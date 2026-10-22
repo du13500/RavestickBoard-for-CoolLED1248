@@ -1,0 +1,16 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+# Build artifacts and local data
+*.elf
+*.bin
+*.map
+*.log
+*.tmp
+*.bak
+# Device credentials/local overrides
+secrets.h
+config.local.h
+.env
