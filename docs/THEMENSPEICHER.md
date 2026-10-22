@@ -1,6 +1,6 @@
 # Themenspeicher und Aufgabenregister
 
-**Stand:** 22.10.2026, v0.1.1 als Testkandidat ergänzt. Aus Projektchats und realen Tests konsolidiert.  
+**Stand:** 22.10.2026, v0.1.1 hardwaregetestet; v0.1.2 als Testkandidat ergänzt. Aus Projektchats und realen Tests konsolidiert.  
 **Status:** `[x]` geprüft/real umgesetzt, `[ ]` offen. Bei **teilweise** ist es nicht abhaktauglich.  
 **Prioritäten:** P0 = Basis/Fehlerdiagnose, P1 = Kerneditor, P2 = Bibliothek/Spezialprogramme, P3 = spätere Option.
 
@@ -23,22 +23,22 @@
 
 ## B · Diagnose, Troubleshooting, Wartung
 
-- [ ] **DIA-01 · P0** Diagnosebereich direkt im Webinterface. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
-- [ ] **DIA-02 · P0** Diagnose-TXT-Download mit Hardware, Firmwarestand, Resetgrund, Uptime und Zeit seit Start. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
-- [ ] **DIA-03 · P0** Heap frei, Minimum Heap, größter freier zusammenhängender Block. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
-- [ ] **DIA-04 · P0** BLE-Verbindungs-, Retry-, Disconnect-, Timeout- und Transfer-Ereignisse; BLE-Notification separat von Write-Erfolg. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
-- [ ] **DIA-05 · P0** HTTP-Aufträge, Queue-Status und Fehlerursachen für Webinterface-Fehlersuche. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
-- [ ] **DIA-06 · P0** Begrenzter RAM-Ringpuffer für letzte Ereignisse und separate Fehlerzähler; keine dauernden Flash-Schreibzugriffe. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **DIA-01 · P0** Diagnosebereich direkt im Webinterface. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
+- [ ] **DIA-02 · P0** Diagnose-TXT-Download mit Hardware, Firmwarestand, Resetgrund, Uptime und Zeit seit Start. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
+- [ ] **DIA-03 · P0** Heap frei, Minimum Heap, größter freier zusammenhängender Block. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
+- [ ] **DIA-04 · P0** BLE-Verbindungs-, Retry-, Disconnect-, Timeout- und Transfer-Ereignisse; BLE-Notification separat von Write-Erfolg. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
+- [ ] **DIA-05 · P0** HTTP-Aufträge, Queue-Status und Fehlerursachen für Webinterface-Fehlersuche. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
+- [ ] **DIA-06 · P0** Begrenzter RAM-Ringpuffer für letzte Ereignisse und separate Fehlerzähler; keine dauernden Flash-Schreibzugriffe. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
 - [ ] **DIA-07 · P1** Dateisystem gesamt/belegt/frei; Speichergrenzen prüfen.
 - [ ] **DIA-08 · P1** Letzten gravierenden Fehler/Resetmarker optional stromausfallsicher, nach Flashverschleiß-Abwägung.
-- [ ] **DIA-09 · P1** Protokollierung von Erfolgen *und* Fehlschlägen, Transferdauer, Datenmenge, Paketanzahl. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **DIA-09 · P1** Protokollierung von Erfolgen *und* Fehlschlägen, Transferdauer, Datenmenge, Paketanzahl. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
 
 ## C · Vorschau als LED-Dot-Matrix
 
-- [ ] **PRE-01 · P0** Fester **64×16-Ausschnitt** statt Textbreite mitzuskalieren.
-- [ ] **PRE-02 · P0** Einzeln sichtbare **runde LED-Punkte** inklusive dunkler/unbeleuchteter Punkte und Punktabstand (nicht nur glatte Pixelblöcke).
-- [ ] **PRE-03 · P0** Lauftext im festen Fenster animieren; keine automatische Verkleinerung.
-- [ ] **PRE-04 · P0** Playersteuerung: Play/Pause, Neustart und **Fast Forward** für lange Texte (z. B. 1×, 2×, 4×, 8×; finale Stufen testen).
+- [ ] **PRE-01 · P0** Fester **64×16-Ausschnitt** statt Textbreite mitzuskalieren. **v0.1.2 implementiert; Gerätetest offen.**
+- [ ] **PRE-02 · P0** Einzeln sichtbare **runde LED-Punkte** inklusive dunkler/unbeleuchteter Punkte und Punktabstand (nicht nur glatte Pixelblöcke). **v0.1.2 implementiert; iPhone-Test offen.**
+- [ ] **PRE-03 · P0** Lauftext im festen Fenster animieren; keine automatische Verkleinerung. **v0.1.2 implementiert; reale Geschwindigkeit unkalibriert.**
+- [ ] **PRE-04 · P0** Playersteuerung: Play/Pause, Neustart und **Fast Forward** für lange Texte (1×, 2×, 4×, 8×). **v0.1.2 implementiert; iPhone-Test offen.**
 - [ ] **PRE-05 · P1** Optional Vorschau-Zeitleiste/Scrubbing oder Sprung zu Folgeseite, damit lange Programme schnell prüfbar sind.
 - [ ] **PRE-06 · P1** Pixelvorschau für mehrere Seiten, zeilenweise Darstellung und gemischte Schriftarten/Farben.
 - [ ] **PRE-07 · P1** Vorschaubewegung möglichst realitätsgetreu: Laufrichtung und Geschwindigkeitsabgleich mit echter Tafel.
@@ -46,7 +46,7 @@
 
 ## D · Texteditor, Modi und Seiten
 
-- [ ] **EDT-01 · P0** **Explizit** auswählen: Lauftext vs. statische Seiten; unabhängig von Textlänge.
+- [ ] **EDT-01 · P0** **Explizit** auswählen: Lauftext vs. statische Seiten; unabhängig von Textlänge. **v0.1.2: Lauftext vs. Standbild implementiert, echter Seiteneditor offen.**
 - [ ] **EDT-02 · P1** Seiten separat erstellen, gestalten, sortieren, duplizieren, löschen.
 - [ ] **EDT-03 · P1** Seiten individuell konfigurieren (Text, Font/Größe, Farbe, Position, Dauer).
 - [ ] **EDT-04 · P1** Manueller Seitenwechsel und automatischer Seitenwechsel mit individuell einstellbarer Dauer.
@@ -55,7 +55,7 @@
 - [ ] **EDT-07 · P1** Auswahl eines Zeichens, Worts oder Abschnitts, **Schriftart je Zeichen** möglich.
 - [ ] **EDT-08 · P1** Einstellbare Positionierung (links, mittig, rechts; bei statischer Seite präzise Koordinaten später prüfen).
 - [ ] **EDT-09 · P1** Für Seiten keine automatische Textkürzung, Umbruch oder Größenänderung; Überlauf klar anzeigen.
-- [ ] **EDT-10 · P1** Geschwindigkeit per Schieberegler beim Lauftext, zusätzlich tatsächliche BLE-Speed-Werte kalibrieren.
+- [ ] **EDT-10 · P1** Geschwindigkeit per Schieberegler beim Lauftext, zusätzlich tatsächliche BLE-Speed-Werte kalibrieren. **Regler/Befehl v0.1.2 vorhanden, Kalibrierung offen.**
 - [ ] **EDT-11 · P1** Auf 40 Zeichen begrenzten Prototyp erweitern; realistische technische Grenzen messen.
 - [ ] **EDT-12 · P2** Freie Textblöcke oder Seiten in Programmen mischen, ohne die Inhalte zu duplizieren.
 - [ ] **EDT-13 · P2** Sonderzeichen, Herz/Emojis und Kombination mit eigenen Grafiken.
@@ -64,7 +64,7 @@
 ## E · Schriftbibliothek
 
 - [x] **FNT-01 · P0** Engschrift als 5×7-Matrix (vertikal verdoppelt) als zusätzlichen Font etabliert und real getestet; **nur Großbuchstaben**.
-- [ ] **FNT-02 · P1** Engschrift: **echte Kleinbuchstaben**, Umlaute und Zeichensatz vervollständigen.
+- [ ] **FNT-02 · P1** Engschrift: **echte Kleinbuchstaben**, Umlaute und Zeichensatz vervollständigen. **v0.1.2: a–z/äöü implementiert, Gerätetest und andere Sonderzeichen offen.**
 - [ ] **FNT-03 · P1** **Normal** aus Referenzaufnahmen jedes Originalzeichens rekonstruieren (separater Originalanzeigen-Chat).
 - [ ] **FNT-04 · P1** **Bold** aus eigenen Originalreferenzen rekonstruieren (separat von Normal).
 - [ ] **FNT-05 · P1** Hersteller-Unregelmäßigkeiten sammeln und einzeln über Übernahme oder Korrektur entscheiden; Originalreferenz behalten.
@@ -100,9 +100,9 @@
 ## H · App-Oberfläche und mobile Bedienung
 
 - [x] **UI-01 · P0** Erste dunkle, eigenständige Oberfläche mit LED-Farben auf iPhone erreichbar.
-- [ ] **UI-02 · P0** 7 Farbtasten ohne unerwünschte zweite Reihe darstellen. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
-- [ ] **UI-03 · P0** `100 %` neben Helligkeitsregler ohne Zeilenumbruch. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
-- [ ] **UI-04 · P0** Buttons/Status außerhalb der überlagernden mobilen Browserleiste positionieren; Safe-Area testen. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **UI-02 · P0** 7 Farbtasten ohne unerwünschte zweite Reihe darstellen. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
+- [ ] **UI-03 · P0** `100 %` neben Helligkeitsregler ohne Zeilenumbruch. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
+- [ ] **UI-04 · P0** Buttons/Status außerhalb der überlagernden mobilen Browserleiste positionieren; Safe-Area testen. **v0.1.1 auf echter Hardware bestätigt; bei neuen Varianten weiter testen.**
 - [ ] **UI-05 · P1** Navigationsstruktur Startseite, Player, Bibliothek, Programme, Editor, Banane/Licht, System/Diagnose.
 - [ ] **UI-06 · P1** Bewusst an nostalgische CoolLED1248-App erinnern, deren Einschränkungen aber nicht übernehmen; **nicht** das SmallTV-Grau/Gelb.
 - [ ] **UI-07 · P2** Touchoptimierung für markierte Textbereiche, Fonts, Farben, Vorlagen und Seitenübersicht.
@@ -132,3 +132,10 @@
 ## Pflegebeispiel
 
 Bei Umsetzung der Vorschau: `PRE-01` abhaken, im `CHANGELOG` unter `v0.1.2` die Änderung und einen echten iPhone-Test vermerken. Bei einer Fehlfunktion neue ID oder Untereintrag aufnehmen und nicht stillschweigend vergessen.
+
+## Aktualisierungen für v0.1.2
+
+- [ ] **DIA-10 · P0** Diagnosebericht mit einem Tipp kopieren, einschließlich Safari-Fallback; v0.1.2 intern browsergetestet, iPhone offen.
+- [ ] **FNT-06 · P1** Eine zentrale Glyphentabelle für Controller und Browser; `/api/font` v0.1.2 implementiert, Hardwaretest offen.
+- [ ] **UI-12 · P0** Deutsche UI-Texte mit Ä/Ö/Ü/ä/ö/ü/ß, keine ASCII-Ersatzformen; Code v0.1.2 umgesetzt.
+- [ ] **BLE-13 · P1** Konkurrierende Original-App-Verbindung: 10-s-Timeout und sinnvolle Meldung unter Last real prüfen.

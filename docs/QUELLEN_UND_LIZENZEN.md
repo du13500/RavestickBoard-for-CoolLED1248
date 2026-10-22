@@ -29,3 +29,7 @@
 - [ ] Schriftdefinitionen und GUI-Elemente aus eigenen Entwürfen vs. Original-App/Referenzen abgrenzen.
 - [ ] Keine übernommenen Codeabschnitte aus `ohtaras/led` ohne klare Erlaubnis verwenden.
 - [ ] Drittlizenzen und Quellen in einer späteren `NOTICE`-Datei erfassen, sofern relevant.
+
+## Hinweis zum v0.1.2-Code (22.10.2026)
+
+Die Erfassung der CoolLEDX-Protokolleigenschaften und deren Neuimplementierung baut auf früheren Referenzrecherchen und eigenen BLE-Hardwaretests auf. Der veröffentlichte Sketch wurde **noch nicht vollständig auf Rechte Dritter geprüft**. Das private GitHub-Repository bleibt privat; vor einer öffentlichen Veröffentlichung ist ein Datei- und Lizenz-Audit erforderlich. Die JavaScript-Weboberfläche von v0.1.2 wurde eigenständig für dieses Projekt erstellt; das ersetzt keine abschließende Auditierung des gesamten Git-Verlaufs.

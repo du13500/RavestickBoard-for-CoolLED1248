@@ -65,3 +65,12 @@ iPhone / anderer Browser
 - Kein Mount oder Schreiben des SPIFFS-Dateisystems. Die v0.1.1-Diagnose kann daher keinen tatsächlichen belegten Dateisystemspeicher ausweisen.
 - WLAN-SSID bleibt in v0.1.1 absichtlich `CoolLED1248` für rückwärtskompatible Smartphone-Verbindungen.
 - Der Reset löscht die Ereignisse und Fehlerzähler; Flash bleibt geschont. Eine spätere sparsame Persistenz ist gesondert zu entscheiden.
+
+## Ergänzung v0.1.2
+
+- Die Fonttabelle liegt ausschließlich in C++ (`FONT` mit Unicode-Codepunkten), die Browser-Vorschau lädt sie über `GET /api/font`. Unterstützt sind A–Z, a–z, 0–9, Ä Ö Ü ä ö ü ß, Herz und ausgewählte Zeichen. Andere Zeichen werden derzeit als `?` gerendert.
+- `GET /api/font` wird nur beim Laden der Oberfläche verwendet. Bei Verbindungsproblemen weist die Vorschau auf den fehlgeschlagenen Schriftabruf hin.
+- Benutzerdefinierter Anzeigemodus: `0x06 0x01` Standbild, `0x06 0x02` Linkslauf. Diese BLE-Modi sind aus vorhandenen Tests und Protokollreferenzen abgeleitet. Das Verhalten für Textbreite > 64 Pixel im Standbild muss noch verifiziert werden.
+- Neuer Testbefehl für Laufgeschwindigkeit: `0x07 <0x00..0xFF>`, UI-Skala 1–100 wird auf 0–255 skaliert. Der Wirkbereich und die Richtung werden am echten Board erst kalibriert.
+- Die Browser-Vorschau animiert lokal über `requestAnimationFrame` und verändert dabei nicht die auf dem Board gespeicherten Inhalte.
+- EEPROM/SPIFFS/LittleFS weiterhin nicht eingebunden; kein Firmware-OTA, Log weiterhin RAM-only.

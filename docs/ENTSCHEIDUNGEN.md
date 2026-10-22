@@ -34,3 +34,12 @@ Format: ID · Datum · Entscheidung · Begründung · Status.
 - Verhalten bei konkurrierenden Original-App-BLE-Verbindungen: Verbindungsreihenfolge, Reconnect-Zeiten, Rückmeldung.
 - Exakte Mini-Font-Pixelhöhe und Layoutregeln für zwei Zeilen.
 - Ob iOS-App/Watch/Widget später noch separat sinnvoll sind, obwohl der Webcontroller funktioniert.
+
+## 22.10.2026 · v0.1.2: deutsche Sprache, Pixelvorschau und Modi
+
+- Die Benutzeroberfläche schreibt Deutsch mit **Ä, Ö, Ü, ä, ö, ü und ß**. Keine pauschale Umschrift in `ae/oe/ue/ss`.
+- Der Engschrift-Font bekommt echte Kleinbuchstaben; der Browser erhält seine Glyphen aus der ESP32-Tabelle über `/api/font`. Keine zweite manuell gepflegte Fonttabelle in JavaScript.
+- Statischer Text und Lauftext werden **manuell gewählt**, unabhängig von Länge. Vorerst kein automatischer Seitenwechsel und kein generischer Auto-Umbruch. Zu breite Standbilder werden ausdrücklich gekennzeichnet.
+- Die LED-Vorschau benutzt einzelne **runde** Punkte in fester 64×16-Matrix und bietet schnellen Vorlauf 1×/2×/4×/8×.
+- Der Geschwindigkeitsregler für die LED-Tafel und die Vorschau-Fast-Forward-Funktion sind unabhängig voneinander. Geschwindigkeit bleibt bis zur Kalibrierung experimentell.
+- Kopieren in die Zwischenablage wird zum bevorzugten Diagnose-Export, TXT bleibt als Alternative.

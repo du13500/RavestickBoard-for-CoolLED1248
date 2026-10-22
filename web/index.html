@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#11141c">
+<title>RavestickBoard · v0.1.2</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#11141c;color:#f3f5fa}
+*{box-sizing:border-box}
+body{margin:0;padding:16px 13px calc(94px + env(safe-area-inset-bottom,0px))}
+main{max-width:630px;margin:0 auto}
+header{display:flex;align-items:center;gap:12px;margin:7px 0 24px;min-width:0}
+.logo{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#273044;display:grid;place-items:center;font-size:25px}
+h1{font-size:clamp(20px,5vw,24px);margin:0;letter-spacing:-.5px;line-height:1.25}
+.sub{font-size:12px;color:#a4b0c1;margin-top:3px}
+.version{font-size:11px;color:#ffda73;background:#39404d;padding:4px 7px;border-radius:99px;display:inline-block;vertical-align:middle;white-space:nowrap;letter-spacing:0;margin-left:4px}
+.panel{background:#1d222e;border:1px solid #363e4e;border-radius:17px;padding:18px;margin-bottom:14px;min-width:0}
+.label{font-weight:800;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#a9b4c5;margin:0 0 10px}
+.hint{color:#abb6c7;font-size:12px;line-height:1.55;margin:9px 0 0}
+#preview{display:block;width:100%;height:auto;aspect-ratio:4/1;background:#070a0e;border-radius:9px}
+.preview-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:13px 0 5px}
+button{font:inherit;font-weight:750;border:0;border-radius:10px;padding:12px 13px;cursor:pointer}
+button:disabled{opacity:.55;cursor:wait}
+.small-btn{font-size:12px;padding:10px 12px;background:#323a4a;color:#e6ecf6;white-space:nowrap}
+.small-btn.active{background:#ffcf4e;color:#10151d}
+.player-label{margin-left:auto;color:#a9b4c5;font-size:12px;white-space:nowrap}
+input[type=text]{background:#111720;color:#fff;border:1px solid #505b70;border-radius:10px;padding:13px 14px;font-size:19px;width:100%;outline:none}
+input[type=text]:focus{border-color:#ffce4f}
+#count{text-align:right;color:#a9b4c5;font-size:12px;margin:6px 0 16px}
+.segment{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.segment label{display:block;background:#111822;border:1px solid #505a6b;border-radius:11px;padding:12px;text-align:center;font-size:14px;font-weight:750;cursor:pointer}
+.segment input{position:absolute;opacity:0;pointer-events:none}
+.segment input:checked+label{border-color:#ffcf4e;background:#3f371f;color:#ffe199}
+.swatches{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;justify-items:center;margin:8px 0 24px}
+.swatches input{position:absolute;opacity:0;pointer-events:none}
+.swatches label{display:block;width:clamp(26px,8vw,40px);height:clamp(26px,8vw,40px);border-radius:50%;border:3px solid #2d3545;cursor:pointer}
+.swatches input:checked+label{outline:2px solid #fff;outline-offset:2px}
+.range-row{display:flex;align-items:center;gap:14px;margin:8px 0 22px}
+.range-row input{min-width:0;flex:1;width:100%;accent-color:#ffd050}
+.range-row b{font-variant-numeric:tabular-nums;min-width:65px;text-align:right;white-space:nowrap}
+.warning{border:1px solid #926d2c;background:#31291b;color:#ffdb97;padding:11px;border-radius:9px;font-size:12px;line-height:1.5;margin:10px 0}
+.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.primary{background:#ffcf4d;color:#171a20}.secondary{background:#343d4f;color:#f5f7fb}
+#status{margin-top:14px;border-radius:9px;background:#2a303e;padding:11px 12px;font-size:13px;line-height:1.5;min-height:42px}
+.small{font-size:12px;color:#aab5c5;line-height:1.6}
+.diag-disclosure{cursor:pointer;font-weight:800;list-style:none}
+.diag-disclosure::-webkit-details-marker{display:none}.diag-disclosure:before{content:"▸";margin-right:7px}details[open] .diag-disclosure:before{content:"▾"}
+.diag-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0}
+.diag-cell{background:#121924;border-radius:9px;padding:10px;min-width:0}.diag-cell small{display:block;color:#aab5c5;margin:0 0 4px}.diag-cell strong{display:block;font-size:14px;overflow-wrap:anywhere}
+.diag-tools{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.diag-tools button,.diag-tools a{font-size:13px;padding:11px 13px;text-decoration:none;text-align:center}
+.diag-log{background:#10161f;border-radius:9px;padding:12px;font:11px/1.65 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;max-height:230px;overflow:auto}
+#copyManual{margin-top:9px}#copyManual textarea{width:100%;height:140px;border-radius:9px;background:#10161f;color:#f2f3f7;border:1px solid #63728a;font:12px/1.4 ui-monospace,monospace}
+@media(max-width:380px){.buttons{grid-template-columns:1fr}.player-label{width:100%;margin:0}}
+</style>
+</head><body><main>
+<header><div class="logo" aria-hidden="true">🍌</div><div>
+<h1>RavestickBoard <span class="version">v0.1.2</span></h1>
+<div class="sub">for CoolLED1248 · ESP32-C3</div></div></header>
+<section class="panel" aria-labelledby="preview-heading">
+<div class="label" id="preview-heading">LED-Vorschau · 64 × 16 Punkte</div>
+<canvas id="preview" width="768" height="192" aria-label="LED-Vorschau mit 64 mal 16 einzelnen Leuchtpunkten"></canvas>
+<div class="preview-controls"><button class="small-btn" id="restart" type="button" title="Vorschau von vorn">⏮ Neustart</button>
+<button class="small-btn active" id="play" type="button">⏸ Pause</button>
+<button class="small-btn" id="fast" type="button">⏩ 1×</button>
+<span class="player-label" id="previewInfo">Statische Anzeige</span></div>
+<div class="hint">Die Vorschau zeigt immer genau 64 × 16 LED-Punkte. Vorspulen verändert nur die Vorschau, nicht die Tafel.</div>
+</section>
+<section class="panel" aria-labelledby="editor-heading">
+<div class="label" id="editor-heading">Anzeigetext</div>
+<input id="message" type="text" value="Grüße!" placeholder="Dein Text mit ä, ö, ü und ß" autocomplete="off" spellcheck="false" aria-label="Anzeigetext">
+<div id="count">0 / 40 Zeichen</div>
+<div class="label">Anzeigemodus</div>
+<div class="segment" id="modes"><div><input type="radio" name="mode" id="static" value="static" checked><label for="static">▣ Standbild</label></div>
+<div><input type="radio" name="mode" id="scroll" value="scroll"><label for="scroll">↔ Lauftext</label></div></div>
+<div class="hint" style="margin:-4px 0 16px">Die Anzeigeart wird bewusst gewählt und hängt nicht von der Textlänge ab. Ein mehrseitiger Editor folgt später.</div>
+<div class="label">Textfarbe</div><div class="swatches" id="swatches"></div>
+<div class="label">Helligkeit</div><div class="range-row"><input id="brightness" type="range" min="1" max="100" value="75"><b id="percent">75 %</b></div>
+<div class="label">Laufgeschwindigkeit</div><div class="range-row"><input id="speed" type="range" min="1" max="100" value="50"><b id="speedValue">50 / 100</b></div>
+<div class="hint" style="margin:-15px 0 16px">Der Regler sendet den Geschwindigkeitsbefehl der Originalhardware. Der genaue Geschwindigkeitsverlauf wird noch am Board kalibriert.</div>
+<div id="overflow" class="warning" hidden></div>
+<div class="buttons"><button class="primary" id="send" type="button">Text senden</button><button class="secondary" id="apply" type="button">Nur Helligkeit</button></div>
+<div role="status" aria-live="polite" id="status">Verbinde mit dem Controller …</div>
+</section>
+<details class="panel" id="diagnostics"><summary class="diag-disclosure">Diagnose und Ereignisprotokoll</summary>
+<p class="hint">Aktuelle Messwerte und Ereignisse seit dem letzten Start. Textinhalte, Passwörter und BLE-Adressen werden nicht exportiert.</p>
+<div class="diag-grid" id="diagGrid"><div class="small">Diagnose wird beim Öffnen geladen.</div></div>
+<div class="diag-tools"><button class="secondary" id="diagReload" type="button">Aktualisieren</button>
+<button class="primary" id="diagCopy" type="button">📋 Log kopieren</button>
+<a class="secondary" href="/api/diagnostics.txt" download="RavestickBoard_Diagnose_v0.1.2.txt">TXT herunterladen</a></div>
+<div class="label">Letzte Ereignisse</div><div id="diagLog" class="diag-log">Noch nicht geladen.</div>
+<div id="diagFeedback" class="hint" role="status" aria-live="polite"></div>
+<div id="copyManual" hidden><p class="hint">Safari blockiert das Kopieren? Textfeld antippen, alles auswählen und manuell kopieren.</p>
+<textarea id="manualText" readonly aria-label="Diagnosebericht zum Kopieren"></textarea></div>
+</details>
+<p class="small">WLAN: <b>CoolLED1248</b> · Webinterface: <b>192.168.4.1</b> · Keine Internetverbindung notwendig.<br>
+Nur ein bewusst gesendeter Auftrag verändert die LED-Tafel. Firmware-Updates erfolgen ausschließlich über USB.</p>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const colors=[['Rot',4,'#ff3939'],['Gelb',6,'#ffff45'],['Grün',2,'#4bf641'],['Cyan',3,'#53eeee'],['Blau',1,'#4d51ff'],['Magenta',5,'#ef47eb'],['Weiß',7,'#ffffff']];
+let selectedColor=7,displayMode='static',fontMap={},fontReady=false;
+const cv=$('preview'),ctx=cv.getContext('2d');
+const WIDTH=64,HEIGHT=16,PITCH=12,CHARWIDTH=6;
+const fastRates=[1,2,4,8];let fastIndex=0,playing=true,position=WIDTH,lastFrame=0;
+const GLYPH_FALLBACK=[14,17,1,2,4,0,4];
+const swatchRoot=$('swatches');
+swatchRoot.innerHTML=colors.map(([name,n,hex])=>`<div><input type="radio" id="c${n}" name="color" value="${n}" ${n===7?'checked':''}><label for="c${n}" style="background:${hex}" title="${name}" aria-label="${name}"></label></div>`).join('');
+swatchRoot.addEventListener('change',e=>{if(e.target.name==='color'){selectedColor=Number(e.target.value);draw();}});
+function cps(text){return Array.from(text.replaceAll('❤️','❤')).filter(c=>c.codePointAt(0)!==0xFE0F && c.codePointAt(0)!==0xFE0E);}
+function glyph(c){return fontMap[c.codePointAt(0)]||GLYPH_FALLBACK;}
+function textWidth(){return Math.max(0,cps($('message').value).length*CHARWIDTH-1);}
+function updateControls(){
+ const count=cps($('message').value).length,tw=textWidth();
+ $('count').textContent=`${count} / 40 Zeichen`;
+ const overflow=displayMode==='static' && tw>WIDTH;
+ $('overflow').hidden=!overflow;
+ if(overflow)$('overflow').textContent=`Der Text ist ${tw} Pixel breit, das Display nur ${WIDTH}. Im Standbild wird nur der linke Ausschnitt angezeigt. Für weitere Seiten benötigen wir den kommenden Seiteneditor.`;
+ if(count>40){$('overflow').hidden=false;$('overflow').textContent='Maximal 40 Zeichen: Bitte den Text kürzen.';}
+ $('previewInfo').textContent=displayMode==='scroll'?'Lauftext, '+fastRates[fastIndex]+'× Vorschau':'Standbild';
+ $('speed').disabled=displayMode!=='scroll';
+ $('play').disabled=displayMode!=='scroll';
+ $('fast').disabled=displayMode!=='scroll';
+ $('restart').disabled=displayMode!=='scroll';
+}
+function colorHex(){return colors.find(x=>x[1]===selectedColor)[2];}
+function draw(){
+ const text=cps($('message').value),tw=textWidth();
+ ctx.fillStyle='#070a0e';ctx.fillRect(0,0,cv.width,cv.height);
+ let left=displayMode==='scroll'?position:(tw<=WIDTH?Math.floor((WIDTH-tw)/2):0);
+ const lit=colorHex();
+ for(let x=0;x<WIDTH;x++)for(let y=0;y<HEIGHT;y++){
+   const px=x*PITCH+PITCH/2,py=y*PITCH+PITCH/2;
+   ctx.beginPath();ctx.arc(px,py,3.25,0,Math.PI*2);ctx.fillStyle='#242b35';ctx.fill();
+ }
+ if(fontReady){
+ ctx.fillStyle=lit;
+ for(let i=0;i<text.length;i++){
+   const rows=glyph(text[i]);const base=left+i*CHARWIDTH;
+   for(let yy=0;yy<7;yy++)for(let xx=0;xx<5;xx++){
+     const x=Math.floor(base+xx);
+     if(x<0||x>=WIDTH||!(rows[yy]&(1<<(4-xx))))continue;
+     for(let dy=0;dy<2;dy++){
+       const y=1+yy*2+dy;ctx.beginPath();ctx.arc(x*PITCH+PITCH/2,y*PITCH+PITCH/2,4,0,Math.PI*2);ctx.fill();
+     }
+   }
+ }
+ }else{ctx.fillStyle='#aeb6c5';ctx.font='13px system-ui';ctx.fillText('Schrift wird geladen …',12,cv.height/2);}
+}
+function restart(){position=WIDTH;draw();}
+function step(ts){
+ if(!lastFrame)lastFrame=ts;
+ const dt=Math.min(100,ts-lastFrame);lastFrame=ts;
+ if(displayMode==='scroll'&&playing&&fontReady){
+   const boardSpeed=Number($('speed').value);
+   const pixelsPerSecond=4+boardSpeed*0.26; // UI approximation, not calibrated to hardware yet.
+   position-=dt/1000*pixelsPerSecond*fastRates[fastIndex];
+   if(position<-(textWidth()+8))position=WIDTH;
+   draw();
+ }
+ requestAnimationFrame(step);
+}
+function updateText(){restart();updateControls();draw();}
+$('message').addEventListener('input',updateText);
+$('modes').addEventListener('change',e=>{if(e.target.name==='mode'){displayMode=e.target.value;updateText();}});
+$('brightness').addEventListener('input',()=>{$('percent').textContent=$('brightness').value+' %';});
+$('speed').addEventListener('input',()=>{$('speedValue').textContent=$('speed').value+' / 100';});
+$('restart').addEventListener('click',restart);
+$('play').addEventListener('click',()=>{playing=!playing;$('play').textContent=playing?'⏸ Pause':'▶ Weiter';});
+$('fast').addEventListener('click',()=>{fastIndex=(fastIndex+1)%fastRates.length;$('fast').textContent='⏩ '+fastRates[fastIndex]+'×';updateControls();});
+async function loadFont(){try{const r=await fetch('/api/font',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);fontMap=await r.json();fontReady=true;draw();}
+ catch(e){$('status').textContent='Schrift konnte nicht geladen werden. Seite neu öffnen.';}}
+let busy=false;function lock(b){busy=b;$('send').disabled=b;$('apply').disabled=b;}
+async function post(path,data){
+ try{
+   lock(true);$('status').textContent='Auftrag wird vorbereitet …';
+   const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data)});
+   const j=await r.json();if(!r.ok)throw Error(j.message||'HTTP '+r.status);
+   $('status').textContent=j.message||'Auftrag angenommen.';
+ }catch(e){$('status').textContent='Fehler: '+e.message;lock(false);}
+}
+$('send').addEventListener('click',()=>{
+ const text=$('message').value;if(!text.trim()){$('status').textContent='Bitte einen Text eingeben.';return;}
+ if(cps(text).length>40){$('status').textContent='Bitte höchstens 40 Zeichen eingeben.';return;}
+ post('/api/text',{text,color:selectedColor,brightness:$('brightness').value,mode:displayMode,speed:$('speed').value});
+});
+$('apply').addEventListener('click',()=>post('/api/brightness',{brightness:$('brightness').value}));
+async function poll(){try{
+ const r=await fetch('/api/status',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);
+ const d=await r.json();$('status').textContent=d.message;lock(d.state==='queued'||d.state==='sending');
+ }catch(e){$('status').textContent='Controller nicht erreichbar.';lock(false);}}
+let reportCache='';
+async function refreshDiagnostics(){
+ const grid=$('diagGrid'),log=$('diagLog');
+ try{
+  grid.textContent='Messwerte werden geladen …';
+  const [r,t]=await Promise.all([fetch('/api/diagnostics',{cache:'no-store'}),fetch('/api/diagnostics.txt',{cache:'no-store'})]);
+  if(!r.ok||!t.ok)throw Error('HTTP '+(r.ok?t.status:r.status));
+  const d=await r.json();reportCache=await t.text();
+  const rows=[['Firmware','v'+d.version],['Laufzeit',d.uptime],['Resetgrund',d.reset],
+    ['Freier Heap',(d.freeHeap/1024).toFixed(1)+' KiB'],
+    ['Minimal frei',(d.minHeap/1024).toFixed(1)+' KiB'],
+    ['Größter Block',(d.maxBlock/1024).toFixed(1)+' KiB'],
+    ['Firmwaregröße',(d.sketchSize/1024).toFixed(0)+' KiB'],
+    ['App-Partition',(d.appPartitionSize/1024).toFixed(0)+' KiB'],
+    ['App-Rest',(d.appAvailable/1024).toFixed(0)+' KiB'],
+    ['WLAN-Geräte',d.wifiClients],['Bluetooth',d.bleConnected?'Verbunden':'Getrennt'],
+    ['BLE-Versuche',d.bleAttempts],['BLE-Verbindungen',d.bleSuccess],
+    ['BLE-Timeouts',d.bleTimeouts],['Schreibfehler',d.writeFailures],
+    ['Benachrichtigungen',d.notifications],['Aufträge OK / Fehler',d.jobsOK+' / '+d.jobsFailed],
+    ['Fehler gesamt',d.errors]];
+  grid.replaceChildren();
+  for(const [label,value] of rows){const cell=document.createElement('div');cell.className='diag-cell';const a=document.createElement('small');a.textContent=label;const b=document.createElement('strong');b.textContent=String(value);cell.append(a,b);grid.append(cell);}
+  log.textContent=d.recent||'Noch keine Ereignisse.';
+  $('diagFeedback').textContent='Letzter Fehler: '+d.lastError;
+ }catch(e){grid.textContent='Diagnose nicht verfügbar.';log.textContent='Fehler: '+e.message;$('diagFeedback').textContent=e.message;}
+}
+function copyFallback(str){
+ const node=document.createElement('textarea');node.value=str;node.style.position='fixed';node.style.opacity='0';node.style.left='-2000px';document.body.append(node);node.focus();node.select();node.setSelectionRange(0,str.length);
+ let ok=false;try{ok=document.execCommand('copy');}catch(e){}node.remove();return ok;
+}
+$('diagCopy').addEventListener('click',async()=>{
+ let text=reportCache;
+ if(!text){$('diagFeedback').textContent='Bitte zuerst auf „Aktualisieren“ tippen.';return;}
+ const fallback=()=>copyFallback(text);
+ if(!navigator.clipboard||!window.isSecureContext){
+   if(fallback()){$('diagFeedback').textContent='Diagnosebericht in die Zwischenablage kopiert.';return;}
+ }else{
+   try{await navigator.clipboard.writeText(text);$('diagFeedback').textContent='Diagnosebericht in die Zwischenablage kopiert.';return;}catch(e){if(fallback()){$('diagFeedback').textContent='Diagnosebericht kopiert.';return;}}
+ }
+ $('copyManual').hidden=false;$('manualText').value=text;$('manualText').focus();$('manualText').select();
+ $('diagFeedback').textContent='Automatisches Kopieren blockiert. Bericht unten markieren und manuell kopieren.';
+});
+$('diagnostics').addEventListener('toggle',()=>{if($('diagnostics').open)refreshDiagnostics();});
+$('diagReload').addEventListener('click',refreshDiagnostics);
+updateControls();draw();loadFont();requestAnimationFrame(step);setInterval(poll,1200);poll();
+</script>
+</body></html>

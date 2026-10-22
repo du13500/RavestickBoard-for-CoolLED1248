@@ -1,64 +1,46 @@
-# Prüfplan für neue Firmwarestände
+# Testplan RavestickBoard v0.1.2
 
-## Testprotokoll je Release
+**Status:** Vorbereitung vom 22.10.2026. Diese Version ist bis zum realen Test ausdrücklich **Testkandidat**.
 
-**Datum:** ____  **Firmware:** ____  **Boardpaket:** ____  **Partitionsschema:** ____  
-**Freier Heap vor/nach Test:** ____ / ____  **größter Block:** ____  
-**Ergebnis:** bestanden / teilweise / fehlgeschlagen  **Fehler-IDs:** ____
+## A. Flash und Webstart
 
-### Grundtests
-- [ ] WLAN-AP erscheint, Verbindungsaufbau per iPhone funktioniert ohne Internet.
-- [ ] Webseite und API `/api/status` sind erreichbar.
-- [ ] Ein kurzer Text kann auf die CoolLEDX übertragen werden.
-- [ ] Textfarbe entspricht der Wahl.
-- [ ] Nur Helligkeit verändern überschreibt den Anzeigetext nicht.
-- [ ] Einmal hochgeladener Inhalt läuft nach BLE-Trennung weiter.
-- [ ] Gespeicherter Tafelinhalt bleibt nach Stromtrennung bestehen.
-- [ ] ESP32-Neustart überschreibt den Inhalt der Anzeige nicht.
+- [ ] Board ESP32C3 Dev Module, USB CDC On Boot Enabled, `No OTA (2MB APP/2MB SPIFFS)` in Arduino IDE 2.3.10 / ESP32 3.3.12.
+- [ ] Kompilierung erfolgreich; Sketchgröße, RAM-Angaben notieren.
+- [ ] Per USB-C hochladen. Serieller Monitor 115200 Baud; WLAN `CoolLED1248` wird bereitgestellt.
+- [ ] Browser lädt unter `http://192.168.4.1`; sichtbare Version **v0.1.2**; keine JavaScript-Fehler.
 
-### Künftige Vorschau- und Editor-Tests
-- [ ] Die Vorschau besteht aus 64×16 getrennten, sichtbar runden Punkten mit unbeleuchteten LEDs.
-- [ ] Die Vorschau besitzt einen festen Ausschnitt, egal wie lang der Text ist.
-- [ ] Lange Textfolgen laufen durch das Fenster und werden nicht verkleinert.
-- [ ] Fast Forward (z. B. 2×/4×/8×), Pause, Reset/Neustart der Vorschau funktionieren.
-- [ ] Preview-Zeit und reale Laufrichtung/Geschwindigkeit sind plausibel abgeglichen.
-- [ ] Statischer Modus kann auch für Text >64 Pixel gewählt werden; Überlauf wird sichtbar angezeigt, nicht automatisch umgebrochen.
-- [ ] Lauftext kann auch für einen kurzen Text gewählt werden.
-- [ ] Jede Seite kann separat formatiert und manuell oder per Dauer gewechselt werden.
-- [ ] Unterschiedliche Farben und Schriften innerhalb eines Textes entsprechen der Tafelanzeige.
-- [ ] Echte Kleinbuchstaben, Umlaute, Sonderzeichen und Herz getestet.
-- [ ] Zweizeilige Mini-Schrift ist auf echter Tafel aus typischer Festivalentfernung lesbar.
+## B. Vorschau / Schrift
 
-### Künftige Diagnose- und Stabilitätstests
-- [ ] Log-Export lädt eine lesbare TXT-Datei mit Firmwarestand, Resetgrund und Uptime.
-- [ ] Heap-Minimum, freier Heap und größter freier Block sind nachvollziehbar.
-- [ ] Fehlversuch ohne eingeschaltete Tafel wird protokolliert und UI bleibt bedienbar.
-- [ ] Fremde BLE-Verbindung über Original-App: Erkennung/Retry/Wiederaufnahme getestet.
-- [ ] Mehrere hintereinander gesendete Aufträge führen weder zu Absturz noch zu vermischten Texten.
-- [ ] Langzeitbetrieb des AP und BLE in einem Testfenster von mehreren Stunden geprüft.
-- [ ] Auf das notwendige Maß begrenzte RAM-/Flashnutzung; Dateisystemfüllstand prüfen.
+- [ ] Vorschau zeigt **64 Spalten × 16 Zeilen** mit erkennbaren dunklen Einzelpunkten und leuchtenden Einzelpunkten.
+- [ ] `Grüße!` wird mit echten Kleinbuchstaben angezeigt.
+- [ ] `ÄÖÜ äöü ß` wird in Vorschau und auf der echten Tafel korrekt dargestellt. Zeichensatzvarianten vergleichen.
+- [ ] Langer Text bleibt auf Vorschaugröße und läuft im gewählten Lauftext-Modus; kein Schrumpfen des gesamten Inhalts.
+- [ ] Play/Pause, Neustart, 1× → 2× → 4× → 8× → 1× funktionieren. Fast Forward verändert **nur** die Vorschau.
+- [ ] Kurzer Text kann bewusst als Lauftext gesendet werden; langer Text kann bewusst als Standbild gewählt werden (sichtbare Überlaufwarnung). Nicht automatisch Modus wechseln.
+- [ ] Linker Ausschnitt von überlangem Standbild in Vorschau und LED-Tafel vergleichen; ggf. Abweichung dokumentieren.
 
-### Mobile Oberfläche
-- [ ] Farbpalette mit 7 Farben ohne unnötigen Umbruch.
-- [ ] `100 %` bleibt in einer Zeile.
-- [ ] Safari-Symbolleiste überdeckt weder Schaltflächen noch Meldungen.
-- [ ] Große Schaltflächen und gute Lesbarkeit, Touchbedienung funktioniert.
+## C. Bluetooth / Einstellungen
 
+- [ ] Kurzen Text per WLAN-Webinterface senden und auf Tafel prüfen.
+- [ ] Rot, Grün, Blau, Weiß erneut prüfen; bestehende Farbauswahl darf nicht kaputtgehen.
+- [ ] Lauftext-Modus mit Speed 10, 50, 90 testen; reale Laufrichtung und Tempo notieren. Vergleich mit Preview nur grobe Annäherung.
+- [ ] Helligkeit 10 % und 100 % separat senden; bisheriger Text bleibt auf der Tafel.
+- [ ] Während die Original-App mit der Tafel verbunden ist, eigenen Auftrag versuchen. Fehlermeldung verständlich? Wie viele Sekunden bis Abbruch? Original-App danach trennen und ohne ESP-Neustart erneut senden.
+- [ ] BLE-Notifications und Auftragserfolge im Diagnoseprotokoll prüfen.
 
-## Testcheckliste v0.1.1 (noch nicht am echten Gerät ausgeführt)
+## D. Diagnose / iPhone
 
-- [ ] Arduino IDE 2.3.10 / ESP32 Core 3.3.12: Sketch `firmware/RavestickBoard_v0_1_1.ino` mit `No OTA (2MB APP/2MB SPIFFS)` kompilieren und per USB flashen.
-- [ ] Serieller Monitor 115200 Baud zeigt `RavestickBoard Webcontroller v0.1.1` und den WLAN-Start.
-- [ ] Mit WLAN `CoolLED1248` verbinden und `http://192.168.4.1` öffnen; im Header steht `RavestickBoard v0.1.1`.
-- [ ] iPhone: alle sieben Farbpunkte in einer Reihe, `100 %` in einer Zeile, Buttons oberhalb/scrollbar trotz Safari-Toolbar erreichbar.
-- [ ] `Diagnose & Log-Export` öffnen; Werte/Resetgrund/Uptime sind sichtbar und ändern sich nach `Aktualisieren`.
-- [ ] `TXT herunterladen` erzeugt eine lesbare Diagnose-Datei mit Eventverlauf; keine Passwort-, BLE-Adress- oder Textinhalte.
-- [ ] Bekannten Testtext (z. B. `TEST 123`) an LED senden; Anzeige korrekt, Helligkeit und Farbe ändern wie bei v0.1.0.
-- [ ] Danach separat nur Helligkeit ändern; vorhandener Tafeltext bleibt erhalten.
-- [ ] Tafel kurz ausschalten, dann Text senden; nach Rückkehr Diagnosefehler/Timeout prüfen.
-- [ ] 10 bis 20 erfolgreiche Schreibvorgänge; freier und minimal freier Heap, größter Block, Eventpuffer und Fehlerzahlen plausibel.
-- [ ] ESP32 neu starten; Logpuffer wird geleert, Uptime startet neu, letzter Resetgrund angezeigt.
-- [ ] Ohne Smartphone: ESP32-Boot überschreibt die Tafel nicht.
-- [ ] Nach Erfolg Commit z. B. `v0.1.1: Diagnostics, logging and project rebranding` erstellen und mit **Push origin** in das private GitHub-Repository übertragen.
+- [ ] `Diagnose und Ereignisprotokoll` öffnen und aktualisieren.
+- [ ] `Log kopieren` direkt in die Zwischenablage. Den kopierten Bericht in eine Notiz einfügen.
+- [ ] Falls automatisches Kopieren auf `http://192.168.4.1` blockiert: manuelles Kopierfeld nutzbar?
+- [ ] TXT-Download weiterhin möglich.
+- [ ] Resetgrund „USB-Reset“ statt Zahlencode 11, falls per USB neu gestartet.
+- [ ] App-Partition ca. 2048 KiB; freie Bytes = Partition gesamt minus verwendete Firmware. **Nicht** irreführend „2048 KiB frei“.
+- [ ] Freier/minimal freier Heap und größter Block vor/nach mehreren BLE-Aufträgen und nach 30 Minuten Laufzeit vergleichen.
 
-Hinweis: v0.1.0 bleibt Rückfallversion. Erst nach realem Gerätetest im Changelog als bestätigt markieren.
+## E. GitHub
+
+- [ ] Nach erfolgreichem Test Änderungen im lokalen Projektordner committen, z. B. `v0.1.2: Dot preview, German glyphs, modes and diagnostics copy`.
+- [ ] `CHANGELOG.md` an konkreten Hardwaretest anpassen: erfolgreicher und gescheiterter Test, ggf. Heap/Buildwert.
+- [ ] `Push origin` in GitHub Desktop. Sicherstellen, dass das Repository **Private** bleibt.
+- [ ] Wenn kritische Fehler auftreten: Firmware v0.1.1 erneut über USB flashen; v0.1.2 noch nicht als stabil markieren.

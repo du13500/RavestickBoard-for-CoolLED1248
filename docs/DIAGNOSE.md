@@ -32,3 +32,11 @@ Da BLE-Jobs derzeit synchron laufen, reagiert der ESP32-Webserver während der �
 Die alten Einschränkungen der v0.1.0-Vorschau und der ausschließlich groß geschriebenen Engschrift bestehen noch.
 
 Für Troubleshooting möglichst **vor dem Reset** die TXT-Datei herunterladen und an die Fehlermeldung/Symptombeschreibung anhängen. Keine Passwörter, Textinhalte und BLE-Adressen werden absichtlich mitgeloggt.
+
+## Änderungen ab v0.1.2 (Testkandidat)
+
+- **„Log kopieren“** ist die primäre Aktion. Falls die Clipboard-API auf iPhone/Safari wegen `http://192.168.4.1` nicht verfügbar ist, versucht der Browser einen älteren Kopiermechanismus. Andernfalls erscheint ein markierbares Textfeld. Der TXT-Export bleibt verfügbar.
+- **Resetgrund** zeigt verständliche Werte, z. B. „USB-Reset“ für IDF-Resetgrund 11.
+- **App-Rest** wird berechnet als `esp_ota_get_running_partition()->size - ESP.getSketchSize()` und auf 0 begrenzt. Das ist ein rechnerischer Flash-Rest, keine garantierte zusätzliche freie RAM-Kapazität.
+- Bei einem erfolglosen BLE-Verbindungsversuch wird darauf hingewiesen, dass die LED-Tafel möglicherweise mit einer anderen App verbunden ist. Diese Ursache kann der Controller aus einem Timeout **nicht eindeutig feststellen**.
+- Bei der Textübertragung bezeichnet die Bezeichnung „Text-Payload“ die gesamte Text-Puffergröße über mehrere Pakete, **nicht** die Nutzlast eines einzelnen BLE-Writes.
