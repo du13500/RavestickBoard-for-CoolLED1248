@@ -1,7 +1,7 @@
-# CoolLED1248 · BananaBoard
+# RavestickBoard for CoolLED1248
 
 **Stand:** 22. Oktober 2026  
-**Projektstatus:** funktionsfähiger Prototyp v0.1.0; weitere Funktionen geplant  
+**Projektstatus:** v0.1.0 erfolgreich auf echter Hardware getestet; **v0.1.1 als Testkandidat bereit**, noch nicht am ESP32 bestätigt  
 **Plattform:** TENSTAR ROBOT ESP32-C3 Super Mini, eigenes WLAN, BLE-Verbindung zur unveränderten LED-Tafel.
 
 ## Leitidee
@@ -25,7 +25,8 @@ Wir möchten die vorhandenen Stärken der alten App behalten und deren Einschrä
 | Originalschriften Normal/Bold | ⬜ Rekonstruktion offen |
 | Präzise 64×16-Punktvorschau | ⬜ offen |
 | Lauftext/Seitenmodus frei wählen | ⬜ offen |
-| Diagnose-TXT-Export im Webinterface | ⬜ offen |
+| Diagnose, Ereignisprotokoll, TXT-Export | 🧪 in v0.1.1 implementiert, Gerätetest offen |
+| Firmwareversion im Webinterface | 🧪 v0.1.1 implementiert, Gerätetest offen |
 | Bibliothek, Programme, Countdown, Scoreboard | ⬜ offen |
 
 **Achtung:** Nicht alles, was kompiliert oder auf dem Display sichtbar war, wurde bereits dauerhaft auf Robustheit geprüft. Die detaillierten Statusangaben stehen in `docs/THEMENSPEICHER.md`.
@@ -42,13 +43,17 @@ Wir möchten die vorhandenen Stärken der alten App behalten und deren Einschrä
 
 ## Aktueller Entwicklungsstand
 
-Der funktionierende Quellcode liegt unter `firmware/CoolLED1248_Web_v0_1_0.ino`. Zusätzlich ist der davor getestete Bluetooth-Textsketch archiviert. Die aktuelle v0.1.0 läuft als WLAN-Access-Point und Webserver auf dem ESP32-C3, mit Textfeld, einfarbiger Engschrift, 7 Farben, Helligkeitsregler und BLE-Upload.
+**Zuletzt auf echter Hardware bestätigt:** `firmware/CoolLED1248_Web_v0_1_0.ino`. **Neuer Testkandidat:** `firmware/RavestickBoard_v0_1_1.ino`. Der erste BLE-Textsketch bleibt unverändert archiviert.
 
-**Bewusste v0.1.0-Einschränkungen:** nur Großbuchstaben (Kleinbuchstaben werden umgewandelt), Textlimit 40 Zeichen, Lauftext automatisch ab einer bestimmten Pixelbreite statt manuell gewählt, Vorschau dehnt sich bei Langtexten statt ein festes Displayfenster darzustellen. Diese Einschränkungen sind im Themenspeicher erfasst und **keine gewollten Eigenschaften des Endprodukts**.
+v0.1.1 erweitert den bekannten Webcontroller um eine sichtbare Versionsnummer und eine Diagnose-Sektion mit Statuswerten, RAM-Ringpuffer sowie herunterladbarem TXT-Protokoll. Die WLAN-SSID bleibt zunächst absichtlich `CoolLED1248`, damit vorhandene Smartphones sich nicht neu einrichten müssen. Die Benutzeroberfläche trägt nun den Namen **RavestickBoard**.
+
+**Weiterhin offene Einschränkungen (auch in v0.1.1):** nur Großbuchstaben (Kleinbuchstaben werden umgewandelt), Textlimit 40 Zeichen, Lauftext automatisch ab einer bestimmten Pixelbreite statt manuell gewählt, Vorschau dehnt sich bei Langtexten statt ein festes Displayfenster darzustellen. Diese Einschränkungen sind im Themenspeicher erfasst und **keine gewollten Eigenschaften des Endprodukts**.
 
 ## Firmware bauen
 
-Arduino IDE 2.3.10; Espressif Arduino-ESP32 3.3.12; Board `ESP32C3 Dev Module`; `USB CDC On Boot: Enabled`; Partitionierung `No OTA (2MB APP/2MB SPIFFS)`; Upload über USB-C. Die Auswahl des Partitionsschemas ist relevant, da v0.1.0 unter der vorherigen 1,25-MiB-App-Partition nicht kompilierte.
+Arduino IDE 2.3.10; Espressif Arduino-ESP32 3.3.12; Board `ESP32C3 Dev Module`; `USB CDC On Boot: Enabled`; Partitionierung `No OTA (2MB APP/2MB SPIFFS)`; Upload über USB-C. Die Auswahl des Partitionsschemas ist relevant, da v0.1.0 unter der vorherigen 1,25-MiB-App-Partition nicht kompilierte. **v0.1.1 wurde noch nicht mit der tatsächlichen Arduino-Toolchain kompiliert oder auf Hardware getestet.**
+
+Für den neuen Stand `firmware/RavestickBoard_v0_1_1.ino` öffnen. Wenn Arduino fragt, ob es den gleichnamigen Sketchordner erstellen soll, bestätigen. Der vorherige Sketch bleibt als Rückfallversion verfügbar.
 
 Das Web-WLAN ist passwortgeschützt, aber **das aktuelle Passwort steht noch im Quellcode**. Vor einer öffentlichen Veröffentlichung oder Weitergabe unbedingt individuell ersetzen. Keine zusätzlichen Web-Logins geplant.
 
@@ -58,8 +63,18 @@ Das Web-WLAN ist passwortgeschützt, aber **das aktuelle Passwort steht noch im 
 2. Pro sachlicher Änderung die betreffende Themen-ID im Commit, Änderungsprotokoll oder in einer Notiz nennen (z. B. `UI-04`, `DIA-01`).
 3. Versionsstand und Testergebnis in `CHANGELOG.md` festhalten: `Geändert`, `Getestet`, `Bekannte Fehler`.
 4. Neue Ideen in `docs/THEMENSPEICHER.md` ergänzen, mit Status und Priorität.
-5. Optional lokal Git verwenden, **ohne** schon etwas auf GitHub zu veröffentlichen. Eine öffentliche Lizenz erst nach dem Quellcode-Lizenzaudit auswählen.
+5. Git lokal verwenden und Änderungen in das **private** Repository `du13500/RavestickBoard-for-CoolLED1248` pushen. Vor einem öffentlichen Release ein Quellcode- und Lizenz-Audit durchführen.
 
 ## Woher stammt dieser Themenbestand?
 
 Konsolidiert aus den vorhandenen Projektgesprächen (u. a. *Alternative Apps für LED-Tafel*, *Screenshots analysieren*, *Originalanzeigen sammeln* und dem Inbetriebnahme-/Firmwarechat) und den hier vorhandenen Testsketchen. Keine Behauptung, dass jede alte Bildreferenz schon vollständig übernommen wurde. Originalanzeigen und Fonts bleiben im dafür vorgesehenen separaten Chat als Referenzen.
+
+## Diagnose in v0.1.1 (Testkandidat)
+
+Im Webinterface ganz unten **„Diagnose & Log-Export“** öffnen. Der Bereich lädt die aktuellen Werte erst beim Öffnen; mit **„Aktualisieren“** kann neu abgefragt werden. **„TXT herunterladen“** speichert den vollständigen Bericht inklusive der letzten 56 Ereignisse.
+
+Direkte Endpunkte im lokalen WLAN: `GET /api/diagnostics` (JSON), `GET /api/diagnostics.txt` (TXT). Sie sind ausschließlich über den HTTP-Server des ESP32 im lokalen WLAN erreichbar. Es gibt **kein OTA** und kein zusätzliches App-Login.
+
+Der Ereignispuffer liegt nur im RAM: nach Reset/Stromverlust wird er geleert. Kein dauernder Flash-Schreibbetrieb, keine Zeitstempel mit echter Uhrzeit und keine persistenten Fehler über Neustarts hinweg. Siehe [`docs/DIAGNOSE.md`](docs/DIAGNOSE.md).
+
+**Wichtig:** Die Diagnose protokolliert BLE-Schreibvorgänge und Notifications. Eine Notification beweist nicht automatisch, dass ein neuer Bildinhalt sichtbar übernommen wurde. Das muss am Board überprüft werden.

@@ -22,6 +22,10 @@ Format: ID · Datum · Entscheidung · Begründung · Status.
 | ADR-016 | 2026-10-22 | **Keine automatische Überschreibung beim Booten** | Bereits gespeicherte Anzeige unangetastet lassen, bis Nutzer aktiv sendet oder ein bewusst aktiviertes Programm läuft. |
 | ADR-017 | 2026-10-22 | **Bei öffentlichem GitHub-Release vorher Lizenz-/Provenienzprüfung** | Community-Projekte sind Referenzen; ungeprüftes Übernehmen fremden Quellcodes vermeiden. |
 
+| ADR-018 | 2026-10-22 | **Projektname „RavestickBoard for CoolLED1248“**, zurzeit private GitHub-Entwicklung | Unterscheidung vom Original-App-Namen; markenrechtliche und Quellcode-Lizenzprüfung vor öffentlichem Release offen. |
+| ADR-019 | 2026-10-22 | **Diagnose-Ringpuffer nur im RAM, TXT-Export auf Anfrage** | Weniger Flash-Verschleiß, keine zusätzliche Anmeldung, keine gespeicherten Textinhalte oder Kennwörter im Log. |
+| ADR-020 | 2026-10-22 | **Firmwareversion im Header sichtbar und im Diagnosebericht** | Direkt erkennbare Softwareversion bei Screenshots und Support; Versionsstand passt zum Git-Commit. |
+
 ## Noch nicht entschieden
 
 - Wie genau der mehrseitige Editor einzelne Seiten speichert und ob Programme ausschließlich im ESP32 verwaltet werden.

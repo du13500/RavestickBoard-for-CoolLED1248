@@ -43,3 +43,22 @@
 - [ ] `100 %` bleibt in einer Zeile.
 - [ ] Safari-Symbolleiste überdeckt weder Schaltflächen noch Meldungen.
 - [ ] Große Schaltflächen und gute Lesbarkeit, Touchbedienung funktioniert.
+
+
+## Testcheckliste v0.1.1 (noch nicht am echten Gerät ausgeführt)
+
+- [ ] Arduino IDE 2.3.10 / ESP32 Core 3.3.12: Sketch `firmware/RavestickBoard_v0_1_1.ino` mit `No OTA (2MB APP/2MB SPIFFS)` kompilieren und per USB flashen.
+- [ ] Serieller Monitor 115200 Baud zeigt `RavestickBoard Webcontroller v0.1.1` und den WLAN-Start.
+- [ ] Mit WLAN `CoolLED1248` verbinden und `http://192.168.4.1` öffnen; im Header steht `RavestickBoard v0.1.1`.
+- [ ] iPhone: alle sieben Farbpunkte in einer Reihe, `100 %` in einer Zeile, Buttons oberhalb/scrollbar trotz Safari-Toolbar erreichbar.
+- [ ] `Diagnose & Log-Export` öffnen; Werte/Resetgrund/Uptime sind sichtbar und ändern sich nach `Aktualisieren`.
+- [ ] `TXT herunterladen` erzeugt eine lesbare Diagnose-Datei mit Eventverlauf; keine Passwort-, BLE-Adress- oder Textinhalte.
+- [ ] Bekannten Testtext (z. B. `TEST 123`) an LED senden; Anzeige korrekt, Helligkeit und Farbe ändern wie bei v0.1.0.
+- [ ] Danach separat nur Helligkeit ändern; vorhandener Tafeltext bleibt erhalten.
+- [ ] Tafel kurz ausschalten, dann Text senden; nach Rückkehr Diagnosefehler/Timeout prüfen.
+- [ ] 10 bis 20 erfolgreiche Schreibvorgänge; freier und minimal freier Heap, größter Block, Eventpuffer und Fehlerzahlen plausibel.
+- [ ] ESP32 neu starten; Logpuffer wird geleert, Uptime startet neu, letzter Resetgrund angezeigt.
+- [ ] Ohne Smartphone: ESP32-Boot überschreibt die Tafel nicht.
+- [ ] Nach Erfolg Commit z. B. `v0.1.1: Diagnostics, logging and project rebranding` erstellen und mit **Push origin** in das private GitHub-Repository übertragen.
+
+Hinweis: v0.1.0 bleibt Rückfallversion. Erst nach realem Gerätetest im Changelog als bestätigt markieren.

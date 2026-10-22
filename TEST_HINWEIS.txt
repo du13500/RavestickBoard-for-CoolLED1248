@@ -1,0 +1,12 @@
+RavestickBoard v0.1.1, 22.10.2026
+
+Quellcode und Browser-JavaScript wurden geprüft, aber der Sketch wurde noch nicht
+mit Arduino IDE / esp32 by Espressif 3.3.12 kompiliert und nicht am ESP32-C3 getestet.
+
+Auslieferung als Testkandidat; die zuletzt real funktionierende Version bleibt
+firmware/CoolLED1248_Web_v0_1_0.ino.
+
+Vor dem Flash: Board ESP32C3 Dev Module, USB CDC On Boot Enabled,
+No OTA (2MB APP/2MB SPIFFS), passender COM-Port.
+
+Beim Austausch im lokalen Git-Repository kein .git-Verzeichnis ueberschreiben.

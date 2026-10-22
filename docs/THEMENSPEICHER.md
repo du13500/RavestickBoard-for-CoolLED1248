@@ -1,6 +1,6 @@
 # Themenspeicher und Aufgabenregister
 
-**Stand:** 22.10.2026. Aus Projektchats und realen Tests konsolidiert.  
+**Stand:** 22.10.2026, v0.1.1 als Testkandidat ergänzt. Aus Projektchats und realen Tests konsolidiert.  
 **Status:** `[x]` geprüft/real umgesetzt, `[ ]` offen. Bei **teilweise** ist es nicht abhaktauglich.  
 **Prioritäten:** P0 = Basis/Fehlerdiagnose, P1 = Kerneditor, P2 = Bibliothek/Spezialprogramme, P3 = spätere Option.
 
@@ -23,15 +23,15 @@
 
 ## B · Diagnose, Troubleshooting, Wartung
 
-- [ ] **DIA-01 · P0** Diagnosebereich direkt im Webinterface.
-- [ ] **DIA-02 · P0** Diagnose-TXT-Download mit Hardware, Firmwarestand, Resetgrund, Uptime und Zeit seit Start.
-- [ ] **DIA-03 · P0** Heap frei, Minimum Heap, größter freier zusammenhängender Block.
-- [ ] **DIA-04 · P0** BLE-Verbindungs-, Retry-, Disconnect-, Timeout- und Transfer-Ereignisse; BLE-Notification separat von Write-Erfolg.
-- [ ] **DIA-05 · P0** HTTP-Aufträge, Queue-Status und Fehlerursachen für Webinterface-Fehlersuche.
-- [ ] **DIA-06 · P0** Begrenzter RAM-Ringpuffer für letzte Ereignisse und separate Fehlerzähler; keine dauernden Flash-Schreibzugriffe.
+- [ ] **DIA-01 · P0** Diagnosebereich direkt im Webinterface. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **DIA-02 · P0** Diagnose-TXT-Download mit Hardware, Firmwarestand, Resetgrund, Uptime und Zeit seit Start. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **DIA-03 · P0** Heap frei, Minimum Heap, größter freier zusammenhängender Block. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **DIA-04 · P0** BLE-Verbindungs-, Retry-, Disconnect-, Timeout- und Transfer-Ereignisse; BLE-Notification separat von Write-Erfolg. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **DIA-05 · P0** HTTP-Aufträge, Queue-Status und Fehlerursachen für Webinterface-Fehlersuche. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **DIA-06 · P0** Begrenzter RAM-Ringpuffer für letzte Ereignisse und separate Fehlerzähler; keine dauernden Flash-Schreibzugriffe. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
 - [ ] **DIA-07 · P1** Dateisystem gesamt/belegt/frei; Speichergrenzen prüfen.
 - [ ] **DIA-08 · P1** Letzten gravierenden Fehler/Resetmarker optional stromausfallsicher, nach Flashverschleiß-Abwägung.
-- [ ] **DIA-09 · P1** Protokollierung von Erfolgen *und* Fehlschlägen, Transferdauer, Datenmenge, Paketanzahl.
+- [ ] **DIA-09 · P1** Protokollierung von Erfolgen *und* Fehlschlägen, Transferdauer, Datenmenge, Paketanzahl. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
 
 ## C · Vorschau als LED-Dot-Matrix
 
@@ -100,9 +100,9 @@
 ## H · App-Oberfläche und mobile Bedienung
 
 - [x] **UI-01 · P0** Erste dunkle, eigenständige Oberfläche mit LED-Farben auf iPhone erreichbar.
-- [ ] **UI-02 · P0** 7 Farbtasten ohne unerwünschte zweite Reihe darstellen.
-- [ ] **UI-03 · P0** `100 %` neben Helligkeitsregler ohne Zeilenumbruch.
-- [ ] **UI-04 · P0** Buttons/Status außerhalb der überlagernden mobilen Browserleiste positionieren; Safe-Area testen.
+- [ ] **UI-02 · P0** 7 Farbtasten ohne unerwünschte zweite Reihe darstellen. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **UI-03 · P0** `100 %` neben Helligkeitsregler ohne Zeilenumbruch. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
+- [ ] **UI-04 · P0** Buttons/Status außerhalb der überlagernden mobilen Browserleiste positionieren; Safe-Area testen. **Code in v0.1.1 vorhanden; Gerätetest ausstehend.**
 - [ ] **UI-05 · P1** Navigationsstruktur Startseite, Player, Bibliothek, Programme, Editor, Banane/Licht, System/Diagnose.
 - [ ] **UI-06 · P1** Bewusst an nostalgische CoolLED1248-App erinnern, deren Einschränkungen aber nicht übernehmen; **nicht** das SmallTV-Grau/Gelb.
 - [ ] **UI-07 · P2** Touchoptimierung für markierte Textbereiche, Fonts, Farben, Vorlagen und Seitenübersicht.
@@ -112,7 +112,7 @@
 
 - [x] **DOC-01 · P0** Erste Firmware v0.1.0 unter eigenem Versionsnamen gesichert.
 - [x] **DOC-02 · P0** Projekt-Themenspeicher, Roadmap, Änderungs- und Entscheidungslog angelegt (22.10.2026).
-- [ ] **DOC-03 · P0** Lokal Git verwenden, funktionierenden Grundstand committen und künftige Änderungen dokumentieren.
+- [x] **DOC-03 · P0** Git eingerichtet, initiales Repository privat unter `du13500/RavestickBoard-for-CoolLED1248` auf GitHub gesichert (22.10.2026).
 - [ ] **DOC-04 · P1** README/Installationsanleitung und Changelog bei jeder Version aktualisieren.
 - [ ] **DOC-05 · P1** Einheitliche Fehlermeldungen, Verhalten nach Stromausfall, Boot- und Dauerbetriebstests.
 - [ ] **DOC-06 · P2** Originalanzeigen separat referenzieren, Normal/Bold und Hersteller-Eigenheiten dokumentieren.

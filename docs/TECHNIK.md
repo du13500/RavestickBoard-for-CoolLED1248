@@ -35,7 +35,7 @@ iPhone / anderer Browser
 - Helligkeit über Steuerbefehl `0x08`; Senden des Werts `0xFF` war real sichtbar erfolgreich.
 - Bei v0.1.0 entscheidet derzeit Pixelbreite >64 automatisch auf Lauftext. **Dies wird ersetzt** durch eine manuelle Moduswahl.
 
-## V0.1.0: bekannte Code-Randbedingungen
+## V0.1.x: bekannte Code-Randbedingungen
 
 - `MAX_CHARS = 40`, 5×7-Font, nur Großbuchstaben, `ä/ö/ü` werden zu Großbuchstaben.
 - `SIGN_WIDTH = 64`, `SIGN_HEIGHT = 16`, Glyphen 5 Pixel breit und 7 Pixel hoch, vertikal verdoppelt.
@@ -43,7 +43,7 @@ iPhone / anderer Browser
 - Weboberfläche als HTML/CSS/JS direkt im Firmware-Flash; aktuell kein persistenter ESP32-Bibliotheksspeicher implementiert.
 - Feste BLE-Adresse im Sketch; später konfigurierbarer Scan und stabile Wiederverbindung sinnvoll.
 - Nur eine einzelne Textfarbe pro Upload, kein Zeichenmix.
-- API derzeit: `GET /`, `GET /api/status`, `POST /api/text`, `POST /api/brightness`.
+- API v0.1.0: `GET /`, `GET /api/status`, `POST /api/text`, `POST /api/brightness`. **Zusätzlich ab v0.1.1:** `GET /api/diagnostics` (JSON), `GET /api/diagnostics.txt` (TXT).
 - Webserver-Bearbeitung ist während synchroner BLE-Aufträge eingeschränkt; im Test bisher nutzbar, für lange Transfers gezielt testen.
 
 ## Status- und Sicherheitshinweise
@@ -53,3 +53,15 @@ iPhone / anderer Browser
 - Keine OTA-Schnittstelle vorsehen. Das verhindert keine Fremdsteuerung über die originale BLE-Schnittstelle.
 - Speicherüberwachung: `ESP.getFreeHeap()`, `ESP.getMinFreeHeap()`, `heap_caps_get_largest_free_block(MALLOC_CAP_8BIT)` für Diagnose prüfen; bei größtem freien Block korrekte Vergleichsbasis dokumentieren.
 - Persistenter Resetmarker und schwerwiegender letzter Fehler nur nach Kosten-/Flashverschleiß-Prüfung, tägliche Ereignisse zunächst im RAM-Ringpuffer.
+
+## v0.1.1-Diagnose (noch auf Hardware zu testen)
+
+- Versionskonstante `FW_VERSION = "0.1.1"`, Header im Browser sichtbar.
+- Ereignisspeicher: 56 feste RAM-Einträge, jedes Ereignis mit ms seit Boot, Kategorie und Kurzbeschreibung; ältere Einträge werden überschrieben.
+- Metriken: `ESP.getFreeHeap()`, `ESP.getMinFreeHeap()`, `ESP.getMaxAllocHeap()`, `ESP.getSketchSize()`, `ESP.getFreeSketchSpace()`, `ESP.getFlashChipSize()`.
+- Resetgrund: `esp_reset_reason()`. Uptime: `millis()` (32-Bit-Zähler, nach ca. 49,7 Tagen Überlauf).
+- BLE Write-Erfolg, Notification und tatsächliche Anzeigeübernahme sind getrennte Bedeutungen.
+- Die vorhandene synchrone BLE-Übertragung blockiert kurzzeitig HTTP-Anfragen. Live-Diagnose und Download funktionieren zwischen Aufträgen, nicht während eines langen BLE-Transfers.
+- Kein Mount oder Schreiben des SPIFFS-Dateisystems. Die v0.1.1-Diagnose kann daher keinen tatsächlichen belegten Dateisystemspeicher ausweisen.
+- WLAN-SSID bleibt in v0.1.1 absichtlich `CoolLED1248` für rückwärtskompatible Smartphone-Verbindungen.
+- Der Reset löscht die Ereignisse und Fehlerzähler; Flash bleibt geschont. Eine spätere sparsame Persistenz ist gesondert zu entscheiden.

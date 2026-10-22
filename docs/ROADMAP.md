@@ -5,7 +5,7 @@
 | Zielversion | Schwerpunkt | Fertig, wenn … |
 | --- | --- | --- |
 | **0.1.0** ✅ | Erster WLAN-/BLE-Webcontroller | iPhone kann Text und Farbe auf die Tafel übertragen. |
-| **0.1.1** ⬜ | Diagnose + iPhone-UI-Korrekturen | Status, Events, Heap und TXT-Export funktionieren; mobile Layoutfehler behoben. |
+| **0.1.1** 🧪 | Diagnose + iPhone-UI-Korrekturen (Code bereit, Gerätetest offen) | Status, Events, Heap und TXT-Export funktionieren; mobile Layoutfehler behoben. |
 | **0.1.2** ⬜ | Pixelgenaue Vorschau | Festes 64×16-Punktfenster, Preview-Play/Pause, Fast-Forward, lange Texte nicht geschrumpft. |
 | **0.2.0** ⬜ | Explizite Anzeigemodi | Statisch/Seiten/Lauftext unabhängig von Länge wählbar, Geschwindigkeits- bzw. Zeitregler. |
 | **0.2.x** ⬜ | Seiteneditor | Jede Seite separat gestaltbar, manuelles und automatisches Durchblättern, Seitenliste. |
