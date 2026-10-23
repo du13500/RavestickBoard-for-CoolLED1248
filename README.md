@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/totem.jpg" alt="RavestickBoard Festival-Totem mit CoolLED1248-LED-Tafel" width="820">
+  <img src="docs/assets/totem.jpg" alt="RavestickBoard Festival-Totem mit CoolLED1248-LED-Tafel">
 </p>
 
 <h1 align="center">🍌 RavestickBoard for CoolLED1248</h1>
@@ -12,9 +12,10 @@
 <p align="center">
   <img alt="Version v0.2.0" src="https://img.shields.io/badge/version-v0.2.0-7056d8">
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
-  <img alt="Hardwaregetestet" src="https://img.shields.io/badge/status-Hardwaretest%20l%C3%A4uft-2c8966">
+  <img alt="Hardware Testing" src="https://img.shields.io/badge/status-hardware%20testing-2e8b71">
   <img alt="Nichtkommerzielles Hobbyprojekt" src="https://img.shields.io/badge/project-non--commercial-f39c49">
   <img alt="All rights reserved" src="https://img.shields.io/badge/license-all%20rights%20reserved-666666">
+  <img alt="Mission: Hugs and Love" src="https://img.shields.io/badge/mission-hugs%20and%20love-ff69b4">
 </p>
 
 <p align="center"><sub>Das Titelbild zeigt das echte Festival-Totem; der darauf sichtbare Text wurde noch mit der Original-App erstellt.</sub></p>
@@ -118,31 +119,6 @@ Ob unsere konkrete Tafel mehrseitige Inhalte oder eigene Animationen über den d
 | **Weitere Programme** | Countdown, Stoppuhr, Scoreboard, Lichtfunktion, Playlist und acht Schnellzugriffe |
 
 Weitere Ideen, Entscheidungen und offene Aufgaben werden unter [`docs/THEMENSPEICHER.md`](docs/THEMENSPEICHER.md) sowie [`docs/ROADMAP.md`](docs/ROADMAP.md) gesammelt. Änderungen und Teststände stehen in [`CHANGELOG.md`](CHANGELOG.md).
-
-## Projektstruktur
-
-```text
-RavestickBoard-for-CoolLED1248/
-├── README.md
-├── LICENSE
-├── CHANGELOG.md
-├── docs/
-│   ├── assets/
-│   │   └── totem.jpg                # Titelbild (manuell hinzugefügt)
-│   ├── THEMENSPEICHER.md
-│   ├── ROADMAP.md
-│   ├── TECHNIK.md
-│   └── ...
-├── firmware/
-│   ├── ...                         # ältere Versionen bleiben erhalten
-│   └── RavestickBoard_v0_2_0/
-│       ├── RavestickBoard_v0_2_0.ino
-│       └── RavestickBoard_WebUI.h  # für die korrigierte v0.2.0 erforderlich
-├── web/
-│   └── index.html
-└── tools/
-    └── sync_web.py
-```
 
 ## Referenzen, Credits und Lizenzsituation
 
