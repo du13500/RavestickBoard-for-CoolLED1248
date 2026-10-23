@@ -1,12 +1,26 @@
 # Changelog
 
-## [0.2.0] – 22.10.2026 (Hardwaretest ausstehend)
+> **Dokumentationsnachtrag 23.10.2026:** Das frühere v0.2.0-Paket bezeichnete Hardwaretests noch als ausstehend. Diese wurden nach **Korrektur 1** vom Nutzer tatsächlich durchgeführt. Historische „zu testen“-Listen in älteren Versionsabschnitten bleiben als damalige Planung erhalten und sind keine aktuellen Offenstände.
+
+### [0.2.0] Praxisabnahme · 23.10.2026
+
+- **13/14** ursprüngliche Testpunkte vom Nutzer mit „Ja“ beantwortet; die einzeilige Darstellung blieb unbewertet.
+- **Bestätigt:** Start, iPhone-Webinterface, Seite hinzufügen/duplizieren/verschieben, unterschiedliche Farben, Mini in zwei Zeilen, automatische Seitenfolge, individuelle Anzeigedauer, NVS-Persistenz nach Neustart und wiederholte Uploads.
+- **Bekannter Mangel:** Der ESP32 lädt bei jedem Seitenwechsel den gesamten Inhalt erneut hoch. Die tafelseitige **Prozentanzeige** erscheint jedes Mal. Der Player wird deshalb als technische Vorstufe einer späteren **Playlist zwischen Programmen** betrachtet.
+- **Schriftentscheidungen:** Zwei Zeilen in der aktuellen Großbuchstaben-Mini beibehalten; Kleinbuchstaben in Mini künftig automatisch als Versalien rendern; „Mini, eine Zeile“ ergänzen; `ß/ẞ` mit Entfernen des blau markierten Pixels; `g/p/q/y` an gemeinsame x-Höhe und Unterlängen anpassen.
+- **Editor-Beobachtung:** Gespeicherte Blockseiten bleiben bei Browser-Reload erhalten; **Lauftextentwurf und zuletzt gewählter Reiter nicht**. Bibliothek/Entwurfswiederherstellung geplant.
+- **Forschung, noch nicht implementiert:** Einmaliger Upload mehrerer Seiten über nativen Blocktext oder `0x04`-Animation; OpenSign-Referenz ist **kein** Gerätetest unserer Tafel.
+- **Dokumentationsentscheidung:** Kurze Excel-kopierbare Testtabelle zu jedem späteren **Firmwarepaket direkt im Chat**, keine zusätzliche Download-Datei.
+
+---
+
+## [0.2.0] – 23.10.2026 (Korrektur 1, auf echter Hardware getestet)
 
 ### Korrektur 1 · 23.10.2026 (Kompilier-Hotfix)
 - HTML und JavaScript aus dem `.ino` in `RavestickBoard_WebUI.h` ausgelagert, um fehlerhafte automatische Arduino-Funktionsprototypen (`function does not name a type`) zu verhindern.
 - `tools/sync_web.py` aktualisiert jetzt die Headerdatei.
 - Sketch und Header müssen gemeinsam im gleichen Arduino-Sketch-Ordner liegen.
-- Sonst keine beabsichtigten Funktionsänderungen; reale ESP32-Kompilierung muss noch bestätigt werden.
+- Sonst keine beabsichtigten Funktionsänderungen; reale ESP32-Kompilierung wurde anschließend vom Nutzer bestätigt (23.10.2026).
 
 
 ### Neu
@@ -26,7 +40,7 @@
 - Firmwarequellcode und `web/index.html` durch `tools/sync_web.py` synchronisierbar.
 
 ### Noch offen
-- Native ESP32-Arduino-Kompilierung und BLE/NVS-Hardwaretest.
+- **Erledigt am 23.10.2026:** ESP32-Arduino-Kompilierung nach Korrektur 1 sowie BLE-/NVS-Grundtests. Offen bleiben spezielle Regressionen und Dauerbelastung.
 - Farb- und Schriftwechsel pro Zeichen sowie Rekonstruktion der Herstellerfonts.
 - Live-BLE-Regler für Helligkeit/Geschwindigkeit, ohne Verbindungsaufbau je Schritt.
 - Prüfung nativer Mehrseitenfähigkeit der Tafel und verkürzter Umschaltzeiten.
@@ -38,9 +52,9 @@
 
 **Prinzip:** Tatsächlich getestete Funktionen und geplante Änderungen getrennt führen. Eine neue Versionsnummer bezeichnet eine bewusst archivierte Firmware, nicht nur eine Idee.
 
-## [0.1.2] · 22.10.2026 · Testkandidat, auf Hardware noch nicht bestätigt
+## [0.1.2] · 22.10.2026 · Nach Compilerkorrektur auf ESP32 gestartet; detaillierte Glyphenprobleme später gesammelt
 
-### Neu und verbessert (implementiert, Gerätetest ausstehend)
+### Neu und verbessert (damals zunächst implementiert; teilweise später auf Hardware beobachtet)
 - **Deutsche Oberfläche und Groß-/Kleinschreibung:** alle UI-Texte deutsch und mit Umlauten/ß; 26 echte Kleinbuchstaben und ä/ö/ü zusätzlich zum bisherigen Zeichensatz (`FNT-02`).
 - **Font aus einer Quelle:** Das Webinterface bezieht dieselbe Engschrift-Glyphentabelle wie der ESP32 über `/api/font`.
 - **LED-Vorschau als Punktmatrix:** stets genau 64×16 runde LEDs, auch bei langem Text; keine automatische Verkleinerung (`PRE-01`, `PRE-02`, `PRE-03`).
@@ -57,8 +71,8 @@
 - Webinterface bei 390 px Breite in Chromium mit simulierten API-Antworten geprüft: Umlaute/Zählung, Standbild/Lauftext, Player, Diagnose, Kopieren.
 - Fontdefinition für Groß-/Kleinbuchstaben einschließlich `ÄÖÜäöüß` automatisiert überprüft.
 
-### Noch nicht bestätigt
-- ESP32-Kompilierung mit Espressif 3.3.12 und reale Flash-Belegung.
+### Zum damaligen Zeitpunkt noch nicht bestätigt
+- ESP32-Kompilierung mit Espressif 3.3.12 und reale Flash-Belegung; **inzwischen nach Korrektur bestätigt**.
 - Tatsächliche Zeichendarstellung von Groß-/Kleinbuchstaben und Umlauten auf der Tafel.
 - Tatsächliches Lauftext-Tempo und Richtung; Einfluss der Rohwertskala.
 - Clipboard-Fallback auf iPhone/Safari unter unverschlüsseltem `http://192.168.4.1`.
@@ -89,7 +103,7 @@
 ### Intern geprüft
 - JavaScript syntaktisch mit Node.js geprüft; HTML/CSS als mobile Chromium-Ansicht gerendert (keine ESP32-Verbindung).
 
-### Noch zu testen
+### Ursprüngliche Testcheckliste (danach teilweise bestätigt)
 - Arduino-Kompilierung und Flash unter ESP32 Core 3.3.12 mit `No OTA (2MB APP/2MB SPIFFS)`.
 - WLAN-Webseite auf iPhone/Safari, v0.1.1 sichtbar, Diagnose und Download geprüft.
 - Textübertragung, Farben und separate Helligkeit gegenüber v0.1.0 regressionsgeprüft.
@@ -100,11 +114,11 @@
 - Vorschau langer Texte noch nicht pixelgenau, keine Kleinbuchstaben, Auto-Lauftext noch aktiv.
 - Diagnose im RAM verliert Ereignisse bei Neustart. Keine vollständige Ursache für Fremd-BLE-Steuerung erkennbar.
 
-## [Unreleased] · Weitere Planung ab 22.10.2026
+## [Historische Planung vor v0.2.0] · ursprüngliche Vorschläge ab 22.10.2026
 
 ### Geplant
 - Nach realem v0.1.1-Gerätetest Diagnosefunktionen als bestätigt markieren; später Diagnose-Persistenz prüfen (`DIA-*`).
-- Vorschau als echte 64×16-LED-Punktmatrix, Lauftext-Simulation, 1×/2×/4×/8× und Vorspulen (`PRE-*`).
+- Vorschau als echte 64×16-LED-Punktmatrix, Lauftext-Simulation, 1×/2×/4×/8× und Vorspulen (**8× später ausdrücklich verworfen; aktuell 1×/2×/4×**) (`PRE-*`).
 - Mobile-UI-Korrekturen aus v0.1.1 auf realem iPhone/Safari verifizieren (`UI-*`).
 - Explizite Wahl zwischen Lauftext und statischen Seiten, keine Längenautomatik (`EDT-*`).
 - Ergänzen echter Kleinbuchstaben für Engschrift (`FNT-*`).

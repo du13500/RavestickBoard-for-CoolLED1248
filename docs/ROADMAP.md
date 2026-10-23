@@ -1,33 +1,251 @@
-# Roadmap RavestickBoard
+# 🍌 RavestickBoard · Roadmap
 
-## Fertig / in Hardware getestet
-- [x] v0.1.0: WLAN und BLE-Textübertragung (64×16, sieben Farben).
-- [x] v0.1.1: Diagnose, Log-Export, Versionsanzeige.
-- [x] v0.1.2: Firmware auf ESP32 installiert; Zeichensatz- und UX-Probleme im Praxistest dokumentiert.
+**Stand: 23. Oktober 2026 · Aktueller Hardwarestand: v0.2.0 (Korrektur 1)**  
+**Projekt:** ESP32-C3-Webcontroller für CoolLED1248/CoolLEDX, 64 × 16 Pixel, sieben LED-Farben.  
+**Mission:** Hugs and Love. ❤️
 
-## Aktuelle Version: v0.2.0 (Testkandidat)
-- [x] Erste Seite-zu-Seite-Bearbeitung mit unabhängigen Inhalten und Einstellungen im Code implementiert.
-- [x] Zwei Textzeilen (Mini) oder eine Zeile (Engschrift), sieben Farben je Zeile.
-- [x] Seiten als Programm in NVS speichern, nicht beim Boot abspielen.
-- [x] Individuelle Vorschau und 1×/2×/4×.
-- [ ] Mit realer Arduino-ESP32-Toolchain kompilieren.
-- [ ] Einzelne Seite auf physischer LED-Tafel bestätigen.
-- [ ] Seiten nach Powercycle im Editor wiederfinden.
-- [ ] Automatische zwei- oder dreiseitige Wiedergabe mit BLE-Log testen.
-- [ ] 1-Stunden-Heap und Stabilität testen.
+Diese Roadmap beschreibt **wo wir stehen, was als Nächstes sinnvoll ist und welche größeren Möglichkeiten wir untersuchen**. Sie ist ein Entwicklungsplan, keine Behauptung bereits vorhandener Fähigkeiten und keine feste Termin- oder Versionszusage.
 
-## Danach: Blockeditor ausbauen
-- [ ] Mehrere Textobjekte je Seite frei positionieren.
-- [ ] Farbwechsel pro Zeichen / Textabschnitt; Schriftmix innerhalb einer Seite.
-- [ ] Originalschrift Normal / Bold aus Referenzscreenshots rekonstruieren.
-- [ ] Engschrift g, p, q, y, Ä, Ö, Ü überarbeiten; letzte Pixelreihe für Unterlängen.
-- [ ] Live-Steuerung Helligkeit und Geschwindigkeit; normaler Bereich ~80, fein abgestuft.
-- [ ] Boardnative Programm-/Mehrseitenfähigkeit untersuchen, ohne undokumentierte gefährliche Befehle zu senden.
-- [ ] Schnellzugriffe, Bibliothek, gespeicherte Programme, Rotation.
-- [ ] Scoreboard, Countdown, Stoppuhr, Licht und Animationsimport.
-- [ ] Speicher- und BLE-Langzeitdiagnose mit logischer Fehlerhistorie.
+- **Detailliertes Ideen- und Aufgabenregister:** [`THEMENSPEICHER.md`](THEMENSPEICHER.md), einschließlich eindeutiger Themen-IDs.
+- **Tatsächlich umgesetzte Versionen und Fehlerkorrekturen:** [`../CHANGELOG.md`](../CHANGELOG.md).
+- **Technische Entscheidungen und offene Alternativen:** [`ENTSCHEIDUNGEN.md`](ENTSCHEIDUNGEN.md).
+- **Quellen und Fremdlizenzen:** [`QUELLEN_UND_LIZENZEN.md`](QUELLEN_UND_LIZENZEN.md).
 
-## Öffentliches Release
-- [ ] Herkunftsaudit und unabhängige Neuimplementierung potenziell fremder Teile.
-- [ ] Lizenz- und Markenrechte, Datenschutzhinweise, Tests, README.
-- [ ] Erst danach Sichtbarkeit des privaten GitHub-Repositories prüfen.
+**Statusregel:** ✅ = auf unserer Hardware bestätigt · 🟡 = implementiert, aber nur eingeschränkt bestätigt oder mit bekanntem Problem · 🔬 = Forschung / auf unserer Hardware noch unbestätigt · ⬜ = geplant. Checklisten werden erst nach nachvollziehbaren Tests und Aktualisierung des Changelogs abgehakt.
+
+---
+
+## 1. Wo wir heute stehen
+
+| Stand | Hardwarestatus | Ergebnis |
+| --- | --- | --- |
+| **BLE-Bring-up / FirstText (22.10.2026)** | ✅ | ESP32-C3 findet die Tafel; Helligkeitsbefehl und eigener mehrfarbiger Text erfolgreich übertragen. |
+| **v0.1.0** | ✅ | Eigenes WLAN, iPhone-Weboberfläche, sieben Farben und Textupload funktionieren. |
+| **v0.1.1** | ✅ | Diagnose und BLE-Statistiken auf der Tafel/im Webinterface praktisch erprobt. |
+| **v0.1.2** | 🟡 | Deutsche Zeichen, getrennte Standbild-/Lauftextmodi, Punktvorschau und weitere Steuerung entwickelt; auffällige Glyphen und UX-Themen gesammelt. |
+| **v0.2.0, Korrektur 1** | ✅ mit Einschränkungen | ESP32- und iPhone-Test erfolgreich: erster Blockeditor, zwei verschiedenfarbige Mini-Zeilen, Seitenverwaltung, individuelle Dauer, automatische BLE-Seitenfolge und Speicherung über Neustart. |
+
+### Ergebnis des v0.2.0-Praxistests vom 23.10.2026
+
+**13 von 14 Testpunkten mit „Ja“ beantwortet; die einzeilige Schrift blieb als separater Testpunkt ohne Ergebnis.** Diese Bewertung bestätigt die Grundfunktionen, nicht die endgültige Bedienqualität.
+
+- [x] Start, WLAN-Weboberfläche und BLE-Übertragung auf echter Hardware.
+- [x] Blockseiten anlegen, duplizieren, verschieben, löschen und farbig gestalten.
+- [x] Die **zweizeilige, farblich getrennte Minischrift** ist auf der echten Tafel sehr gut lesbar; ihre bisherige Großbuchstabenform bleibt erhalten.
+- [x] Automatischer Seitenwechsel und individuelle Anzeigezeiten funktionieren **technisch**.
+- [x] Gespeicherte Blockseiten bleiben nach Neuladen des Editors und Neustart des ESP32 erhalten (NVS).
+- [x] Wiederholte Übertragungen beziehungsweise eine Abfolge mehrerer Inhalte funktionieren.
+- [ ] Einzeilige Mini-Darstellung ergänzen und separat testen.
+
+**Wichtigste Einschränkung:** v0.2.0 überträgt **jede Seite erneut**. Dadurch erscheint zwischen den Seiten immer wieder die **Prozentanzeige der Tafel**. Das ist für ein *zusammenhängendes Blockprogramm* unerwünscht; der vorhandene Mechanismus eignet sich aber als spätere **Playlist-Steuerung zwischen eigenständigen Programmen**.
+
+**Weiteres bestätigtes Verhalten:** Im Lauftexteditor geht der ungespeicherte Entwurf beim Neuladen verloren. **Gespeicherte Blockseiten bleiben erhalten.** Das ist kein allgemeiner NVS-Speicherfehler.
+
+---
+
+## 2. Unser Zielbild: Seite → Programm → Playlist
+
+**Seite** → Ein individuell gestaltetes 64×16-Bild mit eigenen Texten, Schriftarten, Farben, Positionierungen und gegebenenfalls Anzeigedauer. Keine automatisch abgeschnittenen Buchstaben, kein ungefragter Seitenumbruch.
+
+**Programm** → Eine oder mehrere Seiten, die **idealerweise in einer einzigen BLE-Übertragung** auf die Tafel gelangen und dort selbstständig abgespielt werden, **ohne Prozentanzeige zwischen den Seiten**. Ob und mit welchen Grenzen unsere konkrete Tafel dies unterstützt, muss getestet werden.
+
+**Playlist** → Mehrere eigenständige Programme mit Reihenfolge, Wiedergabedauer und Rotation. **Zwischen Programmen darf der ESP32 erneut über BLE übertragen.** Hier können wir den bereits funktionierenden v0.2.0-Seitenplayer weiterverwenden.
+
+Außerdem bleiben **Entwurf**, **gespeichertes Bibliotheksobjekt** und **aktuell auf der Tafel laufender Inhalt** ausdrücklich getrennte Zustände.
+
+---
+
+## 3. Nächste Etappe: v0.2.x stabilisieren und Schriften verfeinern
+
+**Ziel:** Den ersten Editor zuverlässig und angenehm bedienbar machen, ohne das bereits funktionierende Zwei-Zeilen-Layout zu beschädigen.
+
+### Schrift und Darstellung
+
+- [ ] **Mini in zwei Zeilen erhalten**: das bestätigte Erscheinungsbild der Großbuchstaben nicht pauschal verändern (`FNT-10`).
+- [ ] **Mini-Ausgabe immer in Versalien**: `a→A`, `ä→Ä`, `ö→Ö`, `ü→Ü`, `ß→ẞ` als ein Zeichen. Der eingegebene Originaltext bleibt im Editor erhalten (`FNT-11`).
+- [ ] **„Mini, eine Zeile“** als zusätzliche Darstellungsoption; 7 Pixel hoch und vertikal zentriert (`FNT-12`).
+- [ ] **ß und ẞ** technisch separat unterstützen, optisch gleich oder nahezu gleich. In der kleinen Schrift **den vom Nutzer blau markierten unteren Pixel entfernen** (`FNT-13`).
+- [ ] **Engschrift-Unterlängen** bei `g`, `p`, `q`, `y` sinnvoll bis zur untersten Pixelreihe führen, ohne die gemeinsame x-Höhe zu verlassen; auch `j` und Satzzeichen prüfen (`FNT-14`).
+- [ ] **Ä, Ö, Ü** mit den vorhandenen Original-App-Referenzen in Normal und Bold vergleichen und gezielt korrigieren; keine wahllose Font-Neugestaltung.
+- [ ] Glyphenregression auf der echten 64×16-Tafel für Großbuchstaben, Kleinbuchstaben, Umlaute, ß/ẞ und Satzzeichen.
+
+### Editor, Vorschau und Alltagstauglichkeit
+
+- [ ] Überlänge erkennen: **keine Buchstaben am rechten Seitenrand zerteilen**, keine unfreiwillige nächste Seite und keine automatische Schriftverkleinerung; deutlich sichtbare Warnung (`BLK-05`, `EDT-09`).
+- [ ] Vorschau weiter als **exakte 64×16-Punktmatrix** führen; ausgeschaltete LEDs, reale Farbkombinationen und Positionierung darstellen (`PRE-01` bis `PRE-08`).
+- [ ] Vorschau-Tempo auf **1×, 2×, 4×** beschränken; kein 8×; Play/Pause und gezielte Seitennavigation erhalten.
+- [ ] Zuletzt geöffneten Editor-Reiter sowie laufende Entwürfe nach Neuladen automatisch wiederherstellen; sparsame Speicherung statt Flash-Schreiben bei jedem Tastendruck (`LIB-11`).
+- [ ] Statusmeldungen, mobile Bedienbarkeit, Safari-Safe-Area, Farbwahl und Diagnose auf dem iPhone regressionsprüfen (`UI-*`, `DIA-*`).
+- [ ] BLE-Verbindungsfehler verständlich anzeigen, wenn die Original-App das Board gerade verwendet; Wiederherstellung ohne ESP-Neustart testen (`SYS-09`, `BLE-13`).
+
+### Live-Steuerung ohne vollständigen Neu-Upload
+
+- [ ] **Helligkeit `0x08`** direkt beim Schieben verändern; ohne Text-Neuübertragung.
+- [ ] **Geschwindigkeit `0x07`** direkt beim Schieben verändern; Original-App-Skala um **80** gegen Rohwerte messen statt identische Werte anzunehmen.
+- [ ] **Modus `0x06`** direkt umschalten: statisch/Block, links, rechts, aufwärts, abwärts, Schneefall, Laser und weitere **nachweislich unterstützte** Effekte.
+- [ ] Kurze BLE-Verbindung während aktiver Bedienung halten, Zwischenwerte zusammenfassen, nach Inaktivität freigeben; Original-App-Koexistenz erhalten (`BLE-14` bis `BLE-16`).
+
+**Abnahme:** Hauptfunktionen v0.2.0 bleiben stabil; kleine Schrift verwendet gut lesbare Großbuchstaben; Entwürfe überstehen einen Browser-Reload; Live-Kommandos verursachen keine neue Prozentanzeige.
+
+---
+
+## 4. Forschungs-Meilenstein: Was kann die LED-Tafel selbst?
+
+**Ziel:** Den nächsten Architekturentscheid auf **eigenen Hardwaretests** aufbauen statt auf Annahmen über fremde CoolLEDX-Modelle.
+
+### Blockprogramme und gespeicherte Animationen
+
+- [ ] 🔬 **Animierte Bildfolgen über `0x04`** zunächst mit einem kleinen, ungefährlichen Testpaket auf unserer Tafel prüfen (`ANM-01`).
+- [ ] 🔬 Zwei Seiten, z. B. **„SUCHE:“ → „JOINT / ZIGARETTE“**, **einmal** hochladen und anschließend autonom wiederholen lassen, **ohne zwischenzeitliche Prozentanzeige** (`ANM-03`).
+- [ ] 🔬 Den **nativen Text-/Blockmodus `0x02`** dagegen testen: Gibt es einen einfacheren Weg für mehrere Seiten und Formatierungen? (`ANM-05`).
+- [ ] 🔬 Eigene Hardwaregrenzen messen: Frameanzahl, Speicher, Paketgröße, ACKs, Transferdauer, Loop, Verhalten nach Stromverlust (`ANM-02`, `ANM-13`, `ANM-14`).
+- [ ] 🔬 **Anzeigedauer pro Seite** klären. OpenSign beschreibt für seine Referenztafel **eine gemeinsame Bildhaltezeit**. Wiederholte Frames und deren Grenzen untersuchen, individuelle 5-/7-/10-Sekunden-Seiten **nicht ungeprüft versprechen** (`ANM-04`).
+- [ ] 🔬 Originalmodi `0x06` und selbst entworfene, vorgerenderte `0x04`-Effekte klar unterscheiden (`ANM-11`).
+- [ ] 🔬 Echtzeit-Streaming, dynamische Anzeige und mehrere gleichzeitig gespeicherte Programme **nicht voraussetzen** (`ANM-10`).
+
+**Externe Erkenntnis, nicht unsere Testbestätigung:** OpenSign meldet auf seiner eigenen CoolLEDX-Referenztafel ca. **30 KiB / bis zu 80 Frames** und gespeicherte autonome Animation. Unsere Tafel kann andere Grenzen haben. 64×16 Pixel mit drei 1-Bit-Farbebenen benötigen **384 Byte je unkomprimiertem Vollbild**.
+
+**Entscheidung nach den Tests:**
+
+1. **Wenn möglich:** ein Programm als nativen Blocktext oder gespeicherte Animation mit einem Upload an die Tafel senden.
+2. **Wenn nur eingeschränkt möglich:** Grenzen und angenäherte Anzeigedauern deutlich im Editor kennzeichnen.
+3. **Falls nicht möglich:** Die Einschränkung ehrlich dokumentieren und Controller-gesteuerte Übergänge nur dort nutzen, wo die sichtbare Prozentanzeige akzeptabel ist. Den bestehenden Player behalten.
+
+---
+
+## 5. Programm- und Playlist-Architektur
+
+**Abhängigkeit:** Ergebnisse der Block-/Animationsforschung aus Abschnitt 4.
+
+- [ ] **Seitenobjekt** als eigenständig speicher- und bearbeitbares 64×16-Layout definieren (`BLK-01`, `EDT-02` bis `EDT-09`).
+- [ ] **Programmobjekt** mit Seitenfolge, Einstellungen, Loop, Übertragungsweg und gegebenenfalls Zeitraster entwickeln (`BLK-01`, `BLK-03`, `BLK-06`).
+- [ ] **Playlistobjekt** mit mehreren Programmen, Reihenfolge, Dauer, Wiederholung und optional Zufall erstellen (`LIB-04`, `LIB-05`).
+- [ ] Den vorhandenen **v0.2.0-BLE-Seitenplayer** in die Playlist-Ebene übernehmen und nicht ersatzlos entfernen (`BLK-04`).
+- [ ] Manuelle Navigation „vorheriges/nächstes Programm“, Start/Pause/Stop, kontrollierte Wiederaufnahme nach Fehler (`EDT-04`, `EDT-05`).
+- [ ] Sofort-Nachrichten einschieben und danach auf Wunsch zur aktiven Playlist zurückkehren (`LIB-06`).
+- [ ] Aktuelle Anzeige **beim ESP32-Neustart nicht ungefragt überschreiben**; automatischen Start nur nach ausdrücklicher Aktivierung (`LIB-09`).
+- [ ] Übertragungsstatus, BLE-Retries und Fehler pro Programm sichtbar machen.
+
+**Abnahme:** Unterschied zwischen einer Seite, einem autonomen Programm und einer ESP32-Playlist ist in der Bedienung klar. Neue Uploads finden, sofern technisch möglich, nur zwischen Programmen statt.
+
+---
+
+## 6. Bibliothek und Speicherung
+
+**Ziel:** Texte, Seiten, Programme und später Animationen dauerhaft auf dem ESP32 verwalten, unabhängig vom verwendeten Telefon.
+
+- [ ] **Entwurf / Bibliothek / aktives Programm** im Datenmodell und in der Benutzerführung trennen (`LIB-12`).
+- [ ] ESP32-Flash mit **LittleFS** für viele benannte Programme untersuchen; NVS für kleine Konfigurationswerte und bestehende Seitenmigration berücksichtigen (`LIB-13`).
+- [ ] Format mit stabilen IDs, Versionsnummern, Schriftarten, Farben, Positionen, Dauer, Seitenfolge und Metadaten festlegen (`LIB-14`).
+- [ ] Bibliothek: **speichern, öffnen, duplizieren, umbenennen, löschen**, suchen und favorisieren (`LIB-01`, `LIB-02`).
+- [ ] **Acht frei belegbare Schnellzugriffe** auf der Startseite (`LIB-03`).
+- [ ] Ordner/Tags/Festival-Profile und wiederverwendbare Vorlagen (`LIB-02`, `LIB-07`).
+- [ ] **Export/Import/Backup** einzelner Programme und der gesamten Bibliothek; der ESP32 darf niemals die einzige Kopie sein (`LIB-08`, `LIB-15`).
+- [ ] Speicherbelegung, Grenzen, Datenintegrität und Flash-Verschleiß messen; Migrationen zwischen Firmwareversionen testen (`SYS-11`, `DIA-07`).
+- [ ] ⬜ **microSD per SPI** nur bei tatsächlichem Bedarf, etwa für große Bildfolgen, vorsehen; 3,3 V, GPIO und Gehäuseaufbau separat prüfen (`LIB-16`).
+
+**Abnahme:** Eine auf dem iPhone erstellte Vorlage lässt sich später am Laptop wieder öffnen; Reload und Stromausfall verlieren weder gespeicherte Programme noch bewusst gesicherte Entwürfe.
+
+---
+
+## 7. Erweiterter visueller Editor und Schriftarten
+
+- [ ] **Originalschrift Normal** anhand gesammelter Referenzscreenshots rekonstruieren (`FNT-03`).
+- [ ] **Originalschrift Bold** unabhängig von Normal rekonstruieren (`FNT-04`).
+- [ ] Auffällige Hersteller-Glyphen **einzeln** zur Übernahme/Korrektur entscheiden; Originalvorlagen als Referenz erhalten (`FNT-05`).
+- [ ] **Engschrift** und **Mini** als eigenständige Fonts weiterentwickeln (`FNT-02`, `FNT-06` bis `FNT-09`).
+- [ ] **Farbe pro Zeichen, Wort oder Textabschnitt**, ohne Beschränkung auf eine Farbe je Zeile (`EDT-06`).
+- [ ] **Schriftart pro Zeichen/Wort/Abschnitt**, Mischungen innerhalb derselben Seite (`EDT-07`).
+- [ ] Mehrere Textobjekte, ein- oder zweizeilige Abschnitte, zentrierte Elemente und **freie Koordinaten** pro Seite (`EDT-08`, `EDT-12`).
+- [ ] Sonderzeichen, Herzen, Symbole, Emojis soweit als Pixelgrafik darstellbar (`EDT-13`).
+- [ ] Zeichenbasierte Überlaufwarnungen und optionale Hilfen zur Verteilung, **keine automatische Umformatierung ohne Benutzerwunsch** (`BLK-05`).
+- [ ] Touchoptimierter Seiteneditor für iPhone und größere Bildschirme; Drag-and-drop für Reihenfolge und Elemente (`UI-05` bis `UI-07`).
+
+**Gestaltungsregel:** Die echte Tafel hat **sieben leuchtende Farben plus Schwarz**. Browserdarstellung und Mischfarben dürfen keine physisch nicht vorhandenen LED-Farben versprechen.
+
+---
+
+## 8. Grafiken, Animationseditor und eigene Effekte
+
+**Abhängigkeit:** Speicher- und Animationsprotokoll der konkreten Tafel nachweisen.
+
+- [ ] Pixelgrafiken auf der 64×16-Matrix zeichnen, importieren und bearbeiten (`SPC-05`, `ANM-09`).
+- [ ] Animierte Bilddateien **GIF, WebP, APNG** browserseitig dekodieren und in passende Frames umwandeln (`ANM-07`).
+- [ ] Skalierung, Beschnitt, Ausrichtung, Transparenz und klare Vorschau anbieten.
+- [ ] Echte 7-Farben-Palette, Quantisierung und optional räumliches Dithering; temporale Farbmischung nur nach Flimmertests (`ANM-08`).
+- [ ] Eigene Animationseffekte: **Wellenlauf, Glitzer/Sternenhimmel, pulsierendes Herz, Ein-/Ausblenden, Pixelvorhang, Aufblitzen, Auflösen** (`ANM-06`).
+- [ ] Übergänge zwischen Seiten als vorberechnete Pixelbilder oder native Effekte, jeweils mit nachvollziehbaren Limits (`ANM-09`).
+- [ ] Effekte der Original-App (einschließlich Schneefall, Laser, Bild-/Musikmodi) systematisch dokumentieren und nach Eignung anbinden (`BLE-16`, `SPC-06`).
+- [ ] Speicherbedarf, Uploadzeiten und autonome Laufzeit gegenüber ESP32-Live-Steuerung messen (`ANM-14`).
+
+---
+
+## 9. Spezialprogramme für das Festival-Totem
+
+- [ ] **Countdown** mit Einstellen, Start, Pause, Fortsetzen und Reset (`SPC-01`).
+- [ ] **Stoppuhr** mit Start, Pause, Reset und gut lesbarem Displaylayout (`SPC-02`).
+- [ ] **Scoreboard** mit zwei oder mehr unabhängigen Zählern, zum Beispiel ❤️ / 💋 (`SPC-03`).
+- [ ] **Lichtfunktion** als schnelles Weiß-/Rot-Display (`SPC-04`).
+- [ ] Weitere Grafiken, Symbole, Animationen und kleine Interaktionen als wiederverwendbare Bibliothekselemente.
+- [ ] Für dynamische Zähler eine **realistische Update-Strategie** entwickeln: Tafel-nativ, periodische BLE-Änderungen oder nachgewiesener Streaming-Weg; Prozentanzeige und Latenz berücksichtigen (`SPC-07`).
+- [ ] Zeitbasierte Programmauswahl oder Rotation erst nach Klärung einer zuverlässigen Uhrzeitquelle ohne Internet (`LIB-10`).
+
+---
+
+## 10. Stabilität, Diagnose und Geräteverwaltung
+
+- [ ] Die bereits vorhandene Diagnose bei jeder Version regressionsprüfen: Firmwarestand, Resetgrund, Uptime, Heap, zusammenhängender Speicherblock, BLE-Pakete, ACKs und Fehler (`DIA-01` bis `DIA-09`).
+- [ ] **Diagnose mit einem Tipp kopieren**, TXT-Download als Alternative beibehalten; Safari-Fallback testen (`DIA-10`).
+- [ ] BLE-Schreibvorgang, empfangenes ACK und tatsächliche Anzeige **getrennt** bewerten (`ANM-13`).
+- [ ] **Langzeittests** für mehrstündigen Betrieb, wiederholte Übertragungen, WLAN/BLE-Koexistenz, Speicherfragmentierung und Neustarts (`SYS-10`).
+- [ ] BLE-Geräteerkennung und frei konfigurierbare Tafel statt fest codierter Adresse (`SYS-08`).
+- [ ] Wiederverbindung nach Übernahme der Tafel durch die Original-App; klare Fehler und sinnvolle Timeouts (`SYS-09`).
+- [ ] Optional mehrere kompatible LED-Tafeln verwalten; tatsächlich unterstützte Protokoll- und Hardwaregenerationen getrennt dokumentieren (`SYS-12`, `DOC-09`).
+- [ ] WLAN-Konfiguration später über Webinterface anpassbar machen. Das bisherige veröffentlichte Standardpasswort ist eine **bewusste Projektentscheidung**, kein als geheim behandelter Schlüssel.
+- [ ] Firmwareinstallation bleibt **USB-only, ohne OTA**, solange keine bewusste neue Entscheidung getroffen wird.
+
+---
+
+## 11. GitHub, Lizenz, Dokumentation und Zusammenarbeit
+
+**Kein zukünftiger Meilenstein „irgendwann öffentlich releasen“.** Das GitHub-Repository **existiert bereits**; die öffentliche Sichtbarkeit ist eine laufende Projekt- bzw. Repository-Einstellung und keine noch zu entwickelnde Firmwarefunktion. Der genaue derzeitige Visibility-Status wird hier nicht als technische Leistung behauptet.
+
+**Rechtliche Ausrichtung:** RavestickBoard ist ein **nichtkommerzielles Hobbyprojekt**, derzeit **All Rights Reserved**, **keine allgemeine Open-Source-Codefreigabe**. Ein öffentlich sichtbares GitHub-Repository ist damit vereinbar. Eine spätere Lizenzänderung wäre eine separate bewusste Entscheidung, keine Voraussetzung für die weitere Entwicklung.
+
+- [x] GitHub-Repository `du13500/RavestickBoard-for-CoolLED1248` angelegt; Firmwareversionen dokumentiert (`DOC-01` bis `DOC-03`).
+- [x] Projekt-README mit Totem-Titelbild und dokumentiertem v0.2.0-Hardwaretest erstellt.
+- [x] `LICENSE` für die derzeitige Rechtevorbehaltung vorbereitet; Code- und Quellenprüfung als erster Auditdurchgang durchgeführt.
+- [ ] README, Changelog, Roadmap, Themenspeicher und Entscheidungen **bei relevanten Änderungen gemeinsam** fortschreiben (`DOC-04`).
+- [ ] Bei **jeder Firmwareversion und jedem Korrekturpaket** eine **Excel-kopierbare Testtabelle direkt im Chat** liefern: `Nr. | Bereich | Testpunkt | Ergebnis | Bemerkungen`; letzte zwei Spalten leer; **keine separate Download-Datei** (`QA-01`).
+- [ ] Für neue Funktionen sauber zwischen **implementiert**, **experimentell**, **auf unserer Hardware bestätigt** und **noch offen** unterscheiden (`ANM-12`).
+- [ ] OpenSign/`schulzad` zur **Erlaubnis für eine eventuelle Codeübernahme** kontaktieren; bis zu ausdrücklicher Freigabe keine geschützten Codeteile übernehmen oder portieren (`LIC-01` bis `LIC-03`).
+- [ ] Herkunft neuer Referenzen und Codeanteile dokumentieren; MIT-Bedingungen bei tatsächlicher Übernahme fremden MIT-Codes beachten (`LIC-04`, `LIC-05`).
+- [ ] Original-App-Screenshots/Herstellerfonts und Fremdassets bei öffentlicher Weitergabe gesondert auf Nutzungsrechte prüfen.
+- [ ] Projektseite ohne überflüssigen Dateibaum im README halten; Badges auf Englisch, Projektbeschreibung auf Deutsch, Motto **„Mission: Hugs and Love“**.
+
+---
+
+## 12. Reihenfolge und Abhängigkeiten
+
+| Reihenfolge | Arbeitspaket | Warum in dieser Reihenfolge? |
+| --- | --- | --- |
+| **Jetzt** | **v0.2.x-Feinschliff, Schriften, Entwurfsspeicherung und Live-BLE-Regler** | Die bereits funktionierende Basis wird zuverlässig und die unmittelbaren Testergebnisse fließen ein. |
+| **Parallel als gezielte Forschung** | **`0x04`-Animation und nativer Blockmodus** | Erst verstehen, wie die Tafel mehrere Seiten autonom behandeln kann. |
+| **Nach erfolgreicher Protokollklärung** | **Seite → Programm → Playlist** | Verhindert eine Architektur, die ständig unnötige Uploads erzwingt. |
+| **Darauf aufbauend** | **Bibliothek, LittleFS, Favoriten und acht Shortcuts** | Programme müssen erst als eigenständige Objekte existieren. |
+| **Danach / teilweise parallel** | **Rich-Text-Editor, Originalfonts, freie Pixelpositionierung** | Ein gemeinsamer Renderer erleichtert Erweiterungen. |
+| **Bei nachgewiesener Hardwareunterstützung** | **Grafik-/Animation-Import, Effekte, Übergänge** | Speicher-, Timing- und Framelimits bestimmen die Umsetzung. |
+| **Langfristig** | **Countdown, Stoppuhr, Scoreboard, Licht, Mehrgerät, optionale microSD** | Dynamische Anzeigen benötigen bewusst gewählte Ausführungswege. |
+
+Die Reihenfolge ist **veränderbar**. Ein erfolgreiches Hardwareexperiment oder ein kritischer Bug kann Prioritäten verschieben. Wir vergeben neue Versionsnummern erst, wenn klar ist, welche Änderungen zu einem gemeinsam testbaren Paket gehören.
+
+## Nicht vergessen
+
+- **Original-App-Inhalte** sind Referenzen, keine automatisch übernommene Schriftbibliothek.
+- **Eine Programmseite darf nie ohne Zustimmung zerschnitten werden.**
+- **Ein Programmwechsel ist etwas anderes als ein Seitenwechsel.**
+- **Die zweizeilige Minischrift ist bereits ein echter Erfolg und wird nicht ohne Grund ersetzt.**
+- **Die Prozentanzeige gehört zum Uploadverhalten der Tafel; wir lösen das durch ein besseres Übertragungskonzept, nicht durch bloßes Verstecken im Webinterface.**
+- **Neue Ideen werden zunächst im [`THEMENSPEICHER.md`](THEMENSPEICHER.md) mit ihrer ID erfasst, bevor daraus Meilensteine werden.**
+
+*Made for the rave, powered by a banana. 🍌*

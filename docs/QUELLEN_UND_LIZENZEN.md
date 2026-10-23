@@ -1,42 +1,49 @@
-# Quellen, Codeherkunft und Nutzungsrechte
+# RavestickBoard · Quellen, Codeherkunft und Nutzungsrechte
 
-Stand: 23. Oktober 2026. Dieses Dokument ist eine technische Herkunftsprüfung, **keine anwaltliche Rechtsberatung**. Der derzeitige Status des GitHub-Repositories kann von der bei uns lokal geprüften Paketfassung abweichen.
+**Stand: 23.10.2026.** Technische Herkunftsdokumentation, **keine anwaltliche Rechtsberatung**. Für die ursprünglichen Quellen und den Prüfumfang siehe auch [`VEROEFFENTLICHUNGS_AUDIT_2026-10-23.md`](VEROEFFENTLICHUNGS_AUDIT_2026-10-23.md).
 
-## Veröffentlichungsentscheidung
+## Projekt- und Lizenzentscheidung
 
-Das Repository darf nach Entscheidung seines Eigentümers öffentlich sichtbar sein, bleibt jedoch **ohne Open-Source-Lizenz**. Der Umfang der erlaubten Nutzung des eigenen Quellcodes richtet sich nach der [`LICENSE`](../LICENSE). Für Drittmaterial gelten ausschließlich dessen tatsächliche Rechte und Lizenzbedingungen.
+Die Repository-Sichtbarkeit und eine Open-Source-Lizenz sind unterschiedliche Entscheidungen. Für **eigene, vom Rechteinhaber kontrollierte Projektbestandteile** gilt die [`LICENSE`](../LICENSE): **All Rights Reserved**, keine allgemeine Erlaubnis zum Kopieren, Bearbeiten oder Weiterverbreiten. GitHub-Forking-/Viewing-Rechte, geltendes Recht und **fremde Lizenzen** bleiben unberührt.
 
-- Der bestehende WLAN-AP-Schlüssel ist **bewusst öffentlich** und darf in Code und Dokumentation verbleiben; er ist dann kein Zugangsschutz gegen Leser des Repositories. Ein konfigurierbarer Zugang wird für eine spätere Firmware erwogen.
-- Die fest eingestellte BLE-Geräteadresse darf als Testwert im öffentlichen Quellcode verbleiben; sie ist gerätespezifisch und muss für fremde Geräte ohnehin angepasst werden.
-- Das Totem-Foto ist ein eigenes Foto. Der Eigentümer akzeptiert die bestehenden EXIF-Angaben einschließlich iPhone-Modell und Festival-Geotags.
-- Nach Angabe des Repository-Eigentümers enthält die Git-Historie nur die in dieser Zusammenarbeit erstellten Projektdateien, keine zusätzlichen Commits, Forks oder fremde Dateien. Die private Git-Historie konnte beim Audit nicht direkt über die verbundene GitHub-Schnittstelle eingesehen werden.
+Der Nutzer möchte das Projekt bei Bedarf öffentlich präsentieren, u. a. damit OpenSign-Entwickler einen Einblick erhalten. **Der tatsächliche aktuelle GitHub-Sichtbarkeitsstatus war in diesem Dokumentenreview nicht unabhängig abrufbar** und wird nicht als technisch bestätigte Tatsache behauptet. Eine Entscheidung, Code offen zu lizenzieren, wurde **nicht** getroffen.
 
-## Herkunft der Protokollkenntnisse
+## Dokumentierte Fremdprojekte
 
-| Referenz | Status | Verwendung in RavestickBoard |
+| Quelle | Lizenzstand beim Prüfen 23.10.2026 | Nutzung / Grenze |
 | --- | --- | --- |
-| [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) | MIT-Lizenz, Copyright Greg Tatham 2025 | Technische BLE-Protokollreferenz und Kommandobedeutungen; keine eindeutig übernommenen Python-Quelltextpassagen festgestellt |
-| [ohtaras/led](https://github.com/ohtaras/led) | Keine allgemeine Quellcode-Nutzungslizenz festgestellt | Protokollreferenz für Paketstruktur und Pixelreihenfolge; **keine nachgewiesene wortgleiche JavaScript-Codeübernahme** in die eigene ESP32-C++-Implementierung |
-| [schulzad/coolled-sign-controller / OpenSign](https://github.com/schulzad/coolled-sign-controller) | README erklärt ausdrücklich „all-rights-reserved until one is added“ | Forschungsreferenz für künftige Animationen. Die bestehenden v0.2.0-Quellen enthalten **keinen festgestellten OpenSign-Code**. Lizenzanfrage ist vorgesehen bzw. in Vorbereitung. |
+| [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) | **MIT-Lizenz**, Copyright © 2025 Greg Tatham | Technische BLE-Protokollreferenz. Bei **tatsächlicher** Übernahme geschützter Codebestandteile MIT-Lizenz- und Copyright-Hinweise mitführen. |
+| [ohtaras/led](https://github.com/ohtaras/led) | Keine allgemeine Code-Wiederverwendungslizenz festgestellt | Protokoll-/Rendererreferenz; unlizenzierte Quellcodepassagen nicht kopieren oder nahezu wortgetreu portieren. |
+| [schulzad/coolled-sign-controller (OpenSign)](https://github.com/schulzad/coolled-sign-controller) | README erklärt ausdrücklich „all rights reserved until one is added“, **keine Lizenzdatei** | Wertvolle Referenz zur autonomen Animation, aber keine Nutzungserlaubnis für dessen konkreten Python-Code. |
 
-## Geprüfte Projektbereiche und Erkenntnisse
+**Stand OpenSign-Kontakt:** Der Nutzer hat im Browser eine englische GitHub-Lizenzanfrage an Adam vorbereitet und in das Issue-Formular eingetragen. **Das tatsächliche Absenden und eine Antwort/Erlaubnis sind aus dem bisherigen Gespräch nicht bestätigt.** Bis zur ausdrücklichen Erlaubnis: kein Kopieren/Portieren von OpenSign-Implementierung. Ein öffentliches Repository oder nichtkommerzielle Nutzung schaffen keine automatische Weiterverwendungslizenz.
 
-Geprüft wurden die im Projektgespräch verfügbaren Firmwarepakete und Quelltexte der Versionen erster BLE-Test, v0.1.0, v0.1.1, v0.1.2 und v0.2.0 samt Korrekturpaket. Die relevanten C++-Funktionen für Textdaten, Pixelpacking, BLE-Escaping, Chunking und Steuerbefehle wurden mit den dokumentierten Python-/JavaScript-Referenzen verglichen.
+## Technische Protokollkenntnisse gegenüber Fremdcode
 
-| Bereich | Einordnung |
-| --- | --- |
-| 64×16-Pixelmatrix, RGB-Bitebenen, Übertragungsrahmen, Escape-Regeln, XOR-Checksumme | Technische Eigenschaften des Geräteprotokolls, in Projektcode eigenständig als C++-Algorithmen realisiert; notwendigerweise gleiche Daten- und Befehlswerte |
-| Eigene 5×7-Glyphen, zusätzliche Kleinschrift | In der geprüften Firmware als projektspezifische Glyphentabelle enthalten; **kein Import der Originalschriftdateien** festgestellt |
-| Webinterface, Seiteneditor, Diagnose, NVS-Seitenverwaltung | Projektbezogene C++-/HTML-/JavaScript-Implementierung; keine unmittelbar übernommenen Fremdmodule oder verdächtigen Lizenzheader in den gelieferten Dateien gefunden |
-| Arduino-ESP32-Core, WiFi, WebServer, BLE, Preferences | Verwendete Plattform-Bibliotheken über Arduino-/Espressif-Pakete; keine Quellkopien als Vendor-Dateien in den Projektpaketen erkannt |
-| Git-Historie | Angabe des Nutzers berücksichtigt, jedoch **nicht unabhängig vollständig eingesehen** |
+In den bei der ursprünglichen Prüfung verfügbaren Firmwarepaketen (FirstText, v0.1.0, v0.1.1, v0.1.2, v0.2.0 Korrektur 1) wurde **keine konkret nachweisbare Übernahme unlizenzierter Quellcodepassagen** festgestellt. Die Funktionen für ESC-Byte-Framing, 128-Byte-Chunks, Checksummen, RGB-Bitebenen und BLE-Kommandos implementieren gemeinsame technische Geräteanforderungen. Gleiche Paketwerte allein belegen keine Codekopie.
 
-**Abgrenzung:** Die gleiche Protokollstruktur ist für kompatible Kommunikation erforderlich und für sich allein kein Beleg einer urheberrechtlich relevanten Codekopie. Umgekehrt kann eine rein automatische Textähnlichkeitsprüfung eine unzulässige Bearbeitung nicht rechtssicher ausschließen. Dieser Audit hat bei den geprüften Dateien **keine konkrete unlizenzierte Codeübernahme nachgewiesen**; das ist keine umfassende rechtliche Freigabe.
+**Abgrenzung:** Diese Feststellung ist ein technischer, begrenzter Prüfbefund und **keine rechtssichere Garantie**. Eine automatische Textsuche kann auch sinngemäße Codebearbeitungen nicht vollständig ausschließen. **Die tatsächliche private Git-Historie wurde nicht unabhängig ausgelesen**; laut Nutzer enthält sie nur die zuvor hier gemeinsam erzeugten Projektdateien.
 
-## Prüfpunkte bei künftigen Versionen
+Die aktuelle v0.2.0-Firmware ist in C++ für ESP32-C3 geschrieben. Protokollreferenz ist nicht identisch mit der Übernahme eines geschützten Python- oder JavaScript-Implementierungstexts. Eigenständig erstellte Glyphen sind nicht als originaler Herstellerfont auszugeben.
 
-1. Fremden Quellcode nur übernehmen, wenn dessen Rechte und Nachweispflichten geklärt sind.
-2. Bei MIT-lizenzierten **tatsächlich kopierten oder abgeleiteten** Bestandteilen den MIT-Lizenztext und Copyright-Hinweis mitführen. Die bloße Nennung eines Referenzprojekts löst keine automatische Lizenzübernahme aus.
-3. Bei OpenSign: Lizenzänderung beziehungsweise ausdrücklich erlaubte Nutzung vor dem Portieren einzelner Codepassagen abwarten.
-4. Original-App-Screenshots, Markenlogos und Originalschrift-Pixelvorlagen vor Aufnahme ins öffentliche Repository eigenständig auf Rechte prüfen.
-5. Den technisch überprüften, nichtkommerzielle Hobbycharakter des Projekts nicht mit einer Freigabe von Drittcode verwechseln.
+## OpenSign-Animation: externer Forschungsbefund
+
+OpenSign dokumentiert auf **seiner** 64×16-CoolLEDX-Referenztafel (Firmwarekennung 6) gespeicherte Animationen per `0x04`, ungefähr **30 KiB / 80 Frames** sowie eine **gemeinsame Haltezeit pro Frame**. Es beschreibt „store-and-loop“ und keinen bestätigten dauerhaften Frame-Stream.
+
+**Diese Angaben sind nicht auf unsere Tafel übertragen oder verifiziert.** Ein eigenes Testpaket und reale Messungen (Frames, ACKs, Timeraster, Übertragung, Stromausfall, sichtbare Anzeige) sind in [`THEMENSPEICHER.md`](THEMENSPEICHER.md) unter `ANM-01` bis `ANM-14` vorgemerkt. Die kompatible eigene Implementierung wird anhand eigener Tests und technischer Fakten erstellt oder nach eindeutig erteilter Erlaubnis.
+
+## Weitere Rechte und bewusst akzeptierte Veröffentlichungspunkte
+
+- **WLAN-AP-Schlüssel:** `Banane1248!` ist vom Nutzer **bewusst zur Dokumentation freigegeben**; spätere UI-Konfiguration ist optional. Für Nutzer in Funkreichweite ist der AP damit nicht geheim.
+- **BLE-Testadresse:** `ff:00:00:03:7e:c3` identifiziert nur die aktuell getestete Tafel und ist kein Geheimnis; spätere Gerätesuche geplant.
+- **Eigenes Totem-Foto:** EXIF-Angaben zum iPhone-Modell und Festival-Geotags sind dem Nutzer bewusst und akzeptiert.
+- **Original-App-Screenshots, Fonts, Herstellerlogos:** Vor Einbindung in ein öffentlich sichtbares Repository gesondert auf Rechte prüfen. Referenzaufnahmen im Chat sind nicht automatisch zur öffentlichen Wiederverwendung freigegeben.
+- **Plattformbibliotheken:** Arduino-ESP32-Core, WiFi, WebServer, BLE, Preferences werden über ihre jeweiligen Paket-/Abhängigkeitslizenzen bereitgestellt. Eine eigene `LICENSE` im Repository ändert diese Rechte nicht.
+
+## Laufende Pflege
+
+1. Jede neue externe Quelle mit URL, Lizenzstand, Abrufdatum und konkret verwendetem Inhalt dokumentieren.
+2. Zwischen protokolltechnischen Fakten, **eigener** Implementierung und tatsächlich übernommener Codepassage unterscheiden.
+3. Bei MIT-Codeübernahme Copyright und erforderliche Lizenzhinweise mitliefern; bei unlizenzierter Quelle erst schriftliche Freigabe erhalten.
+4. Änderungen an einer tatsächlichen späteren OpenSign-Erlaubnis **wörtlich und mit Datum dokumentieren**; nicht aus einer freundlichen Antwort pauschale Rechte ableiten.
+5. Nach Import neuer Fonts/Bilder/Animationen Provenienz erneut prüfen.

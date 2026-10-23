@@ -1,49 +1,52 @@
-# RavestickBoard: Diagnose und Fehlerprotokoll
+# RavestickBoard · Diagnose und Fehlerprotokoll
 
-**Einführung:** v0.1.1 (Testkandidat, noch nicht auf echter Hardware bestätigt)
+**Stand 23.10.2026 · Einführung v0.1.1, auf realer Hardware bestätigt; Ergänzungen bis v0.2.0 Korrektur 1.**
 
-## Aufrufen und herunterladen
+## Aufrufen und Exportieren
 
-1. Mit dem ESP32-WLAN `CoolLED1248` verbinden.
-2. `http://192.168.4.1` im Browser öffnen.
-3. Unten **Diagnose & Log-Export** aufklappen.
-4. Werte aktualisieren oder **TXT herunterladen** auswählen.
+1. Mit `CoolLED1248` verbinden und `http://192.168.4.1` öffnen.
+2. Bereich **Diagnose / Log** aufklappen und bei Bedarf aktualisieren.
+3. **„Log kopieren“**: seit v0.1.2 bevorzugt. Wegen unverschlüsseltem HTTP kann die Clipboard-API auf iPhone/Safari eingeschränkt sein; der Browser versucht Fallback bzw. bietet manuellen Text. **Der Safari-Fallback ist nicht in sämtlichen Konstellationen abgenommen.**
+4. Alternativ **TXT herunterladen**. Dieser Weg wurde bereits mit v0.1.1 auf dem iPhone bestätigt.
 
-API: `GET /api/diagnostics` liefert eine kleine JSON-Statusübersicht mit maximal 14 neuen Ereignissen, `GET /api/diagnostics.txt` den vollständigen TXT-Bericht mit maximal 56 RAM-Ereignissen.
+| Schnittstelle | Inhalt |
+| --- | --- |
+| `GET /api/diagnostics` | Kleine JSON-Übersicht mit jüngsten Ereignissen |
+| `GET /api/diagnostics.txt` | Vollständiger TXT-Bericht mit bis zu **56** RAM-Ereignissen |
+| `GET /api/status` | Status laufender bzw. beendeter Aufträge |
 
-## Daten
+## Erfasste Informationen
 
-- Firmwareversion, Kompilierzeit, Resetgrund, Uptime ab Boot
-- Freier und minimal freier Heap, größter freier allokierbarer Block
-- Sketchgröße und freier App-Partitionsplatz, physischer Flash
-- WLAN-Clientzahl und AP-Adresse (keine WLAN-Schlüssel)
-- BLE-Verbindungsversuche, Verbindungen, Trennungen, Schreiben, Notifications und Zeitüberschreitungen
-- Übertragene Pakete/Bytes sowie letzte Jobdauer und Erfolgs-/Fehlerzähler
-- 56 letzte Ereignisse mit relativen Millisekunden-Zeitstempeln
+- Firmware-/Buildstand, Resetgrund (einschließlich Klartext für **USB-Reset**), Laufzeit und `millis()`-Zeitbasis.
+- Freier/minimal freier Heap, größter allokierbarer RAM-Block, Sketchgröße, laufende **App-Partitionsgröße** und rechnerisch freie App-Bytes.
+- WLAN-AP-Adresse und Zahl der Clients, nicht jedoch WLAN-Passwort.
+- BLE-Verbindungsversuche, Erfolge, Trennungen, Schreiben, Notifications, Timeout- und Fehlerzähler.
+- Transferstatistik (Pakete/Bytes, Dauer, Erfolg/Fehlschlag), HTTP-Aufträge und abgewiesene Aufträge.
+- Seit **v0.2.0**: gespeicherte Seiten, Playerstatus, Seitenübertragungen OK, NVS-Seitenspeicherungen und automatische Seitenwechsel.
+- Begrenzt gespeicherte Ereignisse als relativer Zeitverlauf seit Boot; jeweils mit Kategorie und Beschreibung.
 
-## Grenzen und Interpretation
+## Interpretation und bekannte Grenzen
 
-Die Daten bleiben **nur im RAM**. Neustart/Stromverlust leert den Ringpuffer; es gibt keinen persistenten letzten Fehler wie später eventuell im SmallTV. Der TXT-Download findet ausschließlich auf Nutzeraktion statt.
+- **RAM-only:** Neustart und Stromausfall löschen den Diagnose-Ringpuffer und die laufenden Fehlerzähler. **NVS-Blockseiten bleiben hingegen erhalten.**
+- **Schreiben ≠ Anzeigen:** Ein akzeptierter `write-without-response`-Auftrag beweist noch keine Bilddarstellung. Notification-Empfang, Transfer-Ende und sichtbares Display separat prüfen.
+- **Blockierende BLE-Übertragung:** Während eines synchronen Transfers kann der Webserver für einige Sekunden verzögert reagieren.
+- **Kein eingebundenes SPIFFS/LittleFS:** Die Anzeige kann den tatsächlichen belegten Dateisystemspeicher nicht bestimmen. Angaben zur App-Partition sind keine freien RAM-Bytes.
+- **Keine Echtzeituhr:** Ereignisse nutzen Millisekunden seit Boot, nicht Uhrzeiten. `millis()` läuft als 32-Bit-Zähler nach rund 49,7 Tagen über.
+- **Verbindungskonflikt:** Eine Fehlermeldung kann auf die Original-App als mögliche Ursache hinweisen, aber der ESP32 kann deren aktive Verbindung aus einem Timeout nicht sicher nachweisen.
+- **Datensparsamkeit:** TXT-Export enthält absichtlich keine Anzeigeinhalte, Passwörter oder BLE-MAC-Adressen. Trotzdem Fehlerberichte vor öffentlichem Teilen kurz prüfen.
 
-**BLE write succeeded** heißt nur, dass der Schreibvorgang lokal akzeptiert wurde. Eine Notification zeigt eine empfangene Antwort an, aber ihr Inhalt wird bislang nicht vollständig ausgewertet. Das sichtbare Ergebnis auf der LED-Tafel separat prüfen.
+## Praktisch beobachteter Stand
 
-Da BLE-Jobs derzeit synchron laufen, reagiert der ESP32-Webserver während der Übertragung zeitweise verzögert. Ein kurz nicht aktualisierbarer Live-Status ist daher nicht automatisch ein Fehler.
+**v0.1.1:** Der Nutzer testete u. a. fünf erfolgreiche Textaufträge, fünf Verbindungen, 20 BLE-Notifications, keine Schreib-/Timeoutfehler; nach Trennung der konkurrierenden Original-App war der Controller ohne Neustart wieder einsatzbereit. Diagnose und TXT-Export funktionierten auf dem iPhone.
 
-Die alten Einschränkungen der v0.1.0-Vorschau und der ausschließlich groß geschriebenen Engschrift bestehen noch.
+**v0.2.0 Korrektur 1:** Seitenplayer, NVS-Blockseiten und reale mehrfache Uploads sind vom Nutzer bestätigt. Eine gesonderte Abnahme **sämtlicher neuer v0.2.0-Diagnosefelder** wurde noch nicht dokumentiert.
 
-Für Troubleshooting möglichst **vor dem Reset** die TXT-Datei herunterladen und an die Fehlermeldung/Symptombeschreibung anhängen. Keine Passwörter, Textinhalte und BLE-Adressen werden absichtlich mitgeloggt.
+## Empfohlener Fehlerbericht
 
-## Änderungen ab v0.1.2 (Testkandidat)
+1. Firmwareversion, Gerät, Uhrzeit/Situation, Betriebsdauer notieren.
+2. **Vor dem Reset** Diagnose kopieren oder TXT speichern.
+3. Betroffene Seite/Programm, gewünschtes vs. tatsächliches Verhalten und Foto/Screenshot angeben.
+4. Bei BLE-Fehlern festhalten, ob die Original-App gleichzeitig verbunden war.
+5. Bei reproduzierbarem Fehler eine Testfolge mit möglichst wenigen Schritten dokumentieren.
 
-- **„Log kopieren“** ist die primäre Aktion. Falls die Clipboard-API auf iPhone/Safari wegen `http://192.168.4.1` nicht verfügbar ist, versucht der Browser einen älteren Kopiermechanismus. Andernfalls erscheint ein markierbares Textfeld. Der TXT-Export bleibt verfügbar.
-- **Resetgrund** zeigt verständliche Werte, z. B. „USB-Reset“ für IDF-Resetgrund 11.
-- **App-Rest** wird berechnet als `esp_ota_get_running_partition()->size - ESP.getSketchSize()` und auf 0 begrenzt. Das ist ein rechnerischer Flash-Rest, keine garantierte zusätzliche freie RAM-Kapazität.
-- Bei einem erfolglosen BLE-Verbindungsversuch wird darauf hingewiesen, dass die LED-Tafel möglicherweise mit einer anderen App verbunden ist. Diese Ursache kann der Controller aus einem Timeout **nicht eindeutig feststellen**.
-- Bei der Textübertragung bezeichnet die Bezeichnung „Text-Payload“ die gesamte Text-Puffergröße über mehrere Pakete, **nicht** die Nutzlast eines einzelnen BLE-Writes.
-
-## v0.2.0 Zusatzdaten
-- `Seitenübertragungen OK`: Zahl erfolgreicher manueller und automatischer Seitenübertragungen seit Boot.
-- `NVS-Seitenspeicherungen`: Zahl erfolgreicher Schreibvorgänge seit Boot.
-- `Automatische Seitenwechsel`: Zahl der erfolgreich geplanten Folgeseiten nach dem initialen Start.
-- NVS-Seiten überdauern Stromverlust; das Diagnose-RAM-Log dagegen nicht.
-- Bei Konflikt mit der Original-App bleibt der BLE-Fehler klar sichtbar; es wird kein konkurrierendes BLE-Pairing erzwungen.
+**Offen für später:** persistenter kritischer letzter Fehler (nur nach Flashverschleiß-Abwägung), weitere Timeout-/NAK-/ACK-Diagnose, Langzeit-/Heap-Test, laufende Grafikanimationen und deren Speicher-/Transferstatistik.

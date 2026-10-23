@@ -1,85 +1,112 @@
-# Technische Bestandsaufnahme
+# RavestickBoard · Technische Bestandsaufnahme
 
-## Hardware und Funk
+**Stand: 23.10.2026 · Firmwarebasis: v0.2.0 Korrektur 1 · Status: hardwaregetestet, mit bekannten Einschränkungen.**
 
-- ESP32: **TENSTAR ROBOT ESP32-C3 Super Mini**, 160 MHz, 4 MB Flash laut `esptool`, BLE 5 LE und 2,4-GHz-WLAN.
-- Boardprofil: `ESP32C3 Dev Module`, serieller USB-C-Port (beim ersten Test COM3).
-- Arduino IDE 2.3.10, Espressif Arduino-ESP32 3.3.12.
-- Partitionierung: `No OTA (2MB APP/2MB SPIFFS)`; die exakten nutzbaren Bytes bestimmen die tatsächlichen Partitionen, nicht nur die Beschriftung.
-- LED-Gerät: Bluetooth-Anzeigename `CoolLEDX`; beim Test MAC `ff:00:00:03:7e:c3` (nur für das getestete Exemplar).
-- GATT-Service `0000fff0-0000-1000-8000-00805f9b34fb`.
-- Characteristic `0000fff1-0000-1000-8000-00805f9b34fb`: Read, Notify, Write Without Response (kein normales Write-With-Response).
-- Aus Hersteller-Advertising abgeleitet: **64 × 16 LEDs**, Farbmodus `01` (7-Farben), Firmwarekennung `06`.
-- Die vollständigen Advertising-Hexbytes aus dem Test waren `e1ebff0000037ec31000400106`. Die ersten zwei Bytes sind Herstellerkennung; danach folgen sechs MAC-Bytes, anschließend Höhe `0x10`, Breite `0x0040`, Farbmodus `0x01`, Firmware `0x06`.
-- Nutzerbeobachtung: Die Tafel spielt hochgeladene Inhalte **ohne laufende Bluetooth-Verbindung** ab und speichert sie **über die Stromtrennung** hinaus.
+Dieses Dokument unterscheidet **durch Nutzer am konkreten Board bestätigt**, **im Quellcode vorhanden** und **für spätere Versionen geplant**. Die Firmware des LED-Boards wird nicht verändert. Historische v0.1.x-Einschränkungen sind weiter unten separat aufgeführt.
 
-## Verbindungsweg
+## 1. Geräte und Entwicklungsumgebung
+
+| Komponente | Aktueller Teststand |
+| --- | --- |
+| Controller | TENSTAR ROBOT ESP32-C3 Super Mini, 160 MHz, 4 MB Flash laut `esptool` |
+| Arduino | IDE 2.3.10, Espressif Arduino-ESP32 3.3.12, `ESP32C3 Dev Module` |
+| USB | USB-C, `USB CDC On Boot: Enabled`; Firmware **ausschließlich per USB**, kein OTA |
+| Partitionsschema | `No OTA (2MB APP/2MB SPIFFS)`; tatsächliche Partitionen bestimmen nutzbare Bytes |
+| Tafel | Original-CoolLEDX, **64×16 Pixel**, sieben LED-Farben, Advertising-Firmwarekennung `06` |
+| Test-MAC | `ff:00:00:03:7e:c3`, derzeit in der Firmware festgelegt; keine allgemeine Modelladresse |
+| BLE | Service `0000fff0-0000-1000-8000-00805f9b34fb`, Characteristic `0000fff1-0000-1000-8000-00805f9b34fb` (Read, Notify, Write Without Response) |
+| Wi-Fi | ESP32-AP `CoolLED1248`, Passwort `Banane1248!`, Browser `http://192.168.4.1`; **bewusst dokumentiertes Testpasswort** |
+
+Die ursprünglichen Advertising-Daten laut BLE-Scan: `e1ebff0000037ec31000400106` (mit Herstellerkennung; enthält die getestete MAC, Höhe `0x10`, Breite `0x0040`, Farbmodus `01` und Firmwarekennung `06`). Der Nutzer hat bestätigt, dass der zuletzt übertragene Inhalt auf der Tafel ohne BLE-Verbindung und nach deren Stromtrennung erhalten bleibt.
+
+## 2. Datenfluss
 
 ```text
-iPhone / anderer Browser
-         |
-         | WLAN-AP, passwortgeschützt, ohne Internet
-         v
- ESP32-C3 Webserver   (http://192.168.4.1)
-         |
-         | Bluetooth LE, Service FFF0 / Characteristic FFF1
-         v
-  CoolLEDX Original-Anzeige, unveränderte Hardware
+Browser (iPhone, Laptop)
+  └─ WLAN/AP → ESP32-C3-Webserver (lokal, ohne Internet)
+                  ├─ HTML/CSS/JavaScript aus `RavestickBoard_WebUI.h`
+                  ├─ Blockseiten/NVS und BLE-Auftragsverwaltung
+                  └─ BLE FFF0/FFF1 → originale CoolLEDX-Tafel
 ```
 
-## Bereits implementierte Übertragung
+Nach der ersten v0.2.0-Kompilierungsfehlermeldung (`'function' does not name a type`) wurde die Weboberfläche aus der `.ino` in **`RavestickBoard_WebUI.h`** ausgelagert. **Beide Dateien müssen im selben Sketch-Verzeichnis liegen.** `tools/sync_web.py` dient der Synchronisation des separaten Webquellcodes. Die korrigierte Fassung wurde vom Nutzer erfolgreich geflasht.
 
-- Benutzeraktion im Webinterface erzeugt einen Auftrag, kein unaufgeforderter Transfer beim Start.
-- Befehle verwenden die in Community-Projekten dokumentierte CoolLEDX-Rahmung (`0x01`, escapen, `0x03`).
-- Bei Textdaten: RGB-Bitfelder, chunkweise übertragen, Notification nach jedem Paket abwarten.
-- Helligkeit über Steuerbefehl `0x08`; Senden des Werts `0xFF` war real sichtbar erfolgreich.
-- Bei v0.1.0 entscheidet derzeit Pixelbreite >64 automatisch auf Lauftext. **Dies wird ersetzt** durch eine manuelle Moduswahl.
+## 3. BLE-Protokoll und Übertragung
 
-## V0.1.x: bekannte Code-Randbedingungen
+- Gerätespezifischer Rahmen: Start `0x01`, Big-Endian-Länge, Byte-Escaping der Werte `0x01..0x03`, Ende `0x03`.
+- Text-/Bildübertragung nutzt **RGB-Bitebenen**, Spaltenreihenfolge, 16 Pixel Höhe = zwei Bytes pro Spalte und Kanal. Acht Zustände einschließlich Schwarz, davon sieben leuchtende Kombinationen.
+- Nutzdaten werden für BLE in Blöcke mit bis zu **128 Bytes Rohdatenteil** samt Blockmetadaten/XOR-Prüfsumme übertragen. Notification und tatsächliche Bilddarstellung müssen separat bewertet werden.
+- **`0x08` Helligkeit**: als eigenständiger Steuerbefehl auf unserer Hardware bereits getestet. Das aktuelle Webinterface führt einen eigenen Helligkeitsauftrag aus, aber noch **keine durchgängige Live-Aktualisierung während der Fingerbewegung**.
+- **`0x07` Geschwindigkeit**: im bisherigen Lauftext-Sendeablauf verwendet. UI-Wert 1–100 wird aktuell auf Rohwert 0–255 skaliert; eine Entsprechung zur Original-App-Zahl **80** ist **nicht** nachgewiesen. Ein Live-Speed-Regler ohne Textupload fehlt.
+- **`0x06` Anzeigemodus**: im Code vor Text-/Seitenübertragungen eingesetzt (`0x01` statisch, `0x02` Linkslauf). Weitere Modi wie Rechtslauf, Auf/Ab, Schneefall oder Laser sind als Protokollreferenz bekannt, aber **noch nicht alle auf unserer Tafel geprüft**. Ein eigenständiger Moduswechsel ohne Neu-Upload ist geplant.
+- **`0x04` gespeicherte Animation**: OpenSign meldet autonome Animationen auf **einem anderen Referenzboard** (ca. 30 KiB bzw. 80 Frames). **Nicht in unserer v0.2.0-Firmware implementiert, auf unserer Hardware ungetestet.**
 
-- `MAX_CHARS = 40`, 5×7-Font, nur Großbuchstaben, `ä/ö/ü` werden zu Großbuchstaben.
-- `SIGN_WIDTH = 64`, `SIGN_HEIGHT = 16`, Glyphen 5 Pixel breit und 7 Pixel hoch, vertikal verdoppelt.
-- JavaScript und C++ enthalten derzeit **je eine eigene Glyphentabelle**. Gefahr der Abweichung; gemeinsames Fontdatenmodell vorbereiten.
-- Weboberfläche als HTML/CSS/JS direkt im Firmware-Flash; aktuell kein persistenter ESP32-Bibliotheksspeicher implementiert.
-- Feste BLE-Adresse im Sketch; später konfigurierbarer Scan und stabile Wiederverbindung sinnvoll.
-- Nur eine einzelne Textfarbe pro Upload, kein Zeichenmix.
-- API v0.1.0: `GET /`, `GET /api/status`, `POST /api/text`, `POST /api/brightness`. **Zusätzlich ab v0.1.1:** `GET /api/diagnostics` (JSON), `GET /api/diagnostics.txt` (TXT).
-- Webserver-Bearbeitung ist während synchroner BLE-Aufträge eingeschränkt; im Test bisher nutzbar, für lange Transfers gezielt testen.
+### Verbindungskonflikte und Uploadverhalten
 
-## Status- und Sicherheitshinweise
+Die aktuelle Firmware verbindet sich für eine Übertragung zum Board, schickt Steuerbefehle und Daten und trennt anschließend. Während die Original-App die BLE-Verbindung belegt, kann ein Auftrag scheitern. Unter v0.1.1 wurde das automatische Wiederfunktionieren nach Freigabe durch die Original-App beobachtet, ohne ESP32-Neustart. **Eine dauerhaft offene Verbindung für Echtzeitregler ist noch nicht implementiert.**
 
-- `Write Without Response` auf BLE-Ebene darf **nicht** mit „Tafel hat Inhalt sicher übernommen“ gleichgesetzt werden. Notification, Fehlercode und sichtbares Resultat getrennt festhalten.
-- Das WLAN-Passwort steht im Sketch im Klartext. Nicht unverändert in eine öffentliche Repo-Version übernehmen.
-- Keine OTA-Schnittstelle vorsehen. Das verhindert keine Fremdsteuerung über die originale BLE-Schnittstelle.
-- Speicherüberwachung: `ESP.getFreeHeap()`, `ESP.getMinFreeHeap()`, `heap_caps_get_largest_free_block(MALLOC_CAP_8BIT)` für Diagnose prüfen; bei größtem freien Block korrekte Vergleichsbasis dokumentieren.
-- Persistenter Resetmarker und schwerwiegender letzter Fehler nur nach Kosten-/Flashverschleiß-Prüfung, tägliche Ereignisse zunächst im RAM-Ringpuffer.
+Die vom LED-Board eingeblendete **Prozentanzeige erscheint bei jedem vollständigen Inhaltsupload** und lässt sich mit den bisherigen Steuerbefehlen nicht einfach im ESP32-Webinterface verbergen. Separate Modus-/Helligkeitsbefehle sollen dieses Verhalten vermeiden.
 
-## v0.1.1-Diagnose (noch auf Hardware zu testen)
+## 4. v0.2.0: Blockeditor und Seitenübertragung
 
-- Versionskonstante `FW_VERSION = "0.1.1"`, Header im Browser sichtbar.
-- Ereignisspeicher: 56 feste RAM-Einträge, jedes Ereignis mit ms seit Boot, Kategorie und Kurzbeschreibung; ältere Einträge werden überschrieben.
-- Metriken: `ESP.getFreeHeap()`, `ESP.getMinFreeHeap()`, `ESP.getMaxAllocHeap()`, `ESP.getSketchSize()`, `ESP.getFreeSketchSpace()`, `ESP.getFlashChipSize()`.
-- Resetgrund: `esp_reset_reason()`. Uptime: `millis()` (32-Bit-Zähler, nach ca. 49,7 Tagen Überlauf).
-- BLE Write-Erfolg, Notification und tatsächliche Anzeigeübernahme sind getrennte Bedeutungen.
-- Die vorhandene synchrone BLE-Übertragung blockiert kurzzeitig HTTP-Anfragen. Live-Diagnose und Download funktionieren zwischen Aufträgen, nicht während eines langen BLE-Transfers.
-- Kein Mount oder Schreiben des SPIFFS-Dateisystems. Die v0.1.1-Diagnose kann daher keinen tatsächlichen belegten Dateisystemspeicher ausweisen.
-- WLAN-SSID bleibt in v0.1.1 absichtlich `CoolLED1248` für rückwärtskompatible Smartphone-Verbindungen.
-- Der Reset löscht die Ereignisse und Fehlerzähler; Flash bleibt geschont. Eine spätere sparsame Persistenz ist gesondert zu entscheiden.
+| Eigenschaft | Tatsächlich umgesetzt |
+| --- | --- |
+| Seitenstruktur | `PageRecord`: UTF-8-Zeilen `line1[48]`, `line2[48]` (je maximal 47 gespeicherte Textbytes plus Abschluss), Layout, Ausrichtung, Farben, Dauer |
+| Seitenanzahl | Maximal **12** Seiten in NVS (`Preferences`, Namespace `rbpages`, Schema 1) |
+| Zeilenlimit | Maximal **10 Unicode-Codepoints pro Zeile**; zusätzlich Begrenzung der Bytefelder beachten |
+| Anzeigedauer | **5–60 Sekunden je Seite**, gerechnet **nach** vollständig erfolgtem BLE-Upload |
+| Große Zeile | 5×7-Glyphen mit vertikaler Verdopplung; aktuell ungefähr y=1 bis y=14 |
+| Zwei Mini-Zeilen | 5×7-Glyphen bei y=0–6 sowie y=8–14; dazwischen **eine** unbeleuchtete Pixelreihe |
+| Farben und Ausrichtung | Zwei separate Zeilenfarben (je 1–7), links/zentriert/rechts; keine Mischfarben pro Zeichen |
+| Text-Payload | 24 führende Nullbytes + Textlänge + 80 Byte Zeichenmetadaten + 2 Byte Pixel-Länge + **384 Byte 64×16-Bitfelddaten** = **491 Bytes**, normalerweise **vier Datenchunks** |
+| Steuerung | Manuelle Einzelseite oder automatischer ESP32-Seitenplayer; **jeder Wechsel vollständiger BLE-Upload** |
+| Datenspeicherung | NVS-Blockseiten bleiben nach Browserreload und Controllerneustart erhalten; **kein automatischer Player-Neustart** |
 
-## Ergänzung v0.1.2
+**Am 23.10.2026 real bestätigt:** Start, iPhone-Webseite, Seiten anlegen/duplizieren/verschieben, Farbtrennung, zweizeilige Großbuchstaben-Minischrift, automatische Seitenfolge, individuelle Dauer, NVS-Persistenz und wiederholte Übertragungen. **13/14 ursprüngliche Testpunkte positiv, einzeiliger Schrift-Test ohne Ergebnis.** Das ist kein vollständiger Regressionstest aller API-Pfade.
 
-- Die Fonttabelle liegt ausschließlich in C++ (`FONT` mit Unicode-Codepunkten), die Browser-Vorschau lädt sie über `GET /api/font`. Unterstützt sind A–Z, a–z, 0–9, Ä Ö Ü ä ö ü ß, Herz und ausgewählte Zeichen. Andere Zeichen werden derzeit als `?` gerendert.
-- `GET /api/font` wird nur beim Laden der Oberfläche verwendet. Bei Verbindungsproblemen weist die Vorschau auf den fehlgeschlagenen Schriftabruf hin.
-- Benutzerdefinierter Anzeigemodus: `0x06 0x01` Standbild, `0x06 0x02` Linkslauf. Diese BLE-Modi sind aus vorhandenen Tests und Protokollreferenzen abgeleitet. Das Verhalten für Textbreite > 64 Pixel im Standbild muss noch verifiziert werden.
-- Neuer Testbefehl für Laufgeschwindigkeit: `0x07 <0x00..0xFF>`, UI-Skala 1–100 wird auf 0–255 skaliert. Der Wirkbereich und die Richtung werden am echten Board erst kalibriert.
-- Die Browser-Vorschau animiert lokal über `requestAnimationFrame` und verändert dabei nicht die auf dem Board gespeicherten Inhalte.
-- EEPROM/SPIFFS/LittleFS weiterhin nicht eingebunden; kein Firmware-OTA, Log weiterhin RAM-only.
+**Wichtige Produktarchitektur:**
 
-## v0.2.0 Techniknotizen
-- `PageRecord`: zwei UTF-8-Zeilen (je 47 Byte im Speicherfeld), Layout 0/1, Ausrichtung 0/1/2, Farben 1..7, Dauer 5..60s. Zwölf Einträge in NVS-Namensraum `rbpages` unter Schema 1.
-- `renderBlockPage`: eine 64×16-Pixelseite, identisches RGB-Bitfeld wie v0.1.2. Payload mit 24 Nullbytes, Textmetadaten (80 Byte), 16-bit-RGB-Länge, RGB-Ebenen R/G/B; ergibt 491 Byte und vier BLE-Chunks zu max. 128 Rohdatenbytes.
-- Zweizeilenmodus: zwei unabhängige Zeilen 5×7 bei y=0..6 und y=8..14; eine Leerzeile dazwischen. Einzeilenmodus: 5×7 bei y=1..14 vertikal 2×.
-- Abbruch bei Zeilen >10 Codepoints (statt Abschneiden). Unicode-Unterstützung folgt der vorhandenen Glyphentabelle, inklusive großem ẞ als gleiche Silhouette wie ß.
-- `GET /api/program`: Seiten und Playerstatus; `POST /api/program/{set,add,delete,move,show,start,stop}`: explizite Benutzeraktionen.
-- Automatische Wiedergabe im Hauptloop, nach jedem übertragenen Bild startet dessen Anzeigedauer. BLE wird je Seite verbunden und getrennt. Fehler stoppt die Playlist.
-- Eine neue Firmware schaltet das Seitenprogramm nie von selbst ein; gespeicherte Inhalte werden nur im Editor geladen.
+- **Seite:** Individuell gestaltetes Bild/Objekt.
+- **Programm:** Eine oder mehrere Seiten, die *idealerweise mit einem* Transfer auf der Tafel autonom ablaufen. **Noch nicht implementiert.**
+- **Playlist:** Mehrere Programme, deren Wechsel per ESP32/BLE erfolgen dürfen. **Der v0.2.0-Seitenplayer liefert dafür eine technische Grundlage, aber noch keine vollständige Programmbibliothek.**
+
+## 5. Speicher und Diagnose
+
+- **Vorhanden:** NVS für die aktuellen Blockseiten; RAM-Ringpuffer für Diagnose (56 Einträge); Fehler-/Transferzähler seit Boot; Status und TXT-Bericht.
+- **Noch nicht vorhanden:** LittleFS-Programmbibliothek, dauerhaft gespeicherte Lauftext-Entwürfe, Browser-Reiterwiederherstellung, JSON-Backup/Import, Ordner/Tags/Favoriten.
+- **Geplant:** LittleFS im vorhandenen ESP32-Flash für benannte Programme; Ex-/Import für externe Sicherung. microSD am ESP32-C3 via SPI nur **optionale spätere Erweiterung**, nicht für die heutige Textbibliothek nötig.
+- **Speicheranzeigen:** `ESP.getSketchSize()` und Größe der **laufenden App-Partition** für rechnerisch freie App-Bytes; kein belegbarer SPIFFS/LittleFS-Verbrauch, solange kein Dateisystem gemountet wird. `ESP.getFreeHeap()`, `ESP.getMinFreeHeap()`, `ESP.getMaxAllocHeap()` für RAM-Diagnose.
+- **Sicherheit:** AP-Passwort steht bewusst im Quelltext; kein zweites Weblogin. Der fehlende Geheimnischarakter ist bekannt und akzeptiert. Änderung per Weboberfläche bleibt geplant.
+
+## 6. Schnittstellen von v0.2.0
+
+| Methode/Pfad | Funktion |
+| --- | --- |
+| `GET /` | Weboberfläche aus Header |
+| `GET /api/status` | Lauf-/Auftragsstatus |
+| `GET /api/font` | Gemeinsame Glyphentabelle für Browser und Controller |
+| `GET /api/diagnostics` | Diagnosestatus (JSON) |
+| `GET /api/diagnostics.txt` | Vollständiger Diagnose-TXT-Export |
+| `GET /api/program` | Aktuelle gespeicherte Seiten und Playerstatus |
+| `POST /api/program/set` | Seite ändern und in NVS sichern |
+| `POST /api/program/add` | Seite hinzufügen/duplizieren |
+| `POST /api/program/delete` | Seite löschen |
+| `POST /api/program/move` | Seite verschieben |
+| `POST /api/program/show` | Seite einzeln übertragen |
+| `POST /api/program/start` | ESP32-Seitenabfolge starten |
+| `POST /api/program/stop` | Abfolge stoppen |
+| `POST /api/text` | Lauftext/Standbild übertragen |
+| `POST /api/brightness` | Helligkeit separat übertragen |
+
+Alle genannten Schnittstellen sind **im korrigierten v0.2.0-Code vorhanden**. Dies bedeutet nicht, dass jede Fehlerbehandlung bereits hardwaregetestet wurde.
+
+## 7. Historische Entwicklungsstufen
+
+- **FirstText / v0.1.0:** Erster BLE-Text; eigene 5×7-Engschrift, ursprünglich Großbuchstaben und bei Überbreite automatischer Lauftext (Prototyp-Regel, später aufgegeben).
+- **v0.1.1:** Diagnose im Browser und TXT-Export **auf Hardware bestätigt**. Log bewusst RAM-only. Erste Beobachtung von BLE-Konkurrenz mit Original-App und Wiederaufnahme nach Freigabe.
+- **v0.1.2:** Unicode/Kleinbuchstaben, `GET /api/font`, 64×16-Punktvorschau, explizite Standbild-/Scrollwahl, Diagnose-Kopieren, Korrektur der App-Platz-Rechnung; nach erstem Typfehler kompilierte Korrekturfassung. Einzelne Glyphen sind unbefriedigend.
+- **v0.2.0:** Separater Blockeditor, NVS-Seiten und Seitenplayer; erste `.ino` hatte JavaScript-/Arduino-Prototyp-Kollision, **Korrektur 1** trennt WebUI-Header ab; danach erfolgreich getestet.
+
+## 8. Noch zu prüfen
+
+Siehe [`ROADMAP.md`](ROADMAP.md) und [`THEMENSPEICHER.md`](THEMENSPEICHER.md): exakte Schriftkorrekturen (g/p/q/y, Ä/Ö/Ü, ß/ẞ), Mini stets in Versalien, Mini-einzeilig, Pixelüberlauf, Originalfonts Normal und Bold, Dauerlast/Heap, Live-Modus/SPEED/BRIGHTNESS, Animation `0x04`, native Blocktexte, bibliotheksfähiges Datei-/Objektmodell.
