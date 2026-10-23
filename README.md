@@ -14,6 +14,7 @@
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
   <img alt="Hardwaregetestet" src="https://img.shields.io/badge/status-Hardwaretest%20l%C3%A4uft-2c8966">
   <img alt="Nichtkommerzielles Hobbyprojekt" src="https://img.shields.io/badge/project-non--commercial-f39c49">
+  <img alt="All rights reserved" src="https://img.shields.io/badge/license-all%20rights%20reserved-666666">
 </p>
 
 <p align="center"><sub>Das Titelbild zeigt das echte Festival-Totem; der darauf sichtbare Text wurde noch mit der Original-App erstellt.</sub></p>
@@ -97,7 +98,7 @@ Ob unsere konkrete Tafel mehrseitige Inhalte oder eigene Animationen über den d
 3. Das Board **`ESP32C3 Dev Module`** auswählen und **`USB CDC On Boot: Enabled`** setzen.
 4. Die Partitionierung **`No OTA (2MB APP/2MB SPIFFS)`** auswählen. Getestete Entwicklungsumgebung: Arduino IDE 2.3.10, `esp32` von Espressif 3.3.12.
 5. Über USB auf den ESP32 flashen. **OTA-Firmwareupdates sind nicht vorgesehen.**
-6. Handy oder Computer mit dem vom ESP32 erzeugten WLAN **`CoolLED1248`** verbinden. Das im Sketch konfigurierte Testpasswort vor einer öffentlichen Nutzung ändern.
+6. Handy oder Computer mit dem vom ESP32 erzeugten WLAN **`CoolLED1248`** verbinden. Das derzeit im Sketch hinterlegte WLAN-Passwort ist bewusst öffentlich dokumentiert. Es ist kein Geheimnis; Personen in Funkreichweite könnten damit das Geräte-WLAN verwenden. Eine individuelle Passwortkonfiguration im Webinterface ist für eine spätere Version vorgesehen.
 7. Die lokale Seite **[http://192.168.4.1](http://192.168.4.1)** öffnen. Der Browser benötigt keine Internetverbindung.
 8. Zunächst eine Blockseite **einzeln** übertragen; erst danach die experimentelle automatische Wiedergabe ausprobieren.
 
@@ -123,6 +124,7 @@ Weitere Ideen, Entscheidungen und offene Aufgaben werden unter [`docs/THEMENSPEI
 ```text
 RavestickBoard-for-CoolLED1248/
 ├── README.md
+├── LICENSE
 ├── CHANGELOG.md
 ├── docs/
 │   ├── assets/
@@ -150,7 +152,9 @@ RavestickBoard baut auf eigenen Hardwaretests und öffentlich dokumentierten Erk
 - [schulzad/coolled-sign-controller / OpenSign](https://github.com/schulzad/coolled-sign-controller) (wichtige Protokollforschung und Animationsexperimente; **derzeit ohne Freigabelizenz für die Übernahme des Quellcodes**).
 - [ohtaras/led](https://github.com/ohtaras/led) (Protokollreferenz; gesonderte Lizenzprüfung vor einer etwaigen Codeübernahme).
 
-**Eine eigene Veröffentlichungslizenz für RavestickBoard ist noch nicht festgelegt.** Nichtkommerzieller Einsatz allein ersetzt keine Nutzungsrechte an fremdem Code. Insbesondere wird OpenSign-Code ohne entsprechende Erlaubnis **nicht einfach übernommen oder nach C++ portiert**. Quellen- und Lizenzfragen werden separat unter [`docs/QUELLEN_UND_LIZENZEN.md`](docs/QUELLEN_UND_LIZENZEN.md) festgehalten.
+**RavestickBoard ist öffentlich einsehbar, aber derzeit nicht unter einer Open-Source-Lizenz freigegeben.** Es gilt der Copyright- und Nutzungshinweis in [`LICENSE`](LICENSE) (All Rights Reserved). Sichtbarkeit, Dokumentation und technische Diskussion sind erwünscht; daraus entsteht keine allgemeine Erlaubnis zum Kopieren, Bearbeiten oder Weiterverbreiten des eigenen Projektcodes. GitHubs Nutzungsbedingungen und gesetzliche Rechte bleiben unberührt.
+
+Nichtkommerzieller Einsatz allein ersetzt keine Nutzungsrechte an fremdem Code. Insbesondere übernehmen wir OpenSign-Code ohne Erlaubnis **nicht** und portieren ihn nicht einfach nach C++. Die Quellcodeherkunft und die Abgrenzung dokumentierter Protokolldaten von fremder Software dokumentiert [`docs/QUELLEN_UND_LIZENZEN.md`](docs/QUELLEN_UND_LIZENZEN.md).
 
 ---
 
