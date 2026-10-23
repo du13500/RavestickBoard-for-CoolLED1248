@@ -43,3 +43,12 @@ Format: ID · Datum · Entscheidung · Begründung · Status.
 - Die LED-Vorschau benutzt einzelne **runde** Punkte in fester 64×16-Matrix und bietet schnellen Vorlauf 1×/2×/4×/8×.
 - Der Geschwindigkeitsregler für die LED-Tafel und die Vorschau-Fast-Forward-Funktion sind unabhängig voneinander. Geschwindigkeit bleibt bis zur Kalibrierung experimentell.
 - Kopieren in die Zwischenablage wird zum bevorzugten Diagnose-Export, TXT bleibt als Alternative.
+
+## Entscheidung 22.10.2026: v0.2.0-Blockeditor
+- Seiten sind eigenständige Design-Objekte, nicht automatisch abgeschnittene Textstücke.
+- Keine erzwungenen Zeilenumbrüche und kein automatisches Nachrücken von Seiten.
+- Jede Seite hat eigenes Layout, Texte, Zeilenfarben, Ausrichtung und Anzeigedauer.
+- 12 Seiten zunächst als pragmatisches Limit. NVS wird nur bei Benutzeraktionen beschrieben.
+- Seitenplayer sendet vollständig über BLE; das ist ausdrücklich ein Experiment bis zur Klärung der Board-internen Mehrseitenfähigkeit.
+- Firmware bleibt USB-only ohne OTA. Webinterface benötigt kein gesondertes Login.
+- Typografische Detailkorrekturen g/p/q/y/Ä/Ö/Ü bleiben separate Entscheidungen anhand der Referenzen.

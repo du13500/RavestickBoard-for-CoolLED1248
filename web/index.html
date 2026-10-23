@@ -4,236 +4,118 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#11141c">
-<title>RavestickBoard · v0.1.2</title>
+<title>RavestickBoard · v0.2.0</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#11141c;color:#f3f5fa}
-*{box-sizing:border-box}
-body{margin:0;padding:16px 13px calc(94px + env(safe-area-inset-bottom,0px))}
-main{max-width:630px;margin:0 auto}
-header{display:flex;align-items:center;gap:12px;margin:7px 0 24px;min-width:0}
-.logo{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#273044;display:grid;place-items:center;font-size:25px}
-h1{font-size:clamp(20px,5vw,24px);margin:0;letter-spacing:-.5px;line-height:1.25}
-.sub{font-size:12px;color:#a4b0c1;margin-top:3px}
-.version{font-size:11px;color:#ffda73;background:#39404d;padding:4px 7px;border-radius:99px;display:inline-block;vertical-align:middle;white-space:nowrap;letter-spacing:0;margin-left:4px}
-.panel{background:#1d222e;border:1px solid #363e4e;border-radius:17px;padding:18px;margin-bottom:14px;min-width:0}
-.label{font-weight:800;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#a9b4c5;margin:0 0 10px}
-.hint{color:#abb6c7;font-size:12px;line-height:1.55;margin:9px 0 0}
-#preview{display:block;width:100%;height:auto;aspect-ratio:4/1;background:#070a0e;border-radius:9px}
-.preview-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:13px 0 5px}
-button{font:inherit;font-weight:750;border:0;border-radius:10px;padding:12px 13px;cursor:pointer}
-button:disabled{opacity:.55;cursor:wait}
-.small-btn{font-size:12px;padding:10px 12px;background:#323a4a;color:#e6ecf6;white-space:nowrap}
-.small-btn.active{background:#ffcf4e;color:#10151d}
-.player-label{margin-left:auto;color:#a9b4c5;font-size:12px;white-space:nowrap}
-input[type=text]{background:#111720;color:#fff;border:1px solid #505b70;border-radius:10px;padding:13px 14px;font-size:19px;width:100%;outline:none}
-input[type=text]:focus{border-color:#ffce4f}
-#count{text-align:right;color:#a9b4c5;font-size:12px;margin:6px 0 16px}
-.segment{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.segment label{display:block;background:#111822;border:1px solid #505a6b;border-radius:11px;padding:12px;text-align:center;font-size:14px;font-weight:750;cursor:pointer}
-.segment input{position:absolute;opacity:0;pointer-events:none}
-.segment input:checked+label{border-color:#ffcf4e;background:#3f371f;color:#ffe199}
-.swatches{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;justify-items:center;margin:8px 0 24px}
-.swatches input{position:absolute;opacity:0;pointer-events:none}
-.swatches label{display:block;width:clamp(26px,8vw,40px);height:clamp(26px,8vw,40px);border-radius:50%;border:3px solid #2d3545;cursor:pointer}
-.swatches input:checked+label{outline:2px solid #fff;outline-offset:2px}
-.range-row{display:flex;align-items:center;gap:14px;margin:8px 0 22px}
-.range-row input{min-width:0;flex:1;width:100%;accent-color:#ffd050}
-.range-row b{font-variant-numeric:tabular-nums;min-width:65px;text-align:right;white-space:nowrap}
-.warning{border:1px solid #926d2c;background:#31291b;color:#ffdb97;padding:11px;border-radius:9px;font-size:12px;line-height:1.5;margin:10px 0}
-.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.primary{background:#ffcf4d;color:#171a20}.secondary{background:#343d4f;color:#f5f7fb}
-#status{margin-top:14px;border-radius:9px;background:#2a303e;padding:11px 12px;font-size:13px;line-height:1.5;min-height:42px}
-.small{font-size:12px;color:#aab5c5;line-height:1.6}
-.diag-disclosure{cursor:pointer;font-weight:800;list-style:none}
-.diag-disclosure::-webkit-details-marker{display:none}.diag-disclosure:before{content:"▸";margin-right:7px}details[open] .diag-disclosure:before{content:"▾"}
-.diag-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0}
-.diag-cell{background:#121924;border-radius:9px;padding:10px;min-width:0}.diag-cell small{display:block;color:#aab5c5;margin:0 0 4px}.diag-cell strong{display:block;font-size:14px;overflow-wrap:anywhere}
-.diag-tools{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.diag-tools button,.diag-tools a{font-size:13px;padding:11px 13px;text-decoration:none;text-align:center}
-.diag-log{background:#10161f;border-radius:9px;padding:12px;font:11px/1.65 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;max-height:230px;overflow:auto}
-#copyManual{margin-top:9px}#copyManual textarea{width:100%;height:140px;border-radius:9px;background:#10161f;color:#f2f3f7;border:1px solid #63728a;font:12px/1.4 ui-monospace,monospace}
-@media(max-width:380px){.buttons{grid-template-columns:1fr}.player-label{width:100%;margin:0}}
-</style>
-</head><body><main>
-<header><div class="logo" aria-hidden="true">🍌</div><div>
-<h1>RavestickBoard <span class="version">v0.1.2</span></h1>
-<div class="sub">for CoolLED1248 · ESP32-C3</div></div></header>
-<section class="panel" aria-labelledby="preview-heading">
-<div class="label" id="preview-heading">LED-Vorschau · 64 × 16 Punkte</div>
-<canvas id="preview" width="768" height="192" aria-label="LED-Vorschau mit 64 mal 16 einzelnen Leuchtpunkten"></canvas>
-<div class="preview-controls"><button class="small-btn" id="restart" type="button" title="Vorschau von vorn">⏮ Neustart</button>
-<button class="small-btn active" id="play" type="button">⏸ Pause</button>
-<button class="small-btn" id="fast" type="button">⏩ 1×</button>
-<span class="player-label" id="previewInfo">Statische Anzeige</span></div>
-<div class="hint">Die Vorschau zeigt immer genau 64 × 16 LED-Punkte. Vorspulen verändert nur die Vorschau, nicht die Tafel.</div>
+*{box-sizing:border-box}body{margin:0;padding:16px 13px calc(78px + env(safe-area-inset-bottom,0px))}main{max-width:720px;margin:auto}
+header{display:flex;align-items:center;gap:11px;margin:5px 0 19px}.logo{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#303744;display:grid;place-items:center;font-size:25px}
+h1{font-size:23px;margin:0;line-height:1.2;letter-spacing:-.5px}.sub{color:#a7b5c9;font-size:12px;margin-top:3px}.version{display:inline-block;font-size:11px;color:#ffdc83;background:#353d4b;padding:4px 8px;border-radius:20px;vertical-align:middle;letter-spacing:0}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:#222934;border:1px solid #373f4b;border-radius:13px;margin:0 0 14px}
+.tab{border:0;border-radius:9px;background:transparent;color:#bbc6d5;font:750 14px system-ui;padding:12px 8px;cursor:pointer}.tab.active{background:#ffd35c;color:#111820}
+.panel{background:#1d222e;border:1px solid #353e50;border-radius:17px;padding:17px;margin-bottom:14px;min-width:0}.label{display:block;color:#b2bed0;font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;margin:0 0 9px}
+.hint{color:#aebacc;font-size:12px;line-height:1.5;margin:7px 0 11px}.tiny{color:#9eafc2;font-size:11px;line-height:1.45}
+button{font:inherit;font-weight:750;border:0;border-radius:10px;padding:12px 11px;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.primary{background:#ffd45c;color:#111821}.secondary{background:#343e50;color:#f6f7fb}.small-btn{padding:9px 10px;font-size:12px;background:#353d4d;color:#edf2fa;white-space:nowrap}.small-btn.active{background:#ffcf52;color:#151b25}.danger{background:#522f35;color:#ffccd2}
+input[type=text],input[type=number],select{width:100%;background:#111823;color:#f7f8fa;border:1px solid #4d596d;border-radius:9px;padding:11px 12px;font:16px system-ui;outline:none}input:focus,select:focus{border-color:#ffcc50}
+input[type=range]{width:100%;accent-color:#ffd45c;min-width:0}.range-row{display:flex;align-items:center;gap:12px;margin-bottom:18px}.range-row b{min-width:65px;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
+#matrix{width:100%;height:auto;display:block;aspect-ratio:4/1;background:#080b10;border-radius:8px}.preview-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:12px 0 5px}.preview-tools .tiny{margin-left:auto}
+.segment{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:0 0 15px}.segment button{background:#131b28;color:#c9d3df;border:1px solid #46556a;padding:11px 8px;font-size:13px}.segment button.active{border-color:#ffd45c;background:#423a25;color:#ffe392}
+.swatches{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:6px 0 15px}.swatch{width:clamp(26px,7.5vw,39px);height:clamp(26px,7.5vw,39px);padding:0;border-radius:50%;border:3px solid #303948;justify-self:center}.swatch.selected{outline:2px solid white;outline-offset:2px}
+.stack{display:grid;gap:11px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.actions button{flex:1 1 auto;font-size:13px}.actions .primary{flex:2 1 150px}
+#status{background:#293343;border-radius:10px;padding:11px 12px;color:#e1e9f4;font-size:13px;line-height:1.55;min-height:40px;margin-bottom:14px}
+#pageRail{display:flex;gap:10px;overflow-x:auto;overscroll-behavior-x:contain;padding:4px 2px 12px;scroll-snap-type:x proximity}.page-card{flex:0 0 164px;max-width:164px;padding:9px;background:#111924;border:1px solid #43516a;border-radius:11px;text-align:left;color:#dce6f3;scroll-snap-align:start}.page-card.selected{border:2px solid #ffd45c;padding:8px}.page-card canvas{width:100%;height:auto;background:#090c11;border-radius:5px;display:block;aspect-ratio:4/1}.page-card-top{display:flex;justify-content:space-between;gap:4px;align-items:center;font-size:12px;margin-bottom:8px}.page-card span.duration{color:#aebbc9;font-size:11px}
+.page-tools{display:flex;flex-wrap:wrap;gap:6px}.page-tools .small-btn{flex:1 1 auto}.page-form{display:grid;gap:12px}.field label{font-size:12px;color:#b0bdce;display:block;margin:0 0 6px}.two-lines{border-top:1px solid #3b4452;padding-top:11px;margin-top:2px}
+.warning{background:#352b1d;border:1px solid #9b733a;color:#ffe0a9;border-radius:9px;padding:10px 11px;font-size:12px;line-height:1.5;margin:10px 0}
+.save-indicator{font-size:12px;color:#ffd98b;white-space:nowrap}.muted{color:#aab6c7}.hidden,[hidden]{display:none!important}
+details summary{cursor:pointer;font-weight:800;list-style:none}details summary::-webkit-details-marker{display:none}details summary:before{content:"▸";margin-right:7px}details[open] summary:before{content:"▾"}
+.diag-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:15px 0}.diag-cell{background:#111925;padding:10px;border-radius:9px;min-width:0}.diag-cell small{display:block;font-size:11px;color:#b2bdcc}.diag-cell strong{display:block;font-size:13px;overflow-wrap:anywhere}.diag-log{background:#0e1722;border-radius:9px;padding:11px;max-height:240px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.6 ui-monospace,monospace}textarea{width:100%;height:130px;background:#101824;color:white;border:1px solid #657385;border-radius:8px}
+@media(max-width:440px){.grid2{grid-template-columns:1fr}.page-card{flex-basis:146px}.panel{padding:14px}.actions button{flex:1 1 120px}h1{font-size:21px}}
+</style></head>
+<body><main>
+<header><div class="logo" aria-hidden="true">🍌</div><div><h1>RavestickBoard <span class="version">v0.2.0</span></h1><div class="sub">for CoolLED1248 · ESP32-C3</div></div></header>
+<nav class="tabs" aria-label="Editor wählen"><button class="tab active" id="tabScroll" type="button">↔ Lauftext</button><button class="tab" id="tabPages" type="button">▣ Blockanzeige</button></nav>
+<section class="panel"><div class="label">LED-Vorschau · 64 × 16 Punkte</div><canvas id="matrix" width="768" height="192" aria-label="Pixelgenaue Punktvorschau"></canvas><div class="preview-tools"><button class="small-btn" id="previewRestart" type="button">⏮ Anfang</button><button class="small-btn active" id="previewToggle" type="button">⏸ Pause</button><button class="small-btn" id="previewSpeed" type="button">⏩ 1×</button><span id="previewCaption" class="tiny">Lauftextvorschau</span></div><p class="hint">1×, 2× oder 4× verändert nur die Vorschau. Die Anzeige auf der Tafel behält ihre eigene Geschwindigkeit.</p></section>
+<section id="scrollEditor" class="panel"><div class="label">Lauftext bearbeiten</div><label class="field" for="scrollText"><span class="hint">Text (maximal 40 Zeichen)</span></label><input type="text" id="scrollText" value="Grüße!" autocomplete="off" spellcheck="false"><p id="scrollCount" class="tiny"></p><div class="label">Farbe</div><div class="swatches" id="scrollColors"></div><div class="label">Laufgeschwindigkeit</div><div class="range-row"><input type="range" min="1" max="100" value="80" id="scrollSpeed"><b id="speedLabel">80 / 100</b></div><p class="hint">Normaltempo ca. 80. Die Live-Regelung bleibt ein separater Optimierungsschritt; derzeit beim Hochladen einstellen.</p><div class="actions"><button class="primary" id="sendScroll">Lauftext senden</button></div></section>
+<section id="pagesEditor" class="hidden">
+ <section class="panel"><div class="label">Blockanzeige · eigene Seiten</div><div id="pageRail" aria-label="Seitenübersicht"></div><div class="page-tools"><button class="small-btn" id="pageAdd">＋ Neue Seite</button><button class="small-btn" id="pageCopy">⧉ Duplizieren</button><button class="small-btn" id="pageLeft">← Verschieben</button><button class="small-btn" id="pageRight">→ Verschieben</button><button class="small-btn danger" id="pageDelete">Löschen</button></div><p class="hint">Jede Seite ist unabhängig. Kein automatisches Abschneiden und kein erzwungener Umbruch. Maximal 12 Seiten.</p></section>
+ <section class="panel"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div class="label" id="pageTitle">Seite 1 bearbeiten</div><span id="dirty" class="save-indicator"></span></div>
+ <div class="page-form">
+  <div class="field"><label for="line1">Text · Zeile 1</label><input id="line1" type="text" placeholder="z. B. SUCHE:" spellcheck="false" autocomplete="off"></div>
+  <div class="field" id="secondRow"><label for="line2">Text · Zeile 2</label><input id="line2" type="text" placeholder="z. B. UMARMUNG" spellcheck="false" autocomplete="off"></div>
+  <div class="grid2"><div class="field"><label for="pageLayout">Schriftdarstellung</label><select id="pageLayout"><option value="0">Engschrift · eine Zeile (14 px)</option><option value="1">Mini · zwei Zeilen (7 px je Zeile)</option></select></div><div class="field"><label for="pageAlign">Ausrichtung</label><select id="pageAlign"><option value="0">Links</option><option value="1">Zentriert</option><option value="2">Rechts</option></select></div></div>
+  <div class="field"><label>Farbe · Zeile 1</label><div class="swatches" id="pageColors1"></div></div>
+  <div class="field" id="secondColors"><label>Farbe · Zeile 2</label><div class="swatches" id="pageColors2"></div></div>
+  <div class="field"><label for="pageDuration">Anzeigedauer nach erfolgreicher Übertragung</label><div class="range-row"><input id="pageDuration" type="range" min="5" max="60" step="1" value="7"><b id="durationLabel">7 Sek.</b></div></div>
+ </div>
+ <div class="warning hidden" id="pageWarning"></div>
+ <div class="actions"><button class="secondary" id="pageSave">Seite speichern</button><button class="primary" id="pageShow">Diese Seite anzeigen</button></div>
+ <p class="hint">Änderungen werden beim Seitenwechsel gespeichert. „Diese Seite anzeigen“ überträgt nur die ausgewählte Seite. Die LED-Tafel kann weiterhin durch die Original-App bedient werden, solange RavestickBoard nicht gerade sendet.</p>
+ </section>
+ <section class="panel"><div class="label">Seitenprogramm · Wiedergabe</div><div class="actions"><button id="programStart" class="primary">▶ Programm starten</button><button id="programStop" class="secondary">■ Stoppen</button></div><p id="programState" class="hint">Noch nicht geladen.</p><p class="hint">Experimenteller Player: Der ESP32 lädt jede Seite einzeln über Bluetooth hoch. Die programmierte Anzeigedauer beginnt nach erfolgreichem Upload. Ein Wechsel benötigt zusätzlich etwa 2 bis 3 Sekunden. Die Originalhardware kann noch keine von uns nachgewiesene komplette Seitenfolge selbstständig abspielen.</p></section>
 </section>
-<section class="panel" aria-labelledby="editor-heading">
-<div class="label" id="editor-heading">Anzeigetext</div>
-<input id="message" type="text" value="Grüße!" placeholder="Dein Text mit ä, ö, ü und ß" autocomplete="off" spellcheck="false" aria-label="Anzeigetext">
-<div id="count">0 / 40 Zeichen</div>
-<div class="label">Anzeigemodus</div>
-<div class="segment" id="modes"><div><input type="radio" name="mode" id="static" value="static" checked><label for="static">▣ Standbild</label></div>
-<div><input type="radio" name="mode" id="scroll" value="scroll"><label for="scroll">↔ Lauftext</label></div></div>
-<div class="hint" style="margin:-4px 0 16px">Die Anzeigeart wird bewusst gewählt und hängt nicht von der Textlänge ab. Ein mehrseitiger Editor folgt später.</div>
-<div class="label">Textfarbe</div><div class="swatches" id="swatches"></div>
-<div class="label">Helligkeit</div><div class="range-row"><input id="brightness" type="range" min="1" max="100" value="75"><b id="percent">75 %</b></div>
-<div class="label">Laufgeschwindigkeit</div><div class="range-row"><input id="speed" type="range" min="1" max="100" value="50"><b id="speedValue">50 / 100</b></div>
-<div class="hint" style="margin:-15px 0 16px">Der Regler sendet den Geschwindigkeitsbefehl der Originalhardware. Der genaue Geschwindigkeitsverlauf wird noch am Board kalibriert.</div>
-<div id="overflow" class="warning" hidden></div>
-<div class="buttons"><button class="primary" id="send" type="button">Text senden</button><button class="secondary" id="apply" type="button">Nur Helligkeit</button></div>
-<div role="status" aria-live="polite" id="status">Verbinde mit dem Controller …</div>
-</section>
-<details class="panel" id="diagnostics"><summary class="diag-disclosure">Diagnose und Ereignisprotokoll</summary>
-<p class="hint">Aktuelle Messwerte und Ereignisse seit dem letzten Start. Textinhalte, Passwörter und BLE-Adressen werden nicht exportiert.</p>
-<div class="diag-grid" id="diagGrid"><div class="small">Diagnose wird beim Öffnen geladen.</div></div>
-<div class="diag-tools"><button class="secondary" id="diagReload" type="button">Aktualisieren</button>
-<button class="primary" id="diagCopy" type="button">📋 Log kopieren</button>
-<a class="secondary" href="/api/diagnostics.txt" download="RavestickBoard_Diagnose_v0.1.2.txt">TXT herunterladen</a></div>
-<div class="label">Letzte Ereignisse</div><div id="diagLog" class="diag-log">Noch nicht geladen.</div>
-<div id="diagFeedback" class="hint" role="status" aria-live="polite"></div>
-<div id="copyManual" hidden><p class="hint">Safari blockiert das Kopieren? Textfeld antippen, alles auswählen und manuell kopieren.</p>
-<textarea id="manualText" readonly aria-label="Diagnosebericht zum Kopieren"></textarea></div>
-</details>
-<p class="small">WLAN: <b>CoolLED1248</b> · Webinterface: <b>192.168.4.1</b> · Keine Internetverbindung notwendig.<br>
-Nur ein bewusst gesendeter Auftrag verändert die LED-Tafel. Firmware-Updates erfolgen ausschließlich über USB.</p>
+<section class="panel"><div class="label">Helligkeit</div><div class="range-row"><input id="brightness" type="range" min="1" max="100" value="75"><b id="brightLabel">75 %</b></div><div class="actions"><button class="secondary" id="sendBrightness">Helligkeit übertragen</button></div><p class="hint">Unabhängig vom angezeigten Inhalt. Die direkte Live-Regelung bleibt für die nächste BLE-Optimierung vorgesehen.</p></section>
+<div id="status" role="status" aria-live="polite">Verbindung wird geprüft …</div>
+<details class="panel" id="diagnostics"><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload">Aktualisieren</button><button class="primary" id="diagCopy">📋 Log kopieren</button><a class="secondary" href="/api/diagnostics.txt" download="RavestickBoard_Diagnose_v0.2.0.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">TXT herunterladen</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div id="diagLog" class="diag-log"></div><p id="diagFeedback" class="hint"></p><div id="copyManual" hidden><textarea id="manualText" readonly aria-label="Log manuell kopieren"></textarea></div></details>
+<p class="tiny">WLAN: CoolLED1248 · http://192.168.4.1 · USB-Firmwareupdates, kein OTA.<br>Die Seiten werden auf dem ESP32 gespeichert, die Anzeige selbst zeigt zuletzt hochgeladene Inhalte auch ohne Verbindung weiter.</p>
 </main>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
-const colors=[['Rot',4,'#ff3939'],['Gelb',6,'#ffff45'],['Grün',2,'#4bf641'],['Cyan',3,'#53eeee'],['Blau',1,'#4d51ff'],['Magenta',5,'#ef47eb'],['Weiß',7,'#ffffff']];
-let selectedColor=7,displayMode='static',fontMap={},fontReady=false;
-const cv=$('preview'),ctx=cv.getContext('2d');
-const WIDTH=64,HEIGHT=16,PITCH=12,CHARWIDTH=6;
-const fastRates=[1,2,4,8];let fastIndex=0,playing=true,position=WIDTH,lastFrame=0;
-const GLYPH_FALLBACK=[14,17,1,2,4,0,4];
-const swatchRoot=$('swatches');
-swatchRoot.innerHTML=colors.map(([name,n,hex])=>`<div><input type="radio" id="c${n}" name="color" value="${n}" ${n===7?'checked':''}><label for="c${n}" style="background:${hex}" title="${name}" aria-label="${name}"></label></div>`).join('');
-swatchRoot.addEventListener('change',e=>{if(e.target.name==='color'){selectedColor=Number(e.target.value);draw();}});
-function cps(text){return Array.from(text.replaceAll('❤️','❤')).filter(c=>c.codePointAt(0)!==0xFE0F && c.codePointAt(0)!==0xFE0E);}
-function glyph(c){return fontMap[c.codePointAt(0)]||GLYPH_FALLBACK;}
-function textWidth(){return Math.max(0,cps($('message').value).length*CHARWIDTH-1);}
-function updateControls(){
- const count=cps($('message').value).length,tw=textWidth();
- $('count').textContent=`${count} / 40 Zeichen`;
- const overflow=displayMode==='static' && tw>WIDTH;
- $('overflow').hidden=!overflow;
- if(overflow)$('overflow').textContent=`Der Text ist ${tw} Pixel breit, das Display nur ${WIDTH}. Im Standbild wird nur der linke Ausschnitt angezeigt. Für weitere Seiten benötigen wir den kommenden Seiteneditor.`;
- if(count>40){$('overflow').hidden=false;$('overflow').textContent='Maximal 40 Zeichen: Bitte den Text kürzen.';}
- $('previewInfo').textContent=displayMode==='scroll'?'Lauftext, '+fastRates[fastIndex]+'× Vorschau':'Standbild';
- $('speed').disabled=displayMode!=='scroll';
- $('play').disabled=displayMode!=='scroll';
- $('fast').disabled=displayMode!=='scroll';
- $('restart').disabled=displayMode!=='scroll';
-}
-function colorHex(){return colors.find(x=>x[1]===selectedColor)[2];}
-function draw(){
- const text=cps($('message').value),tw=textWidth();
- ctx.fillStyle='#070a0e';ctx.fillRect(0,0,cv.width,cv.height);
- let left=displayMode==='scroll'?position:(tw<=WIDTH?Math.floor((WIDTH-tw)/2):0);
- const lit=colorHex();
- for(let x=0;x<WIDTH;x++)for(let y=0;y<HEIGHT;y++){
-   const px=x*PITCH+PITCH/2,py=y*PITCH+PITCH/2;
-   ctx.beginPath();ctx.arc(px,py,3.25,0,Math.PI*2);ctx.fillStyle='#242b35';ctx.fill();
- }
- if(fontReady){
- ctx.fillStyle=lit;
- for(let i=0;i<text.length;i++){
-   const rows=glyph(text[i]);const base=left+i*CHARWIDTH;
-   for(let yy=0;yy<7;yy++)for(let xx=0;xx<5;xx++){
-     const x=Math.floor(base+xx);
-     if(x<0||x>=WIDTH||!(rows[yy]&(1<<(4-xx))))continue;
-     for(let dy=0;dy<2;dy++){
-       const y=1+yy*2+dy;ctx.beginPath();ctx.arc(x*PITCH+PITCH/2,y*PITCH+PITCH/2,4,0,Math.PI*2);ctx.fill();
-     }
-   }
- }
- }else{ctx.fillStyle='#aeb6c5';ctx.font='13px system-ui';ctx.fillText('Schrift wird geladen …',12,cv.height/2);}
-}
-function restart(){position=WIDTH;draw();}
-function step(ts){
- if(!lastFrame)lastFrame=ts;
- const dt=Math.min(100,ts-lastFrame);lastFrame=ts;
- if(displayMode==='scroll'&&playing&&fontReady){
-   const boardSpeed=Number($('speed').value);
-   const pixelsPerSecond=4+boardSpeed*0.26; // UI approximation, not calibrated to hardware yet.
-   position-=dt/1000*pixelsPerSecond*fastRates[fastIndex];
-   if(position<-(textWidth()+8))position=WIDTH;
-   draw();
- }
- requestAnimationFrame(step);
-}
-function updateText(){restart();updateControls();draw();}
-$('message').addEventListener('input',updateText);
-$('modes').addEventListener('change',e=>{if(e.target.name==='mode'){displayMode=e.target.value;updateText();}});
-$('brightness').addEventListener('input',()=>{$('percent').textContent=$('brightness').value+' %';});
-$('speed').addEventListener('input',()=>{$('speedValue').textContent=$('speed').value+' / 100';});
-$('restart').addEventListener('click',restart);
-$('play').addEventListener('click',()=>{playing=!playing;$('play').textContent=playing?'⏸ Pause':'▶ Weiter';});
-$('fast').addEventListener('click',()=>{fastIndex=(fastIndex+1)%fastRates.length;$('fast').textContent='⏩ '+fastRates[fastIndex]+'×';updateControls();});
-async function loadFont(){try{const r=await fetch('/api/font',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);fontMap=await r.json();fontReady=true;draw();}
- catch(e){$('status').textContent='Schrift konnte nicht geladen werden. Seite neu öffnen.';}}
-let busy=false;function lock(b){busy=b;$('send').disabled=b;$('apply').disabled=b;}
-async function post(path,data){
- try{
-   lock(true);$('status').textContent='Auftrag wird vorbereitet …';
-   const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(data)});
-   const j=await r.json();if(!r.ok)throw Error(j.message||'HTTP '+r.status);
-   $('status').textContent=j.message||'Auftrag angenommen.';
- }catch(e){$('status').textContent='Fehler: '+e.message;lock(false);}
-}
-$('send').addEventListener('click',()=>{
- const text=$('message').value;if(!text.trim()){$('status').textContent='Bitte einen Text eingeben.';return;}
- if(cps(text).length>40){$('status').textContent='Bitte höchstens 40 Zeichen eingeben.';return;}
- post('/api/text',{text,color:selectedColor,brightness:$('brightness').value,mode:displayMode,speed:$('speed').value});
-});
-$('apply').addEventListener('click',()=>post('/api/brightness',{brightness:$('brightness').value}));
-async function poll(){try{
- const r=await fetch('/api/status',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);
- const d=await r.json();$('status').textContent=d.message;lock(d.state==='queued'||d.state==='sending');
- }catch(e){$('status').textContent='Controller nicht erreichbar.';lock(false);}}
-let reportCache='';
-async function refreshDiagnostics(){
- const grid=$('diagGrid'),log=$('diagLog');
- try{
-  grid.textContent='Messwerte werden geladen …';
-  const [r,t]=await Promise.all([fetch('/api/diagnostics',{cache:'no-store'}),fetch('/api/diagnostics.txt',{cache:'no-store'})]);
-  if(!r.ok||!t.ok)throw Error('HTTP '+(r.ok?t.status:r.status));
-  const d=await r.json();reportCache=await t.text();
-  const rows=[['Firmware','v'+d.version],['Laufzeit',d.uptime],['Resetgrund',d.reset],
-    ['Freier Heap',(d.freeHeap/1024).toFixed(1)+' KiB'],
-    ['Minimal frei',(d.minHeap/1024).toFixed(1)+' KiB'],
-    ['Größter Block',(d.maxBlock/1024).toFixed(1)+' KiB'],
-    ['Firmwaregröße',(d.sketchSize/1024).toFixed(0)+' KiB'],
-    ['App-Partition',(d.appPartitionSize/1024).toFixed(0)+' KiB'],
-    ['App-Rest',(d.appAvailable/1024).toFixed(0)+' KiB'],
-    ['WLAN-Geräte',d.wifiClients],['Bluetooth',d.bleConnected?'Verbunden':'Getrennt'],
-    ['BLE-Versuche',d.bleAttempts],['BLE-Verbindungen',d.bleSuccess],
-    ['BLE-Timeouts',d.bleTimeouts],['Schreibfehler',d.writeFailures],
-    ['Benachrichtigungen',d.notifications],['Aufträge OK / Fehler',d.jobsOK+' / '+d.jobsFailed],
-    ['Fehler gesamt',d.errors]];
-  grid.replaceChildren();
-  for(const [label,value] of rows){const cell=document.createElement('div');cell.className='diag-cell';const a=document.createElement('small');a.textContent=label;const b=document.createElement('strong');b.textContent=String(value);cell.append(a,b);grid.append(cell);}
-  log.textContent=d.recent||'Noch keine Ereignisse.';
-  $('diagFeedback').textContent='Letzter Fehler: '+d.lastError;
- }catch(e){grid.textContent='Diagnose nicht verfügbar.';log.textContent='Fehler: '+e.message;$('diagFeedback').textContent=e.message;}
-}
-function copyFallback(str){
- const node=document.createElement('textarea');node.value=str;node.style.position='fixed';node.style.opacity='0';node.style.left='-2000px';document.body.append(node);node.focus();node.select();node.setSelectionRange(0,str.length);
- let ok=false;try{ok=document.execCommand('copy');}catch(e){}node.remove();return ok;
-}
-$('diagCopy').addEventListener('click',async()=>{
- let text=reportCache;
- if(!text){$('diagFeedback').textContent='Bitte zuerst auf „Aktualisieren“ tippen.';return;}
- const fallback=()=>copyFallback(text);
- if(!navigator.clipboard||!window.isSecureContext){
-   if(fallback()){$('diagFeedback').textContent='Diagnosebericht in die Zwischenablage kopiert.';return;}
- }else{
-   try{await navigator.clipboard.writeText(text);$('diagFeedback').textContent='Diagnosebericht in die Zwischenablage kopiert.';return;}catch(e){if(fallback()){$('diagFeedback').textContent='Diagnosebericht kopiert.';return;}}
- }
- $('copyManual').hidden=false;$('manualText').value=text;$('manualText').focus();$('manualText').select();
- $('diagFeedback').textContent='Automatisches Kopieren blockiert. Bericht unten markieren und manuell kopieren.';
-});
-$('diagnostics').addEventListener('toggle',()=>{if($('diagnostics').open)refreshDiagnostics();});
-$('diagReload').addEventListener('click',refreshDiagnostics);
-updateControls();draw();loadFont();requestAnimationFrame(step);setInterval(poll,1200);poll();
-</script>
-</body></html>
+const COLORS=[['Rot',4,'#ff4141'],['Gelb',6,'#fff04c'],['Grün',2,'#39ed55'],['Cyan',3,'#4fe5e5'],['Blau',1,'#6571ff'],['Magenta',5,'#eb5bf2'],['Weiß',7,'#ffffff']];
+const FONT_FALLBACK=[14,17,1,2,4,0,4];
+const W=64,H=16,MAX_PAGES=12,MAX_LINE=10,PITCH=12;
+let font={},fontReady=false,tab='scroll',pages=[],selected=0,previewPage=0,dirty=false;
+let previewPlaying=true,previewRate=1,previewClock=0,previewX=W,lastTick=0;
+let scrollColor=7,programRunning=false,boardCurrent=0,controllerBusy=false,statusMessage='';
+const cv=$('matrix'),ctx=cv.getContext('2d');
+function codepoints(s){return Array.from((s||'').replaceAll('❤️','❤')).filter(c=>!['\ufe0f','\ufe0e'].includes(c));}
+function glyph(c){return font[c.codePointAt(0)]||FONT_FALLBACK;}
+function hexColor(n){return COLORS.find(c=>c[1]===Number(n))?.[2]||'#ffffff';}
+function esc(s){return String(s).replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
+function samplePage(){return {line1:'SUCHE:',line2:'UMARMUNG',layout:0,align:1,color1:6,color2:7,duration:7};}
+function makeSwatches(root,selected,onChange){root.replaceChildren();for(const [name,code,hex] of COLORS){const b=document.createElement('button');b.type='button';b.className='swatch'+(Number(selected)===code?' selected':'');b.style.background=hex;b.setAttribute('aria-label',name);b.title=name;b.dataset.color=code;b.addEventListener('click',()=>onChange(code));root.append(b);}}
+function setTab(next){tab=next;$('tabScroll').classList.toggle('active',next==='scroll');$('tabPages').classList.toggle('active',next==='pages');$('scrollEditor').classList.toggle('hidden',next!=='scroll');$('pagesEditor').classList.toggle('hidden',next!=='pages');restartPreview();draw();}
+$('tabScroll').onclick=()=>setTab('scroll');$('tabPages').onclick=()=>setTab('pages');
+function drawDots(context,pitch){context.fillStyle='#080b10';context.fillRect(0,0,W*pitch,H*pitch);for(let x=0;x<W;x++)for(let y=0;y<H;y++){context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.27,0,Math.PI*2);context.fillStyle='#28303a';context.fill();}}
+function drawLine(context,line,color,align,yTop,scale,pitch,leftOverride=null){const chars=codepoints(line);const width=chars.length?chars.length*6-1:0;const left=leftOverride!==null?leftOverride:align===0?0:align===2?W-width:Math.floor((W-width)/2);context.fillStyle=hexColor(color);for(let i=0;i<chars.length;i++){const rows=glyph(chars[i]);for(let ry=0;ry<7;ry++)for(let rx=0;rx<5;rx++){if(!(rows[ry]&(1<<(4-rx))))continue;const x=Math.floor(left+i*6+rx);for(let dy=0;dy<scale;dy++){const y=yTop+ry*scale+dy;if(x>=0&&x<W&&y>=0&&y<H){context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.34,0,Math.PI*2);context.fill();}}}}}
+function drawPage(context,p,pitch){drawDots(context,pitch);if(!fontReady||!p)return;drawLine(context,p.line1,p.color1,Number(p.align),p.layout===1?0:1,p.layout===1?1:2,pitch);if(Number(p.layout)===1)drawLine(context,p.line2,p.color2,Number(p.align),8,1,pitch);}
+function draw(){if(tab==='pages')drawPage(ctx,pages[previewPage]||pages[selected],PITCH);else{drawDots(ctx,PITCH);if(fontReady)drawLine(ctx,$('scrollText').value,scrollColor,0,1,2,PITCH,previewX);}}
+function restartPreview(){previewClock=0;previewX=W;previewPage=selected;draw();}
+function tick(now){if(!lastTick)lastTick=now;const dt=Math.min(90,now-lastTick);lastTick=now;if(previewPlaying&&fontReady){if(tab==='scroll'){previewX-=dt/1000*(4+Number($('scrollSpeed').value)*.26)*previewRate;if(previewX<-codepoints($('scrollText').value).length*6-8)previewX=W;draw();}else if(pages.length>1){previewClock+=dt*previewRate;if(previewClock>=Math.max(5,Number(pages[previewPage].duration))*1000){previewClock=0;previewPage=(previewPage+1)%pages.length;draw();$('previewCaption').textContent=`Vorschau Seite ${previewPage+1} / ${pages.length}`;}}}requestAnimationFrame(tick);}
+$('previewRestart').onclick=restartPreview;$('previewToggle').onclick=()=>{previewPlaying=!previewPlaying;$('previewToggle').textContent=previewPlaying?'⏸ Pause':'▶ Weiter';};$('previewSpeed').onclick=()=>{previewRate=previewRate===1?2:previewRate===2?4:1;$('previewSpeed').textContent='⏩ '+previewRate+'×';};
+function checkLine(line){const n=codepoints(line).length;return n<=MAX_LINE;}
+function validatePage(p){const n1=codepoints(p.line1).length,n2=codepoints(p.line2).length;if(!p.line1.trim()&&(!p.layout||!p.line2.trim()))return 'Bitte mindestens eine Zeile füllen.';if(n1>MAX_LINE||(Number(p.layout)===1&&n2>MAX_LINE))return `Pro Zeile passen höchstens ${MAX_LINE} Zeichen bei 5×7 Pixeln (64 Spalten).`;return '';}
+function updateWarning(){if(tab!=='pages'||!pages.length)return;const msg=validatePage(pages[selected]);$('pageWarning').textContent=msg;$('pageWarning').classList.toggle('hidden',!msg);}
+function renderRail(){const rail=$('pageRail');rail.replaceChildren();pages.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='page-card'+(i===selected?' selected':'');const head=document.createElement('div');head.className='page-card-top';const strong=document.createElement('strong');strong.textContent='Seite '+(i+1);const dur=document.createElement('span');dur.className='duration';dur.textContent=p.duration+' Sek.';head.append(strong,dur);const cn=document.createElement('canvas');cn.width=192;cn.height=48;const g=cn.getContext('2d');drawPage(g,p,3);b.append(head,cn);b.onclick=()=>selectPage(i);rail.append(b);});}
+function renderSelected(){if(!pages.length)return;const p=pages[selected];$('pageTitle').textContent=`Seite ${selected+1} von ${pages.length}`;$('line1').value=p.line1;$('line2').value=p.line2;$('pageLayout').value=String(p.layout);$('pageAlign').value=String(p.align);$('pageDuration').value=String(p.duration);$('durationLabel').textContent=p.duration+' Sek.';document.querySelectorAll('#secondRow,#secondColors').forEach(e=>e.classList.toggle('hidden',Number(p.layout)!==1));renderPageColors();$('dirty').textContent=dirty?'Nicht gespeichert':'';updateWarning();renderRail();draw();}
+function renderPageColors(){if(!pages.length)return;makeSwatches($('pageColors1'),pages[selected].color1,c=>{pages[selected].color1=c;changed();renderPageColors();});makeSwatches($('pageColors2'),pages[selected].color2,c=>{pages[selected].color2=c;changed();renderPageColors();});}
+function changed(){dirty=true;$('dirty').textContent='Nicht gespeichert';updateWarning();renderRail();draw();}
+['line1','line2','pageLayout','pageAlign','pageDuration'].forEach(id=>$(id).addEventListener('input',()=>{const p=pages[selected];p.line1=$('line1').value;p.line2=$('line2').value;p.layout=Number($('pageLayout').value);p.align=Number($('pageAlign').value);p.duration=Number($('pageDuration').value);$('durationLabel').textContent=p.duration+' Sek.';document.querySelectorAll('#secondRow,#secondColors').forEach(e=>e.classList.toggle('hidden',p.layout!==1));changed();}));
+async function api(path,data=null){const opt={cache:'no-store'};if(data){opt.method='POST';opt.headers={'Content-Type':'application/x-www-form-urlencoded'};opt.body=new URLSearchParams(data);}const r=await fetch(path,opt);let j=await r.json();if(!r.ok||j.ok===false)throw Error(j.message||'HTTP '+r.status);return j;}
+function notify(text){$('status').textContent=text;}
+async function saveCurrent(){if(!pages.length)return false;const p=pages[selected],problem=validatePage(p);if(problem){notify(problem);updateWarning();return false;}if(!dirty)return true;try{const j=await api('/api/program/set',{index:selected,line1:p.line1,line2:p.line2,layout:p.layout,align:p.align,color1:p.color1,color2:p.color2,duration:p.duration});dirty=false;$('dirty').textContent='';notify(j.message||'Seite gespeichert.');return true;}catch(e){notify('Speichern fehlgeschlagen: '+e.message);return false;}}
+async function refreshPages(){try{const data=await api('/api/program');pages=data.pages||[];programRunning=!!data.playing;boardCurrent=data.current||0;selected=Math.max(0,Math.min(selected,pages.length-1));dirty=false;previewPage=selected;renderSelected();renderProgramState(data);}catch(e){notify('Seiten konnten nicht geladen werden: '+e.message);}}
+async function selectPage(i){if(i===selected)return;if(!(await saveCurrent()))return;selected=i;previewPage=i;previewClock=0;renderSelected();}
+async function pageAction(path,body){if(!(await saveCurrent()))return;try{const j=await api(path,body);notify(j.message||'Seiten geändert.');await refreshPages();}catch(e){notify('Fehler: '+e.message);}}
+$('pageAdd').onclick=async()=>{if(pages.length>=MAX_PAGES){notify('Höchstens 12 Seiten möglich.');return;}if(!(await saveCurrent()))return;try{await api('/api/program/add',{});selected=pages.length;await refreshPages();}catch(e){notify(e.message);}};
+$('pageCopy').onclick=async()=>{if(pages.length>=MAX_PAGES){notify('Höchstens 12 Seiten möglich.');return;}if(!(await saveCurrent()))return;try{await api('/api/program/add',{copy:selected});selected=pages.length;await refreshPages();}catch(e){notify(e.message);}};
+$('pageLeft').onclick=async()=>{if(selected<=0)return;const old=selected;await pageAction('/api/program/move',{index:old,dir:-1});selected=Math.max(0,old-1);renderSelected();};
+$('pageRight').onclick=async()=>{if(selected>=pages.length-1)return;const old=selected;await pageAction('/api/program/move',{index:old,dir:1});selected=Math.min(pages.length-1,old+1);renderSelected();};
+$('pageDelete').onclick=async()=>{if(pages.length<=1){notify('Mindestens eine Seite bleibt erhalten.');return;}if(!confirm('Seite '+(selected+1)+' wirklich löschen?'))return;dirty=false;try{await api('/api/program/delete',{index:selected});selected=Math.min(selected,pages.length-2);await refreshPages();notify('Seite gelöscht.');}catch(e){notify('Löschen fehlgeschlagen: '+e.message);}};
+$('pageSave').onclick=async()=>{if(await saveCurrent())notify('Seite ist gespeichert.');};
+$('pageShow').onclick=async()=>{if(!(await saveCurrent()))return;try{const j=await api('/api/program/show',{index:selected});notify(j.message);}catch(e){notify(e.message);}};
+$('programStart').onclick=async()=>{if(!(await saveCurrent()))return;try{const j=await api('/api/program/start',{});notify(j.message);programRunning=true;renderProgramState({playing:true,current:0});}catch(e){notify(e.message);}};
+$('programStop').onclick=async()=>{try{const j=await api('/api/program/stop',{});notify(j.message);programRunning=false;renderProgramState({playing:false});}catch(e){notify(e.message);}};
+function renderProgramState(data){const msg=data.playing?'▶ Seitenprogramm läuft auf dem ESP32. Seite '+((data.current??boardCurrent)+1)+' / '+pages.length:'■ Programm gestoppt. Letztes hochgeladenes Bild bleibt auf der LED-Tafel.';$('programState').textContent=msg;}
+function makeScrollSwatches(){makeSwatches($('scrollColors'),scrollColor,c=>{scrollColor=c;makeScrollSwatches();draw();});}makeScrollSwatches();
+$('scrollText').oninput=()=>{const n=codepoints($('scrollText').value).length;$('scrollCount').textContent=n+' / 40 Zeichen';restartPreview();};$('scrollText').dispatchEvent(new Event('input'));
+$('scrollSpeed').oninput=()=>{$('speedLabel').textContent=$('scrollSpeed').value+' / 100';};
+$('brightness').oninput=()=>{$('brightLabel').textContent=$('brightness').value+' %';};
+$('sendScroll').onclick=async()=>{const value=$('scrollText').value;if(!value.trim()||codepoints(value).length>40){notify('Bitte einen Lauftext mit 1 bis 40 Zeichen eingeben.');return;}try{const j=await api('/api/text',{text:value,color:scrollColor,brightness:$('brightness').value,mode:'scroll',speed:$('scrollSpeed').value});notify(j.message);}catch(e){notify('Fehler: '+e.message);}};
+$('sendBrightness').onclick=async()=>{try{const j=await api('/api/brightness',{brightness:$('brightness').value});notify(j.message);}catch(e){notify('Fehler: '+e.message);}};
+async function poll(){try{const d=await api('/api/status');if(d.message&&d.message!==statusMessage){statusMessage=d.message;notify(d.message);}controllerBusy=d.state==='queued'||d.state==='sending';programRunning=!!d.playing;boardCurrent=d.current||0;renderProgramState(d);}catch(e){notify('ESP32 nicht erreichbar.');}}setInterval(poll,1700);
+let reportCache='';async function refreshDiagnostics(){try{const [a,b]=await Promise.all([fetch('/api/diagnostics',{cache:'no-store'}),fetch('/api/diagnostics.txt',{cache:'no-store'})]);if(!a.ok||!b.ok)throw Error('HTTP Fehler');const d=await a.json();reportCache=await b.text();const rows=[['Firmware','v'+d.version],['Laufzeit',d.uptime],['Reset',d.reset],['Freier Heap',(d.freeHeap/1024).toFixed(1)+' KiB'],['Minimum Heap',(d.minHeap/1024).toFixed(1)+' KiB'],['Größter Block',(d.maxBlock/1024).toFixed(1)+' KiB'],['App frei',(d.appAvailable/1024).toFixed(0)+' KiB'],['WLAN',d.wifiClients],['BLE erfolgreich',d.bleSuccess],['Fehler',d.errors],['Jobs OK / Fehler',d.jobsOK+' / '+d.jobsFailed],['Seitenwechsel',d.pageShows||0]];$('diagGrid').replaceChildren();for(const [k,v] of rows){const card=document.createElement('div');card.className='diag-cell';const small=document.createElement('small');small.textContent=k;const strong=document.createElement('strong');strong.textContent=String(v);card.append(small,strong);$('diagGrid').append(card);}$('diagLog').textContent=d.recent||'Noch keine Ereignisse.';$('diagFeedback').textContent='Letzter Fehler: '+d.lastError;}catch(e){$('diagFeedback').textContent='Fehler: '+e.message;}}
+function copyOld(text){const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.append(t);t.focus();t.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}t.remove();return ok;}
+$('diagCopy').onclick=async()=>{if(!reportCache)await refreshDiagnostics();if(!reportCache){$('diagFeedback').textContent='Kein Log verfügbar.';return;}try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(reportCache);}else if(!copyOld(reportCache))throw Error('Safari blockiert das Kopieren');$('diagFeedback').textContent='Log in Zwischenablage kopiert.';}catch(e){$('copyManual').hidden=false;$('manualText').value=reportCache;$('manualText').focus();$('manualText').select();$('diagFeedback').textContent='Log im Textfeld markieren und manuell kopieren.';}};
+$('diagReload').onclick=refreshDiagnostics;$('diagnostics').addEventListener('toggle',()=>{if($('diagnostics').open)refreshDiagnostics();});
+async function init(){try{const r=await fetch('/api/font',{cache:'no-store'});if(!r.ok)throw Error('Schrift nicht erreichbar');font=await r.json();fontReady=true;await refreshPages();restartPreview();}catch(e){notify('Fehler beim Start: '+e.message);}poll();requestAnimationFrame(tick);}init();
+</script></body></html>

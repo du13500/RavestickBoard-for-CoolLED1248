@@ -40,3 +40,10 @@ Für Troubleshooting möglichst **vor dem Reset** die TXT-Datei herunterladen un
 - **App-Rest** wird berechnet als `esp_ota_get_running_partition()->size - ESP.getSketchSize()` und auf 0 begrenzt. Das ist ein rechnerischer Flash-Rest, keine garantierte zusätzliche freie RAM-Kapazität.
 - Bei einem erfolglosen BLE-Verbindungsversuch wird darauf hingewiesen, dass die LED-Tafel möglicherweise mit einer anderen App verbunden ist. Diese Ursache kann der Controller aus einem Timeout **nicht eindeutig feststellen**.
 - Bei der Textübertragung bezeichnet die Bezeichnung „Text-Payload“ die gesamte Text-Puffergröße über mehrere Pakete, **nicht** die Nutzlast eines einzelnen BLE-Writes.
+
+## v0.2.0 Zusatzdaten
+- `Seitenübertragungen OK`: Zahl erfolgreicher manueller und automatischer Seitenübertragungen seit Boot.
+- `NVS-Seitenspeicherungen`: Zahl erfolgreicher Schreibvorgänge seit Boot.
+- `Automatische Seitenwechsel`: Zahl der erfolgreich geplanten Folgeseiten nach dem initialen Start.
+- NVS-Seiten überdauern Stromverlust; das Diagnose-RAM-Log dagegen nicht.
+- Bei Konflikt mit der Original-App bleibt der BLE-Fehler klar sichtbar; es wird kein konkurrierendes BLE-Pairing erzwungen.

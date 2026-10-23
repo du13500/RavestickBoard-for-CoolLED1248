@@ -1,3 +1,39 @@
+# Changelog
+
+## [0.2.0] – 22.10.2026 (Hardwaretest ausstehend)
+
+### Korrektur 1 · 23.10.2026 (Kompilier-Hotfix)
+- HTML und JavaScript aus dem `.ino` in `RavestickBoard_WebUI.h` ausgelagert, um fehlerhafte automatische Arduino-Funktionsprototypen (`function does not name a type`) zu verhindern.
+- `tools/sync_web.py` aktualisiert jetzt die Headerdatei.
+- Sketch und Header müssen gemeinsam im gleichen Arduino-Sketch-Ordner liegen.
+- Sonst keine beabsichtigten Funktionsänderungen; reale ESP32-Kompilierung muss noch bestätigt werden.
+
+
+### Neu
+- Getrennte Bereiche für Lauftext und Blockanzeige.
+- Bis zu zwölf eigenständige Seiten mit je einer 14-Pixel-Zeile oder zwei 7-Pixel-Zeilen, eigenständigen Zeilenfarben, Ausrichtung und Anzeigedauer.
+- Seiten hinzufügen, duplizieren, verschieben, löschen, speichern und einzeln hochladen.
+- Nichtflüchtige Speicherung des Seitenprogramms im NVS, ohne automatische Wiedergabe nach dem Start.
+- Experimenteller ESP32-Seitenplayer mit unabhängigen BLE-Uploads, manueller Start-/Stoppsteuerung und Fehlerabbruch.
+- Vorschau mit festen 64×16 LED-Punkten, seitenweiser Abfolge und 1×/2×/4× Fast Forward.
+- Großes ẞ zusätzlich zum kleinen ß, mit bewusst gleicher komprimierter Glyphenform.
+- Diagnose-Zähler für Seitenübertragungen und Speichervorgänge.
+
+### Korrekturen und Entscheidungen
+- Im Seiteneditor keine gekappten Buchstaben und kein automatischer Seitenumbruch.
+- Verschiedene Seiten werden unabhängig mit ihren eigenen Parametern gespeichert.
+- Die zuvor gefundene Arduino-Typ-Prototyp-Falle (Job) bleibt behoben.
+- Firmwarequellcode und `web/index.html` durch `tools/sync_web.py` synchronisierbar.
+
+### Noch offen
+- Native ESP32-Arduino-Kompilierung und BLE/NVS-Hardwaretest.
+- Farb- und Schriftwechsel pro Zeichen sowie Rekonstruktion der Herstellerfonts.
+- Live-BLE-Regler für Helligkeit/Geschwindigkeit, ohne Verbindungsaufbau je Schritt.
+- Prüfung nativer Mehrseitenfähigkeit der Tafel und verkürzter Umschaltzeiten.
+- Schriftformen g, p, q, y, Ä, Ö, Ü gemäß Original-Referenzen verfeinern.
+
+---
+
 # Änderungs- und Testhistorie
 
 **Prinzip:** Tatsächlich getestete Funktionen und geplante Änderungen getrennt führen. Eine neue Versionsnummer bezeichnet eine bewusst archivierte Firmware, nicht nur eine Idee.

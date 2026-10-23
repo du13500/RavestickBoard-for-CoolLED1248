@@ -1,46 +1,45 @@
-# Testplan RavestickBoard v0.1.2
+# Testplan v0.2.0: Blockeditor (ESP32-C3 / CoolLEDX)
 
-**Status:** Vorbereitung vom 22.10.2026. Diese Version ist bis zum realen Test ausdrücklich **Testkandidat**.
+**Erwartung:** Gerät bleibt zunächst beim bisherigen Anzeigetext. Nach dem Flashen soll **kein automatischer Seitenwechsel** starten.
 
-## A. Flash und Webstart
+## Kompilierung und Start
+- [ ] Arduino IDE: ESP32C3 Dev Module, USB CDC Enabled, Partition No OTA (2MB APP / 2MB SPIFFS).
+- [ ] Kein C++-Compilerfehler wie in der ersten v0.1.2 (`Job`).
+- [ ] Serieller Monitor meldet v0.2.0, NVS-Status, AP bereit, HTTP bereit.
+- [ ] Smartphone öffnet die Webseite unter http://192.168.4.1 und sieht v0.2.0.
 
-- [ ] Board ESP32C3 Dev Module, USB CDC On Boot Enabled, `No OTA (2MB APP/2MB SPIFFS)` in Arduino IDE 2.3.10 / ESP32 3.3.12.
-- [ ] Kompilierung erfolgreich; Sketchgröße, RAM-Angaben notieren.
-- [ ] Per USB-C hochladen. Serieller Monitor 115200 Baud; WLAN `CoolLED1248` wird bereitgestellt.
-- [ ] Browser lädt unter `http://192.168.4.1`; sichtbare Version **v0.1.2**; keine JavaScript-Fehler.
+## Editor ohne Upload
+- [ ] Reiter „Blockanzeige“ öffnen, **noch kein BLE-Senden**.
+- [ ] Neue Seite hinzufügen. Seite 1 und 2 unterschiedlich beschriften.
+- [ ] Einzelne Seite speichern, wechseln, erneut aufrufen. Text, Farben, Dauer erhalten.
+- [ ] Duplizieren, Pfeile für Reihenfolge, Löschen (mit Sicherheitsfrage).
+- [ ] Mehr als zehn Zeichen in einer Zeile: Warnung, kein Abschneiden und kein Upload.
+- [ ] Umstellen auf Mini: zwei Zeilen sichtbar. In der Vorschau sind 64×16 Punkte fix.
+- [ ] 1×, 2×, 4×, Pause und Neuanfang im Browser.
 
-## B. Vorschau / Schrift
+## Manueller BLE-Test
+- [ ] Seite 1 mit gelbem „SUCHE:“ als eine große Zeile anzeigen.
+- [ ] Seite 2 als Mini zweizeilig: „Grüße“ (rot), „ÄÖÜ ẞ“ (grün).
+- [ ] Beide Zeilen komplett sichtbar, keine schrägen abgeschnittenen Zeichen.
+- [ ] Danach Test mit rechtsbündiger Ausrichtung.
+- [ ] Kein Reset notwendig zwischen zwei Übertragungen.
 
-- [ ] Vorschau zeigt **64 Spalten × 16 Zeilen** mit erkennbaren dunklen Einzelpunkten und leuchtenden Einzelpunkten.
-- [ ] `Grüße!` wird mit echten Kleinbuchstaben angezeigt.
-- [ ] `ÄÖÜ äöü ß` wird in Vorschau und auf der echten Tafel korrekt dargestellt. Zeichensatzvarianten vergleichen.
-- [ ] Langer Text bleibt auf Vorschaugröße und läuft im gewählten Lauftext-Modus; kein Schrumpfen des gesamten Inhalts.
-- [ ] Play/Pause, Neustart, 1× → 2× → 4× → 8× → 1× funktionieren. Fast Forward verändert **nur** die Vorschau.
-- [ ] Kurzer Text kann bewusst als Lauftext gesendet werden; langer Text kann bewusst als Standbild gewählt werden (sichtbare Überlaufwarnung). Nicht automatisch Modus wechseln.
-- [ ] Linker Ausschnitt von überlangem Standbild in Vorschau und LED-Tafel vergleichen; ggf. Abweichung dokumentieren.
+## Dauerhafter Programmspeicher
+- [ ] Seiten speichern. ESP32 USB abziehen und erneut einschalten.
+- [ ] Browser neu öffnen: Seiten und Werte sind noch gespeichert.
+- [ ] Led-Tafel zeigt weiterhin den zuletzt hochgeladenen Inhalt, **kein Autostart**.
 
-## C. Bluetooth / Einstellungen
+## Automatisches Programm: Erst nach bestandenen manuellen Tests
+- [ ] Zwei Seiten, Anzeigedauer z. B. je 7 Sekunden.
+- [ ] „Programm starten“, zwei Wechsel beobachten, tatsächliche Gesamtdauer notieren.
+- [ ] „Stoppen“: Tafel behält letztes Bild.
+- [ ] Hersteller-App während der Übertragung verbinden: Fehlermeldung und sauberer Abbruch, danach erneuter Start möglich.
+- [ ] Diagnose mit „Log kopieren“ abrufen und Laufzeit, freien Heap, BLE-/Page-Zähler prüfen.
 
-- [ ] Kurzen Text per WLAN-Webinterface senden und auf Tafel prüfen.
-- [ ] Rot, Grün, Blau, Weiß erneut prüfen; bestehende Farbauswahl darf nicht kaputtgehen.
-- [ ] Lauftext-Modus mit Speed 10, 50, 90 testen; reale Laufrichtung und Tempo notieren. Vergleich mit Preview nur grobe Annäherung.
-- [ ] Helligkeit 10 % und 100 % separat senden; bisheriger Text bleibt auf der Tafel.
-- [ ] Während die Original-App mit der Tafel verbunden ist, eigenen Auftrag versuchen. Fehlermeldung verständlich? Wie viele Sekunden bis Abbruch? Original-App danach trennen und ohne ESP-Neustart erneut senden.
-- [ ] BLE-Notifications und Auftragserfolge im Diagnoseprotokoll prüfen.
+## Offene bekannte Grenzen
+- [ ] Leere Seite nicht erlaubt.
+- [ ] Pro Zeile noch keine per-Zeichen-Farbe und nur ein gemeinsamer Font.
+- [ ] 5 Sekunden Sichtbarkeit beginnt erst nach dem Upload, dadurch sind Seitenwechsel nicht nahtlos.
+- [ ] Keine automatische Programmausführung nach Stromverlust.
 
-## D. Diagnose / iPhone
-
-- [ ] `Diagnose und Ereignisprotokoll` öffnen und aktualisieren.
-- [ ] `Log kopieren` direkt in die Zwischenablage. Den kopierten Bericht in eine Notiz einfügen.
-- [ ] Falls automatisches Kopieren auf `http://192.168.4.1` blockiert: manuelles Kopierfeld nutzbar?
-- [ ] TXT-Download weiterhin möglich.
-- [ ] Resetgrund „USB-Reset“ statt Zahlencode 11, falls per USB neu gestartet.
-- [ ] App-Partition ca. 2048 KiB; freie Bytes = Partition gesamt minus verwendete Firmware. **Nicht** irreführend „2048 KiB frei“.
-- [ ] Freier/minimal freier Heap und größter Block vor/nach mehreren BLE-Aufträgen und nach 30 Minuten Laufzeit vergleichen.
-
-## E. GitHub
-
-- [ ] Nach erfolgreichem Test Änderungen im lokalen Projektordner committen, z. B. `v0.1.2: Dot preview, German glyphs, modes and diagnostics copy`.
-- [ ] `CHANGELOG.md` an konkreten Hardwaretest anpassen: erfolgreicher und gescheiterter Test, ggf. Heap/Buildwert.
-- [ ] `Push origin` in GitHub Desktop. Sicherstellen, dass das Repository **Private** bleibt.
-- [ ] Wenn kritische Fehler auftreten: Firmware v0.1.1 erneut über USB flashen; v0.1.2 noch nicht als stabil markieren.
+**Abnahme erst nach realem Boardtest und RAM-Auswertung; die lokale Simulation allein genügt nicht.**

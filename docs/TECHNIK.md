@@ -74,3 +74,12 @@ iPhone / anderer Browser
 - Neuer Testbefehl für Laufgeschwindigkeit: `0x07 <0x00..0xFF>`, UI-Skala 1–100 wird auf 0–255 skaliert. Der Wirkbereich und die Richtung werden am echten Board erst kalibriert.
 - Die Browser-Vorschau animiert lokal über `requestAnimationFrame` und verändert dabei nicht die auf dem Board gespeicherten Inhalte.
 - EEPROM/SPIFFS/LittleFS weiterhin nicht eingebunden; kein Firmware-OTA, Log weiterhin RAM-only.
+
+## v0.2.0 Techniknotizen
+- `PageRecord`: zwei UTF-8-Zeilen (je 47 Byte im Speicherfeld), Layout 0/1, Ausrichtung 0/1/2, Farben 1..7, Dauer 5..60s. Zwölf Einträge in NVS-Namensraum `rbpages` unter Schema 1.
+- `renderBlockPage`: eine 64×16-Pixelseite, identisches RGB-Bitfeld wie v0.1.2. Payload mit 24 Nullbytes, Textmetadaten (80 Byte), 16-bit-RGB-Länge, RGB-Ebenen R/G/B; ergibt 491 Byte und vier BLE-Chunks zu max. 128 Rohdatenbytes.
+- Zweizeilenmodus: zwei unabhängige Zeilen 5×7 bei y=0..6 und y=8..14; eine Leerzeile dazwischen. Einzeilenmodus: 5×7 bei y=1..14 vertikal 2×.
+- Abbruch bei Zeilen >10 Codepoints (statt Abschneiden). Unicode-Unterstützung folgt der vorhandenen Glyphentabelle, inklusive großem ẞ als gleiche Silhouette wie ß.
+- `GET /api/program`: Seiten und Playerstatus; `POST /api/program/{set,add,delete,move,show,start,stop}`: explizite Benutzeraktionen.
+- Automatische Wiedergabe im Hauptloop, nach jedem übertragenen Bild startet dessen Anzeigedauer. BLE wird je Seite verbunden und getrennt. Fehler stoppt die Playlist.
+- Eine neue Firmware schaltet das Seitenprogramm nie von selbst ein; gespeicherte Inhalte werden nur im Editor geladen.

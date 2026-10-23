@@ -1,0 +1,47 @@
+v0.2.0 · Korrektur 1 vom 23.10.2026
+====================================
+Behebt die Arduino-Kompilierfehler "function does not name a type" an
+Zeilen 489–502. Keine JavaScript-Funktionen mehr im Arduino .ino.
+
+WICHTIG: Diese beiden Dateien gemeinsam im selben Ordner verwenden:
+ firmware/RavestickBoard_v0_2_0/RavestickBoard_v0_2_0.ino
+ firmware/RavestickBoard_v0_2_0/RavestickBoard_WebUI.h
+
+Bei künftiger Änderung der Weboberfläche: web/index.html bearbeiten,
+danach "python tools/sync_web.py" ausführen.
+
+Hardwaretest der Firmware ausstehend; vorherige v0.1.2 aufbewahren.
+
+---
+
+RavestickBoard v0.2.0: Erster eigenständiger Blockeditor
+22. Oktober 2026
+
+NEU
+- Bis zu 12 individuell gestaltete Seiten
+- Seite hinzufügen, duplizieren, verschieben, löschen
+- Einzelne Seite senden / experimentelle Wiedergabe aller Seiten
+- Nichtflüchtige ESP32-Speicherung (NVS)
+- Zwei Schriftgrößen: Engschrift 14px, Mini 7px je Zeile
+- Farben pro Zeile, Ausrichtung pro Seite, Dauer 5–60s
+- 64x16 LED-Vorschau mit 1x/2x/4x Fast Forward
+- Versalien ß und ẞ beide unterstützt
+- Diagnose-Zähler für Seitenübertragungen
+
+WICHTIG
+- Manuelle Seite zuerst testen. Erst dann automatische Wiedergabe.
+- Volle Übertragung je Seite dauert zusätzliche 2–3 Sekunden.
+- 5 Sekunden Mindestsichtbarkeit beginnt NACH dem Upload.
+- Kein automatischer Neustart der Seitenfolge bei Stromverlust.
+- Noch kein Farbwechsel pro Zeichen oder gemischte Schriften innerhalb einer Zeile.
+- v0.1.2 nicht löschen; bei Fehlern kann sie erneut per USB geflasht werden.
+
+INSTALLATION
+- ZIP in den lokalen Git-Projektordner entpacken
+- Arduino IDE: firmware/RavestickBoard_v0_2_0/RavestickBoard_v0_2_0.ino öffnen
+- ESP32C3 Dev Module, USB CDC On Boot Enabled, No OTA 2MB APP/2MB SPIFFS
+- Firmware über USB hochladen
+- WLAN CoolLED1248, Browser http://192.168.4.1
+- Nach Praxistest GitHub Desktop -> Commit -> Push origin
+
+Versionshistorie: README.md, CHANGELOG.md, docs/*.

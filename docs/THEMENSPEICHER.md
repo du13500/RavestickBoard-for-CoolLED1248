@@ -1,6 +1,6 @@
 # Themenspeicher und Aufgabenregister
 
-**Stand:** 22.10.2026, v0.1.1 hardwaregetestet; v0.1.2 als Testkandidat ergänzt. Aus Projektchats und realen Tests konsolidiert.  
+**Stand:** 22.10.2026, v0.1.1 hardwaregetestet, v0.1.2 auf ESP32 gestartet und getestet; v0.2.0 als Blockeditor-Testkandidat ergänzt. Aus Projektchats und realen Tests konsolidiert.  
 **Status:** `[x]` geprüft/real umgesetzt, `[ ]` offen. Bei **teilweise** ist es nicht abhaktauglich.  
 **Prioritäten:** P0 = Basis/Fehlerdiagnose, P1 = Kerneditor, P2 = Bibliothek/Spezialprogramme, P3 = spätere Option.
 
@@ -38,7 +38,7 @@
 - [ ] **PRE-01 · P0** Fester **64×16-Ausschnitt** statt Textbreite mitzuskalieren. **v0.1.2 implementiert; Gerätetest offen.**
 - [ ] **PRE-02 · P0** Einzeln sichtbare **runde LED-Punkte** inklusive dunkler/unbeleuchteter Punkte und Punktabstand (nicht nur glatte Pixelblöcke). **v0.1.2 implementiert; iPhone-Test offen.**
 - [ ] **PRE-03 · P0** Lauftext im festen Fenster animieren; keine automatische Verkleinerung. **v0.1.2 implementiert; reale Geschwindigkeit unkalibriert.**
-- [ ] **PRE-04 · P0** Playersteuerung: Play/Pause, Neustart und **Fast Forward** für lange Texte (1×, 2×, 4×, 8×). **v0.1.2 implementiert; iPhone-Test offen.**
+- [ ] **PRE-04 · P0** Playersteuerung: Play/Pause, Neustart und **Fast Forward** für lange Texte (1×, 2×, 4×; 8× explizit gestrichen). **v0.2.0 implementiert; iPhone-Test offen.**
 - [ ] **PRE-05 · P1** Optional Vorschau-Zeitleiste/Scrubbing oder Sprung zu Folgeseite, damit lange Programme schnell prüfbar sind.
 - [ ] **PRE-06 · P1** Pixelvorschau für mehrere Seiten, zeilenweise Darstellung und gemischte Schriftarten/Farben.
 - [ ] **PRE-07 · P1** Vorschaubewegung möglichst realitätsgetreu: Laufrichtung und Geschwindigkeitsabgleich mit echter Tafel.
@@ -46,7 +46,7 @@
 
 ## D · Texteditor, Modi und Seiten
 
-- [ ] **EDT-01 · P0** **Explizit** auswählen: Lauftext vs. statische Seiten; unabhängig von Textlänge. **v0.1.2: Lauftext vs. Standbild implementiert, echter Seiteneditor offen.**
+- [ ] **EDT-01 · P0** **Explizit** auswählen: Lauftext vs. statische Seiten; unabhängig von Textlänge. **v0.2.0: getrennter Seiteneditor als Testkandidat implementiert, Hardwaretest offen.**
 - [ ] **EDT-02 · P1** Seiten separat erstellen, gestalten, sortieren, duplizieren, löschen.
 - [ ] **EDT-03 · P1** Seiten individuell konfigurieren (Text, Font/Größe, Farbe, Position, Dauer).
 - [ ] **EDT-04 · P1** Manueller Seitenwechsel und automatischer Seitenwechsel mit individuell einstellbarer Dauer.
@@ -139,3 +139,19 @@ Bei Umsetzung der Vorschau: `PRE-01` abhaken, im `CHANGELOG` unter `v0.1.2` die 
 - [ ] **FNT-06 · P1** Eine zentrale Glyphentabelle für Controller und Browser; `/api/font` v0.1.2 implementiert, Hardwaretest offen.
 - [ ] **UI-12 · P0** Deutsche UI-Texte mit Ä/Ö/Ü/ä/ö/ü/ß, keine ASCII-Ersatzformen; Code v0.1.2 umgesetzt.
 - [ ] **BLE-13 · P1** Konkurrierende Original-App-Verbindung: 10-s-Timeout und sinnvolle Meldung unter Last real prüfen.
+
+## Aktueller Blockeditor (v0.2.0, Implementierung, noch nicht hardwarebestätigt)
+- [x] Separater Reiter „Blockanzeige“ (eigene Seiten statt Textabschneiden).
+- [x] Bis 12 Seiten: hinzufügen, duplizieren, löschen, verschieben.
+- [x] Individueller Text, Farben pro Zeile, Ausrichtung, Anzeigezeit.
+- [x] Eine große oder zwei kleine Zeilen auf echter 64×16-LED-Matrix.
+- [x] Speichern im ESP32-NVS, keine automatische Wiedergabe beim Booten.
+- [x] Erste BLE-Wiedergabe von Einzelseiten und experimentelle Playlist.
+- [x] Vorschau mit Wiedergabe 1× / 2× / 4×, kein 8×.
+- [ ] ESP32-Kompilierung, Zwei-Zeilen-Übertragung und Seitenrotation praktisch bestätigen.
+- [ ] Feste Engschrift g/p/q/y: x-Höhe angleichen, unterste Pixelzeile für Unterlängen.
+- [ ] Die Großumlaute Ä/Ö/Ü mit Referenzbildern überarbeiten.
+- [ ] Live-BLE-Helligkeit und -Geschwindigkeit wie Original-App mit Feinskalierung nahe 80.
+- [ ] Individuelle Textfarben und Schriftarten **pro Buchstabe**, gemischte Fonts pro Seite.
+- [ ] Frei positionierbare Blöcke, Grafiken, eigene Animationen und Seitenübergänge.
+- [ ] Native Mehrseiten-Wiedergabe der Herstellerhardware untersuchen.

@@ -1,67 +1,160 @@
-# RavestickBoard for CoolLED1248
+<p align="center">
+  <img src="docs/assets/totem.jpg" alt="RavestickBoard Festival-Totem mit CoolLED1248-LED-Tafel" width="820">
+</p>
 
-**Firmware:** v0.1.2, Testkandidat vom 22.10.2026. **Noch nicht auf der realen Hardware getestet.**  
-**Letzte bestätigte Hardwareversion:** v0.1.1, inklusive 5 erfolgreichen BLE-Textaufträgen, Diagnoselog und Nutzung parallel zur Original-App (nach manueller Trennung ihrer BLE-Verbindung).
+<h1 align="center">🍌 RavestickBoard for CoolLED1248</h1>
 
-Eigenständige Offline-Websteuerung für die CoolLED1248 / CoolLEDX LED-Tafel mit einem TENSTAR ROBOT ESP32-C3 Super Mini. Keine Änderung der Firmware der LED-Tafel. Kein OTA; Firmwareaktualisierung ausschließlich per USB-C.
+<p align="center">
+  <strong>Ein eigener ESP32-C3-Webcontroller für eine 64 × 16-Pixel-CoolLEDX-Tafel.</strong><br>
+  Entstanden aus einer LED-Banane, einem Festival-Totem und dem Wunsch nach einer besseren App.
+</p>
 
-## Neue Funktionen in v0.1.2
+<p align="center">
+  <img alt="Version v0.2.0" src="https://img.shields.io/badge/version-v0.2.0-7056d8">
+  <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
+  <img alt="Hardwaregetestet" src="https://img.shields.io/badge/status-Hardwaretest%20l%C3%A4uft-2c8966">
+  <img alt="Nichtkommerzielles Hobbyprojekt" src="https://img.shields.io/badge/project-non--commercial-f39c49">
+</p>
 
-- **Deutsche Schreibweise:** Die Benutzeroberfläche verwendet echte Umlaute und `ß`. Der eigenständige Engschrift-Font enthält jetzt erstmals Groß- **und** Kleinbuchstaben einschließlich `Ä Ö Ü ä ö ü ß`.
-- **LED-Punktvorschau:** Festes 64×16-Dot-Matrix-Fenster mit ausgeschalteten und leuchtenden runden LEDs. Längere Texte werden in der Vorschau **nicht** verkleinert.
-- **Preview-Player:** Play/Pause, Neustart, Beschleunigung 1× / 2× / 4× / 8×. Beschleunigung wirkt nur auf die Webvorschau.
-- **Manuelle Anzeigemodi:** `Standbild` oder `Lauftext` unabhängig von der Textlänge. Ein zu breites Standbild zeigt einen sichtbaren Hinweis und den linken Ausschnitt, **noch keine automatischen Seiten**.
-- **Laufgeschwindigkeit:** Schieberegler 1–100, auf BLE-Rohwerte 0–255 umgerechnet, über CoolLEDX-Befehl `0x07`. **Echte Geschwindigkeit noch nicht kalibriert.** Die Browser-Vorschau ist nur eine Annäherung.
-- **Diagnose:** `Log kopieren` mit Clipboard-API, älterem Kopierweg und manuell markierbarem Text als Fallback. TXT-Download bleibt möglich.
-- **Systemanzeige:** Verständliche Resetgründe inklusive `USB-Reset`. Tatsächlich verbleibender Platz der aktiven Firmwarepartition wird berechnet, nicht mehr die falsche Größe einer Updatepartition angezeigt.
-- **Konkurrierende BLE-Verbindungen:** Bei Verbindungsfehler wird auf eine eventuell noch verbundene Hersteller-App hingewiesen; kürzerer Verbindungs-Timeout als Test.
-- **Eine Schriftquelle:** `/api/font` liefert Glyphen aus **derselben C++-Tabelle**, die für die LED-Übertragung verwendet wird. Die Webvorschau hält keine zweite getrennte Fontkopie.
+<p align="center"><sub>Das Titelbild zeigt das echte Festival-Totem; der darauf sichtbare Text wurde noch mit der Original-App erstellt.</sub></p>
 
-## Installation
+---
 
-1. Paket entpacken und die **Ordner/Dateien aus diesem ZIP** in deinen bestehenden Git-Projektordner `RavestickBoard-for-CoolLED1248` kopieren. Vorhandene README-, CHANGELOG- und docs-Dateien ersetzen; ältere `.ino`-Versionen erhalten.
-2. In Arduino IDE `firmware/RavestickBoard_v0_1_2.ino` öffnen. Wenn Arduino einen gleichnamigen Sketch-Ordner anlegen möchte, diesen innerhalb des Projektordners erzeugen, damit Änderungen weiterhin von Git erfasst werden.
-3. Board: `ESP32C3 Dev Module`; Port: der aktuelle COM-Port; `USB CDC On Boot: Enabled`; Partition: **`No OTA (2MB APP/2MB SPIFFS)`**; Espressif-Boardpaket 3.3.12.
-4. Über **USB-C** flashen. Nach erfolgreichem Start mit dem WLAN **`CoolLED1248`** verbinden, Browser: **http://192.168.4.1**.
-5. **Zunächst einen kurzen Text prüfen**, danach Kleinbuchstaben und `ÄÖÜäöüß`, Standbild und Lauftext, Geschwindigkeit, Diagnose und Speicherwerte. Siehe [Testplan](docs/TESTPLAN.md).
+## Was ist RavestickBoard?
 
-**Das WLAN und sein Testpasswort bleiben gegenüber v0.1.1 unverändert.** Standardpasswort im Quellcode vor einem Fremdeinsatz ändern. Kein zusätzlicher Weblogin, kein OTA.
+**RavestickBoard** ersetzt für die tägliche Bedienung der LED-Tafel die begrenzte Original-App durch ein **lokales Webinterface**, das auf einem **ESP32-C3 Super Mini** läuft. Ein iPhone, Android-Handy oder Computer verbindet sich mit dem WLAN des ESP32. Dieser überträgt die fertigen Anzeigen per **Bluetooth Low Energy (BLE)** an die CoolLEDX-Tafel.
 
-## Bestand und Dokumentation
+Die Hersteller-Firmware der LED-Tafel wird dabei **nicht verändert**. Die Tafel kann hochgeladene Inhalte anschließend eigenständig darstellen. Eine Internetverbindung ist für die Bedienung nicht erforderlich.
 
-- [Themenspeicher](docs/THEMENSPEICHER.md): Aufgabenregister und offene Anforderungen.
-- [Roadmap](docs/ROADMAP.md): Entwicklungsreihenfolge, kein verbindlicher Terminplan.
-- [Changelog](CHANGELOG.md): nachweisbare Änderungen, Hardwaretest-Status und offene Punkte.
-- [Diagnose](docs/DIAGNOSE.md): Diagnoseexport, Fehlerzähler, Grenzen des RAM-Logs.
-- [Entscheidungen](docs/ENTSCHEIDUNGEN.md): Architektur und Bedienprinzipien.
-- [Technik](docs/TECHNIK.md): CoolLEDX BLE und ESP32.
-- [Quellen und Lizenzen](docs/QUELLEN_UND_LIZENZEN.md): vor öffentlichem Release unbedingt prüfen.
+Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Festival-Totem. Es befindet sich aktiv in Entwicklung und ist noch kein fertiges Produkt.
 
-## Aufbau
+## Aktueller Stand: v0.2.0
+
+**Die Version v0.2.0 inklusive Kompilierkorrektur wurde am 23.10.2026 auf echter Hardware gestartet und praktisch getestet.** Der separate WebUI-Header ist Bestandteil der funktionierenden Fassung.
+
+### Bereits umgesetzt
+
+- **Lauftext- und Blockeditor** als getrennte Bereiche, ohne automatische Moduswahl anhand der Textlänge.
+- **Bis zu zwölf individuell gestaltete Blockseiten**: hinzufügen, duplizieren, verschieben, löschen und dauerhaft speichern.
+- **Pro Seite:** eine große einzeilige Engschrift oder zwei kleine Textzeilen; sieben LED-Farben, Ausrichtung und einstellbare Anzeigezeit von 5–60 Sekunden.
+- **Zweizeilige Darstellung mit unterschiedlichen Zeilenfarben**, auf der echten LED-Tafel erfolgreich getestet.
+- **64 × 16-LED-Vorschau** mit einzelnen runden Punkten sowie Wiedergabesteuerung einschließlich 1×, 2× und 4×.
+- **Permanente Speicherung der Blockseiten auf dem ESP32** mittels NVS, auch nach Neuladen des Webinterfaces beziehungsweise Neustart.
+- **Experimenteller automatischer Seitenplayer**, Diagnosebereich und BLE-Übertragung.
+- **Deutsche Sonderzeichen** und eigene Pixel-Glyphen; verschiedene Formen benötigen noch Feinschliff.
+
+### Reale Hardwaretests vom 23.10.2026
+
+Die folgende Zusammenfassung stammt aus dem ersten systematischen Nutzer-Testprotokoll für v0.2.0. **13 von 14 Punkten wurden mit „Ja“ bestätigt**, ein Punkt war noch nicht abschließend bewertet. „Ja“ bedeutet dabei, dass die Grundfunktion läuft, nicht unbedingt, dass Darstellung und Bedienung bereits ausgereift sind.
+
+| Testbereich | Ergebnis | Beobachtung |
+| --- | --- | --- |
+| ESP32-Start und Webinterface auf dem iPhone | ✅ | Funktioniert |
+| Blockseiten anlegen, duplizieren, sortieren | ✅ | Funktioniert |
+| Unterschiedliche Farben | ✅ | Funktioniert |
+| Zweizeilige Schrift | ✅ | Gut lesbar; soll in der derzeitigen Grundform erhalten bleiben |
+| Einzeilige Schrift | ⏳ | Separater Testpunkt noch offen; gewünscht ist zusätzlich „Mini, eine Zeile“, vertikal zentriert |
+| Kleine Buchstaben / Unterlängen | ✅ mit Änderungsbedarf | Die kleine Schrift soll künftig **ausschließlich Großbuchstaben darstellen** |
+| Umlaute und Sonderzeichen | ✅ mit Änderungsbedarf | Beim **ß** soll ein konkret markierter Pixel ausgeschaltet werden |
+| Automatischer Seitenwechsel | ✅ mit Einschränkung | **Zwischen den Seiten erscheint die Prozentanzeige**, weil jede Seite neu übertragen wird |
+| Individuelle Anzeigedauer | ✅ mit Einschränkung | Zeitsteuerung funktioniert, aber mit erneuter BLE-Übertragung zwischen den Seiten |
+| Seiten nach Neustart weiterhin vorhanden | ✅ | NVS-Speicherung bestätigt |
+| Mehrfache Übertragungen / Programmabfolge | ✅ | Im ersten Praxistest funktionsfähig |
+
+**Wichtig:** Der Seitenplayer von v0.2.0 lädt für jeden Wechsel eine komplette Seite per BLE hoch. Die Tafel zeigt dabei ihre eigene Übertragungsfortschrittsanzeige. Dieses Verhalten ist für einen zusammenhängenden Blocktext **noch nicht die gewünschte Lösung**. Der vorhandene Code ist jedoch eine gute Grundlage für eine spätere **Playlist aus mehreren eigenständigen Programmen**.
+
+## So funktioniert es
+
+```text
+Handy / Computer
+       │
+       │ WLAN: lokales Webinterface
+       ▼
+ESP32-C3 Super Mini
+       │
+       │ BLE: Steuerbefehle + Pixeldaten
+       ▼
+CoolLEDX / CoolLED1248
+64 × 16 Pixel · 7 LED-Farben
+```
+
+Die Hardware unterscheidet bereits zwischen **Inhaltsübertragungen** und kurzen **Steuerbefehlen**. Helligkeit (`0x08`), Laufgeschwindigkeit (`0x07`) und Anzeigemodus (`0x06`) lassen sich prinzipiell separat steuern. Live-Regler und die vollständige Modusauswahl sind für kommende Versionen vorgesehen.
+
+### Geplante Architektur
+
+- **Seite:** Individuell gestaltete Anzeige mit Text, Schrift, Farben, Positionierung und gegebenenfalls Dauer.
+- **Programm:** Eine oder mehrere Seiten, die idealerweise **mit einer Übertragung** auf die Tafel gelangen und anschließend autonom ablaufen.
+- **Playlist:** Eine Abfolge mehrerer Programme, deren Wechsel der ESP32 steuert. Dabei sind neue BLE-Uploads akzeptabel.
+
+Ob unsere konkrete Tafel mehrseitige Inhalte oder eigene Animationen über den dokumentierten Animationsbefehl `0x04` selbstständig abspielen kann, ist **noch nicht auf unserer Hardware verifiziert**. Das ist ein wichtiges nächstes Forschungsthema.
+
+## Installation und erste Verbindung
+
+**Benötigt:** ESP32-C3 Super Mini, kompatible CoolLEDX-Tafel (hier 64 × 16 Pixel, sieben Farben), USB-Kabel und Arduino IDE mit dem Espressif-Boardpaket.
+
+1. `firmware/RavestickBoard_v0_2_0/RavestickBoard_v0_2_0.ino` in der Arduino IDE öffnen.
+2. Sicherstellen, dass **`RavestickBoard_WebUI.h` im selben Ordner** wie die `.ino` liegt. Ohne diese Datei ist die v0.2.0-Korrekturfassung nicht vollständig.
+3. Das Board **`ESP32C3 Dev Module`** auswählen und **`USB CDC On Boot: Enabled`** setzen.
+4. Die Partitionierung **`No OTA (2MB APP/2MB SPIFFS)`** auswählen. Getestete Entwicklungsumgebung: Arduino IDE 2.3.10, `esp32` von Espressif 3.3.12.
+5. Über USB auf den ESP32 flashen. **OTA-Firmwareupdates sind nicht vorgesehen.**
+6. Handy oder Computer mit dem vom ESP32 erzeugten WLAN **`CoolLED1248`** verbinden. Das im Sketch konfigurierte Testpasswort vor einer öffentlichen Nutzung ändern.
+7. Die lokale Seite **[http://192.168.4.1](http://192.168.4.1)** öffnen. Der Browser benötigt keine Internetverbindung.
+8. Zunächst eine Blockseite **einzeln** übertragen; erst danach die experimentelle automatische Wiedergabe ausprobieren.
+
+> **Hinweis:** Die BLE-Adresse der bisher verwendeten Tafel ist in der Firmware noch fest hinterlegt. Eine automatische Gerätesuche und Unterstützung mehrerer Boards sind geplant. Während die Original-App die BLE-Verbindung zur Tafel hält, kann RavestickBoard unter Umständen nicht gleichzeitig übertragen.
+
+## Bekannte Grenzen und nächste Schritte
+
+| Thema | Stand |
+| --- | --- |
+| **Blockprogramm ohne Prozentanzeige** | Offen: Seiten sollen als **ein Programm** übertragen werden; Animations- und native Blockmodi untersuchen |
+| **Minischrift** | Zweizeilig bestätigt; Kleinbuchstaben künftig automatisch als Großbuchstaben darstellen; einzeilige Mini-Variante ergänzen |
+| **Schrift-Feinschliff** | `g`, `p`, `q`, `y` an x-Höhe/Unterlängen anpassen; `ß`/`ẞ` mit eigener Pixelkorrektur; Originalfonts Normal und Bold rekonstruieren |
+| **Live-Steuerung** | Helligkeit, Tempo und Anzeigemodus ohne vollständigen Neu-Upload direkt an die Tafel senden |
+| **Bibliothek** | Benannte Text- und Seitenprogramme, Entwürfe automatisch wiederherstellen, später Export/Import und Favoriten |
+| **Individuelle Gestaltung** | Farben und Schriftarten pro Zeichen/Abschnitt, frei platzierbare Elemente, Grafiken und Übergänge |
+| **Eigene Animationen** | `0x04` und Speichergrenzen auf dem konkreten Board experimentell überprüfen |
+| **Weitere Programme** | Countdown, Stoppuhr, Scoreboard, Lichtfunktion, Playlist und acht Schnellzugriffe |
+
+Weitere Ideen, Entscheidungen und offene Aufgaben werden unter [`docs/THEMENSPEICHER.md`](docs/THEMENSPEICHER.md) sowie [`docs/ROADMAP.md`](docs/ROADMAP.md) gesammelt. Änderungen und Teststände stehen in [`CHANGELOG.md`](CHANGELOG.md).
+
+## Projektstruktur
 
 ```text
 RavestickBoard-for-CoolLED1248/
 ├── README.md
 ├── CHANGELOG.md
+├── docs/
+│   ├── assets/
+│   │   └── totem.jpg                # Titelbild (manuell hinzugefügt)
+│   ├── THEMENSPEICHER.md
+│   ├── ROADMAP.md
+│   ├── TECHNIK.md
+│   └── ...
 ├── firmware/
-│   ├── ... ältere Sketche (nicht löschen)
-│   └── RavestickBoard_v0_1_2.ino
+│   ├── ...                         # ältere Versionen bleiben erhalten
+│   └── RavestickBoard_v0_2_0/
+│       ├── RavestickBoard_v0_2_0.ino
+│       └── RavestickBoard_WebUI.h  # für die korrigierte v0.2.0 erforderlich
 ├── web/
 │   └── index.html
-├── tools/
-│   └── sync_web.py
-└── docs/
+└── tools/
+    └── sync_web.py
 ```
 
-**Weboberfläche verändern:** `web/index.html` editieren, anschließend `python tools/sync_web.py` ausführen. Das Skript kopiert die Webseite in den vollständigen `.ino`-Sketch. Dadurch stimmen die Webquelle und der Firmwarestand überein. Der ESP32 benötigt **kein Dateisystem** für das Webinterface.
+## Referenzen, Credits und Lizenzsituation
 
-## Weiterhin offen
+RavestickBoard baut auf eigenen Hardwaretests und öffentlich dokumentierten Erkenntnissen zum CoolLEDX-BLE-Protokoll auf. Wertvolle Referenzen sind insbesondere:
 
-- Seiteneditor mit individuellen Seiten, Seitenwechseln und Anzeigedauern.
-- Farb- und Schriftauswahl je Zeichen; Originalschriften Normal/Bold, Mini-Zweizeilenfont.
-- Exakter Geschwindigkeitsabgleich zwischen Browser-Vorschau und tatsächlicher LED-Tafel.
-- Schrift-/Sonderzeichenvollständigkeit, mehrere Textblöcke, Bibliothek und Schnellzugriffe.
-- WLAN-/BLE-Langzeittest, Heapüberwachung, Flash-Dateisystem und Wiederverbindung bei fremder Original-App.
-- Copyright-/Lizenzprüfung vor einem möglichen öffentlichen GitHub-Release.
+- [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) (MIT-lizenziertes Referenzprojekt).
+- [schulzad/coolled-sign-controller / OpenSign](https://github.com/schulzad/coolled-sign-controller) (wichtige Protokollforschung und Animationsexperimente; **derzeit ohne Freigabelizenz für die Übernahme des Quellcodes**).
+- [ohtaras/led](https://github.com/ohtaras/led) (Protokollreferenz; gesonderte Lizenzprüfung vor einer etwaigen Codeübernahme).
 
-**Kein Code gilt als hardwaregetestet, nur weil er syntaktisch geprüft wurde.** v0.1.1 bleibt bis zum erfolgreichen v0.1.2-Gerätetest unsere verlässlichere Rückfallversion.
+**Eine eigene Veröffentlichungslizenz für RavestickBoard ist noch nicht festgelegt.** Nichtkommerzieller Einsatz allein ersetzt keine Nutzungsrechte an fremdem Code. Insbesondere wird OpenSign-Code ohne entsprechende Erlaubnis **nicht einfach übernommen oder nach C++ portiert**. Quellen- und Lizenzfragen werden separat unter [`docs/QUELLEN_UND_LIZENZEN.md`](docs/QUELLEN_UND_LIZENZEN.md) festgehalten.
+
+---
+
+<p align="center">
+  <strong>Made for the rave, powered by a banana. 🍌</strong><br>
+  <sub>RavestickBoard is an independent hobby project, not affiliated with the CoolLED1248 manufacturer.</sub>
+</p>
