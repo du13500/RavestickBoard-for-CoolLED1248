@@ -30,21 +30,35 @@ Die Hersteller-Firmware der LED-Tafel wird dabei **nicht verändert**. Die Tafel
 
 Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Festival-Totem. Es befindet sich aktiv in Entwicklung und ist noch kein fertiges Produkt.
 
-## Entwicklungsstand: v0.3.0 (noch nicht auf der Hardware getestet)
+## Entwicklungsstand: v0.3.0-dev (Praxistest am 24.10.2026)
 
-**Achtung:** Die v0.3.0-Fassung ist ein Entwicklungs- und Testkandidat, keine fertig abgenommene Firmware. Der letzte bestätigte Hardwarestand ist **v0.2.0 Korrektur 1**. Die unveränderte v0.2.0 bleibt als Rückfallversion im Repository.
+**Praxistest 24.10.2026:** Die v0.3.0-dev wurde vom Nutzer in der Arduino IDE kompiliert, auf dem ESP32-C3 gestartet und praktisch an der CoolLEDX-Tafel überprüft. Die zentralen Funktionen waren erfolgreich; **bekannte Einschränkungen und offene Tests bleiben ausdrücklich bestehen**. Die ältere, ebenfalls getestete v0.2.0 Korrektur 1 bleibt als Rückfallversion im Repository. Die vorliegende README-Aktualisierung ist **nur Dokumentation, keine neue Firmware v0.4.0**.
 
-### In v0.3.0 neu vorbereitet
+### In v0.3.0 implementiert und im Nutzer-Test teilweise bestätigt
 
-- Originalschriftarten **Normal** und **Bold** mit je 82 aus der Hersteller-App rekonstruierten Zeichen als eigene Auswahl im Blockeditor.
+- Originalschriftarten **Normal** und **Bold** mit je 82 aus der Hersteller-App rekonstruierten Zeichen als eigene Auswahl im Blockeditor; im Praxistest wurde die Darstellung gegenüber der Original-App als übereinstimmend bewertet.
 - Unsere **Minischrift, eine Zeile**: sieben Pixel hoch, horizontal **und** vertikal zentriert; zweizeilige Minischrift bleibt erhalten, in Mini werden kleine Buchstaben auf der Tafel als Großbuchstaben dargestellt.
 - **Inline-Symbole:** 24 rekonstruierte Herstellerpiktogramme und eine selbst entworfene, vertikal gespiegelte RavestickBoard-Banane. Symbole lassen sich wie Emojis an der Cursorposition in den Text einfügen; die Vorschau zeigt das gemischte Pixelraster.
 - **Herz in allen sieben LED-Farben** über sieben Emoji-Varianten.
 - Unterschiedliche tatsächlich beleuchtete Symbolbreiten werden bei der Platzierung berücksichtigt. **Abstände vorerst experimentell**, ein systematischer Abgleich mit der Original-App steht aus.
-- Direkte Befehle für Helligkeit, Tempo und Modus ohne erneuten Bild-Upload, mit zeitlich befristeter BLE-Verbindung. **Bisher nur quellcode- und browsertestseitig geprüft.**
-- Lauftextentwurf und zuletzt geöffneter Editor-Reiter werden lokal im jeweiligen Browser zwischengespeichert.
+- Direkte Befehle für Helligkeit, Tempo und Modus ohne erneuten Bild-Upload, mit zeitlich befristeter BLE-Verbindung. **Im kurzen Nutzer-Praxistest funktionierend; Langzeitverhalten und Geschwindigkeitskalibrierung noch offen.**
+- Lauftextentwurf und zuletzt geöffneter Editor-Reiter sollten lokal zwischengespeichert werden. **Im Praxistest sprang der Lauftext nach Neuladen dennoch auf „Grüße!“ zurück**; das muss korrigiert werden.
 
-### Unverändert bestätigter Ausgangspunkt: v0.2.0
+### Beobachtungen aus dem v0.3.0-Praxistest
+
+| Bereich | Ergebnis und weiterer Bedarf |
+| --- | --- |
+| Start, BLE, Speicherung | ESP32-C3 startete; bisherige v0.2.0-Blockseiten blieben erhalten; wiederholte Übertragungen und Diagnose funktionierten. |
+| Schriftarten | Normal/Bold entsprachen im Test der Herstellerdarstellung. Mini einzeilig ist horizontal und vertikal zentriert; zweizeilig funktioniert. |
+| Symbole und Farben | Inline-Symbole im Text und sieben Herzfarben funktionieren. Die selbst entworfene Ravestick-Banane ist jedoch noch nicht gut erkennbar. |
+| Fernsteuerung | Helligkeit, Tempo und Anzeigemodus konnten ohne erneuten Upload gesteuert werden. Der zusätzliche Helligkeits-Sendebutton ist überflüssig. |
+| Lauftext | **40-Zeichen-Begrenzung** ist zu eng; lange Symbolfolgen werden teils bereits in der HTTP-Validierung abgewiesen. Das tatsächliche Hardwarelimit ist noch unbekannt. |
+| Entwurf | Blockseiten bleiben nach Reload gespeichert; im Lauftext erschien erneut der Demotext **„Grüße!“** statt des zuletzt bearbeiteten Entwurfs. |
+| Bedienung | Symbol-Picker steht zu weit unten; LED-Vorschau soll beim Scrollen sichtbar bleiben. Symbolbreiten/-abstände benötigen später weitere Original-App-Vergleiche. |
+
+Die älteren Aussagen „v0.3.0 noch nicht hardwaregetestet“ in historischen Release-Dokumenten beziehen sich auf den **Zeitpunkt vor dem Test am 24.10.2026**. Die neuen Ideen in `docs/THEMENSPEICHER.md` sind **noch nicht Bestandteil der Firmware**.
+
+### Frühere bestätigte Basis: v0.2.0
 
 
 **Die Version v0.2.0 inklusive Kompilierkorrektur wurde am 23.10.2026 auf echter Hardware gestartet und praktisch getestet.** Der separate WebUI-Header ist Bestandteil der funktionierenden Fassung.
@@ -95,7 +109,7 @@ CoolLEDX / CoolLED1248
 64 × 16 Pixel · 7 LED-Farben
 ```
 
-Die Hardware unterscheidet bereits zwischen **Inhaltsübertragungen** und kurzen **Steuerbefehlen**. Helligkeit (`0x08`), Laufgeschwindigkeit (`0x07`) und Anzeigemodus (`0x06`) lassen sich prinzipiell separat steuern. Direkte BLE-Regler für Helligkeit, Geschwindigkeit und Anzeigemodus sind in v0.3.0-dev vorbereitet; ihre Wirkung und der Verbindungslifecycle müssen auf der Tafel noch getestet werden.
+Die Hardware unterscheidet zwischen **Inhaltsübertragungen** und kurzen **Steuerbefehlen**. Helligkeit (`0x08`), Laufgeschwindigkeit (`0x07`) und Anzeigemodus (`0x06`) lassen sich prinzipiell separat steuern. Die Direktbefehle sind in v0.3.0-dev im Nutzer-Praxistest bestätigt. Die Verbindungserhaltung, Grenzfälle und die exakte Geschwindigkeitskalibrierung bleiben offen.
 
 ### Geplante Architektur
 
@@ -109,7 +123,7 @@ Ob unsere konkrete Tafel mehrseitige Inhalte oder eigene Animationen über den d
 
 **Benötigt:** ESP32-C3 Super Mini, kompatible CoolLEDX-Tafel (hier 64 × 16 Pixel, sieben Farben), USB-Kabel und Arduino IDE mit dem Espressif-Boardpaket.
 
-1. Für den **ungetesteten Entwicklungsstand v0.3.0**: `firmware/RavestickBoard_v0_3_0/RavestickBoard_v0_3_0.ino` öffnen. Für eine bereits auf Hardware bestätigte Version v0.2.0 Korrektur 1 verwenden.
+1. Für die **hardwaregetestete v0.3.0-dev**: `firmware/RavestickBoard_v0_3_0/RavestickBoard_v0_3_0.ino` öffnen. Bei Problemen kann die bereits bestätigte v0.2.0 Korrektur 1 als Rückfallversion verwendet werden.
 2. Sicherstellen, dass **`RavestickBoard_WebUI.h` und `RavestickBoard_Assets.h`** zusammen mit der `.ino` im selben Sketch-Verzeichnis liegen. Bei v0.2.0 ist nur der WebUI-Header erforderlich.
 3. Das Board **`ESP32C3 Dev Module`** auswählen und **`USB CDC On Boot: Enabled`** setzen.
 4. Die Partitionierung **`No OTA (2MB APP/2MB SPIFFS)`** auswählen. Getestete Entwicklungsumgebung: Arduino IDE 2.3.10, `esp32` von Espressif 3.3.12.
@@ -120,18 +134,35 @@ Ob unsere konkrete Tafel mehrseitige Inhalte oder eigene Animationen über den d
 
 > **Hinweis:** Die BLE-Adresse der bisher verwendeten Tafel ist in der Firmware noch fest hinterlegt. Eine automatische Gerätesuche und Unterstützung mehrerer Boards sind geplant. Während die Original-App die BLE-Verbindung zur Tafel hält, kann RavestickBoard unter Umständen nicht gleichzeitig übertragen.
 
+## Bedienkonzept und vorgemerkte Weiterentwicklung
+
+Die Grundbedienung bleibt bewusst einfach: **Text schreiben, globale Schrift und Farbe auswählen, senden.** Bei der zweizeiligen Mini-Blockanzeige gibt es bereits **getrennte Farben pro Zeile**. Neu vorgemerkt sind **schmalere Leerzeichen in der Mini-Schrift** und eine **eigene horizontale Ausrichtung pro Zeile** (Links / Zentriert / Rechts), statt einer gemeinsamen Ausrichtung für beide Zeilen.
+
+### Größere Erweiterungen, noch nicht umgesetzt
+
+- **🎨 Erweiterter Formatierungseditor:** achte Schaltfläche neben den sieben Farben. Textbereiche markieren oder Buchstaben, Leerzeichen und Symbole als einzelne Kacheln mit Mehrfachauswahl bearbeiten. **Alles auswählen**, **Auswahl aufheben** und **Auswahl umkehren**.
+- **Farbe und Font je Zeichen:** Globaler Standard bleibt erhalten, einzelne Wörter dürfen Original Normal, Original Bold, Engschrift und gegebenenfalls Mini Einzeilig verwenden. Einzelabweichungen lassen sich unabhängig für Farbe und Schrift festlegen oder zurück auf „Standard übernehmen“ setzen.
+- **Globale Änderung mit Wahlmöglichkeit:** Bei vorhandenen Einzelabweichungen kompakt fragen, ob diese **beibehalten** oder für die geänderte Eigenschaft **alle angeglichen** werden sollen. Keine globalen Änderungen an der jeweils anderen Eigenschaft.
+- **Rückgängig / Wiederholen (↶ / ↷):** Möglichst früh auch für normale Texteingaben und versehentliche Löschungen, später ebenso für Formatierungen und Seitenaktionen. Editor-Rückgängig sendet niemals ungefragt eine neue Anzeige an die Tafel.
+- **Originalsymbole bewahren:** Festfarbige Hersteller-Piktogramme behalten ihre Originalfarben und reagieren stillschweigend nicht auf Farb- oder Schriftwechsel, selbst wenn ihre Kachel ausgewählt ist. **Keine Warnhinweise**. Herzvarianten bleiben eine bewusst unterstützte Ausnahme; weitere Varianten, etwa Warnzeichen in anderen Farben, werden später einzeln entschieden.
+- **Neue Symbolreferenzen:** Kussmund/Lippen, Blume/Rose und Biene wurden in der Original-App nachgewiesen und fehlen noch in unserer bisherigen 24er-Herstellerliste. Die Blume benötigt weniger rechten Nachlauf, der Stern soll ohne Umzeichnung vertikal besser sitzen. Als **eigene** Ravestick-Symbole sind eine besser erkennbare Totem-Banane und ein gelbes Quietscheentchen vorgesehen.
+- **Freie Text-/Symbolkomposition:** Große einzeilige Schriften, kleine zweizeilige Blöcke und Symbole gemeinsam auf 64×16 Pixel anordnen. **Nur Ideenspeicher**, noch keine Umsetzung: Erst die angekündigten Nutzerskizzen abwarten.
+- **Bibliothek:** Leerer neuer Editor, vorhandene Programme bewusst aus der Bibliothek laden; bestehende gespeicherte Seiten dürfen bei einer späteren Migration nicht verloren gehen.
+
+Alle konkreten Anforderungen, Aufgaben-IDs, Prioritäten und offenen technischen Fragen stehen in [`docs/THEMENSPEICHER.md`](docs/THEMENSPEICHER.md). Ein künftiger v0.4.0-Build wurde besprochen, ist durch diese Dokumentationspflege **weder erstellt noch freigegeben**.
+
 ## Bekannte Grenzen und nächste Schritte
 
 | Thema | Stand |
 | --- | --- |
 | **Blockprogramm ohne Prozentanzeige** | Offen: Seiten sollen als **ein Programm** übertragen werden; Animations- und native Blockmodi untersuchen |
-| **Minischrift** | Zweizeilig hardwarebestätigt; einzeilig horizontal/vertikal zentriert und automatische Versalien in v0.3.0-dev vorbereitet, Boardtest ausstehend |
-| **Schrift-Feinschliff** | `g`, `p`, `q`, `y` und `ß`/`ẞ` weiter optimieren; 82 Originalglyphen je Normal/Bold rekonstruiert und in v0.3.0-dev integriert, Pixeldarstellung am Board noch offen |
-| **Live-Steuerung** | In v0.3.0-dev als separate Befehle vorbereitet; BLE-Praxisprüfung und Wertkalibrierung offen |
-| **Bibliothek** | Benannte Text- und Seitenprogramme, Entwürfe automatisch wiederherstellen, später Export/Import und Favoriten |
-| **Individuelle Gestaltung** | Farben und Schriftarten pro Zeichen/Abschnitt, frei platzierbare Elemente, Grafiken und Übergänge |
+| **Minischrift** | Zweizeilig und einzeilig am 24.10.2026 erfolgreich getestet; **Leerzeichen zu breit**, **Ausrichtung pro Zeile** bei zweizeiligem Blocktext noch offen |
+| **Schrift-Feinschliff** | `g`, `p`, `q`, `y` und `ß`/`ẞ` weiter optimieren; 82 Originalglyphen je Normal/Bold rekonstruiert und in v0.3.0-dev integriert, Vergleich im Praxistest positiv; weitere Einzelzeichen-Regressionsprüfung offen |
+| **Live-Steuerung** | Direkte BLE-Kommandos für Helligkeit, Tempo und Modus im v0.3.0-Praxistest funktionierend; Kalibrierung und Langzeitprüfung offen |
+| **Bibliothek** | Noch nicht umgesetzt; NVS-Blockseiten vorhanden, Lauftextentwurf nach Reload fehlerhaft; später Programme, Export/Import und Favoriten |
+| **Individuelle Gestaltung** | Erweiterter 🎨-Editor mit Mehrfachauswahl, Farb-/Font-Abweichungen, Undo/Redo und gezieltem Reset: noch nicht umgesetzt |
 | **Eigene Animationen** | `0x04` und Speichergrenzen auf dem konkreten Board experimentell überprüfen |
-| **Weitere Programme** | Countdown, Stoppuhr, Scoreboard, Lichtfunktion, Playlist und acht Schnellzugriffe |
+| **Weitere Programme** | Countdown, Stoppuhr, Scoreboard, Lichtfunktion, Playlist und acht Schnellzugriffe (Ideen, nicht in v0.3.0 vorhanden) |
 
 Weitere Ideen, Entscheidungen und offene Aufgaben werden unter [`docs/THEMENSPEICHER.md`](docs/THEMENSPEICHER.md) sowie [`docs/ROADMAP.md`](docs/ROADMAP.md) gesammelt. Änderungen und Teststände stehen in [`CHANGELOG.md`](CHANGELOG.md).
 
