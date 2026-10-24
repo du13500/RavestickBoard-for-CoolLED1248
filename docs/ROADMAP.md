@@ -218,7 +218,7 @@ Außerdem bleiben **Entwurf**, **gespeichertes Bibliotheksobjekt** und **aktuell
 - [ ] README, Changelog, Roadmap, Themenspeicher und Entscheidungen **bei relevanten Änderungen gemeinsam** fortschreiben (`DOC-04`).
 - [ ] Bei **jeder Firmwareversion und jedem Korrekturpaket** eine **Excel-kopierbare Testtabelle direkt im Chat** liefern: `Nr. | Bereich | Testpunkt | Ergebnis | Bemerkungen`; letzte zwei Spalten leer; **keine separate Download-Datei** (`QA-01`).
 - [ ] Für neue Funktionen sauber zwischen **implementiert**, **experimentell**, **auf unserer Hardware bestätigt** und **noch offen** unterscheiden (`ANM-12`).
-- [ ] OpenSign/`schulzad` zur **Erlaubnis für eine eventuelle Codeübernahme** kontaktieren; bis zu ausdrücklicher Freigabe keine geschützten Codeteile übernehmen oder portieren (`LIC-01` bis `LIC-03`).
+- [x] OpenSign/`schulzad` **am 23.10.2026 per E-Mail** zur Nutzung kontaktiert (`LIC-03`). **Antwort/Erlaubnis weiter offen** (`LIC-08`); keine geschützten Codeteile übernehmen oder portieren.
 - [ ] Herkunft neuer Referenzen und Codeanteile dokumentieren; MIT-Bedingungen bei tatsächlicher Übernahme fremden MIT-Codes beachten (`LIC-04`, `LIC-05`).
 - [ ] Original-App-Screenshots/Herstellerfonts und Fremdassets bei öffentlicher Weitergabe gesondert auf Nutzungsrechte prüfen.
 - [ ] Projektseite ohne überflüssigen Dateibaum im README halten; Badges auf Englisch, Projektbeschreibung auf Deutsch, Motto **„Mission: Hugs and Love“**.
@@ -249,3 +249,9 @@ Die Reihenfolge ist **veränderbar**. Ein erfolgreiches Hardwareexperiment oder 
 - **Neue Ideen werden zunächst im [`THEMENSPEICHER.md`](THEMENSPEICHER.md) mit ihrer ID erfasst, bevor daraus Meilensteine werden.**
 
 *Made for the rave, powered by a banana. 🍌*
+
+## Entwicklungsnachtrag 24.10.2026: v0.3.0
+
+**v0.3.0-dev** enthält einen ersten Quelltext- und Browser-Testkandidaten für Originalschriften (Normal/Bold), Inline-Symbole, sieben Herzfarben, gespiegelte Ravestick-Banane, horizontale und vertikale Mini-Einzelzeile, eigenständige Live-BLE-Befehle und Browser-Entwurfswiederherstellung. **Noch kein Arduino- und kein Boardtest.**
+
+Zu prüfen: echte Vorschub-/Zeichenabstände mit der Original-App, Symbolüberlagerungen bei Mini-Zweizeilern, sämtliche Glyphen im realen Raster, Short-Command-Verbindungsfreigabe, Rückwärtskompatibilität des NVS-Speichers und Nutzung der Originalsymbole in öffentlichen Quellen. `0x04` und die vollständige Programm-/Playlist-Architektur bleiben eigenständige Entwicklungsmeilensteine.

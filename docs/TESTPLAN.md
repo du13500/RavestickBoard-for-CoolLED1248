@@ -1,6 +1,6 @@
 # RavestickBoard · Hardwaretests und Abnahmeprotokolle
 
-**Stand: 23.10.2026 · Firmware: v0.2.0 Korrektur 1.**
+**Stand: 24.10.2026 · Letzter Hardwaretest: v0.2.0 Korrektur 1 · Neuer Quelltextkandidat: v0.3.0-dev.**
 
 Dieses Dokument hält die **realen Ergebnisse** und weiter offenen, gezielt nachprüfbaren Testfälle fest. Es ist **nicht** die vom Nutzer gewünschte Excel-Datei: **Zu jeder neuen Firmware liefern wir die kurze, direkt in Excel kopierbare Testtabelle ausschließlich im Chat**, mit leeren Spalten `Ergebnis` und `Bemerkungen` (siehe `ENTSCHEIDUNGEN.md`, ADR-028).
 
@@ -55,7 +55,7 @@ Die Kästchen unten bleiben offen, sofern der spezielle Teiltest nicht mit einem
 - [ ] Diagnosefelder: Heap/Low-Water/Block, Resetgrund, NVS-Seitenspeicherungen, automatische Wechsel, Erfolge/Fehler vor und nach längerer Wiedergabe.
 - [ ] Dauerbetrieb, wiederholte BLE-Verbindungstrennung, Stromverlust im Speichervorgang.
 
-## 3. Noch nicht implementierte Funktionen (spätere Versionstests)
+## 3. Zum Stand v0.2.0 noch nicht implementierte Funktionen (historische Planung)
 
 - [ ] Slider für Helligkeit/Speed **live** auf dem Board, ohne erneuten Textupload; Rohwertkalibrierung gegen Original-App.
 - [ ] Direkte Moduswechsel `0x06` ohne Textupload: Block, rechts/links, Schneefall, Laser usw. kontrolliert testen.
@@ -67,3 +67,23 @@ Die Kästchen unten bleiben offen, sofern der spezielle Teiltest nicht mit einem
 ## 4. Evidenz- und Dokumentationsregel
 
 `nicht geprüft` → `experimentell` → `auf unserer Tafel bestätigt`. Ein anderer CoolLEDX-Protokolltreiber ist kein Ersatz für einen eigenen Test. Zu jedem Befund Firmwarestand, konkretes Gerät, Testschritte und Ergebnis notieren; Status erst dann in `THEMENSPEICHER.md`, `ROADMAP.md` und `CHANGELOG.md` aktualisieren.
+
+## 24.10.2026 · Zusätzliche Tests für v0.3.0 (alle noch offen)
+
+- [ ] Arduino IDE mit `ESP32C3 Dev Module`, `USB CDC On Boot: Enabled`, `No OTA (2MB APP/2MB SPIFFS)`: **drei Dateien** im selben Sketchverzeichnis fehlerfrei kompilieren.
+- [ ] Nach Flash: vorhandene v0.2.0-NVS-Blockseiten erscheinen unverändert; keine automatische Übertragung beim Neustart.
+- [ ] Normal/Bold am realen Board für A, Ä, ß, Ziffern, Satzzeichen testen und mit App-Screenshots abgleichen.
+- [ ] Mini einzeilig an beiden Achsen zentriert, auch mit kurzer/langen Texten; Mini zweizeilig unverändert gut lesbar.
+- [ ] Mini wandelt äöüß automatisch zu ÄÖÜẞ in der **Anzeige**, Textfeld behält Original.
+- [ ] Symbole per Picker an Cursorposition in Lauftext/Blocktext, vor/in/nach Wörtern; keine abgeschnittenen LED-Spalten.
+- [ ] Originale 24 Pixelpiktogramme visuell auf echter Tafel prüfen, Sonderfälle mit unbekannter Anzeigezuordnung notieren.
+- [ ] Hersteller-Banane `🍌` und separate vertikal gespiegelte Eigensymbol-Banane `🍌︎` sichtbar unterscheidbar.
+- [ ] Herz in Rot, Gelb, Grün, Cyan, Blau, Magenta und Weiß; andere Symbole erhalten Originalfarben.
+- [ ] Mehrere Symbole mit unterschiedlichen belegten Breiten; Abstände zur Original-App weiterhin als provisorisch kennzeichnen.
+- [ ] Mini-Zweizeilen mit Symbolen: 16-Pixel-Kollisionen erkennen/beurteilen; aktuell kein automatischer Kollisionsschutz.
+- [ ] Helligkeit, Geschwindigkeit und Effekt/Modus per eigenständigen Befehlen verändern: keine Prozentanzeige, Verbindung nach Inaktivität frei.
+- [ ] Hersteller-App danach wieder verbinden und Controller erneut verwenden; Busy-Fehler ohne Neustart.
+- [ ] Lauftextentwurf und letzter Reiter über Browser-Reload erhalten, aber nicht irrtümlich als ESP32-Bibliothek ausgegeben.
+- [ ] BLE-Diagnose und Fortschrittsanzeige bei einem **echten Inhaltsupload** weiterhin korrekt; Langzeittests.
+
+**Ergebnis bisher:** Browser-JavaScript ohne Laufzeitfehler; Assets korrekt dekomprimiert. **Kein** ESP32-Kompiliernachweis, keine BLE-Hardwareprüfung. Keine Checkbox als erledigt markieren.

@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.3.0-dev] · 24.10.2026 · Entwicklungs- und Browser-Testkandidat
+
+**Noch nicht mit Arduino-ESP32 3.3.12 kompiliert und nicht auf dem ESP32 oder der CoolLEDX-Tafel geprüft. Nicht als hardwarebestätigte Version kennzeichnen.**
+
+- 82 vollständige Originalglyphen **Normal**, 82 **Bold** aus dem Originalglyphenarchiv v02 in Flash-Daten vorbereitet. Pixelvorschub/Abstände experimentell.
+- 24 Originalsymbole aus dem Herstellerarchiv v01 (16×16 und sieben Farben), dazu eine unabhängige, vertikal gespiegelte RavestickBoard-Banane. Symbole in Texte einfügbar; für unterschiedliche effektive Breiten wird die tatsächlich beleuchtete Breite benutzt, plus vorläufig 1 Pixel Abstand.
+- Herz in sieben Farben, durch Emoji-Farbvarianten auswählbar und unabhängig von der normalen Textfarbe.
+- Mini, eine Zeile: 7 px hoch, horizontal und vertikal zentriert. Mini in zwei Zeilen bleibt erhalten; kleine Buchstaben werden in der Anzeige zu Versalien, ohne den gespeicherten Text zu verändern.
+- Separate BLE-Kommandos für Helligkeit (`0x08`), Tempo (`0x07`) und Anzeigeart (`0x06`), kurzzeitige Verbindungswiederverwendung. Wirkung/Antwort noch nicht hardwaregetestet.
+- Browserseitige Wiederherstellung von Lauftextentwurf und zuletzt verwendetem Editor-Reiter.
+- NVS-Datensatzformat der bestehenden 12 Seiten bleibt unverändert; neue Layoutwerte 2–4 werden ergänzt.
+- Kein `0x04`-Animationsupload, keine LittleFS-Programmbibliothek und keine vollständige Zeichen-für-Zeichen-Formatierung in diesem Kandidaten.
+- Browser-Smoketest ohne JavaScript-Ausnahme; vollständige Arduino-/Hardwareprüfung ausstehend.
+- Lizenzanfrage an OpenSign-Autor Adam Schulz wurde am 23.10.2026 **per E-Mail** versendet; Antwort/Erlaubnis weiterhin ausstehend. Repository ist auf GitHub **Public**.
+
+---
+
+
 > **Dokumentationsnachtrag 23.10.2026:** Das frühere v0.2.0-Paket bezeichnete Hardwaretests noch als ausstehend. Diese wurden nach **Korrektur 1** vom Nutzer tatsächlich durchgeführt. Historische „zu testen“-Listen in älteren Versionsabschnitten bleiben als damalige Planung erhalten und sind keine aktuellen Offenstände.
 
 ### [0.2.0] Praxisabnahme · 23.10.2026

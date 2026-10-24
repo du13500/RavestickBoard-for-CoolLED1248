@@ -6,7 +6,7 @@
 
 Die Repository-Sichtbarkeit und eine Open-Source-Lizenz sind unterschiedliche Entscheidungen. Für **eigene, vom Rechteinhaber kontrollierte Projektbestandteile** gilt die [`LICENSE`](../LICENSE): **All Rights Reserved**, keine allgemeine Erlaubnis zum Kopieren, Bearbeiten oder Weiterverbreiten. GitHub-Forking-/Viewing-Rechte, geltendes Recht und **fremde Lizenzen** bleiben unberührt.
 
-Der Nutzer möchte das Projekt bei Bedarf öffentlich präsentieren, u. a. damit OpenSign-Entwickler einen Einblick erhalten. **Der tatsächliche aktuelle GitHub-Sichtbarkeitsstatus war in diesem Dokumentenreview nicht unabhängig abrufbar** und wird nicht als technisch bestätigte Tatsache behauptet. Eine Entscheidung, Code offen zu lizenzieren, wurde **nicht** getroffen.
+Das Repository `du13500/RavestickBoard-for-CoolLED1248` ist seit dem 23.10.2026 **öffentlich (Public)**, über die GitHub-Schnittstelle bestätigt. Es ist **nicht** unter einer Open-Source-Lizenz freigegeben; der eigene Projektcode bleibt All Rights Reserved. Eine offene Lizenz wurde **nicht** beschlossen.
 
 ## Dokumentierte Fremdprojekte
 
@@ -16,7 +16,7 @@ Der Nutzer möchte das Projekt bei Bedarf öffentlich präsentieren, u. a. damit
 | [ohtaras/led](https://github.com/ohtaras/led) | Keine allgemeine Code-Wiederverwendungslizenz festgestellt | Protokoll-/Rendererreferenz; unlizenzierte Quellcodepassagen nicht kopieren oder nahezu wortgetreu portieren. |
 | [schulzad/coolled-sign-controller (OpenSign)](https://github.com/schulzad/coolled-sign-controller) | README erklärt ausdrücklich „all rights reserved until one is added“, **keine Lizenzdatei** | Wertvolle Referenz zur autonomen Animation, aber keine Nutzungserlaubnis für dessen konkreten Python-Code. |
 
-**Stand OpenSign-Kontakt:** Der Nutzer hat im Browser eine englische GitHub-Lizenzanfrage an Adam vorbereitet und in das Issue-Formular eingetragen. **Das tatsächliche Absenden und eine Antwort/Erlaubnis sind aus dem bisherigen Gespräch nicht bestätigt.** Bis zur ausdrücklichen Erlaubnis: kein Kopieren/Portieren von OpenSign-Implementierung. Ein öffentliches Repository oder nichtkommerzielle Nutzung schaffen keine automatische Weiterverwendungslizenz.
+**Stand OpenSign-Kontakt:** Adam Schulz wurde am 23.10.2026 **per E-Mail** um eine Erlaubnis zur Übernahme, Anpassung, Portierung und Veröffentlichung relevanter OpenSign-Codeteile gebeten. **Versand vom Nutzer bestätigt; Antwort/Erlaubnis derzeit ausstehend.** Bis zur ausdrücklichen Erlaubnis: kein Kopieren/Portieren von OpenSign-Implementierung. Ein öffentliches Repository oder nichtkommerzielle Nutzung schaffen keine automatische Weiterverwendungslizenz.
 
 ## Technische Protokollkenntnisse gegenüber Fremdcode
 
@@ -47,3 +47,11 @@ OpenSign dokumentiert auf **seiner** 64×16-CoolLEDX-Referenztafel (Firmwarekenn
 3. Bei MIT-Codeübernahme Copyright und erforderliche Lizenzhinweise mitliefern; bei unlizenzierter Quelle erst schriftliche Freigabe erhalten.
 4. Änderungen an einer tatsächlichen späteren OpenSign-Erlaubnis **wörtlich und mit Datum dokumentieren**; nicht aus einer freundlichen Antwort pauschale Rechte ableiten.
 5. Nach Import neuer Fonts/Bilder/Animationen Provenienz erneut prüfen.
+
+## Herkunft der Originalsymbole (v0.3.0)
+
+Die als „CoolLED1248-Originalsymbole“ gekennzeichneten Pixelgrafiken wurden anhand der offiziellen CoolLED1248-App (Apple App Store, Entwicklerangabe: **玲玉 代**) rekonstruiert.
+
+RavestickBoard beansprucht keine Rechte an den ursprünglichen Symbolgestaltungen. Etwaige Rechte verbleiben bei den jeweiligen Rechteinhabern.
+
+Eigenständig entwickelte Symbole werden separat als „RavestickBoard-Eigensymbole“ gekennzeichnet. Die Quellenangabe ersetzt eine gegebenenfalls erforderliche Nutzungserlaubnis nicht.

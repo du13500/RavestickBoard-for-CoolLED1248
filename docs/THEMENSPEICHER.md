@@ -117,7 +117,7 @@
 - [ ] **DOC-05 · P1** Einheitliche Fehlermeldungen, Verhalten nach Stromausfall, Boot- und Dauerbetriebstests.
 - [ ] **DOC-06 · P2** Originalanzeigen separat referenzieren, Normal/Bold und Hersteller-Eigenheiten dokumentieren.
 - [x] **DOC-07 · P2** Initiale Codeherkunfts-/Lizenzprüfung durchgeführt und dokumentiert (23.10.2026), mit ausdrücklichen Prüfgrenzen; für neue Abhängigkeiten fortlaufend wiederholen.
-- [x] **DOC-08 · P3** Entscheidung für bei Bedarf öffentliche Sichtbarkeit bei vorbehaltenen Rechten nach Lizenz-/Herkunftssichtung; tatsächliche GitHub-Sichtbarkeit in dieser Dokumentenprüfung nicht unabhängig geprüft (23.10.2026).
+- [x] **DOC-08 · P3** Entscheidung für bei Bedarf öffentliche Sichtbarkeit bei vorbehaltenen Rechten nach Lizenz-/Herkunftssichtung; Repository ist seit 23.10.2026 Public; am 24.10.2026 über GitHub bestätigt.
 - [ ] **DOC-09 · P3** Mehrgerätefähigkeit und Verteilung an andere CoolLEDX-Besitzer testen, bevor allgemeine Kompatibilität behauptet wird.
 
 ## Themen, für die noch Entscheidungen/Versuche fehlen
@@ -205,7 +205,7 @@ Nach nachgewiesener Umsetzung einer Funktion: den passenden Eintrag (etwa `PRE-0
 
 - [x] **LIC-01 · P0** OpenSign/`schulzad/coolled-sign-controller` ist **öffentlich sichtbar, aber ohne Nutzungslizenz**. Das README verlangt, die Implementierung als **all rights reserved** zu behandeln. **Keinen geschützten Sourcecode, keine Grafiken oder langen Textpassagen übernehmen oder aus Python nahezu zeilengleich nach C++ übertragen.**
 - [ ] **LIC-02 · P0** **Eigenständige ESP32-C3-Implementierung** ausschließlich anhand protokolltechnischer Fakten, öffentlich zugänglicher Funktionsbeschreibungen und eigener BLE-Messungen. Testdaten dokumentieren, eigene Architektur, eigene Benennungen, eigener Code und eigene Testvektoren. Ein bloßes Umbenennen/Umformatieren ist **kein Clean-Room-Verfahren**.
-- [ ] **LIC-03 · P1** GitHub-Issue zur Lizenzfreigabe an `schulzad` entworfen und im Browser ausgefüllt; ob abgesendet und beantwortet, ist nicht bestätigt. Um explizite schriftliche Lizenzfreigabe (z. B. MIT/Apache-2.0) oder projektbezogene Erlaubnis bitten; vor tatsächlicher Codeübernahme die Erlaubnis und Bedingungen dokumentieren.
+- [x] **LIC-03 · P1** E-Mail an Adam Schulz am **23.10.2026 versendet**: schriftliche Freigabe für Übernahme, Anpassung, Portierung nach C++ und Veröffentlichung auf GitHub angefragt. **Kontaktaufnahme erledigt; Antwort und Lizenzberechtigung offen.**
 - [ ] **LIC-04 · P1** Separat `UpDryTwist/coolledx-driver` mit **MIT-Lizenz** als mögliche rechtssichere Codequelle prüfen; bei tatsächlicher Übernahme Lizenz- und Copyright-Hinweise beibehalten. Keine pauschale Lizenzübertragung von MIT auf andere Repositories annehmen.
 - [ ] **LIC-05 · P1** Jede neue Implementierung/Quelle mit URL, Abrufdatum, technischem Fakt vs. übernommenem Code, Nachweis und Teststatus im Lizenzregister dokumentieren. Initialer Sketch-/Paketabgleich wurde 23.10.2026 durchgeführt, eine private Git-Historie nicht unabhängig geprüft; laufende Pflege erforderlich.
 
@@ -218,9 +218,24 @@ Nach nachgewiesener Umsetzung einer Funktion: den passenden Eintrag (etwa `PRE-0
 - [x] **DOC-11 · P1** README-Gestaltung: Zentriertes eigenes Totem-Foto `docs/assets/totem.jpg` **ohne width/style-Vorgabe**, zentrierter 🍌-Titel, englische Badges `version`, `hardware`, `status: hardware testing`, `project: non-commercial`, `license: all rights reserved`, `mission: hugs and love`. Fließtext deutsch. **Keinen ausgeschiedenen Abschnitt „Projektstruktur“ wieder einführen.**
 - [ ] **DOC-12 · P1** Bei nächster README-Überarbeitung die **eigens entwickelte zweizeilige Minischrift** ausdrücklich benennen. Nicht eigens die vom Nutzer angepasste README bei einer reinen Dokumentenpflege überschreiben.
 - [x] **DOC-13 · P1** **Zu jedem Firmware-Updatepaket eine kurze, Excel-kopierbare Testtabelle ausschließlich im Chat** (Nr., Bereich, Testpunkt, Ergebnis, Bemerkungen), mit leeren Feldern für Nutzerbefunde; kein separater Excel-Download und keine Pflichtdatei im Updatepaket. `docs/TESTPLAN.md` bleibt technische Testhistorie/Checkliste.
-- [x] **LIC-06 · P1** Bewusste Freigabeentscheidung: Repo darf sichtbar gemacht werden, eigene Teile bleiben mangels Open-Source-Freigabe **all rights reserved**. Die GitHub-Sichtbarkeit ist keine neue Firmwarefunktion und kein offener „Release“-Meilenstein. Direkte öffentliche Sichtbarkeit ist in diesem Dokumentenreview nicht verifiziert.
+- [x] **LIC-06 · P1** Bewusste Freigabeentscheidung: Repo darf sichtbar gemacht werden, eigene Teile bleiben mangels Open-Source-Freigabe **all rights reserved**. Die GitHub-Sichtbarkeit ist keine neue Firmwarefunktion und kein offener „Release“-Meilenstein. Das Repository ist Public, die Lizenz des eigenen Codes bleibt All Rights Reserved.
 - [x] **LIC-07 · P1** Festes AP-Passwort `Banane1248!` ist bewusst öffentlich dokumentierbar; individuell änderbares Passwort bleibt Zukunftsthema. Fest codierte BLE-MAC ist ein dokumentierter Gerätespezialfall. Totem-EXIF (iPhone-Modell/Festivalgeotag) wird akzeptiert.
-- [ ] **LIC-08 · P1** OpenSign-Lizenzanfrage: Nutzer hat GitHub-Issue-Formular ausgefüllt; **Absendung und Antwort sind nicht belegt**. Bis zu tatsächlicher Erlaubnis keine OpenSign-Codeübernahme.
+- [ ] **LIC-08 · P1** Antwort von Adam abwarten und Bedingungen einer eventuellen Erlaubnis schriftlich dokumentieren, bevor OpenSign-Code übernommen oder portiert wird. **Keine Freigabe bislang bestätigt.**
 - [ ] **SYS-13 · P2** WLAN-AP-Passwort optional über Weboberfläche ändern, mit sicherer Wiederherstellung bei Verlust und klarer Bedienanleitung.
 
 **Hinweis zur IDs-Konsolidierung:** In einer alten Fassung war `FNT-06` zweimal vergeben. Die gemeinsame Glyphentabelle wird ausschließlich unter `FNT-08` geführt; `FNT-06` bezeichnet allein die Mini-Schrift. Bestehende Aufgaben werden nicht gelöscht.
+
+## 24.10.2026 · v0.3.0 Entwicklungsstand (ohne Gerätetest)
+
+- [ ] **SYM-01 · P1** 24 Originalsymbole aus `CoolLED1248_Originalsymbole_v01.json` inline in Lauf- und Blocktext integrieren. **Code vorhanden, Hardwareprüfung offen.**
+- [ ] **SYM-02 · P1** Symbolbreiten anhand beleuchteter Spalten berechnen; effektive Original-App-Zeichenabstände/Advance in späterem Vergleich nachmessen. **Vorläufig +1 px; nicht boardvalidiert.**
+- [ ] **SYM-03 · P1** Das Hersteller-Herz in allen sieben LED-Farben einfärben; unabhängige Emoji-Farbvarianten. **Implementiert, Hardwareprüfung offen.**
+- [ ] **SYM-04 · P1** Eigenes RavestickBoard-Bananen-Symbol in vertikal gespiegelter Emoji-Anmutung entwickeln; unabhängig von Hersteller-Banane kennzeichnen. **Erster Entwurf integriert, Nutzerabnahme offen.**
+- [ ] **SYM-05 · P1** Originalsymbol- und Eigensymbol-Bibliotheken sichtbar getrennt verwalten, Quellenhinweis in `QUELLEN_UND_LIZENZEN.md`. **Implementiert, visuelle Abnahme offen.**
+- [ ] **FNT-15 · P1** 82 Normal- und 82 Bold-Originalglyphen aus `CoolLED1248_Originalglyphen_v02.json` laden; tatsächlichen Vorschub und reale Darstellung testen. **Code vorhanden, Boardtest offen.**
+- [ ] **FNT-16 · P1** „Mini, eine Zeile“ horizontal und vertikal zentrieren; Großbuchstabenautomatik inklusive Ä/Ö/Ü/ẞ. **Code vorhanden, Boardtest offen.**
+- [ ] **BLE-16 · P1** Helligkeit, Tempo, Modus ohne Content-Upload und mit kurzer Wiederverwendung der BLE-Verbindung senden. **Code vorhanden, Hardwaretest offen.**
+- [ ] **LIB-16 · P1** Lauftextentwurf/aktiven Reiter im Browser wiederherstellen. **Implementiert, iPhone-Test offen.**
+- [ ] **DOC-10 · P1** OpenSign-Mail 23.10.2026 und öffentliches GitHub-Repository durchgehend aktuell dokumentieren. Antwort ausstehend.
+
+Die bestehenden v0.2.0-NVS-Seiten werden im v0.3.0-Entwurf nicht automatisch gelöscht oder migriert. **Keine Auto-Ausführung nach dem Booten.**

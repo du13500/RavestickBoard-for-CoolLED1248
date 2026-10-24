@@ -50,3 +50,7 @@
 5. Bei reproduzierbarem Fehler eine Testfolge mit möglichst wenigen Schritten dokumentieren.
 
 **Offen für später:** persistenter kritischer letzter Fehler (nur nach Flashverschleiß-Abwägung), weitere Timeout-/NAK-/ACK-Diagnose, Langzeit-/Heap-Test, laufende Grafikanimationen und deren Speicher-/Transferstatistik.
+
+## 24.10.2026 · Entwicklungszusatz v0.3.0
+
+Separate Steuerjobs `BRIGHTNESS`, `SPEED`, `MODE` verwenden kurze BLE-Kommandos und für ca. 2,5 Sekunden nach dem letzten Kommando eine bestehende Verbindung. Die eigentliche Wirkung auf der Original-Tafel, konkurrierende App-Verbindungen und der BLE-Timeoutpfad müssen erneut auf Hardware getestet werden. Die Diagnose bleibt RAM-only. Dieser Abschnitt ist noch kein Hardwaretestbericht.

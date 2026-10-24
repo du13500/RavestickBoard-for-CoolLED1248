@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version v0.2.0" src="https://img.shields.io/badge/version-v0.2.0-7056d8">
+  <img alt="Version v0.3.0 Entwicklungsstand" src="https://img.shields.io/badge/version-v0.3.0--dev-7056d8">
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
   <img alt="Hardware Testing" src="https://img.shields.io/badge/status-hardware%20testing-2e8b71">
   <img alt="Nichtkommerzielles Hobbyprojekt" src="https://img.shields.io/badge/project-non--commercial-f39c49">
@@ -30,7 +30,22 @@ Die Hersteller-Firmware der LED-Tafel wird dabei **nicht verändert**. Die Tafel
 
 Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Festival-Totem. Es befindet sich aktiv in Entwicklung und ist noch kein fertiges Produkt.
 
-## Aktueller Stand: v0.2.0
+## Entwicklungsstand: v0.3.0 (noch nicht auf der Hardware getestet)
+
+**Achtung:** Die v0.3.0-Fassung ist ein Entwicklungs- und Testkandidat, keine fertig abgenommene Firmware. Der letzte bestätigte Hardwarestand ist **v0.2.0 Korrektur 1**. Die unveränderte v0.2.0 bleibt als Rückfallversion im Repository.
+
+### In v0.3.0 neu vorbereitet
+
+- Originalschriftarten **Normal** und **Bold** mit je 82 aus der Hersteller-App rekonstruierten Zeichen als eigene Auswahl im Blockeditor.
+- Unsere **Minischrift, eine Zeile**: sieben Pixel hoch, horizontal **und** vertikal zentriert; zweizeilige Minischrift bleibt erhalten, in Mini werden kleine Buchstaben auf der Tafel als Großbuchstaben dargestellt.
+- **Inline-Symbole:** 24 rekonstruierte Herstellerpiktogramme und eine selbst entworfene, vertikal gespiegelte RavestickBoard-Banane. Symbole lassen sich wie Emojis an der Cursorposition in den Text einfügen; die Vorschau zeigt das gemischte Pixelraster.
+- **Herz in allen sieben LED-Farben** über sieben Emoji-Varianten.
+- Unterschiedliche tatsächlich beleuchtete Symbolbreiten werden bei der Platzierung berücksichtigt. **Abstände vorerst experimentell**, ein systematischer Abgleich mit der Original-App steht aus.
+- Direkte Befehle für Helligkeit, Tempo und Modus ohne erneuten Bild-Upload, mit zeitlich befristeter BLE-Verbindung. **Bisher nur quellcode- und browsertestseitig geprüft.**
+- Lauftextentwurf und zuletzt geöffneter Editor-Reiter werden lokal im jeweiligen Browser zwischengespeichert.
+
+### Unverändert bestätigter Ausgangspunkt: v0.2.0
+
 
 **Die Version v0.2.0 inklusive Kompilierkorrektur wurde am 23.10.2026 auf echter Hardware gestartet und praktisch getestet.** Der separate WebUI-Header ist Bestandteil der funktionierenden Fassung.
 
@@ -38,7 +53,7 @@ Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Fest
 
 - **Lauftext- und Blockeditor** als getrennte Bereiche, ohne automatische Moduswahl anhand der Textlänge.
 - **Bis zu zwölf individuell gestaltete Blockseiten**: hinzufügen, duplizieren, verschieben, löschen und dauerhaft speichern.
-- **Pro Seite:** eine große einzeilige Engschrift oder zwei kleine Textzeilen; sieben LED-Farben, Ausrichtung und einstellbare Anzeigezeit von 5–60 Sekunden.
+- **Pro Seite (v0.2.0):** eine große einzeilige Engschrift oder zwei Zeilen in unserer eigens entwickelten Minischrift; sieben LED-Farben, Ausrichtung und individuell einstellbare Anzeigezeit von 5–60 Sekunden.
 - **Zweizeilige Darstellung mit unterschiedlichen Zeilenfarben**, auf der echten LED-Tafel erfolgreich getestet.
 - **64 × 16-LED-Vorschau** mit einzelnen runden Punkten sowie Wiedergabesteuerung einschließlich 1×, 2× und 4×.
 - **Permanente Speicherung der Blockseiten auf dem ESP32** mittels NVS, auch nach Neuladen des Webinterfaces beziehungsweise Neustart.
@@ -80,7 +95,7 @@ CoolLEDX / CoolLED1248
 64 × 16 Pixel · 7 LED-Farben
 ```
 
-Die Hardware unterscheidet bereits zwischen **Inhaltsübertragungen** und kurzen **Steuerbefehlen**. Helligkeit (`0x08`), Laufgeschwindigkeit (`0x07`) und Anzeigemodus (`0x06`) lassen sich prinzipiell separat steuern. Live-Regler und die vollständige Modusauswahl sind für kommende Versionen vorgesehen.
+Die Hardware unterscheidet bereits zwischen **Inhaltsübertragungen** und kurzen **Steuerbefehlen**. Helligkeit (`0x08`), Laufgeschwindigkeit (`0x07`) und Anzeigemodus (`0x06`) lassen sich prinzipiell separat steuern. Direkte BLE-Regler für Helligkeit, Geschwindigkeit und Anzeigemodus sind in v0.3.0-dev vorbereitet; ihre Wirkung und der Verbindungslifecycle müssen auf der Tafel noch getestet werden.
 
 ### Geplante Architektur
 
@@ -94,12 +109,12 @@ Ob unsere konkrete Tafel mehrseitige Inhalte oder eigene Animationen über den d
 
 **Benötigt:** ESP32-C3 Super Mini, kompatible CoolLEDX-Tafel (hier 64 × 16 Pixel, sieben Farben), USB-Kabel und Arduino IDE mit dem Espressif-Boardpaket.
 
-1. `firmware/RavestickBoard_v0_2_0/RavestickBoard_v0_2_0.ino` in der Arduino IDE öffnen.
-2. Sicherstellen, dass **`RavestickBoard_WebUI.h` im selben Ordner** wie die `.ino` liegt. Ohne diese Datei ist die v0.2.0-Korrekturfassung nicht vollständig.
+1. Für den **ungetesteten Entwicklungsstand v0.3.0**: `firmware/RavestickBoard_v0_3_0/RavestickBoard_v0_3_0.ino` öffnen. Für eine bereits auf Hardware bestätigte Version v0.2.0 Korrektur 1 verwenden.
+2. Sicherstellen, dass **`RavestickBoard_WebUI.h` und `RavestickBoard_Assets.h`** zusammen mit der `.ino` im selben Sketch-Verzeichnis liegen. Bei v0.2.0 ist nur der WebUI-Header erforderlich.
 3. Das Board **`ESP32C3 Dev Module`** auswählen und **`USB CDC On Boot: Enabled`** setzen.
 4. Die Partitionierung **`No OTA (2MB APP/2MB SPIFFS)`** auswählen. Getestete Entwicklungsumgebung: Arduino IDE 2.3.10, `esp32` von Espressif 3.3.12.
 5. Über USB auf den ESP32 flashen. **OTA-Firmwareupdates sind nicht vorgesehen.**
-6. Handy oder Computer mit dem vom ESP32 erzeugten WLAN **`CoolLED1248`** verbinden. Das derzeit im Sketch hinterlegte WLAN-Passwort ist bewusst öffentlich dokumentiert. Es ist kein Geheimnis; Personen in Funkreichweite könnten damit das Geräte-WLAN verwenden. Eine individuelle Passwortkonfiguration im Webinterface ist für eine spätere Version vorgesehen.
+6. Handy oder Computer mit dem vom ESP32 erzeugten WLAN **`CoolLED1248`** verbinden (Standardpasswort **`Banane1248!`**, bewusst öffentlich dokumentiert). Es ist kein Geheimnis; Personen in Funkreichweite könnten damit das Geräte-WLAN verwenden. Eine individuelle Passwortkonfiguration im Webinterface ist für eine spätere Version vorgesehen.
 7. Die lokale Seite **[http://192.168.4.1](http://192.168.4.1)** öffnen. Der Browser benötigt keine Internetverbindung.
 8. Zunächst eine Blockseite **einzeln** übertragen; erst danach die experimentelle automatische Wiedergabe ausprobieren.
 
@@ -110,9 +125,9 @@ Ob unsere konkrete Tafel mehrseitige Inhalte oder eigene Animationen über den d
 | Thema | Stand |
 | --- | --- |
 | **Blockprogramm ohne Prozentanzeige** | Offen: Seiten sollen als **ein Programm** übertragen werden; Animations- und native Blockmodi untersuchen |
-| **Minischrift** | Zweizeilig bestätigt; Kleinbuchstaben künftig automatisch als Großbuchstaben darstellen; einzeilige Mini-Variante ergänzen |
-| **Schrift-Feinschliff** | `g`, `p`, `q`, `y` an x-Höhe/Unterlängen anpassen; `ß`/`ẞ` mit eigener Pixelkorrektur; Originalfonts Normal und Bold rekonstruieren |
-| **Live-Steuerung** | Helligkeit, Tempo und Anzeigemodus ohne vollständigen Neu-Upload direkt an die Tafel senden |
+| **Minischrift** | Zweizeilig hardwarebestätigt; einzeilig horizontal/vertikal zentriert und automatische Versalien in v0.3.0-dev vorbereitet, Boardtest ausstehend |
+| **Schrift-Feinschliff** | `g`, `p`, `q`, `y` und `ß`/`ẞ` weiter optimieren; 82 Originalglyphen je Normal/Bold rekonstruiert und in v0.3.0-dev integriert, Pixeldarstellung am Board noch offen |
+| **Live-Steuerung** | In v0.3.0-dev als separate Befehle vorbereitet; BLE-Praxisprüfung und Wertkalibrierung offen |
 | **Bibliothek** | Benannte Text- und Seitenprogramme, Entwürfe automatisch wiederherstellen, später Export/Import und Favoriten |
 | **Individuelle Gestaltung** | Farben und Schriftarten pro Zeichen/Abschnitt, frei platzierbare Elemente, Grafiken und Übergänge |
 | **Eigene Animationen** | `0x04` und Speichergrenzen auf dem konkreten Board experimentell überprüfen |

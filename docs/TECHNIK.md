@@ -110,3 +110,17 @@ Alle genannten Schnittstellen sind **im korrigierten v0.2.0-Code vorhanden**. Di
 ## 8. Noch zu prüfen
 
 Siehe [`ROADMAP.md`](ROADMAP.md) und [`THEMENSPEICHER.md`](THEMENSPEICHER.md): exakte Schriftkorrekturen (g/p/q/y, Ä/Ö/Ü, ß/ẞ), Mini stets in Versalien, Mini-einzeilig, Pixelüberlauf, Originalfonts Normal und Bold, Dauerlast/Heap, Live-Modus/SPEED/BRIGHTNESS, Animation `0x04`, native Blocktexte, bibliotheksfähiges Datei-/Objektmodell.
+
+## 24.10.2026 · v0.3.0-Entwicklungszweig (nur Browser-/Quelltextprüfung)
+
+- Weiterhin drei Sketch-Dateien im selben Verzeichnis: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`. Webquelltext wird per `tools/sync_web.py` synchronisiert.
+- 82 Glyphen Normal + 82 Bold aus dem Archiv v02: pro Glyph Unicode-BMP `uint16` (LE), belegte Breite `uint8`, 16 Zeilen à `uint16` (LE). **35 Bytes pro Glyph**, 2 × 82 × 35 = 5.740 Bytes Pixel-/Metadaten.
+- 24 rekonstruierte Originalsymbole sowie ein eigenes Bananensymbol. 16×16 Pixel mit 4-bit RGB-Code pro Pixel, **128 Bytes je Symbol**, 25 × 128 = 3.200 Bytes. 0=aus; RGB-Bits 4/2/1 für Rot/Grün/Blau.
+- Sichtbare Symbolbreite = Differenz der äußersten tatsächlich beleuchteten Spalten +1; 1 Pixel Abstand vorläufig. **Original-App-Vorschub nicht abgeglichen.**
+- Bei Emoji `🍌` wird Hersteller-Banane verwendet; `🍌︎` (U+1F34C + VS15) ist als separates Text-Token für die selbst gestaltete Ravestick-Banane reserviert. Browser/ESP32 interpretieren die Auswahl gleich. Das ist eine **projektspezifische** Unterscheidung, kein Unicode-Standard für Bananenarten.
+- Farbcodierung des Herzens über ❤️ 💛 💚 🩵 💙 💜 🤍; C++ und JS verwenden denselben RGB-Farbcode. Die 16×16-Herzmaske wird umgefärbt.
+- Layoutwerte in `PageRecord.layout`: 0 Engschrift 14px; 1 Mini zwei Zeilen; 2 Mini eine Zeile **horizontal und vertikal zentriert**; 3 Normal; 4 Bold. Das bestehende NVS-Schema 1 und die Recordgröße bleiben unverändert.
+- `/api/speed` sendet `0x07`, `/api/mode` sendet `0x06`, `/api/brightness` bleibt `0x08`, jeweils **ohne vollständige Bilddaten**. BLE-Verbindung für Folgekommandos maximal ca. 2,5 Sekunden inaktiv behalten; Hersteller-App-Koexistenz muss getestet werden.
+- `localStorage` sichert Browser-Entwurf und Reiter, **nicht** als plattformübergreifende Controllerbibliothek. NVS behält die gespeicherten Blockseiten.
+- **Nicht implementiert:** gespeicherte `0x04`-Animationen, native Programme ohne Prozentanzeige, LittleFS-Bibliothek, pixelgenaue frei formatierte Zeichenabschnitte.
+- **Sicherheit:** Kein reales Arduino-Kompilat/ESP32- oder LED-Tafel-Testprotokoll für v0.3.0 vorhanden. Änderungen nicht als hardwarebestätigt kennzeichnen.

@@ -16,7 +16,7 @@ Das Projekt soll für andere Interessierte, insbesondere den OpenSign-Entwickler
 | Geräteadresse | BLE-Testadresse ist gerätespezifisch, soll aber nach Nutzerentscheidung vorerst nicht entfernt werden. |
 | Foto | Nutzer bestätigt, dass das Totem-Foto keine unerwünschten persönlichen Angaben zeigt. iPhone-13-Pro-Modell/Geotags vom Festivalgelände dürfen laut Nutzer bleiben; Originaldatei/EXIF wurden in dieser Prüfung nicht unabhängig ausgelesen. |
 | Git-Historie | Laut Nutzer ausschließlich von ChatGPT bereitgestellte Projektdateien, keine fremden Forks oder Zusatzdaten. **Historie war für den Assistenten nicht vollständig direkt zugänglich**; die Aussage ist daher eine dokumentierte Nutzerangabe, kein eigener lückenloser Git-Historiennachweis. |
-| OpenSign | Technische Referenz, **keine Codeübernahme**. GitHub-Issue zur Lizenz vorbereitet; Versand und Rechteerteilung nicht bestätigt. |
+| OpenSign | Technische Referenz, **keine Codeübernahme**. E-Mail mit Lizenzanfrage an Adam Schulz am 23.10.2026 versendet; Antwort und Rechteerteilung noch ausstehend. |
 | `LICENSE` | Eigenes Copyright-/Nutzungsdokument erzeugt; wirksam nur für Bestandteile, für die die Rechte tatsächlich beim erklärenden Rechteinhaber liegen. Lizenzen Dritter werden nicht überschrieben. |
 
 ## 3. Bewusst akzeptierte Rahmenbedingungen
@@ -36,3 +36,5 @@ Das Projekt soll für andere Interessierte, insbesondere den OpenSign-Entwickler
 ## 5. Nächste Wartungsschritte (kein Veröffentlichungshindernis als Firmwarefeature)
 
 Bei **neuen** externen Codebestandteilen, Glyphen, Grafiken oder Animationen erneut die Herkunft dokumentieren. Der Nutzer hat das feste AP-Passwort, die testgerätespezifische MAC sowie die Foto-EXIF-Daten ausdrücklich akzeptiert; diese sind **keine ausstehenden Pflichtkorrekturen**. Den Dokumentenstand bei Änderungen im Repository aktualisieren.
+
+**Nachtrag 24.10.2026:** Das Repository ist inzwischen tatsächlich **Public**, die eigene Lizenz weiterhin **All Rights Reserved**. In v0.3.0-dev wurden Hersteller-Symbolmatrizen rekonstruiert und als Originalsymbole gekennzeichnet. Der Rechtehinweis beansprucht keine Rechte an Originalgrafiken; eine Quellenangabe allein ist keine etwaig nötige Genehmigung. Vor einer Veröffentlichung des v0.3.0-Quellcodes bleibt die rechtliche Abwägung der Symbolübernahme Aufgabe des Repository-Eigentümers.

@@ -32,7 +32,7 @@
 - Wie Original-App-Geschwindigkeitsanzeige (~80) in BLE-Rohwerte übersetzt wird.
 - Welche Speicherkapazitäten/Kompressionsstrategien für Bibliothek und Animationen realistisch sind.
 - Ob eine optionale native App/Watch/Widget-Oberfläche später einen Mehrwert bietet.
-- Welche konkrete GitHub-Sichtbarkeit derzeit eingestellt ist; das ist kein Firmware-Meilenstein und wurde im Dokumentenreview nicht unabhängig ausgelesen.
+- GitHub ist inzwischen **Public**, unabhängig bestätigt am 24.10.2026; die Lizenz bleibt All Rights Reserved.
 
 ## 22.10.2026 · v0.1.2: deutsche Sprache, Pixelvorschau und Modi
 
@@ -79,5 +79,17 @@
 | ADR-034 | 2026-10-23 | **README als Nutzer-Vorlage bewahren** | Nicht bei Dokumentationspflege die Nutzeranpassungen durch ältere generierte README-Fassungen ersetzen. Bei nächster inhaltlicher Änderung eigene Minischrift klar benennen. |
 | ADR-035 | 2026-10-23 | **v0.2.0 als erfolgreich hardwaregetesteter Prototyp** | Nutzer hat 13 von 14 Testpunkten mit Ja bewertet, ein Punkt unbewertet; konkrete Mängel (Kleinbuchstaben-Mini, ß, Prozentanzeige) bleiben offen. |
 | ADR-036 | 2026-10-23 | **Schrift-Feinschliff gezielt und nicht pauschal** | Großbuchstaben-Mini zweizeilig beibehalten; Mini-Text in Versalien; zusätzliche einzeilige Mini; g/p/q/y mit gemeinsamer x-Höhe und Unterlängen; ß/ẞ nur minimal unterschiedlich, markierter Pixel aus. |
-| ADR-037 | 2026-10-23 | **GitHub-Issue an OpenSign als Lizenzanfrage** | Englischer Entwurf mit Festival-Kontext und nichtkommerzieller Nutzung wurde im Browser eingegeben; **Absendung/Erlaubnis nicht bestätigt**. Bis dahin keine Quellcodeübernahme. |
+| ADR-037 | 2026-10-23 | **OpenSign-Kontakt per E-Mail statt öffentlichem Issue** | Die englische Lizenzanfrage an Adam wurde **am 23.10.2026 per E-Mail versendet**. **Antwort und Erlaubnis ausstehend**; kein OpenSign-Quellcode übernommen. |
 | ADR-038 | 2026-10-23 | **Dokumente regelmäßig gegen aktuellen Firmwarestand abgleichen** | Jede neue Firmware erhält im Chat eine direkt nach Excel kopierbare Testtabelle; `docs/TESTPLAN.md` dient für historische Befunde und spezifische Regressionstests. |
+
+## Designentscheidungen v0.3.0 (24.10.2026)
+
+| ID | Datum | Entscheidung | Grund / Auswirkung |
+| --- | --- | --- | --- |
+| ADR-039 | 2026-10-24 | **Mini, eine Zeile: horizontal und vertikal zentriert** | Unabhängig vom bisherigen links/mitte/rechts-Wert; 7 Pixel Schrift hoch. |
+| ADR-040 | 2026-10-24 | **16×16-Symbole inline als Emoji in Textfeldern** | Kein separater „Symbol statt Text“-Modus; bei zwei Zeilen sind überlappende Bereiche zu prüfen. |
+| ADR-041 | 2026-10-24 | **Herz-Silhouette in allen sieben Farben** | Gewählte Emoji-Variante bestimmt die LED-Herzfarbe, unabhängig von der Textfarbe. |
+| ADR-042 | 2026-10-24 | **Vorläufig effektive Symbolbreite plus 1 px Abstand** | Hersteller-App-Abstände später anhand Original-App messen und bei Bedarf korrigieren. |
+| ADR-043 | 2026-10-24 | **Getrennte Hersteller- und RavestickBoard-Symbole** | 24 Originalsymbole mit kurzer Quellenangabe; selbst gestaltete, vertikal gespiegelte Ravestick-Banane separat. |
+| ADR-044 | 2026-10-24 | **Neue Fontrenderpfade erhalten altes NVS-Seitenformat** | Bestehende bis zu 12 Seiten bleiben lesbar; Layout-ID 2/3/4 ergänzen. |
+| ADR-045 | 2026-10-24 | **v0.3.0 ist bis zum Boardtest nur Entwicklungskandidat** | Browser-Simulation bestätigt nicht Arduino-Kompilierung, BLE-Funktion oder Pixelabstände auf der Tafel. |
