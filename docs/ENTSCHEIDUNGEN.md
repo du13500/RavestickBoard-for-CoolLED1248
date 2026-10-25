@@ -25,6 +25,12 @@
 | ADR-019 | 2026-10-22 | **Diagnose-Ringpuffer nur im RAM, TXT-Export auf Anfrage** | Weniger Flash-Verschleiß, keine zusätzliche Anmeldung, keine gespeicherten Textinhalte oder Kennwörter im Log. |
 | ADR-020 | 2026-10-22 | **Firmwareversion im Header sichtbar und im Diagnosebericht** | Direkt erkennbare Softwareversion bei Screenshots und Support; Versionsstand passt zum Git-Commit. |
 
+## Entscheidung 25.10.2026 – v0.3.3: Datenbudget statt Zeichenzählerlimit
+
+Die 600-Zeichen-Grenze wird **nicht** als Produktspezifikation behandelt. Der Editor berechnet die Bytegröße aus Originalglyphen, tatsächlichen Symbolbreiten und `107 + 6 × max(64, gerenderte Spalten)`. Der Zeichenzähler bleibt rein informativ. Bei Überschreitung erscheint die Auslastung **rot und fett**, ohne Textverlust; Senden wird blockiert. **30 KiB sind vorläufig**, die Hardwaregrenze bleibt unbekannt (29.837 B funktionierten, 31.853 B wurden gesendet, aber nicht dargestellt). Der Firmwarecode dekodiert lange Lauftexte iterativ, um beim Start keinen großen statischen Bild-/Zeichenpuffer zu reservieren.
+
+Als kleine Zusatzfunktion erlaubt Mini Zweizeilig als **Lauftext** getrennte Farben pro Zeile; die zwei Zeilen scrollen synchron. Andere Layouts bleiben gleich. Bibliothek und Verkettung mehrerer Nachrichten sind **noch nicht implementiert**; sie gehören in einen späteren Release nach Hardwarevalidierung.
+
 ## Noch nicht technisch geklärt
 
 - Ob **native Blockseiten** oder **gespeicherte Animationen `0x04`** auf unserer konkreten Tafel mit **einem** Upload autonom laufen; weitere Details in ADR-021/022.

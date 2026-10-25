@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.3 — Testkandidat (25.10.2026)
+
+**Entwickelt, noch nicht in Arduino IDE oder am LED-Board getestet.** Letzter hardwaregetesteter Stand: v0.3.2 Korrektur 2.
+
+- Experimentelles **datenbasiertes Lauftextlimit** statt 600-Zeichen-Begrenzung; berechnete Original-Glyphen-/Symbolbreiten, Bytes einschließlich 107-Byte-Header und Prozentbalken live im Webeditor. Vorläufiges 30-KiB-Limit, keine automatische Textkürzung; Überschreitung rot/fett, Senden gesperrt.
+- UTF-8-Lauftext wird vom ESP32 gestreamt und ohne globale 600-Zeichen-Arrays gerendert. Datenlimit auch in HTTP-Validierung und Bildrendering geprüft; blockseitenbezogene Datenstruktur und NVS-Schema unverändert.
+- Mini Zweizeilig im Lauftext: unabhängige Schriftfarben für obere und untere Zeile, auch in der 64×16-Pixel-Vorschau.
+- `web/index.html` und `RavestickBoard_WebUI.h` synchronisiert; aktualisierte README/Dokumentation und neuer reproduzierbarer Testplan.
+- **Nicht enthalten:** Bibliothek, Lauftext-Programmeditor, Verkettung mehrerer Lauftexte in einer BLE-Übertragung. Diese Ideen sind für Folgereleases dokumentiert.
+
+**Risikohinweis:** 30 KiB ist kein gesichertes CoolLEDX-Limit. Tests von v0.3.2 zeigten 29.837 B erfolgreich, 31.853 B ohne Anzeige trotz BLE-Erfolg. Umfangreichere Daten brauchen ggf. mehr zusammenhängenden RAM, als zum Sendezeitpunkt verfügbar ist.
+
 ## [0.3.2] · 25.10.2026 · Mobile-Bedienung und experimenteller Langtext
 
 **Hardwaretest-Nachtrag · 25.10.2026, ca. 11:45 Uhr MEZ:** **Korrektur 2 wurde vom Nutzer erfolgreich kompiliert, geflasht und auf ESP32-C3 + CoolLEDX getestet.** Der zuvor fehlgeschlagene WLAN-AP startet wieder; NVS-Blockseiten blieben erhalten. Mobile Symbolpalette, Mehrfach-Einfügen ohne Tastatur, alle fünf Lauftextschriften, synchroner Mini-Zweizeilen-Lauftext, leere neue Eingaben und rot/fetter Zähler ab 601 bestätigt. **600 normale Zeichen werden auf der Tafel dargestellt** (27.461 B, 215 BLE-Pakete, 54,3 s). 300 gemischte Symbole funktionieren (29.837 B), 320 gemischte Symbole nicht (31.853 B); 320 Blitze funktionieren (25.061 B), 320 Warnsymbole nicht (32.741 B). Anzeigefehler werden trotz vollständig quittierter BLE-Pakete teilweise als `JOB OK` gemeldet. Bei 514 bis 600 sehr breiten Symbolen scheitert teils bereits die RAM-Allokation. **Keine feste Tafeldatengrenze bestätigt.** Zwei Zeilen in Mini-Lauftext haben noch keine getrennte Farbauswahl. **Ideen, nicht implementiert:** datenbasierte Live-Kapazität statt Zeichenlimit und ein aus Bibliothekseinträgen zusammengefügtes Laufband als einzelner BLE-Upload. Details: [`docs/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](docs/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md).

@@ -1,5 +1,9 @@
 # RavestickBoard · Hardwaretests und Abnahmeprotokolle
 
+## v0.3.3 – Kompakter Hardwaretest (25.10.2026)
+
+**Testkandidat, noch nicht an Arduino IDE / ESP32-C3 / LED-Tafel verifiziert.** Der ausführliche Testbogen steht in [`ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md). Schwerpunkte: Start und gespeicherte Blockseiten; 600 und über 600 normale Zeichen; Schriftwechsel und spontane Live-Byteberechnung; 300 × ⚠️ (~30.701 B) vs. 301 × ⚠️ (~30.803 B, blockiert); getrennte Farben im Mini-Zweizeilen-Lauftext und synchrones Scrollen; erneuter WLAN/RAM-Stabilitätstest. Bitte bei Übertragungen `JOB OK` und **sichtbare Darstellung** unterscheiden. **NVS nicht löschen.**
+
 ## Abnahme-Nachtrag 25.10.2026 – reale Hardwaretests v0.3.2 Korrektur 2
 
 **Getestet / bestätigt:** Arduino-Kompilierung, AP/Webinterface, vorhandene NVS-Seiten, mobile Symbolpalette mit Mehrfach-Einfügung ohne iPhone-Tastatur, fünf Lauftextschriften, Mini Zweizeilig synchron, leere neue Texte, Zähler normal bis 600 und rot/fett ab 601, keine Popup-/Kürzungsreaktion. 600 normale Textzeichen wurden erfolgreich dargestellt. Bei gemischten Symbolen funktionieren 300, 320 jedoch nicht; 320 Blitze funktionieren, 320 Warnsymbole nicht. **Nicht abgenommen:** separate Schriftfarbe beider Mini-Lauftextzeilen, gesicherte Tafeldatengrenze, eindeutiges Display-Abschluss-ACK, Langzeitstabilität.

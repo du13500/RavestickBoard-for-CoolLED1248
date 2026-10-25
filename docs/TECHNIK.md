@@ -6,6 +6,12 @@
 
 Dieses Dokument unterscheidet **durch Nutzer am konkreten Board bestätigt**, **im Quellcode vorhanden** und **für spätere Versionen geplant**. Die Firmware des LED-Boards wird nicht verändert. Historische v0.1.x-Einschränkungen sind weiter unten separat aufgeführt.
 
+## Techniknotiz v0.3.3 – experimentelles Lauftext-Datenbudget (25.10.2026)
+
+**Nur Lauftext**: Keine festen 600 Codepoint-Arrays mehr; UTF-8 wird mithilfe eines iterativen Decoders zweimal gescannt (Breitenmessung und Rendering). Variation-Selector U+FE0F wird übersprungen, Banane + U+FE0E bleibt das getrennte Ravestick-Piktogramm. Die tatsächlichen `tokenWidth()`-Maße aus Originalschrift/Symbolsprite plus ein Pixel Abstand je Zeichen ergeben die Bildbreite. Ein Terminatorabstand am Zeilenende wird nicht gezählt. Für Mini Zweizeilig zählt die **maximale** Breite der beiden synchronen Zeilen, nicht deren Summe; jede Zeile besitzt eine eigene RGB-Farbe. Der Frontend-Rechner benutzt dieselben Glyphenbreiten und berechnet `107 + 6 × max(64, Breite)` Bytes. Vorläufiges Budget `30*1024=30720` Bytes, maximale Spaltenzahl `floor((30720-107)/6)=5102`. Beide Seiten prüfen das Budget; Text wird nicht stillschweigend gekürzt.
+
+Header: Der bekannte Protokoll-Header bleibt 107 Bytes groß, die ursprünglichen 80 Formatplätze werden nicht erweitert. Bitmapdaten folgen danach. **BLE-Paket-Notifications allein sind kein Anzeigebeleg**. Bei knappen zusammenhängenden RAM-Blöcken kann selbst unterhalb von 30 KiB eine dynamische Allokation fehlschlagen; dann keine BLE-Übertragung. NVS-PageRecord-Schema und historische Blockseiten bleiben unverändert. v0.3.3 noch nicht hardwaregetestet.
+
 ## 1. Geräte und Entwicklungsumgebung
 
 | Komponente | Aktueller Teststand |

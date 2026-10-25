@@ -2,6 +2,10 @@
 
 **Fortgeschrieben 25.10.2026 · WLAN-Startfehler unter v0.3.2 Korrektur 1 beobachtet; mit Korrektur 2 im Hardwaretest behoben.**
 
+## Diagnose-Ergänzung v0.3.3 (25.10.2026)
+
+Der seriellen HTTP-Logzeile für Lauftextaufträge werden **dekodierte Zeichen, Bildspalten und Datenbytes** hinzugefügt. Bei zu großer berechneter Datenmenge erfolgt ein HTTP-400-Abbruch **vor dem BLE-Auftrag**; der Text bleibt im Browser bestehen. Das Webinterface zeigt eine rote/fette Byte-Auslastung und deaktiviert „Lauftext senden“. Eine spätere dynamische RAM-Allokation kann trotzdem scheitern und erscheint wie bisher als `[RAM] Bildpuffer ... fehlgeschlagen` sowie `JOB FEHLER`. Eine `JOB OK`-Meldung beweist lediglich erfolgreiche Paketübertragung und Benachrichtigungen, **nicht** die Bildübernahme durch die Tafel. Den tatsächlich sichtbaren Effekt stets getrennt protokollieren. Status v0.3.3: Code-/Browsertests, noch **kein** Hardwaretest.
+
 ## Neuer Diagnosebefund: Bildtransfer ≠ Bildanzeige (25.10.2026)
 
 Beim v0.3.2-Korrektur-2-Praxistest wurden teilweise alle BLE-Pakete quittiert und `JOB OK` gemeldet, obwohl die CoolLEDX-Tafel keine neue Grafik anzeigte (etwa 320 gemischte Symbole, 31.853 B / 249 Pakete). Deshalb den Status **„vollständig gesendet“** nicht mit **„Tafel zeigt neue Grafik“** gleichsetzen. Ein wirkliches Display-Abschluss-ACK ist bislang nicht nachgewiesen. Gleichzeitig können sehr lange Symbolfolgen auf dem Controller bereits an einer fehlgeschlagenen zusammenhängenden RAM-Allokation scheitern. Für vollständige Messwerte und Grenzideen siehe [`ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md).

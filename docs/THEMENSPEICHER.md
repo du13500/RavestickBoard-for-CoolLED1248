@@ -1,6 +1,15 @@
 # Themenspeicher und Aufgabenregister
 
 
+## Nachtrag 25.10.2026 – Nächste Entwicklungsschritte nach v0.3.3
+
+- v0.3.3: Testkandidat für datenbasierten Lauftext-Editor ohne 600-Zeichenlimit, vorläufige 30-KiB-Auslastung, individuelle Farbe pro Zeile in Mini Zweizeilig (noch nicht auf echter Hardware getestet).
+- Nach neuer Grenzmessung: Die Byte-Obergrenze vom tatsächlichen LED-Board-Verhalten abhängig machen, inklusive RAM-Limit des ESP32-C3. 300 × ⚠️ (30.701 B) ist knapp innerhalb des vorläufigen Budgets, 301 × ⚠️ außerhalb.
+- **Bibliothek:** Einzeltexte unabhängig mit Schrift, Farben, Symbolen, Titel und ggf. Geschwindigkeit speichern und bearbeiten.
+- **Verketteter Lauftext als Programm:** Auswahl mehrerer Bibliothekseinträge, Reihenfolge und Leer-Spalten frei wählbar, offline zu einem einzigen 16-Pixel-hohen Pixelstreifen zusammenstellen, einmal per BLE übertragen. Vorteil: nicht zwischen den Nachrichten erneut die Fortschrittsprozentanzeige. Die Datenkapazität muss für alle zusammengesetzten Beiträge reichen.
+- Echte Blockseite mit eigener Standzeit / eigenem Modus ist **nicht** automatisch in einem verknüpften Lauftext darstellbar; dafür später Hersteller-BLE-Format genauer erforschen oder separates Ersatzkonzept.
+- Fehlende Symbole (u. a. Kuss, Blume, Biene), neu gezeichnete Banane/Gummiente, selektive Zeichenformatierung, Vorschau-Rework und BLE-Seitenplayer-Stabilität bleiben auf der alten Roadmap.
+
 ## Zwischenstand 24.10.2026 · v0.3.1-Testkandidat, noch nicht hardwarebestätigt
 
 **Nicht mit einer fertigen Abnahme verwechseln:** Für v0.3.1 sind die nachfolgenden Teilumsetzungen im Quellcode enthalten und browserseitig syntaktisch beziehungsweise per simuliertem API-Smoke geprüft, aber Arduino-Kompilierung, LED-BLE-Transfer und iPhone-Praxistest sind noch ausstehend.

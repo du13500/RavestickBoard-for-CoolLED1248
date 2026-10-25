@@ -15,6 +15,12 @@ Diese Roadmap beschreibt **wo wir stehen, was als Nächstes sinnvoll ist und wel
 
 ---
 
+## Aktueller Stand / v0.3.3 (25.10.2026)
+
+**In v0.3.3 testweise implementiert (Hardwaretest ausstehend):** dynamisches datenbasiertes Lauftextlimit von vorläufig 30 KiB anstelle des 600-Zeichenlimits; laufende Breiten-/Byteberechnung mit den Originalglyphen; unabhängige Farben der beiden synchron scrollenden Mini-Zeilen. **Letzter hardwaregetesteter Stand v0.3.2 Korrektur 2.**
+
+**Danach geplant:** (1) empirisches Limit der LED-Tafel genauer bestimmen und Datenbudget anpassen; (2) Bibliothek für separat editierbare Texte mit gespeicherten Schriften, Farben und Symbolen; (3) einfacher Programmeditor zum **einmaligen Übertragen verketteter Lauftexte** (eine Prozentanzeige für das Gesamtprogramm, sofern die Daten passen); (4) echte gemischte Programme aus Lauf- und Standbildern erst nach Protokollrecherche, da unterschiedliche Standzeiten nicht in einem einfachen Laufbild enthalten sind. Weitere Ideen bleiben im bisherigen Themenspeicher.
+
 ## Aktueller Nachtrag: v0.3.2 Korrektur 2 und nächste Architektur (25.10.2026)
 
 **Hardwarebestätigt:** WLAN/RAM-Startreparatur; NVS-Persistenz; mobile Symbolpalette; fünf Lauftextschriften; Mini Zweizeilig synchron; 600 normale Zeichen übertragen und dargestellt. Grenzfälle: 300 gemischte Symbole funktionieren, 320 gemischte Symbole nicht; 320 Blitze funktionieren, 320 Warnsymbole nicht. `JOB OK` beweist bislang nur einen vollständig quittierten Transfer, keine sichtbare Bildübernahme.

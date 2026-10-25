@@ -16,13 +16,14 @@
 </p>
 
 <p align="center">
-  <img alt="Version v0.3.2 Testkandidat" src="https://img.shields.io/badge/version-v0.3.2--testkandidat-7056d8">
+  <img alt="Version v0.3.3 Testkandidat" src="https://img.shields.io/badge/version-v0.3.3--testkandidat-7056d8">
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
   <img alt="Hardware Testing" src="https://img.shields.io/badge/status-hardware%20testing-2e8b71">
   <img alt="Nichtkommerzielles Hobbyprojekt" src="https://img.shields.io/badge/project-non--commercial-f39c49">
   <img alt="All rights reserved" src="https://img.shields.io/badge/license-all%20rights%20reserved-666666">
   <img alt="Mission: Hugs and Love" src="https://img.shields.io/badge/mission-hugs%20and%20love-ff69b4">
 </p>
+
 
 ---
 
@@ -34,11 +35,26 @@ Die Hersteller-Firmware der LED-Tafel wird dabei **nicht verändert**. Die Tafel
 
 Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Festival-Totem. Es befindet sich aktiv in Entwicklung und ist noch kein fertiges Produkt.
 
-## Entwicklungsstand: v0.3.2 · Testkandidat vom 25.10.2026
+## Aktuell: v0.3.3 · Testkandidat vom 25.10.2026
+
+**Neu:** Statt eines festen 600-Zeichen-Limits berechnet das Webinterface live die tatsächliche Pixelbreite und die für eine Übertragung benötigte Datenmenge. Ein **vorläufiges, experimentelles Budget von 30 KiB einschließlich Header** steuert die Sendbarkeit; überschrittene Werte werden **fett und rot** angezeigt, Text wird niemals automatisch gekürzt. Besonders schmale Lauftexte können damit länger als 600 Zeichen werden. Zusätzlich bietet **Mini Zweizeilig** beim Lauftext jetzt **eine eigene Farbe pro Zeile**.
+
+**Status:** v0.3.3 ist **noch nicht in der Arduino IDE und nicht auf echter Hardware getestet**. Der letzte vom Nutzer erfolgreich auf dem ESP32-C3 getestete Stand bleibt **v0.3.2 Korrektur 2**. Die neue Datenobergrenze ist eine Hypothese aus den v0.3.2-Versuchen, keine bestätigte Gerätespezifikation. BLE-OK bedeutet nicht zwangsläufig eine erfolgreiche Darstellung auf dem LED-Board. Eine Bibliothek und verkettete Lauftext-Programme sind **nur für spätere Versionen geplant**.
+
+📋 **[Entwicklungsstand v0.3.3, Versuchsdaten und Testplan](docs/ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md)**
+
+### v0.3.3 installieren und testen
+
+1. Das vollständige Direktupdate in den **Stammordner des lokalen Repositories** entpacken und vorhandene Dateien überschreiben. Der bisherige Firmwareordner `firmware/RavestickBoard_v0_3_2/` bleibt unangetastet.
+2. `firmware/RavestickBoard_v0_3_3/RavestickBoard_v0_3_3.ino` in der Arduino IDE öffnen und mit den bisherigen ESP32-C3-Einstellungen kompilieren/flashen. Die Header liegen direkt daneben, **kein Generator erforderlich**.
+3. Mit dem WLAN `CoolLED1248` verbinden und `http://192.168.4.1` öffnen. Den neuen Testplan befolgen, besonders WLAN/RAM, Darstellung langer Texte und zwei Farben im Mini-Zeilenlauftext.
+4. Erst nach eigenem Test den Stand über GitHub Desktop committen/pushen; dieses Paket verändert GitHub nicht.
+
+## Rückblick: v0.3.2 · Testkandidat vom 25.10.2026
 
 **Aktueller auf echter Hardware getesteter Stand: v0.3.2 Korrektur 2 (25.10.2026).** Nach der RAM-Reparatur starten WLAN und Webinterface wieder, bestehende NVS-Blockseiten bleiben erhalten. Die neue iPhone-Symbolpalette, fünf Lauftextschriften und 600 normale Lauftextzeichen wurden erfolgreich ausprobiert. **Lange Symbolketten bleiben ein Experiment:** 300 gemischte Symbole funktionieren, 320 gemischte nicht; das tatsächliche Datenlimit der Tafel ist noch ungeklärt. **Die erfolgreiche BLE-Übertragung ist nicht automatisch eine bestätigte Bildanzeige.**
 
-📋 **[Aktueller Entwicklungsstand mit Testmessungen, Fehlern und nächsten Ideen](docs/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md)** · Stand 25.10.2026, ca. 11:45 Uhr MEZ. Historische Versionsabschnitte weiter unten dokumentieren ihren **damaligen** Stand.
+📋 **[Hardwaretest-Bericht zu v0.3.2 mit Messungen und damaligen Entwicklungsideen](docs/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md)** · Stand 25.10.2026, ca. 11:45 Uhr MEZ. Historische Versionsabschnitte weiter unten dokumentieren ihren **damaligen** Stand.
 
 ### Neu in v0.3.2
 
