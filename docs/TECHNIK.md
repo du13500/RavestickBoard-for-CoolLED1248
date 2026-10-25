@@ -1,6 +1,8 @@
 # RavestickBoard · Technische Bestandsaufnahme
 
-**Stand: 23.10.2026 · Firmwarebasis: v0.2.0 Korrektur 1 · Status: hardwaregetestet, mit bekannten Einschränkungen.**
+**Aktualisiert: 25.10.2026 · Aktueller auf Hardware geprüfter Stand: v0.3.2 Korrektur 2; WLAN und BLE funktionieren, längere Symbolfolgen zeigen getrennte RAM- und Boardgrenzen.**
+
+**Mess- und Architektur-Nachtrag:** [`ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md) enthält die real getesteten Payloadgrößen, den Unterschied von BLE-Quittung und tatsächlicher Bildanzeige sowie die unbestätigten 30-KiB-/5.120-Pixel-Hypothesen. `107 + 6 × max(64, Pixelspalten)` ist die derzeitige Raster-Payloadformel. Die 600-Codepoint-Grenze und die 80 Headerformatplätze sind der aktuelle Implementierungsstand, nicht die bestätigte Hardwaregrenze. Ein Live-Datenbudget und verkettete Lauftextprogramme sind **Planung**, kein Firmwarefeature.
 
 Dieses Dokument unterscheidet **durch Nutzer am konkreten Board bestätigt**, **im Quellcode vorhanden** und **für spätere Versionen geplant**. Die Firmware des LED-Boards wird nicht verändert. Historische v0.1.x-Einschränkungen sind weiter unten separat aufgeführt.
 
@@ -124,3 +126,12 @@ Siehe [`ROADMAP.md`](ROADMAP.md) und [`THEMENSPEICHER.md`](THEMENSPEICHER.md): e
 - `localStorage` sichert Browser-Entwurf und Reiter, **nicht** als plattformübergreifende Controllerbibliothek. NVS behält die gespeicherten Blockseiten.
 - **Nicht implementiert:** gespeicherte `0x04`-Animationen, native Programme ohne Prozentanzeige, LittleFS-Bibliothek, pixelgenaue frei formatierte Zeichenabschnitte.
 - **Sicherheit:** Kein reales Arduino-Kompilat/ESP32- oder LED-Tafel-Testprotokoll für v0.3.0 vorhanden. Änderungen nicht als hardwarebestätigt kennzeichnen.
+
+
+## Technischer Nachtrag v0.3.2 (25.10.2026)
+
+**Lauftext und BLE:** Controllerdatenpuffer `MAX_CHARS=600`, `MAX_COLUMNS=10.200`, RGB-Bilddaten bis 61.200 Bytes, Gesamtpayload bis 61.307 Bytes (einschließlich 107-Byte-Header). In v0.3.2 Korrektur 1 waren beide Felder statisch angelegt (122.507 Bytes dauerhaft). **Korrektur 2** allokiert dynamisch nur einen tatsächlich benötigten Payload-Puffer und rendert die RGB-Bilddaten direkt ab Byte 107. Freigabe erfolgt nach dem Übertragungsauftrag auch bei Fehlern. Für sehr lange Texte bleibt ausreichend zusammenhängender freier Heap eine Voraussetzung. Header-Formatplätze 25–104 reichen nur für 80 Zeichencodes, Feld 24 wird experimentell auf höchstens 80 gesetzt. Pixelmatrix und Paketanzahl können dennoch darüber hinausgehen. Das reale Boardverhalten ist ausdrücklich **unbekannt**. Bei Validierung werden UTF-8-Codepoints statt JS-UTF-16-Codeunits gezählt, die beiden Mini-Zeilen gemeinsam. Die Payloadlänge und Paketnummern sind 16-Bit-Werte.
+
+**Layoutcodes (Speicherschema unverändert):** `0=Engschrift`, `1=Mini Zweizeilig`, `2=Mini Einzeilig`, `3=Standard`, `4=Standard Bold`. Für zweizeiligen Lauftext werden die beiden 7-Pixel-Zeilen auf eine gemeinsame Breite gerendert und synchron horizontal bewegt. Gleiche Farbe, keine neue Blockseitenstruktur.
+
+**Webinterface:** v0.3.1 hatte im HTML des Symbol-Overlays einen fehlenden schließenden `</div>`-Tag. Dadurch wurden Status und Diagnose als weitere Flex-Kinder im Overlay angeordnet, was den schmalen, unlesbaren Dialog sowie überlagernde Statusfelder erklärt. In v0.3.2 ist die Hierarchie korrigiert und mit einem emulierten 375-Pixel-Mobilviewport auf eine 351-Pixel-Dialogbreite geprüft. Dies ist ein Browser-Smoketest, noch kein Test in mobilem Safari. Der Browserentwurf bleibt auf dem Endgerät in `localStorage`, NVS-Blockseiten auf dem ESP32.

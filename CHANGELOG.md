@@ -1,5 +1,54 @@
 # Changelog
 
+## [0.3.2] · 25.10.2026 · Mobile-Bedienung und experimenteller Langtext
+
+**Hardwaretest-Nachtrag · 25.10.2026, ca. 11:45 Uhr MEZ:** **Korrektur 2 wurde vom Nutzer erfolgreich kompiliert, geflasht und auf ESP32-C3 + CoolLEDX getestet.** Der zuvor fehlgeschlagene WLAN-AP startet wieder; NVS-Blockseiten blieben erhalten. Mobile Symbolpalette, Mehrfach-Einfügen ohne Tastatur, alle fünf Lauftextschriften, synchroner Mini-Zweizeilen-Lauftext, leere neue Eingaben und rot/fetter Zähler ab 601 bestätigt. **600 normale Zeichen werden auf der Tafel dargestellt** (27.461 B, 215 BLE-Pakete, 54,3 s). 300 gemischte Symbole funktionieren (29.837 B), 320 gemischte Symbole nicht (31.853 B); 320 Blitze funktionieren (25.061 B), 320 Warnsymbole nicht (32.741 B). Anzeigefehler werden trotz vollständig quittierter BLE-Pakete teilweise als `JOB OK` gemeldet. Bei 514 bis 600 sehr breiten Symbolen scheitert teils bereits die RAM-Allokation. **Keine feste Tafeldatengrenze bestätigt.** Zwei Zeilen in Mini-Lauftext haben noch keine getrennte Farbauswahl. **Ideen, nicht implementiert:** datenbasierte Live-Kapazität statt Zeichenlimit und ein aus Bibliothekseinträgen zusammengefügtes Laufband als einzelner BLE-Upload. Details: [`docs/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](docs/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md).
+
+**Leseregel:** Die nachfolgenden Hinweise „noch nicht getestet“ kennzeichnen den damaligen *Auslieferungsstand vor diesem Hardwaretest*, nicht den heutigen Status von Korrektur 2.
+
+**Korrektur 2 (25.10.2026, WLAN/RAM):** Nutzer hat Korrektur 1 erfolgreich kompiliert und geflasht, der WLAN-AP konnte jedoch wegen fehlgeschlagener WLAN-RAM-Allokation nicht starten (`wifi:alloc pp wdev funcs fail`, Folgefehler `0x3001`). Der Quelltext hatte zwei dauerhaft reservierte Bildpuffer von zusammen **122.507 Bytes** (`61.200 + 61.307`). Jetzt wird nur ein auf die tatsächlich gerenderte Bildbreite dimensionierter Payload-Puffer unmittelbar vor dem Versand angelegt (RGB-Daten liegen direkt ab Byte 107) und auf sämtlichen Erfolgs-/Fehlerpfaden wieder freigegeben. Kleinere Stackpuffer beim Blockseitenrendering und zusätzliche Heap-Diagnose beim Start. Der Webserver wird bei fehlendem AP nicht irreführend als bereit gemeldet. **Zum Zeitpunkt der Auslieferung von Korrektur 2 stand der Arduino-/Hardwaretest noch aus; dieser wurde am 25.10.2026 anschließend erfolgreich vom Nutzer durchgeführt (siehe Nachtrag oben).** Experimentelle 600-Codepoint-Grenze und NVS-Format bleiben unverändert. Bei sehr langen Symbolketten kann die dynamische Allokation dennoch scheitern; dann wird nicht gesendet.
+
+**Korrektur 1 (25.10.2026):** Compilerfehler in `renderText()` behoben: `drawInline()` erhielt versehentlich einen zusätzlichen Skalierungsparameter. Die Skalierung wird bereits innerhalb von `drawInline()` aus `layout` bestimmt. Keine Änderung an NVS, BLE-Protokoll oder Webinterface. **Zum Zeitpunkt von Korrektur 1 stand die Arduino-Neukompilierung noch aus; sie erfolgte anschließend erfolgreich.**
+
+**Historischer Auslieferungsstatus vor Hardwareprüfung:** JavaScript-Syntax und mobile Chromium-Browser-Smoketests geprüft (375px, 351px Dialog); die Arduino-Kompilierung und der LED-Hardwaretest waren zu diesem Zeitpunkt noch ausstehend. Grundlage: v0.3.1, am 25.10.2026 vom Nutzer erfolgreich kompiliert und praktisch getestet.
+
+- Mobile Symbolpalette: **fehlendes schließendes HTML-`div` behoben**. Dadurch gehören Diagnose/Status nicht länger zum Overlay, die Palette hat wieder volle nutzbare Dialogbreite. Mehrere Symbole ohne erneutes Öffnen einfügen; beim Einfügen kein automatisches Fokussieren des Textfelds und kein Tastatur-Popup.
+- Lauftext-Schriftauswahl und Blockseiten-Auswahl einheitlich: Standard, Standard Bold, Engschrift, Mini Einzeilig, Mini Zweizeilig. Layout-Codes und gespeicherte NVS-Struktur bleiben unverändert.
+- Experimenteller synchron zweizeiliger Mini-Lauftext mit zwei Eingabefeldern und gemeinsamem horizontalen Scrollen.
+- Neue Blockseiten und neue Browserentwürfe ohne Demo-Feldwerte; bestehende gespeicherte Seiten bleiben erhalten. Browserseitige lokale Entwürfe werden weiterhergestellt.
+- Experimenteller Controller-Puffer für bis zu 600 Unicode-Codepoints, rote/fette Zählerdarstellung ab 601; Texte werden nicht gekürzt. Über 600 wird nicht gesendet, ohne Popup.
+- **Protokoll-Risiko:** Die bekannten 80 Format-Slots und das Ein-Byte-Zeichenfeld des BLE-Headers wurden nicht reverse-engineert. Bei mehr als 80 Zeichen wird das Header-Feld auf 80 begrenzt, die vollständige Pixelmatrix aber übertragen. Ob die Tafel längere Inhalte annimmt, ist unbekannt. Lange Symbolketten können große BLE-Paketzahlen und lange Sendezeiten verursachen. Test bei 80, 100, 150, 200, 300, 400, 500, 600 schrittweise.
+- Web-Mirror aktualisiert; bestehende Firmwareversionen und gespeicherte Blockseiten bleiben unangetastet.
+
+**Offen:** Mobile Safari-Test, Arduino-Build, BLE-Langtext, iOS-Overlay, zweizeiliger Lauftext und Persistenztest.
+
+
+## [0.3.1] · 24.10.2026 · begrenzter Korrektur- und Testkandidat
+
+**Nachtrag 25.10.:** Vom Nutzer erfolgreich mit Arduino IDE kompiliert und auf Hardware getestet. 40/60/80 Zeichen und lange Symbolketten übertragen; bestehende Seiten erhalten. UI-Probleme der Symbolpalette, verbleibende Demotexte und fehlende Lauftext-Schriftwahl in v0.3.2 aufgenommen.
+
+**Status:** Quelltext erstellt, JavaScript-Syntax und zentrale Browser-Bedienabläufe mit simulierten API-Antworten geprüft. **Noch keine vollständige Arduino-/ESP32-Kompilierung und kein Hardwaretest**; Version nicht als abgenommen markieren. Ausgangsbasis ist das auf echter Hardware bestätigte v0.3.0-dev.
+
+### Neu / geändert
+- `EDT-11`, `QA-02`: Experimentelles 80-Zeichen-Limit für Lauftext statt 40; Pixelpuffer auf bis zu 1.360 Spalten ausgelegt. Die 80 Slots des bisherigen Protokollkopfs werden nicht überschritten. Die Tafelkapazität muss real geprüft werden, insbesondere bei vielen 16×16-Piktogrammen.
+- `LIB-11`, `EDT-22`: Demotext „Grüße!“ als voreingestellten Feldwert entfernt; bisheriger Lauftextentwurf bleibt im Browser gespeichert und wird wiederhergestellt.
+- `UI-03`, `SYM-02`: Symbolauswahl als Overlay neben jedem Textfeld, mit Einfügen an der gespeicherten Cursorposition.
+- `EDT-15`: Rückgängig/Wiederholen für **Textänderungen und Symbol-Einfügen** in Lauftext sowie Zeile 1/2, jeweils lokaler Verlauf von bis zu 100 Zuständen pro Feld. Farbwechsel/Seitenoperationen ausdrücklich noch nicht rückgängig.
+- `FNT-19`: Leerzeichen bei Mini ein- und zweizeilig schmaler (2 + 1 statt 5 + 1 Pixel). Vorschau und Controller rechnen einheitlich.
+- `PRE-07`, `UI-04`: Vorschau beim Scrollen sticky; redundanter Helligkeits-Button entfernt. Vier vorrangige Fontnamen aufgeräumt; bestehende Engschrift bleibt als Kompatibilitätsoption verfügbar.
+
+### Unverändert / zurückgestellt
+- Firmwareordner v0.3.0 und alle früheren Stände unberührt.
+- NVS-Struktur der bis zu zwölf Blockseiten **nicht verändert**, bisherige Seiten bleiben erhalten.
+- Keine individuelle Zeilenausrichtung, keine neuen Symbole, kein überarbeiteter Bananenentwurf, keine vollständige Bibliothek, kein erweitertes Zeichenformatierungs-UI.
+
+### Prüfung
+- JavaScript durch Node.js `--check` geprüft; Chromium-Smoketest im simulierten Webumfeld: Leerstarter, Textzähler, Undo/Redo, Symbol-Einfügung an Cursorposition und Undo, Blockseitentext-Undo. Kein echter BLE-/USB-Test.
+- Offene Praxisprüfung: Arduino-Kompilierung, UI auf iPhone/Safari, 40/50/60/80-Zeichen-Übertragungen, viele Symbole, Helligkeit, Persistenz alter Seiten, Speicher und BLE-Diagnose.
+
+---
+
+
 ## [0.3.0-dev] · 24.10.2026 · Entwicklungs- und Browser-Testkandidat
 
 **Noch nicht mit Arduino-ESP32 3.3.12 kompiliert und nicht auf dem ESP32 oder der CoolLEDX-Tafel geprüft. Nicht als hardwarebestätigte Version kennzeichnen.**

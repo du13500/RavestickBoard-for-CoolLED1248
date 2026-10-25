@@ -1,6 +1,6 @@
 # 🍌 RavestickBoard · Roadmap
 
-**Stand: 23. Oktober 2026 · Aktueller Hardwarestand: v0.2.0 (Korrektur 1)**  
+**Fortgeschrieben: 25. Oktober 2026 · aktueller auf Hardware getesteter Stand: v0.3.2 Korrektur 2.**  
 **Projekt:** ESP32-C3-Webcontroller für CoolLED1248/CoolLEDX, 64 × 16 Pixel, sieben LED-Farben.  
 **Mission:** Hugs and Love. ❤️
 
@@ -12,6 +12,23 @@ Diese Roadmap beschreibt **wo wir stehen, was als Nächstes sinnvoll ist und wel
 - **Quellen und Fremdlizenzen:** [`QUELLEN_UND_LIZENZEN.md`](QUELLEN_UND_LIZENZEN.md).
 
 **Statusregel:** ✅ = auf unserer Hardware bestätigt · 🟡 = implementiert, aber nur eingeschränkt bestätigt oder mit bekanntem Problem · 🔬 = Forschung / auf unserer Hardware noch unbestätigt · ⬜ = geplant. Checklisten werden erst nach nachvollziehbaren Tests und Aktualisierung des Changelogs abgehakt.
+
+---
+
+## Aktueller Nachtrag: v0.3.2 Korrektur 2 und nächste Architektur (25.10.2026)
+
+**Hardwarebestätigt:** WLAN/RAM-Startreparatur; NVS-Persistenz; mobile Symbolpalette; fünf Lauftextschriften; Mini Zweizeilig synchron; 600 normale Zeichen übertragen und dargestellt. Grenzfälle: 300 gemischte Symbole funktionieren, 320 gemischte Symbole nicht; 320 Blitze funktionieren, 320 Warnsymbole nicht. `JOB OK` beweist bislang nur einen vollständig quittierten Transfer, keine sichtbare Bildübernahme.
+
+**Als Nächstes erforschen, nicht vorschnell implementieren:**
+
+- [ ] Tafelseitige Bildbreiten-/Payloadgrenze durch gezielte Wiederholungstests isolieren; 300/301/302 `⚠️` vorgeschlagen (noch nicht durchgeführt).
+- [ ] Browser- und Firmwarelimit vom willkürlichen Zeichenzähler auf **live berechnetes Pixel-/Datenbudget** umstellen; Browser- und Controllerberechnung müssen exakt übereinstimmen. Den aktuell größten zusammenhängenden RAM-Block separat beachten.
+- [ ] Lange reine Texte über 600 experimentell ermöglichen, **erst nach kontrolliertem Umbau** von Controller-Arrays, HTTP-Prüfung und bislang 80 Headerformatplätzen.
+- [ ] Mini-Zweizeilen-Lauftext: individuelle Farben pro Zeile ergänzen.
+- [ ] Später Bibliothek mit einzeln bearbeitbaren Lauftexten sowie **Lauftext-Programmeditor**: mehrere Inhalte inklusive Abständen zu einem Pixelstreifen zusammenrendern und einmal übertragen, um die Prozentanzeige zwischen Nachrichten zu vermeiden.
+- [ ] **Echte** Blockseitenprogramme mit Stopps, wechselnden Modi und Anzeigedauer bleiben getrennte, unbestätigte Protokollforschung.
+
+**Ausführliche Messdaten und Statusabgrenzung:** [`ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md). Ältere Roadmap-Abschnitte dokumentieren den ursprünglichen Planungshorizont und sind nicht automatisch aktuelle To-do-Listen.
 
 ---
 
@@ -255,3 +272,12 @@ Die Reihenfolge ist **veränderbar**. Ein erfolgreiches Hardwareexperiment oder 
 **v0.3.0-dev** enthält einen ersten Quelltext- und Browser-Testkandidaten für Originalschriften (Normal/Bold), Inline-Symbole, sieben Herzfarben, gespiegelte Ravestick-Banane, horizontale und vertikale Mini-Einzelzeile, eigenständige Live-BLE-Befehle und Browser-Entwurfswiederherstellung. **Noch kein Arduino- und kein Boardtest.**
 
 Zu prüfen: echte Vorschub-/Zeichenabstände mit der Original-App, Symbolüberlagerungen bei Mini-Zweizeilern, sämtliche Glyphen im realen Raster, Short-Command-Verbindungsfreigabe, Rückwärtskompatibilität des NVS-Speichers und Nutzung der Originalsymbole in öffentlichen Quellen. `0x04` und die vollständige Programm-/Playlist-Architektur bleiben eigenständige Entwicklungsmeilensteine.
+
+
+## Stand nach v0.3.1 und Prioritäten für v0.3.2 (25.10.2026)
+
+**Durch Nutzer auf Hardware bestätigt:** v0.3.1 mit übertragenen 40/60/80 Zeichen, umfangreichen Symbolketten, Mini-Leerzeichenkorrektur, persistenten NVS-Seiten und direkt steuerbaren BLE-Parametern. Mobile-Safari-Symbolpalette unbenutzbar, Lauftext-Schriftwahl fehlte und Test-/Demotexte waren weiterhin störend.
+
+**In v0.3.2 vorbereitet, noch zu testen:** mobile Symbolpalette mit korrekter DOM-Schließung und Mehrfachauswahl ohne Tastaturzwang; fünf einheitliche Schriftbezeichnungen in beiden Editoren; synchroner Mini-Zweizeilen-Lauftext; neue leere Textfelder; Experiment mit 600 Lauftextzeichen, rot/fetter Zähler ab 601 ohne Popup. Protokollunterstützung jenseits 80 Zeichen ist ungeklärt.
+
+**Nicht in v0.3.2:** neue Symbole, neue Banane, eigene Mini-Zeilenausrichtung, kompaktere Vorschau, visueller Einzelzeichen-Formatierungseditor, NVS-Bibliotheksumbau, robuster automatischer BLE-Retry, native Seitenprogramme ohne Zwischen-Upload. Historische Tabellen vor diesem Nachtrag sind zeitpunktbezogen zu lesen.

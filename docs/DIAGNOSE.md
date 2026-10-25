@@ -1,6 +1,10 @@
 # RavestickBoard · Diagnose und Fehlerprotokoll
 
-**Stand 23.10.2026 · Einführung v0.1.1, auf realer Hardware bestätigt; Ergänzungen bis v0.2.0 Korrektur 1.**
+**Fortgeschrieben 25.10.2026 · WLAN-Startfehler unter v0.3.2 Korrektur 1 beobachtet; mit Korrektur 2 im Hardwaretest behoben.**
+
+## Neuer Diagnosebefund: Bildtransfer ≠ Bildanzeige (25.10.2026)
+
+Beim v0.3.2-Korrektur-2-Praxistest wurden teilweise alle BLE-Pakete quittiert und `JOB OK` gemeldet, obwohl die CoolLEDX-Tafel keine neue Grafik anzeigte (etwa 320 gemischte Symbole, 31.853 B / 249 Pakete). Deshalb den Status **„vollständig gesendet“** nicht mit **„Tafel zeigt neue Grafik“** gleichsetzen. Ein wirkliches Display-Abschluss-ACK ist bislang nicht nachgewiesen. Gleichzeitig können sehr lange Symbolfolgen auf dem Controller bereits an einer fehlgeschlagenen zusammenhängenden RAM-Allokation scheitern. Für vollständige Messwerte und Grenzideen siehe [`ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md).
 
 ## Aufrufen und Exportieren
 
@@ -54,3 +58,18 @@
 ## 24.10.2026 · Entwicklungszusatz v0.3.0
 
 Separate Steuerjobs `BRIGHTNESS`, `SPEED`, `MODE` verwenden kurze BLE-Kommandos und für ca. 2,5 Sekunden nach dem letzten Kommando eine bestehende Verbindung. Die eigentliche Wirkung auf der Original-Tafel, konkurrierende App-Verbindungen und der BLE-Timeoutpfad müssen erneut auf Hardware getestet werden. Die Diagnose bleibt RAM-only. Dieser Abschnitt ist noch kein Hardwaretestbericht.
+
+
+## Für den 600-Zeichen-Versuch unter v0.3.2
+
+Bei jeder Teststufe 80, 100, 150, 200, 300, 400, 500, 600 bitte erfassen: (1) Anzahl Zeichen laut Editor, (2) angegebene Text-Payload-Bytes, (3) BLE-Paketzahl, (4) `JOB OK` bzw. Fehler, (5) tatsächliche sichtbare Darstellung auf der LED-Tafel. Ein `JOB OK` besagt, dass die Paketkommunikation erfolgreich verlief, nicht zwingend, dass das Board den Text vollständig anzeigt.
+
+**Auffälligkeiten aus v0.3.1:** Einzelne BLE-Verbindungsfehler konnten durch den nächsten Verbindungsversuch überwunden werden; beim automatischen Seitenplayer stoppte ein Verbindungsfehler hingegen die Wiedergabe. Begrenzte Auto-Retry-Strategie bleibt auf später verschoben.
+
+## WLAN-Startfehler unter v0.3.2 Korrektur 1 (25.10.2026)
+
+Nutzerlog: Nach `Seiten geladen: 10` scheiterte der AP-Start mit `wifi:alloc pp wdev funcs fail`; anschließend meldete der Treiber beim Aufräumen `0x3001`. Diese Zeilen sind mit **zu wenig freiem Arbeitsspeicher beim Initialisieren des WLAN-Treibers** vereinbar. In Korrektur 1 waren allein die beiden globalen Bild-/Payload-Puffer mit zusammen 122.507 Bytes reserviert.
+
+Korrektur 2 vermeidet diese globale Vorbelegung. Im seriellen Monitor erscheinen vor BLE, nach BLE/NVS und nach WLAN jetzt `[RAM]`-Zeilen mit freiem Heap und größtem allokierbaren Block sowie beim Senden Puffergröße und Rest-Heap. Bei fehlgeschlagenem WLAN-Start wird der HTTP-Webserver nicht als bereit gemeldet.
+
+**NVS-Warnung:** Zur Diagnose **keinen Flash-Erase** und kein NVS-Reset ausführen. Das Firmwareupdate mit der üblichen Partitionseinstellung bewahrt das Seitenformat, sofern die IDE nicht auf `Erase All Flash` gestellt wurde. Bei weiterer Störung v0.3.1 als funktionierenden Rückfallstand verwenden.

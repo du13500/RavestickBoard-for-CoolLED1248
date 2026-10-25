@@ -93,3 +93,27 @@
 | ADR-043 | 2026-10-24 | **Getrennte Hersteller- und RavestickBoard-Symbole** | 24 Originalsymbole mit kurzer Quellenangabe; selbst gestaltete, vertikal gespiegelte Ravestick-Banane separat. |
 | ADR-044 | 2026-10-24 | **Neue Fontrenderpfade erhalten altes NVS-Seitenformat** | Bestehende bis zu 12 Seiten bleiben lesbar; Layout-ID 2/3/4 ergänzen. |
 | ADR-045 | 2026-10-24 | **v0.3.0 ist bis zum Boardtest nur Entwicklungskandidat** | Browser-Simulation bestätigt nicht Arduino-Kompilierung, BLE-Funktion oder Pixelabstände auf der Tafel. |
+
+
+## Ergänzungen vom 25.10.2026 (v0.3.2 Testkandidat)
+
+- **ADR-2026-10-25-A · Testweise Langtexte:** Die alte 80-Zeichen-Softwaregrenze wird zur Messung vorläufig auf 600 Zeichen erhöht. Dies bestätigt **keine** korrekte Hardware- oder Protokollunterstützung. Der bisher rekonstruierte Header bleibt mit 80 Format-Slots unverändert und begrenzt den darin übermittelten Zeichenwert auf 80. Einzelne BLE-Erfolge und sichtbare Korrektheit getrennt bewerten.
+- **ADR-2026-10-25-B · Dezentes Überlängenfeedback:** Bei mehr als 600 Codepoints wird lediglich der Live-Zähler rot und fett. Bereits getippter Text wird nicht gekürzt; ungültige Überlängen werden nicht übertragen. Kein neues Popup. Für zweizeiligen Lauftext zählen beide Zeilen zusammen.
+- **ADR-2026-10-25-C · Mobil-Symbolauswahl:** Die Symbolpalette bleibt während mehrerer Einfügungen offen und fokussiert das iPhone-Textfeld beim Einfügen nicht automatisch. Diagnosestatus und Fußbereich gehören ausdrücklich **nicht** zum Overlay-DOM.
+- **ADR-2026-10-25-D · Einheitliche Fontnamen:** Sichtbare Namen und Reihenfolge: Standard, Standard Bold, Engschrift, Mini Einzeilig, Mini Zweizeilig. Interne numerische Layout-IDs und gespeicherte NVS-Daten bleiben erhalten.
+- **ADR-2026-10-25-E · Leere neue Eingaben:** Neue Texte und neue Blockseiten starten ohne Demo-Inhalte. Bereits gespeicherte Seiten/Browserentwürfe werden nicht stillschweigend gelöscht.
+- **ADR-2026-10-25-F · Repository-Bereinigung:** Keine Datei automatisiert entfernen; die im Cleanup-Bericht vorgeschlagenen Löschungen/Verschiebungen erst nach Hardwaretest in einem separaten GitHub-Desktop-Commit.
+
+
+## Architekturentscheidungen und Hypothesen nach dem v0.3.2-Hardwaretest (25.10.2026)
+
+| ID | Status | Festlegung bzw. Untersuchung |
+| --- | --- | --- |
+| ADR-2026-10-25-G | **Entwicklungsrichtung beschlossen, noch nicht implementiert** | Starres 600-Zeichenlimit später durch **live berechnetes Pixel-/Datenbudget** ersetzen; bei Überlauf fett/rot markieren, nicht still kürzen, kein Popup. Der Controller validiert dieselben Renderingdaten. |
+| ADR-2026-10-25-H | **Hardwaregrenze unbestätigt** | Erfolgreiche 29.837 B und fehlgeschlagene 31.853 B begrenzen den bisher beobachteten Bereich, beweisen aber weder 30 KiB noch 5.120 Spalten. Gezielter Test mit 300/301/302 Warnsymbolen geplant. |
+| ADR-2026-10-25-I | **Diagnoseanforderung** | BLE-Paketquittung/`JOB OK` darf ohne weiteres Protokollwissen nicht als sichtbare LED-Bildübernahme bezeichnet werden. |
+| ADR-2026-10-25-J | **Konzept, noch nicht implementiert** | Mehrere eigenständige **Lauftexte** aus einer späteren Bibliothek mit frei definierten Abständen zu einem einzigen Pixelstreifen und einem BLE-Upload verketten. Dadurch nur einmal Fortschrittsanzeige für den gesamten Inhalt. |
+| ADR-2026-10-25-K | **Separate Forschungsaufgabe** | Echte Blockseitenprogramme mit Standzeiten/Moduswechseln nicht mit einem einzelnen gleichmäßig scrollenden Bildstreifen verwechseln; native Board-Fähigkeit noch ungeklärt. |
+| ADR-2026-10-25-L | **Offener UI-Fix** | Mini Zweizeilig als Lauftext erhält später zwei unabhängig wählbare Textfarben; synchroner Scroll bleibt. |
+
+Aktueller Teststand und Primärbeobachtungen: [`ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md).

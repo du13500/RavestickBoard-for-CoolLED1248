@@ -1,8 +1,95 @@
 # RavestickBoard · Hardwaretests und Abnahmeprotokolle
 
-**Stand: 24.10.2026 · Letzter Hardwaretest: v0.2.0 Korrektur 1 · Neuer Quelltextkandidat: v0.3.0-dev.**
+## Abnahme-Nachtrag 25.10.2026 – reale Hardwaretests v0.3.2 Korrektur 2
 
-Dieses Dokument hält die **realen Ergebnisse** und weiter offenen, gezielt nachprüfbaren Testfälle fest. Es ist **nicht** die vom Nutzer gewünschte Excel-Datei: **Zu jeder neuen Firmware liefern wir die kurze, direkt in Excel kopierbare Testtabelle ausschließlich im Chat**, mit leeren Spalten `Ergebnis` und `Bemerkungen` (siehe `ENTSCHEIDUNGEN.md`, ADR-028).
+**Getestet / bestätigt:** Arduino-Kompilierung, AP/Webinterface, vorhandene NVS-Seiten, mobile Symbolpalette mit Mehrfach-Einfügung ohne iPhone-Tastatur, fünf Lauftextschriften, Mini Zweizeilig synchron, leere neue Texte, Zähler normal bis 600 und rot/fett ab 601, keine Popup-/Kürzungsreaktion. 600 normale Textzeichen wurden erfolgreich dargestellt. Bei gemischten Symbolen funktionieren 300, 320 jedoch nicht; 320 Blitze funktionieren, 320 Warnsymbole nicht. **Nicht abgenommen:** separate Schriftfarbe beider Mini-Lauftextzeilen, gesicherte Tafeldatengrenze, eindeutiges Display-Abschluss-ACK, Langzeitstabilität.
+
+| Nächster Grenztest | Erwartete Payload aus gegenwärtiger Renderbreite | Hardwareergebnis |
+| --- | ---: | --- |
+| 300 × `⚠️` | 30.701 B | noch offen |
+| 301 × `⚠️` | 30.803 B | noch offen |
+| 302 × `⚠️` | 30.905 B | noch offen |
+| Lange reine Texte >600 nach kontrolliertem Firmwareumbau | abhängig von Schrift/Breite | nicht mit v0.3.2 regulär möglich |
+
+**Gesamte Messreihe:** [`ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md). Die folgenden ursprünglichen Testtabellen bleiben als **historische, vor dem Test erstellte Checklisten** dokumentiert; deren leere Ergebnisfelder sind **kein aktueller Negativstatus**.
+
+---
+
+## v0.3.2 · Korrektur 2 · gezielter WLAN/RAM-Wiederholungstest (25.10.2026)
+
+**Bestätigte Vorbedingung:** Korrektur 1 wurde kompiliert/geflasht, zeigte aber `wifi:alloc pp wdev funcs fail` beim Start. Das NVS enthält weiter 10 Blockseiten. Korrektur 2 war beim Erstellen dieses ursprünglichen Testplans noch nicht hardwaregeprüft; der Nutzer bestätigte anschließend Kompilierung, WLAN-Start und weitere Funktionen (siehe Nachtrag oben).
+
+| Nr. | Testpunkt | Ergebnis | Bemerkungen |
+|---:|---|---|---|
+| 1 | Korrektur 2 kompiliert und wird geflasht | | |
+| 2 | WLAN `CoolLED1248` startet ohne `alloc pp wdev funcs fail` | | |
+| 3 | Webinterface unter `192.168.4.1` erreichbar | | |
+| 4 | `NVS`: 10 alte Blockseiten geladen | | |
+| 5 | `[RAM]`-Zeilen beim Start sichtbar | | |
+| 6 | Kurzer Lauftext wird übertragen und angezeigt | | |
+| 7 | Mini Zweizeilig / eine Blockseite wird übertragen | | |
+| 8 | Langer Text 80/100/200/400/600 nur schrittweise testen | | |
+| 9 | Nach Übertragung bleibt WLAN/Webinterface erreichbar | | |
+| 10 | Neustart: WLAN und zehn Blockseiten bleiben erhalten | | |
+
+---
+
+## v0.3.2 · Testprotokoll (25.10.2026)
+
+**Historischer Plan vor dem Hardwaretest:** Vor Langtext-Experimenten war v0.3.1 als Rückfallstand aufzubewahren; der v0.3.2-Korrektur-2-Test wurde inzwischen durchgeführt. Bitte bei längeren Texten Paketanzahl, Bytes, Laufzeit und sichtbares Ergebnis festhalten.
+
+| Nr. | Bereich | Testpunkt | Ergebnis | Bemerkungen |
+|---:|---|---|---|---|
+| 1 | Arduino | Sketch v0.3.2 kompiliert | | |
+| 2 | Start | Webinterface v0.3.2 und gespeicherte Seiten vorhanden | | |
+| 3 | Mobil | Symbolpalette breit, lesbar, kein abgeschnittener Inhalt | | |
+| 4 | Mobil | 5 Symbole nacheinander einfügen, Palette bleibt offen | | |
+| 5 | Mobil | Beim Einfügen erscheint keine iOS-Tastatur | | |
+| 6 | Lauftext | Alle fünf Schriften verfügbar, Darstellung auf Board | | |
+| 7 | Lauftext | Mini Zweizeilig, beide Zeilen scrollen synchron | | |
+| 8 | Texte | Keine Demo-Feldwerte bei neuem Entwurf / neuer Seite | | |
+| 9 | Texte | Alte Entwürfe und gespeicherte Seiten bleiben erhalten | | |
+| 10 | Zähler | 600 normal; ab 601 rot/fett; keine Kürzung | | |
+| 11 | Limit | Über 600: keine Übertragung, kein Popup | | |
+| 12 | BLE | 80, 100, 150, 200 Zeichen | | |
+| 13 | BLE | 300, 400, 500, 600 Zeichen, nur bei Erfolg der Vorstufen | | |
+| 14 | BLE | 100+ Symbole: Payload, Pakete und Boardverhalten | | |
+| 15 | BLE | Helligkeit, Tempo, Modus und Blockseiten-Player unverändert | | |
+| 16 | Stabilität | BLE-Fehler und erneuter Versuch; serielles Log | | |
+
+
+## v0.3.1 · Testpunkte vor Commit/Push (24.10.2026)
+
+**Die Firmware ist noch nicht am ESP32 getestet.** Vor dem Flash prüfen, dass die alten gespeicherten Seiten unter v0.3.0 vorhanden sind; bei Problemen v0.3.0 wieder per USB aufspielen. Keine automatische Migration oder Löschung der NVS-Seiten vorgesehen.
+
+| Nr. | Bereich | Testpunkt | Ergebnis | Bemerkungen |
+|---:|---|---|---|---|
+| 1 | Arduino | Neuer Sketch v0.3.1 mit beiden Headern kompiliert | | |
+| 2 | Start | WLAN, Webinterface, Versionsanzeige v0.3.1 | | |
+| 3 | NVS | Alle bestehenden Blockseiten und ihre Inhalte unverändert | | |
+| 4 | Lauftext | Erster Aufruf ohne „Grüße!“, vorhandener eigener Entwurf bleibt | | |
+| 5 | Lauftext | Text eingeben, Seite neu laden, Entwurf wieder vorhanden | | |
+| 6 | Lauftext | 40, 50, 60, 80 Zeichen: HTTP-Annahme und LED-Ergebnis notieren | | |
+| 7 | Lauftext | 10 / 20 / 40 Symbole: HTTP, BLE-Pakete, tatsächliche Darstellung | | |
+| 8 | Schrift | Mini zweizeilig: verkürzte Leerzeichen wie Vorschau | | |
+| 9 | Schrift | Mini einzeilig zentriert trotz kürzerer Leerzeichen | | |
+| 10 | Symbole | Textcursor mittig, Symbol einsetzen, Position korrekt | | |
+| 11 | Symbole | Eingefügtes Symbol mit Undo entfernen und Redo zurückholen | | |
+| 12 | Undo | Mehrere Buchstaben löschen; ein Undo stellt den gelöschten Bereich wieder her | | |
+| 13 | Undo | Blockseite Zeile 1 und 2 separat ändern, undo/redo, speichern | | |
+| 14 | Mobile | Vorschau bleibt beim Scrollen sichtbar, blockiert keine Schaltflächen | | |
+| 15 | Live-BLE | Helligkeit ohne separaten Senden-Button; Tempo/Modus weiterhin | | |
+| 16 | Blockseiten | Vorhandene Seiten zeigen, automatisch spielen, nach Neustart noch vorhanden | | |
+| 17 | Stabilität | Mehrmals nacheinander übertragen, Log auf HTTP/BLE-Fehler prüfen | | |
+| 18 | Fallback | Falls nötig v0.3.0 erneut flashen, Altseiten bleiben erhalten | | |
+
+**Für den Hardwarevergleich besonders wichtig:** Bei längeren Texten die tatsächliche Anzeige, Wartezeit, Prozentanzeige und Diagnose notieren. HTTP-Annahme beweist keine Board-Unterstützung. Undo gilt in v0.3.1 ausschließlich für Textfeldbearbeitung und nicht für komplette Seitenaktionen.
+
+---
+
+**Stand: 24.10.2026 · Letzter hardwarebestätigter Firmwarestand: v0.3.0-dev (Nutzerprüfung). Neuer, noch ungetesteter Quelltextkandidat: v0.3.1.**
+
+Dieses Dokument hält die **realen Ergebnisse** und weiter offenen, gezielt nachprüfbaren Testfälle fest. Es ist **nicht** die vom Nutzer gewünschte Excel-Datei: **Zu jeder neuen Firmware liefern wir die kurze, direkt in Excel kopierbare Testtabelle direkt im Chat**, mit leeren Spalten `Ergebnis` und `Bemerkungen` (siehe `ENTSCHEIDUNGEN.md`, ADR-028).
 
 ## 1. Bereits protokollierter Nutzer-Praxistest v0.2.0 (23.10.2026)
 

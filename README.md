@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version v0.3.0 Entwicklungsstand" src="https://img.shields.io/badge/version-v0.3.0--dev-7056d8">
+  <img alt="Version v0.3.2 Testkandidat" src="https://img.shields.io/badge/version-v0.3.2--testkandidat-7056d8">
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
   <img alt="Hardware Testing" src="https://img.shields.io/badge/status-hardware%20testing-2e8b71">
   <img alt="Nichtkommerzielles Hobbyprojekt" src="https://img.shields.io/badge/project-non--commercial-f39c49">
@@ -30,9 +30,41 @@ Die Hersteller-Firmware der LED-Tafel wird dabei **nicht verändert**. Die Tafel
 
 Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Festival-Totem. Es befindet sich aktiv in Entwicklung und ist noch kein fertiges Produkt.
 
-## Entwicklungsstand: v0.3.0-dev (Praxistest am 24.10.2026)
+## Entwicklungsstand: v0.3.2 · Testkandidat vom 25.10.2026
 
-**Praxistest 24.10.2026:** Die v0.3.0-dev wurde vom Nutzer in der Arduino IDE kompiliert, auf dem ESP32-C3 gestartet und praktisch an der CoolLEDX-Tafel überprüft. Die zentralen Funktionen waren erfolgreich; **bekannte Einschränkungen und offene Tests bleiben ausdrücklich bestehen**. Die ältere, ebenfalls getestete v0.2.0 Korrektur 1 bleibt als Rückfallversion im Repository. Die vorliegende README-Aktualisierung ist **nur Dokumentation, keine neue Firmware v0.4.0**.
+**Aktueller auf echter Hardware getesteter Stand: v0.3.2 Korrektur 2 (25.10.2026).** Nach der RAM-Reparatur starten WLAN und Webinterface wieder, bestehende NVS-Blockseiten bleiben erhalten. Die neue iPhone-Symbolpalette, fünf Lauftextschriften und 600 normale Lauftextzeichen wurden erfolgreich ausprobiert. **Lange Symbolketten bleiben ein Experiment:** 300 gemischte Symbole funktionieren, 320 gemischte nicht; das tatsächliche Datenlimit der Tafel ist noch ungeklärt. **Die erfolgreiche BLE-Übertragung ist nicht automatisch eine bestätigte Bildanzeige.**
+
+📋 **[Aktueller Entwicklungsstand mit Testmessungen, Fehlern und nächsten Ideen](docs/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md)** · Stand 25.10.2026, ca. 11:45 Uhr MEZ. Historische Versionsabschnitte weiter unten dokumentieren ihren **damaligen** Stand.
+
+### Neu in v0.3.2
+
+- **Symbolauswahl auf Mobilgeräten:** Das bisher zu schmale Overlay erhält eine viewportbreite, scrollbare Darstellung; es bleibt beim Einfügen weiterer Symbole geöffnet. Die Textfelder werden beim Einfügen nicht automatisch fokussiert, damit die iPhone-Tastatur nicht sofort wieder erscheint.
+- **Fünf einheitliche Schriftbezeichnungen** für Lauftext und Blockseiten: **Standard**, **Standard Bold**, **Engschrift**, **Mini Einzeilig**, **Mini Zweizeilig**. Interne Layoutkennungen bleiben kompatibel.
+- **Mini Zweizeilig im Lauftext:** Zwei separate Eingabefelder werden auf zwei 7-Pixel-Zeilen gezeichnet und scrollen synchron. Derselbe Farbwert gilt derzeit für beide Zeilen; eine individuelle Zeilenfarbe wird nicht neu eingeführt.
+- **Neue Texte beginnen leer:** Kein „Grüße“ im neuen Lauftextfeld und kein „UMARMUNG“ auf neu angelegten Blockseiten. Bereits gespeicherte ESP32-NVS-Seiten und vorhandene browserseitige Entwürfe werden **nicht** überschrieben. Ein in einem alten Browserentwurf gespeicherter Demotext kann deshalb noch erscheinen.
+- **Experimentelle Grenze 600 Zeichen** statt 80 für Lauftexte. Die Gesamtzahl beider Zeilen zählt gemeinsam; der Zähler wird **erst ab 601 rot und fett**, ohne Popup. Überlange Eingaben bleiben erhalten, werden aber nicht übertragen und auch nicht automatisch abgeschnitten.
+
+**Korrektur 1:** Der `drawInline()`-Compilerfehler wurde behoben; der Nutzer konnte die Firmware danach kompilieren und aufspielen. **Dabei scheiterte der WLAN-Start aufgrund einer RAM-Allokation des WLAN-Treibers.**
+
+**Korrektur 2 (WLAN/RAM, anschließend hardwaregetestet):** Zwei fest reservierte Bildpuffer von zusammen 122.507 Bytes wurden entfernt. Beim Senden wird nun ein einzelner, passend großer temporärer Payload-Puffer verwendet, der nach dem Auftrag freigegeben wird. Der serielle Monitor zeigt Heap-Größe und größten freien Block. Die maximale Textlänge bleibt vorerst experimentell bei 600 Zeichen. Bereits gespeicherte Blockseiten bleiben unangetastet. **Bei WLAN- oder RAM-Problemen nicht die NVS löschen**, sondern bei Bedarf v0.3.1 über USB flashen.
+
+### Bitte vor dem ersten Test wissen
+
+Die **600 Zeichen sind keine bestätigte BLE-Grenze**. Der bisher rekonstruierte Textheader enthält 80 Format-Slots, und der Quellcode setzt den dortigen Zählwert bei längeren Texten weiterhin auf höchstens 80, während er die umfangreichere Pixelmatrix zu senden versucht. Das ist **ein riskanter Protokollversuch**, kein garantierter Weg für 600 darstellbare Zeichen. Längere Inhalte, insbesondere breite Symbole, können viel RAM, längere Sendezeiten und deutlich mehr BLE-Pakete benötigen. Der Versuch mit **600 normalen Zeichen** verlief erfolgreich. Für die anschließende Grenzerforschung sind reine Texte und breite Symbole getrennt zu testen; serielles Log und sichtbares Ergebnis immer getrennt notieren. Für die Zukunft wird ein **datenbasiertes Pixel-/Byte-Limit** statt der aktuellen Zeichenbegrenzung untersucht.
+
+Das NVS-Schema der Blockseiten bleibt unverändert. Die älteren Firmwareordner werden nicht überschrieben. Eine Rückkehr zu v0.3.1 per USB bleibt möglich.
+
+### Installation des direkt entpackbaren v0.3.2-Pakets
+
+1. ZIP **in den Stammordner des lokalen Git-Repositories** entpacken. Nur gleichnamige Dokumente und `web/index.html` überschreiben; bestehende Firmwareordner und `.git` behalten.
+2. `firmware/RavestickBoard_v0_3_2/RavestickBoard_v0_3_2.ino` in der Arduino IDE öffnen. `RavestickBoard_WebUI.h` und `RavestickBoard_Assets.h` liegen direkt daneben, ohne Generatorlauf.
+3. Board **ESP32C3 Dev Module**, **USB CDC On Boot: Enabled**, **No OTA (2MB APP/2MB SPIFFS)**, Espressif-Boardpaket **3.3.12** auswählen; kompilieren und per USB aufspielen.
+4. Mit WLAN **CoolLED1248** verbinden und `http://192.168.4.1` öffnen. Den Testplan unter `docs/TESTPLAN.md` verwenden.
+5. Nach Kontrolle deines bereits erfolgten Hardwaretests über **GitHub Desktop** committen/pushen. Dieses ZIP verändert GitHub nicht direkt. `docs/REPO_AUFRÄUMEN_v0.3.2.md` enthält separate Vorschläge für spätere Bereinigungen.
+
+## Rückblick: v0.3.0-dev (Praxistest am 24.10.2026)
+
+**Praxistest 24.10.2026:** Die v0.3.0-dev wurde vom Nutzer in der Arduino IDE kompiliert, auf dem ESP32-C3 gestartet und praktisch an der CoolLEDX-Tafel überprüft. Die zentralen Funktionen waren erfolgreich; **bekannte Einschränkungen und offene Tests bleiben ausdrücklich bestehen**. Die ältere, ebenfalls getestete v0.2.0 Korrektur 1 bleibt als Rückfallversion im Repository. v0.3.1 und v0.3.2 bauen darauf auf; v0.3.1 wurde inzwischen ebenfalls real getestet.
 
 ### In v0.3.0 implementiert und im Nutzer-Test teilweise bestätigt
 
@@ -123,8 +155,8 @@ Ob unsere konkrete Tafel mehrseitige Inhalte oder eigene Animationen über den d
 
 **Benötigt:** ESP32-C3 Super Mini, kompatible CoolLEDX-Tafel (hier 64 × 16 Pixel, sieben Farben), USB-Kabel und Arduino IDE mit dem Espressif-Boardpaket.
 
-1. Für die **hardwaregetestete v0.3.0-dev**: `firmware/RavestickBoard_v0_3_0/RavestickBoard_v0_3_0.ino` öffnen. Bei Problemen kann die bereits bestätigte v0.2.0 Korrektur 1 als Rückfallversion verwendet werden.
-2. Sicherstellen, dass **`RavestickBoard_WebUI.h` und `RavestickBoard_Assets.h`** zusammen mit der `.ino` im selben Sketch-Verzeichnis liegen. Bei v0.2.0 ist nur der WebUI-Header erforderlich.
+1. Für den **v0.3.2-Testkandidaten**: `firmware/RavestickBoard_v0_3_2/RavestickBoard_v0_3_2.ino` öffnen. Die geprüfte v0.3.0-dev bleibt als direkte Rückfallversion bestehen.
+2. Sicherstellen, dass **`RavestickBoard_WebUI.h` und `RavestickBoard_Assets.h`** zusammen mit der `.ino` im selben Sketch-Verzeichnis liegen. Beide sind im neuen v0.3.2-Ordner bereits enthalten.
 3. Das Board **`ESP32C3 Dev Module`** auswählen und **`USB CDC On Boot: Enabled`** setzen.
 4. Die Partitionierung **`No OTA (2MB APP/2MB SPIFFS)`** auswählen. Getestete Entwicklungsumgebung: Arduino IDE 2.3.10, `esp32` von Espressif 3.3.12.
 5. Über USB auf den ESP32 flashen. **OTA-Firmwareupdates sind nicht vorgesehen.**

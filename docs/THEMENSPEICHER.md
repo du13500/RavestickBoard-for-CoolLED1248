@@ -1,5 +1,21 @@
 # Themenspeicher und Aufgabenregister
 
+
+## Zwischenstand 24.10.2026 · v0.3.1-Testkandidat, noch nicht hardwarebestätigt
+
+**Nicht mit einer fertigen Abnahme verwechseln:** Für v0.3.1 sind die nachfolgenden Teilumsetzungen im Quellcode enthalten und browserseitig syntaktisch beziehungsweise per simuliertem API-Smoke geprüft, aber Arduino-Kompilierung, LED-BLE-Transfer und iPhone-Praxistest sind noch ausstehend.
+
+- **`EDT-11`, `QA-02` (Teilumsetzung):** 80 statt 40 Lauftext-Zeichen, größere Pixelpuffer und passende Browserprüfung. Da der bestehende Protokollkopf nur 80 Zeichen-Slots vorsieht, ist darüber hinaus keine Erhöhung zugesagt. Die reale maximale Zeichen-/Pixelbreite der Tafel bleibt offen. Tests mit Symbolketten besonders wichtig.
+- **`EDT-22`, `LIB-11` (Teilumsetzung):** Demotext aus dem Lauftextfeld entfernt, bisheriger `localStorage`-Schlüssel für den Browserentwurf bleibt. Dauerhafte Bibliothek und Speicherung des vollständigen Undo-Verlaufs sind weiterhin offen.
+- **`EDT-15` (Teilumsetzung):** Undo und Redo für **Textänderungen in Lauftext / Zeile 1 / Zeile 2**, inklusive per Picker eingefügter Symbole, maximal 100 Zustände je Eingabefeld pro Browsersitzung. **Noch offen:** Löschen/Verschieben von Seiten, Farben, Fonts, Mehrfachauswahl, nach Reload rekonstruierter Undo-Verlauf. Kein Undo-Schritt überträgt automatisch ans Board.
+- **Symbol-Picker / mobile UI (Teilumsetzung):** Knopf am jeweiligen Textfeld, Cursorposition vor Öffnen sichern, Overlay öffnen, Symbol an Position einfügen. Der alte Picker am unteren Seitenende entfällt.
+- **`FNT-19` (Teilumsetzung):** Mini-Leerzeichen nun **2 Pixel interne Leerbreite + 1 Pixel Zwischenabstand**. Noch per Vergleichsbild und auf dem realen Board beurteilen. Originalschriftarten und deren Leerzeichen unverändert.
+- **Vorschau/Helligkeit (Teilumsetzung):** Sticky-Vorschau und Entfernen des redundanten Helligkeit-Buttons. Helligkeitssignal bleibt am Live-Schieberegler. Vier gewünschte Schriftlabels vorrangig; alte Engschrift bleibt zusätzlich als Bestands-/Kompatibilitätseintrag sichtbar, damit gespeicherte Altseiten weiterhin bearbeitbar sind.
+- **`EDT-24` offen:** Jede Zeile der zweizeiligen Mini-Blockseite separat links/zentriert/rechts ausrichten. Hierfür noch keine NVS-Migration eingebaut; bestehende Seiten niemals still überschreiben.
+- **`SYM-09` bis `SYM-16` offen:** Kussmund, Blume, Biene, Sternlage, Blüten-Abstand, neue Banane und Quietscheente bleiben **geplant**, nicht in v0.3.1 enthalten.
+- **🎨-Formatierungseditor und freie Hybridlayouts offen:** Nicht in v0.3.1; gezielt als gesonderte größere Entwicklungsschritte behandeln.
+
+
 **Stand:** 24.10.2026, einschließlich Praxistest der v0.3.0-dev und der danach vereinbarten Änderungswünsche. Die vorherigen Einträge bleiben zur Rückverfolgbarkeit erhalten. Neue Funktionen gelten erst nach Umsetzung und Prüfung als verfügbar.  
 **Status:** `[x]` = im bezeichneten Umfang durch Nutzer-/Hardwaretest bestätigt oder Dokumentationsaufgabe erledigt; `[ ]` = offen/teilweise/noch nicht abschließend verifiziert. Eine Implementierung allein ist kein Hardwaretest.  
 **Prioritäten:** P0 = Basis/Fehlerdiagnose, P1 = Kerneditor, P2 = Bibliothek/Spezialprogramme, P3 = spätere Option. Die Umsetzungsreihenfolge ergibt sich aus der aktualisierten `ROADMAP.md`.
@@ -310,3 +326,11 @@ Die bestehenden v0.2.0-NVS-Seiten werden im v0.3.0-Entwurf nicht automatisch gel
 - [ ] **DOC-16 · P1 · Lieferform künftiger Versionen.** Standardlieferung: **fertiges ZIP** mit bereits ausgearbeiteten Firmware-/Dokudateien in korrekter Repositorystruktur, direkt über bestehendes lokales Repo entpackbar. **Kein vorgeschalteter Python- oder Batch-Generator erforderlich.** Keine GitHub-Commits/Pushes durch die Assistenz; der Nutzer prüft, flasht und veröffentlicht selbst über GitHub Desktop. Bei reinen Dokumentationsupdates nur geänderte Dateien bereitstellen.
 
 **Versionierungsentscheidung:** Nach dem v0.3.0-Test wurden zahlreiche Ideen für einen späteren v0.4.0-Schritt besprochen. **Heute kein neuer Firmware-Build.** Die Version v0.3.0 bleibt der aktuelle hardwaregetestete Entwicklungsstand mit dokumentierten Einschränkungen; künftige v0.4.0-Funktionen gelten erst nach Erstellung und realem Test als umgesetzt.
+
+
+## Testbefunde 25.10.2026 und v0.3.2
+
+- **v0.3.1 real getestet:** Arduino kompiliert; NVS-Seiten erhalten; 40, 60, 80 Zeichen sowie umfangreiche Symbolketten übertragen; Mini-Leerzeichen verbessert; Live-BLE, Vorschau und Blockseiten funktionieren.
+- **Offen/Fehler v0.3.1:** iOS-Symbolpalette zu schmal und unbedienbar; Dialog schließt nach jedem Symbol und Tastatur springt auf; Lauftext-Schriftwahl fehlt; Demo-Feldwerte „Grüße“ und „UMARMUNG“ unerwünscht; Vorschau langfristig verkleinern; Undo/Redo erst für künftige individuelle Formatierung wirklich wertvoll; automatischer Blockseiten-Player stoppt nach BLE-Verbindungsfehler.
+- **v0.3.2 Kandidat:** mobile Palette mit Mehrfacheinfügung, fünf einheitliche Fontnamen, Mini Zweizeilig auch im Lauftext, keine neuen Demotexte, experimentelle 600-Zeichen-Grenze mit rotem/fettem Zähler bei Überschreitung. Technisch kritisch: BLE-Header weiterhin nur 80 Format-Slots; längere Übertragung ohne bestätigte Protokollunterstützung.
+- **Repository-Pflege:** ältere Dokumente vor Löschen auf historische Informationen prüfen; `RELEASE_NOTES.txt`, `TEST_HINWEIS.txt`, `UPDATE_ANLEITUNG.txt`, `ENTWICKLUNGSSTAND_v0.3.0.md` und `docs/VEROEFFENTLICHUNGS_AUDIT_2026-10-23.md` sind Archivkandidaten, nicht automatisch löschen.
