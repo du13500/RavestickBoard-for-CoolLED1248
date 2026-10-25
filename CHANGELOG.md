@@ -1,3 +1,12 @@
+## v0.3.5.1 – 25.10.2026 – Pixelart-Update (Hardwaretest offen)
+
+- Seven Excel-created 16×16 graphics implemented directly from the cells and the eight-state LED color legend (`Pixel-Art.xlsx`): Huhn, Ravestick-Banane, Gummiente, UFO, UFO+Traktorstrahl, new Küken and Frosch. Existing sprite IDs preserved.
+- Original-app screenshot reconstructions Kussmund, Blume, Biene, Kuh re-extracted pixel-by-pixel from the screenshots; fixes one-column X shift and restores rightmost column.
+- Font data, BLE commands, display-mode codes, NVS format and block-pages behavior unchanged from 0.3.5.
+- Color mapping from the Excel legend: light green and dark green both map to hardware Green; `W` maps to LED White even where the Excel theme displays dark.
+- v0.3.5 test feedback: speed-range semantics still require a separate hardware calibration; **not considered fixed** in this patch.
+- Hardware / Arduino IDE compilation still to be confirmed by tester.
+
 ## v0.3.5 · LED-Steuerung und Pixelmotive (2026-10-25)
 
 **Status: fertig gepackter Firmware-Testkandidat; Arduino-Kompilierung und Hardwaretest offen.**

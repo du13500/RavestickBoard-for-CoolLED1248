@@ -1,3 +1,5 @@
+> **v0.3.5.1 (25.10.2026):** Pixelart-Korrektur/Erweiterung: sieben 16×16-Motive aus `docs/Pixel-Art.xlsx`, vier Hersteller-Piktogramme ohne X-Versatz und ohne rechts abgeschnittene Spalte, neue Küken-/Frosch-Symbole. Keine NVS-Migration; der Geschwindigkeitshinweis aus dem v0.3.5-Test bleibt zur Kalibrierung offen.
+
 <p align="center">
   <img src="docs/assets/board-gif.gif" alt="Animierte Vorschau der CoolLED1248-LED-Tafel" />
 </p>
@@ -16,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version v0.3.5 Testkandidat" src="https://img.shields.io/badge/version-v0.3.5--testkandidat-7056d8">
+  <img alt="Version v0.3.5.1 Testkandidat" src="https://img.shields.io/badge/version-v0.3.5.1--testkandidat-7056d8">
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
   <img alt="Hardware Testing" src="https://img.shields.io/badge/status-hardware%20testing-2e8b71">
   <img alt="Nichtkommerzielles Hobbyprojekt" src="https://img.shields.io/badge/project-non--commercial-f39c49">
@@ -35,9 +37,9 @@ Die Hersteller-Firmware der LED-Tafel wird dabei **nicht verändert**. Die Tafel
 
 Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Festival-Totem. Es befindet sich aktiv in Entwicklung und ist noch kein fertiges Produkt.
 
-## Aktuell: v0.3.5 · Steuerung und zusätzliche Pixelmotive (25.10.2026)
+## Aktuell: v0.3.5.1 · Steuerung und zusätzliche Pixelmotive (25.10.2026)
 
-**Neue Version auf Grundlage der hardwarebestätigten v0.3.4.** Die Änderungen betreffen die Websteuerung und Symbol-Matrizen; das NVS-Format und die bislang bestätigte BLE-Paketübertragung bleiben unverändert. **v0.3.5 selbst ist ein noch nicht auf Hardware geprüfter Testkandidat.**
+**Neue Version auf Grundlage der hardwarebestätigten v0.3.4.** Die Änderungen betreffen die Websteuerung und Symbol-Matrizen; das NVS-Format und die bislang bestätigte BLE-Paketübertragung bleiben unverändert. **v0.3.5.1 selbst ist ein noch nicht auf Hardware geprüfter Testkandidat.**
 
 - **LED-Anzeige EIN/AUS** als eigener Schalter bei der Helligkeit, ohne erneuten Bild-Upload. CoolLEDX-Referenzbefehl `0x09 0x01` (ein) / `0x09 0x00` (aus). **Hardwarewirkung auf unserer Tafel noch nicht geprüft**; Anzeige im UI ist der zuletzt erfolgreich gesendete Befehl, keine Rückmeldung des physischen Zustands.
 - **Geschwindigkeit 60–100**, Standard **80**; Umrechnung BLE `round(Reglerwert × 255 / 100)` beibehalten; keine Laufzeitberechnung oder Kalibrierung.
@@ -48,7 +50,7 @@ Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Fest
 
 **Direktupdate installieren:** ZIP in den Repository-Stammordner entpacken, dann in Arduino IDE **`firmware/RavestickBoard_v0_3_5/RavestickBoard_v0_3_5.ino`** öffnen. Gleiches ESP32-C3-Boardprofil wie v0.3.4; **kein „Erase All Flash“**, um NVS-Seiten zu erhalten. Nach dem Flashen zuerst die neue **Ein/Aus-Funktion**, anschließend neue Symbole mit wenigen Zeichen auf dem Display prüfen. Die neue Variante befindet sich in einem eigenen Sketchordner; v0.3.4 bleibt als Rückfallversion separat erhalten.
 
-**Dokumentation:** [Entwicklungsstand und Testprotokoll v0.3.5](docs/ENTWICKLUNGSSTAND_v0.3.5_2026-10-25.md) · [Testplan](docs/TESTPLAN.md). Die genaue Laufzeitmessung horizontaler Lauftexte und Spezialeffekt-Automatisierung sind **nicht** Teil von v0.3.5.
+**Dokumentation:** [Entwicklungsstand und Testprotokoll v0.3.5.1](docs/ENTWICKLUNGSSTAND_v0.3.5.1_2026-10-25.md) · [Testplan](docs/TESTPLAN.md). Die genaue Laufzeitmessung horizontaler Lauftexte und Spezialeffekt-Automatisierung sind **nicht** Teil von v0.3.5.1.
 
 ### Rückblick: v0.3.4 · Hardwarebestätigt
 
