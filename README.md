@@ -1,6 +1,12 @@
 <p align="center">
-  <img src="docs/assets/totem.jpg" alt="RavestickBoard Festival-Totem mit CoolLED1248-LED-Tafel">
+  <img src="docs/assets/board-gif.gif" alt="Animierte Vorschau der CoolLED1248-LED-Tafel" />
 </p>
+
+<p align="center">
+  <img src="docs/assets/totem.jpg" alt="CoolLED1248-Board an einem Festival-Totem (Ravestick)" />
+</p>
+
+<p align="center"><sub>CoolLED1248-Board an einem Festival-Totem (Ravestick).</sub></p>
 
 <h1 align="center">🍌 RavestickBoard for CoolLED1248</h1>
 
@@ -17,8 +23,6 @@
   <img alt="All rights reserved" src="https://img.shields.io/badge/license-all%20rights%20reserved-666666">
   <img alt="Mission: Hugs and Love" src="https://img.shields.io/badge/mission-hugs%20and%20love-ff69b4">
 </p>
-
-<p align="center"><sub>Das Titelbild zeigt das echte Festival-Totem; der darauf sichtbare Text wurde noch mit der Original-App erstellt.</sub></p>
 
 ---
 
