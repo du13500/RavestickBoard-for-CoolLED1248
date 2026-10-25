@@ -1,6 +1,12 @@
 # Themenspeicher und Aufgabenregister
 
 
+## Nachtrag 25.10.2026 – v0.3.4 ist ein neues Feature, keine v0.3.3-Korrektur
+
+- v0.3.3 **auf echter Hardware bestätigt**: 650 Textzeichen / 30.689 B, 301 gemischte Zeichen / 30.695 B, zwei Farben für synchronen Mini-Lauftext; sieben gespeicherte Seiten erhalten. Die damaligen „ungeprüft“-Markierungen in älteren Abschnitten sind historisch.
+- v0.3.4 führt `0x03`–`0x08` als **zusätzliche Parameter des Kommandos `0x06`** im normalen Modus-Dropdown; Tests auf der konkreten Tafel noch offen. Ein separater „Testbereich“ ist nicht gewünscht.
+- Priorität: reale Namen, Wirkungen und sichtbare Prozentanzeige zu jedem Wert dokumentieren; `0x04` als Modus **nicht** mit `0x04` als eigenständigem Animationsbefehl verwechseln.
+
 ## Nachtrag 25.10.2026 – Nächste Entwicklungsschritte nach v0.3.3
 
 - v0.3.3: Testkandidat für datenbasierten Lauftext-Editor ohne 600-Zeichenlimit, vorläufige 30-KiB-Auslastung, individuelle Farbe pro Zeile in Mini Zweizeilig (noch nicht auf echter Hardware getestet).

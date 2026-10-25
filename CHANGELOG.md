@@ -1,8 +1,37 @@
 # Changelog
 
-## v0.3.3 — Testkandidat (25.10.2026)
+## [0.3.4] · 25.10.2026 · Erweiterte BLE-Anzeigemodi (Hardwaretest ausstehend)
 
-**Entwickelt, noch nicht in Arduino IDE oder am LED-Board getestet.** Letzter hardwaregetesteter Stand: v0.3.2 Korrektur 2.
+**Eigenständiges Feature-Release auf Basis der am 25.10.2026 hardwarebestätigten v0.3.3.** Die zunächst intern „v0.3.3 Korrektur 1“ genannte Erweiterung wird als **v0.3.4** ausgeliefert; kein Fehlerfix am bereits funktionsfähigen v0.3.3-Release.
+
+### Neu und geändert
+- Das bestehende Dropdown für direkte Moduswechsel über BLE-Kommando `0x06` führt zusätzlich `0x03` Rechtslauf, `0x04` Aufwärts, `0x05` Abwärts, `0x06` Schneeflocke, `0x07` Bild/Picture und `0x08` Laser. **Alle sechs neuen Werte sind am eigenen Board noch ungetestet.** Referenznamen stammen aus `UpDryTwist/coolledx-driver`; Anzeigeeffekte können je nach Board abweichen.
+- Standbild (`0x01`) und Linkslauf (`0x02`) bleiben erhalten. Server validiert die erlaubten Modusnamen und protokolliert den Parameter als Hexwert. Moduswechsel selbst sind kurze BLE-Steueraufträge ohne neuen Bild-Upload.
+- HTTP-Startseite liefert `Cache-Control: no-store` gegen veraltetes Safari-HTML. Laufzeitdiagnose unterscheidet Helligkeit, Tempo und Moduswechsel auch bei der `Auftrag:`-Ausgabe; der exportierte Diagnose-TXT-Dateiname wird aus `FW_VERSION` gebildet.
+- Firmware/HTML sichtbar `v0.3.4`; neuer separater Sketchordner `firmware/RavestickBoard_v0_3_4/`. Aktualisierter `web/index.html`, Testplan, README, Roadmap, technische Dokumente und Entwicklungsstand.
+
+### Unverändert
+- Das in v0.3.3 erfolgreich hardwaregetestete datenbasierte Lauftextlimit (vorläufig 30 KiB), zwei Mini-Zeilenfarben, Glyphen/Symbole und gespeicherte NVS-Seiten. **Keine Migration und kein Datenverlust beabsichtigt.**
+- Neue Textuploads wählen weiterhin ihre eigenen Textmodi; die zusätzlichen Werte werden nur über das separate Live-Dropdown getestet.
+- Keine Bibliothek, keine neuen Symbole, kein Animationsupload und keine verketteten Programme.
+
+### Prüfen auf echter Hardware
+- Arduino-IDE-Kompilierung, WLAN-Start, bestehende sieben Blockseiten und Übertragung eines kurzen Texts.
+- Modusparameter `0x01` bis `0x08` einzeln: Beobachtung auf der Tafel, BLE-Log, Prozentanzeige und Rückkehr zu bekannten Modi. Keine tatsächliche Effektunterstützung für `0x03`–`0x08` vorab behaupten.
+- **Ein BLE-JOB-OK bestätigt nur die Übertragung/Notification, nicht die Bildanzeige.** Das vorige v0.3.3 ist die Rückfallversion.
+
+---
+
+## Historischer Zwischenstand · Arbeitstitel „v0.3.3 Korrektur 1“ (nicht eigenständig veröffentlicht)
+
+- Live-Modus-Dropdown um Referenz-Moduswerte `0x03`–`0x08` erweitert: rechts, aufwärts, abwärts, Schneeflocke, Bild, Laser. Bereits auf unserer Tafel getestete Werte `0x01` (Standbild) und `0x02` (Linkslauf) bleiben erhalten. **Alle neuen Werte noch ungetestet.** Modus wird weiterhin ausschließlich über den eigenständigen BLE-Steuerbefehl `0x06` ohne Bildneuübertragung geändert; der neue Textupload bleibt wie gehabt mit Linkslauf.
+- Firmware validiert Modusnamen serverseitig und protokolliert den tatsächlich gesendeten Hexwert. Startlog unterscheidet Tempo, Modus und Helligkeit. HTML-Startseite sendet `Cache-Control: no-store` gegen veraltete Safari-Oberflächen.
+- **Hardwaretests der ursprünglichen v0.3.3 erfolgreich** (noch **nicht** der vorliegenden Korrektur 1): WLAN, NVS-Seiten (7), mobile Palette, fünf Fonts, zweizeiliger Mini-Lauftext mit zwei Farben, datenbasierter Zähler; 650 Zeichen / 5.097 Spalten / 30.689 Bytes real dargestellt. Gemischte 301-Zeichen-Folge bei 30.695 B erfolgreich. Grenzwert 301 × ⚠️ (30.803 B) wird im Editor blockiert. Im seriellen Log 240 quittierte BLE-Pakete bei 30.695 B, Dauer 52.937 ms; freier Heap nach WLAN 93.352 B, größter Block 81.908 B. In diesem Log keine `JOB FEHLER`-Zeilen.
+- **Firmwarestatus zum Zeitpunkt dieser Notiz:** Moduserweiterung noch nicht mit Arduino kompiliert oder am Board getestet. **Anschließend als v0.3.4 veröffentlicht**, ohne das bestätigte v0.3.3 umzubenennen; NVS-Format unverändert.
+
+## v0.3.3 — Ursprünglicher Testkandidat (25.10.2026)
+
+**Nachträglich an realer Hardware erfolgreich getestet.** Die ursprünglich als ausstehend bezeichneten Tests wurden am 25.10.2026 durchgeführt (siehe Korrektur-1-Eintrag oben).
 
 - Experimentelles **datenbasiertes Lauftextlimit** statt 600-Zeichen-Begrenzung; berechnete Original-Glyphen-/Symbolbreiten, Bytes einschließlich 107-Byte-Header und Prozentbalken live im Webeditor. Vorläufiges 30-KiB-Limit, keine automatische Textkürzung; Überschreitung rot/fett, Senden gesperrt.
 - UTF-8-Lauftext wird vom ESP32 gestreamt und ohne globale 600-Zeichen-Arrays gerendert. Datenlimit auch in HTTP-Validierung und Bildrendering geprüft; blockseitenbezogene Datenstruktur und NVS-Schema unverändert.

@@ -1,6 +1,6 @@
 # 🍌 RavestickBoard · Roadmap
 
-**Fortgeschrieben: 25. Oktober 2026 · aktueller auf Hardware getesteter Stand: v0.3.2 Korrektur 2.**  
+**Fortgeschrieben: 25. Oktober 2026 · hardwaregetesteter Stand: v0.3.3 · neuer Testkandidat: v0.3.4.**  
 **Projekt:** ESP32-C3-Webcontroller für CoolLED1248/CoolLEDX, 64 × 16 Pixel, sieben LED-Farben.  
 **Mission:** Hugs and Love. ❤️
 
@@ -15,9 +15,16 @@ Diese Roadmap beschreibt **wo wir stehen, was als Nächstes sinnvoll ist und wel
 
 ---
 
+## v0.3.4 – Testphase der erweiterten Modusauswahl (25.10.2026)
+
+- ✅ **v0.3.3 hardwarebestätigt:** 650 Zeichen/30.689 B, 301 gemischte Zeichen/30.695 B, zwei Mini-Lauftextfarben, mobile Bedienung, sieben NVS-Seiten.
+- 🔬 **v0.3.4 neu:** Dropdown mit `0x01`–`0x08` als Parametern zum BLE-Steuerbefehl `0x06`. Die sechs zusätzlichen Werte (`0x03`–`0x08`) sind noch nicht auf unserer Hardware bestätigt, daher keine Effektbezeichnungen als gesicherte Tatsachen behandeln.
+- 🔬 **Nachrangig:** Breitenlimit und Bildheader oberhalb 30 KiB, echte autonome Animationen als **anderer** Protokollbefehl `0x04`, Bibliothek, Lauftextverkettung, neue Symbole, exportierbare NVS-Seiten und robustere Lang-BLE-Übertragung.
+- 🔗 [Entwicklungsstand v0.3.4](ENTWICKLUNGSSTAND_v0.3.4_2026-10-25.md) und [Modus-Testplan](TESTPLAN.md).
+
 ## Aktueller Stand / v0.3.3 (25.10.2026)
 
-**In v0.3.3 testweise implementiert (Hardwaretest ausstehend):** dynamisches datenbasiertes Lauftextlimit von vorläufig 30 KiB anstelle des 600-Zeichenlimits; laufende Breiten-/Byteberechnung mit den Originalglyphen; unabhängige Farben der beiden synchron scrollenden Mini-Zeilen. **Letzter hardwaregetesteter Stand v0.3.2 Korrektur 2.**
+**In v0.3.3 implementiert und am 25.10.2026 hardwaregetestet:** dynamisches datenbasiertes Lauftextlimit von vorläufig 30 KiB anstelle des 600-Zeichenlimits; laufende Breiten-/Byteberechnung mit den Originalglyphen; unabhängige Farben der beiden synchron scrollenden Mini-Zeilen. **Nachfolgender neuer Testkandidat: v0.3.4 (Modus-Dropdown).**
 
 **Danach geplant:** (1) empirisches Limit der LED-Tafel genauer bestimmen und Datenbudget anpassen; (2) Bibliothek für separat editierbare Texte mit gespeicherten Schriften, Farben und Symbolen; (3) einfacher Programmeditor zum **einmaligen Übertragen verketteter Lauftexte** (eine Prozentanzeige für das Gesamtprogramm, sofern die Daten passen); (4) echte gemischte Programme aus Lauf- und Standbildern erst nach Protokollrecherche, da unterschiedliche Standzeiten nicht in einem einfachen Laufbild enthalten sind. Weitere Ideen bleiben im bisherigen Themenspeicher.
 

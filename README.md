@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version v0.3.3 Testkandidat" src="https://img.shields.io/badge/version-v0.3.3--testkandidat-7056d8">
+  <img alt="Version v0.3.4 Testkandidat" src="https://img.shields.io/badge/version-v0.3.4--testkandidat-7056d8">
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
   <img alt="Hardware Testing" src="https://img.shields.io/badge/status-hardware%20testing-2e8b71">
   <img alt="Nichtkommerzielles Hobbyprojekt" src="https://img.shields.io/badge/project-non--commercial-f39c49">
@@ -35,24 +35,51 @@ Die Hersteller-Firmware der LED-Tafel wird dabei **nicht verändert**. Die Tafel
 
 Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Festival-Totem. Es befindet sich aktiv in Entwicklung und ist noch kein fertiges Produkt.
 
-## Aktuell: v0.3.3 · Testkandidat vom 25.10.2026
+## Aktuell: v0.3.4 · Erweiterte BLE-Anzeigemodi (25.10.2026)
 
-**Neu:** Statt eines festen 600-Zeichen-Limits berechnet das Webinterface live die tatsächliche Pixelbreite und die für eine Übertragung benötigte Datenmenge. Ein **vorläufiges, experimentelles Budget von 30 KiB einschließlich Header** steuert die Sendbarkeit; überschrittene Werte werden **fett und rot** angezeigt, Text wird niemals automatisch gekürzt. Besonders schmale Lauftexte können damit länger als 600 Zeichen werden. Zusätzlich bietet **Mini Zweizeilig** beim Lauftext jetzt **eine eigene Farbe pro Zeile**.
+**Neue eigenständige Version:** v0.3.3 wurde am 25.10.2026 auf echter Hardware erfolgreich getestet. Die nachträglich entwickelten Moduswerte werden daher **als neues Feature in v0.3.4** veröffentlicht, nicht als „v0.3.3 Korrektur 1“. Die v0.3.3 bleibt **unverändert** in ihrem eigenen Firmwareordner erhalten.
 
-**Status:** v0.3.3 ist **noch nicht in der Arduino IDE und nicht auf echter Hardware getestet**. Der letzte vom Nutzer erfolgreich auf dem ESP32-C3 getestete Stand bleibt **v0.3.2 Korrektur 2**. Die neue Datenobergrenze ist eine Hypothese aus den v0.3.2-Versuchen, keine bestätigte Gerätespezifikation. BLE-OK bedeutet nicht zwangsläufig eine erfolgreiche Darstellung auf dem LED-Board. Eine Bibliothek und verkettete Lauftext-Programme sind **nur für spätere Versionen geplant**.
+**Neu in v0.3.4:** Das bestehende Dropdown „Anzeigemodus ohne neuen Upload“ enthält acht Werte des **einen** BLE-Steuerbefehls `0x06`:
 
-📋 **[Entwicklungsstand v0.3.3, Versuchsdaten und Testplan](docs/ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md)**
+| Wert | Referenzbezeichnung | Unser Teststand |
+| --- | --- | --- |
+| `0x01` | Standbild | bestätigt |
+| `0x02` | Linkslauf | bestätigt |
+| `0x03` | Rechtslauf | **neu, ungetestet** |
+| `0x04` | Aufwärts | **neu, ungetestet** |
+| `0x05` | Abwärts | **neu, ungetestet** |
+| `0x06` | Schneeflocke | **neu, ungetestet** |
+| `0x07` | Bild / Picture | **neu, ungetestet** |
+| `0x08` | Laser | **neu, ungetestet** |
 
-### v0.3.3 installieren und testen
+Die sechs Namen sind aus einer [CoolLEDX-Referenzimplementierung](https://github.com/UpDryTwist/coolledx-driver/blob/main/src/coolledx/__init__.py) übernommen; ihre tatsächliche Bedeutung und Unterstützung **auf unserer 64×16-Tafel** sind noch zu prüfen. Ein Moduswechsel sendet ausschließlich einen kurzen Steuerauftrag, **keine neue Pixelgrafik**. Text-Uploads wählen wie bisher selbst ihren Darstellungsmodus; Blockseiten bleiben Standbilder. Zusätzlich: `Cache-Control: no-store` für die Startseite gegen alte iPhone-/Safari-Ansichten, verständlicheres Logging bei Modus-/Tempowechseln; Diagnose-TXT trägt jetzt die aktuelle Firmwareversion im Dateinamen.
 
-1. Das vollständige Direktupdate in den **Stammordner des lokalen Repositories** entpacken und vorhandene Dateien überschreiben. Der bisherige Firmwareordner `firmware/RavestickBoard_v0_3_2/` bleibt unangetastet.
-2. `firmware/RavestickBoard_v0_3_3/RavestickBoard_v0_3_3.ino` in der Arduino IDE öffnen und mit den bisherigen ESP32-C3-Einstellungen kompilieren/flashen. Die Header liegen direkt daneben, **kein Generator erforderlich**.
-3. Mit dem WLAN `CoolLED1248` verbinden und `http://192.168.4.1` öffnen. Den neuen Testplan befolgen, besonders WLAN/RAM, Darstellung langer Texte und zwei Farben im Mini-Zeilenlauftext.
-4. Erst nach eigenem Test den Stand über GitHub Desktop committen/pushen; dieses Paket verändert GitHub nicht.
+**Bewährter Unterbau aus v0.3.3:** Live-Datenbudget statt 600-Zeichen-Grenze, bei Überschreitung **fett/rot ohne Textkürzung**, zwei individuell gefärbte synchrone Mini-Lauftextzeilen, mobile Symbolpalette. Im Hardwaretest liefen **650 normale Zeichen / 5.097 Spalten / 30.689 Bytes** sowie **301 gemischte Zeichen / 30.695 Bytes** erfolgreich. Sieben gespeicherte NVS-Seiten blieben erhalten. **Das 30-KiB-Budget ist weiterhin nur unsere experimentelle Grenze**, keine nachgewiesene Gerätespezifikation. BLE-Paketquittung allein bestätigt nicht, dass ein neues Bild angezeigt wurde.
+
+**Prüfstatus:** v0.3.3 ist hardwaregetestet; **v0.3.4 ist ein neuer, noch nicht mit Arduino kompiliert oder an der LED-Tafel geprüfter Releasekandidat**. NVS-Datenstruktur unverändert. Keine neuen Symbole, keine Bibliothek und keine verketteten Programme in dieser Version.
+
+📋 **[Entwicklungsstand und Modus-Testtabelle v0.3.4](docs/ENTWICKLUNGSSTAND_v0.3.4_2026-10-25.md)** · **[Vollständiger Testplan](docs/TESTPLAN.md)**
+
+### v0.3.4 installieren
+
+1. Das vollständige ZIP direkt in den **Stammordner des lokalen Repositories** entpacken. Git-Historie, alte Firmwareordner und vorhandene Dateien beibehalten.
+2. **`firmware/RavestickBoard_v0_3_4/RavestickBoard_v0_3_4.ino`** öffnen; `RavestickBoard_WebUI.h` und `RavestickBoard_Assets.h` liegen im selben Ordner. Keine Generatoren erforderlich.
+3. Arduino-Einstellungen wie bei v0.3.3 verwenden: ESP32C3 Dev Module, USB CDC On Boot aktiviert, No OTA (2MB APP/2MB SPIFFS), ESP32-Core 3.3.12. Ohne „Erase All Flash“ flashen, damit NVS-Seiten erhalten bleiben.
+4. WLAN `CoolLED1248`, Webinterface `http://192.168.4.1`. Einen **kurzen** Text senden und anschließend alle acht Modi im vorhandenen Dropdown durchprobieren. Für jeden Wert **sichtbaren Effekt und Prozentanzeige separat** notieren; zum Zurücksetzen `0x01` oder `0x02` wählen.
+5. Nur nach Prüfung über GitHub Desktop committen und pushen. Das Paket verändert GitHub nicht selbst.
+
+## Rückblick: v0.3.3 · Hardwarebestätigt am 25.10.2026
+
+- Datenbasierte Laufschrift ohne starres Zeichenlimit; **650 Zeichen** mit 30.689 Bytes sowie 301 gemischte Zeichen mit 30.695 Bytes tatsächlich angezeigt.
+- Mini-Zweizeiler mit zwei verschiedenen Farben und gemeinsamem Laufband bestätigt.
+- Mobile Symbolpalette und alle fünf Schriftarten bestätigt; Blockseiten nach Neustart erhalten.
+- Ein zwischenzeitlich vorbereitetes, **nicht als neue Version veröffentlichtes** Modus-Update mit Arbeitsnamen „v0.3.3 Korrektur 1“ wurde zur eigenständigen **v0.3.4** umbenannt. Dies war kein Fehlerfix an der getesteten v0.3.3.
+
+📋 [Testbericht v0.3.3](docs/ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md)
 
 ## Rückblick: v0.3.2 · Testkandidat vom 25.10.2026
 
-**Aktueller auf echter Hardware getesteter Stand: v0.3.2 Korrektur 2 (25.10.2026).** Nach der RAM-Reparatur starten WLAN und Webinterface wieder, bestehende NVS-Blockseiten bleiben erhalten. Die neue iPhone-Symbolpalette, fünf Lauftextschriften und 600 normale Lauftextzeichen wurden erfolgreich ausprobiert. **Lange Symbolketten bleiben ein Experiment:** 300 gemischte Symbole funktionieren, 320 gemischte nicht; das tatsächliche Datenlimit der Tafel ist noch ungeklärt. **Die erfolgreiche BLE-Übertragung ist nicht automatisch eine bestätigte Bildanzeige.**
+**Damals auf echter Hardware getesteter Stand: v0.3.2 Korrektur 2 (25.10.2026).** Nach der RAM-Reparatur starten WLAN und Webinterface wieder, bestehende NVS-Blockseiten bleiben erhalten. Die neue iPhone-Symbolpalette, fünf Lauftextschriften und 600 normale Lauftextzeichen wurden erfolgreich ausprobiert. **Lange Symbolketten bleiben ein Experiment:** 300 gemischte Symbole funktionieren, 320 gemischte nicht; das tatsächliche Datenlimit der Tafel ist noch ungeklärt. **Die erfolgreiche BLE-Übertragung ist nicht automatisch eine bestätigte Bildanzeige.**
 
 📋 **[Hardwaretest-Bericht zu v0.3.2 mit Messungen und damaligen Entwicklungsideen](docs/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md)** · Stand 25.10.2026, ca. 11:45 Uhr MEZ. Historische Versionsabschnitte weiter unten dokumentieren ihren **damaligen** Stand.
 

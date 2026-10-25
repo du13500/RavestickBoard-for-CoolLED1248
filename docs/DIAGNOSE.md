@@ -1,10 +1,14 @@
 # RavestickBoard · Diagnose und Fehlerprotokoll
 
-**Fortgeschrieben 25.10.2026 · WLAN-Startfehler unter v0.3.2 Korrektur 1 beobachtet; mit Korrektur 2 im Hardwaretest behoben.**
+**Fortgeschrieben 25.10.2026 · v0.3.3 hardwaregetestet; Modus-Testversion v0.3.4 noch ungetestet.**
+
+## Diagnose-Ergänzung v0.3.4 – Testbare Moduswerte (25.10.2026)
+
+Der neue Modus-Dropdownwert wird vor dem BLE-Auftrag auf genau `0x01` bis `0x08` geprüft und als **Modusparameter des Steuerbefehls `0x06`** im Diagnose-Log festgehalten. Vor einem Auftrag melden Start- und `Auftrag:`-Zeile jetzt Moduswechsel statt „Helligkeit“; der TXT-Export erhält einen aus `FW_VERSION` gebildeten Dateinamen. Bei Safari-Refresh soll `Cache-Control: no-store` die aktuelle v0.3.4-Oberfläche ausliefern. **Noch keine Hardwarebestätigung für die sechs neuen Effekte**; sichtbaren Anzeigemodus getrennt von `JOB OK` notieren. Vorherige v0.3.3 bleibt Rückfallversion.
 
 ## Diagnose-Ergänzung v0.3.3 (25.10.2026)
 
-Der seriellen HTTP-Logzeile für Lauftextaufträge werden **dekodierte Zeichen, Bildspalten und Datenbytes** hinzugefügt. Bei zu großer berechneter Datenmenge erfolgt ein HTTP-400-Abbruch **vor dem BLE-Auftrag**; der Text bleibt im Browser bestehen. Das Webinterface zeigt eine rote/fette Byte-Auslastung und deaktiviert „Lauftext senden“. Eine spätere dynamische RAM-Allokation kann trotzdem scheitern und erscheint wie bisher als `[RAM] Bildpuffer ... fehlgeschlagen` sowie `JOB FEHLER`. Eine `JOB OK`-Meldung beweist lediglich erfolgreiche Paketübertragung und Benachrichtigungen, **nicht** die Bildübernahme durch die Tafel. Den tatsächlich sichtbaren Effekt stets getrennt protokollieren. Status v0.3.3: Code-/Browsertests, noch **kein** Hardwaretest.
+Der seriellen HTTP-Logzeile für Lauftextaufträge werden **dekodierte Zeichen, Bildspalten und Datenbytes** hinzugefügt. Bei zu großer berechneter Datenmenge erfolgt ein HTTP-400-Abbruch **vor dem BLE-Auftrag**; der Text bleibt im Browser bestehen. Das Webinterface zeigt eine rote/fette Byte-Auslastung und deaktiviert „Lauftext senden“. Eine spätere dynamische RAM-Allokation kann trotzdem scheitern und erscheint wie bisher als `[RAM] Bildpuffer ... fehlgeschlagen` sowie `JOB FEHLER`. Eine `JOB OK`-Meldung beweist lediglich erfolgreiche Paketübertragung und Benachrichtigungen, **nicht** die Bildübernahme durch die Tafel. Den tatsächlich sichtbaren Effekt stets getrennt protokollieren. **Hardware-Nachtrag:** v0.3.3 wurde am 25.10.2026 erfolgreich getestet; 240 BLE-Pakete und 30.695 B über 52.937 ms mit `JOB OK`, tatsächlich auf der Tafel angezeigt.
 
 ## Neuer Diagnosebefund: Bildtransfer ≠ Bildanzeige (25.10.2026)
 

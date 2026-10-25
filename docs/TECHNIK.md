@@ -1,8 +1,8 @@
 # RavestickBoard · Technische Bestandsaufnahme
 
-**Aktualisiert: 25.10.2026 · Aktueller auf Hardware geprüfter Stand: v0.3.2 Korrektur 2; WLAN und BLE funktionieren, längere Symbolfolgen zeigen getrennte RAM- und Boardgrenzen.**
+**Aktualisiert: 25.10.2026 · Auf Hardware geprüft: v0.3.3; neues Modus-Feature v0.3.4 noch ungetestet.**
 
-**Mess- und Architektur-Nachtrag:** [`ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md) enthält die real getesteten Payloadgrößen, den Unterschied von BLE-Quittung und tatsächlicher Bildanzeige sowie die unbestätigten 30-KiB-/5.120-Pixel-Hypothesen. `107 + 6 × max(64, Pixelspalten)` ist die derzeitige Raster-Payloadformel. Die 600-Codepoint-Grenze und die 80 Headerformatplätze sind der aktuelle Implementierungsstand, nicht die bestätigte Hardwaregrenze. Ein Live-Datenbudget und verkettete Lauftextprogramme sind **Planung**, kein Firmwarefeature.
+**Mess- und Architektur-Nachtrag:** In v0.3.3 erfolgreich: 650 Zeichen / 30.689 B und 301 gemischte Zeichen / 30.695 B. `107 + 6 × max(64, Pixelspalten)` ist die aktuelle Payloadformel, mit bewusst **vorläufigem 30-KiB-Softwarebudget**. Der frühere 600-Zeichen-Grenzwert ist seit v0.3.3 entfernt. Die tatsächliche Grenzgröße des LED-Boards bleibt unbekannt; BLE-Paketquittung beweist keine sichtbare Grafik. Siehe [`ENTWICKLUNGSSTAND_v0.3.4_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.4_2026-10-25.md).
 
 Dieses Dokument unterscheidet **durch Nutzer am konkreten Board bestätigt**, **im Quellcode vorhanden** und **für spätere Versionen geplant**. Die Firmware des LED-Boards wird nicht verändert. Historische v0.1.x-Einschränkungen sind weiter unten separat aufgeführt.
 
@@ -10,7 +10,7 @@ Dieses Dokument unterscheidet **durch Nutzer am konkreten Board bestätigt**, **
 
 **Nur Lauftext**: Keine festen 600 Codepoint-Arrays mehr; UTF-8 wird mithilfe eines iterativen Decoders zweimal gescannt (Breitenmessung und Rendering). Variation-Selector U+FE0F wird übersprungen, Banane + U+FE0E bleibt das getrennte Ravestick-Piktogramm. Die tatsächlichen `tokenWidth()`-Maße aus Originalschrift/Symbolsprite plus ein Pixel Abstand je Zeichen ergeben die Bildbreite. Ein Terminatorabstand am Zeilenende wird nicht gezählt. Für Mini Zweizeilig zählt die **maximale** Breite der beiden synchronen Zeilen, nicht deren Summe; jede Zeile besitzt eine eigene RGB-Farbe. Der Frontend-Rechner benutzt dieselben Glyphenbreiten und berechnet `107 + 6 × max(64, Breite)` Bytes. Vorläufiges Budget `30*1024=30720` Bytes, maximale Spaltenzahl `floor((30720-107)/6)=5102`. Beide Seiten prüfen das Budget; Text wird nicht stillschweigend gekürzt.
 
-Header: Der bekannte Protokoll-Header bleibt 107 Bytes groß, die ursprünglichen 80 Formatplätze werden nicht erweitert. Bitmapdaten folgen danach. **BLE-Paket-Notifications allein sind kein Anzeigebeleg**. Bei knappen zusammenhängenden RAM-Blöcken kann selbst unterhalb von 30 KiB eine dynamische Allokation fehlschlagen; dann keine BLE-Übertragung. NVS-PageRecord-Schema und historische Blockseiten bleiben unverändert. v0.3.3 noch nicht hardwaregetestet.
+Header: Der bekannte Protokoll-Header bleibt 107 Bytes groß, die ursprünglichen 80 Formatplätze werden nicht erweitert. Bitmapdaten folgen danach. **BLE-Paket-Notifications allein sind kein Anzeigebeleg**. Bei knappen zusammenhängenden RAM-Blöcken kann selbst unterhalb von 30 KiB eine dynamische Allokation fehlschlagen; dann keine BLE-Übertragung. NVS-PageRecord-Schema und historische Blockseiten bleiben unverändert. v0.3.3 wurde am 25.10.2026 vom Nutzer erfolgreich hardwaregetestet.
 
 ## 1. Geräte und Entwicklungsumgebung
 
@@ -46,7 +46,20 @@ Nach der ersten v0.2.0-Kompilierungsfehlermeldung (`'function' does not name a t
 - Nutzdaten werden für BLE in Blöcke mit bis zu **128 Bytes Rohdatenteil** samt Blockmetadaten/XOR-Prüfsumme übertragen. Notification und tatsächliche Bilddarstellung müssen separat bewertet werden.
 - **`0x08` Helligkeit**: als eigenständiger Steuerbefehl auf unserer Hardware bereits getestet. Das aktuelle Webinterface führt einen eigenen Helligkeitsauftrag aus, aber noch **keine durchgängige Live-Aktualisierung während der Fingerbewegung**.
 - **`0x07` Geschwindigkeit**: im bisherigen Lauftext-Sendeablauf verwendet. UI-Wert 1–100 wird aktuell auf Rohwert 0–255 skaliert; eine Entsprechung zur Original-App-Zahl **80** ist **nicht** nachgewiesen. Ein Live-Speed-Regler ohne Textupload fehlt.
-- **`0x06` Anzeigemodus**: im Code vor Text-/Seitenübertragungen eingesetzt (`0x01` statisch, `0x02` Linkslauf). Weitere Modi wie Rechtslauf, Auf/Ab, Schneefall oder Laser sind als Protokollreferenz bekannt, aber **noch nicht alle auf unserer Tafel geprüft**. Ein eigenständiger Moduswechsel ohne Neu-Upload ist geplant.
+- **`0x06` Anzeigemodus**: kurzer, eigenständiger Steuerbefehl mit *einem Byte Moduswert*. In v0.3.4 sind die Referenzwerte über das Live-Dropdown ohne Bild-Upload erreichbar. **Nur `0x01` und `0x02` sind auf der konkreten Tafel bestätigt**, übrige Namen stammen aus der [CoolLEDX-Referenzimplementierung](https://github.com/UpDryTwist/coolledx-driver/blob/main/src/coolledx/__init__.py):
+
+  | `0x06`-Parameter | Referenzbezeichnung | Status am Ravestick |
+  |---|---|---|
+  | `0x01` | Standbild | getestet |
+  | `0x02` | Linkslauf | getestet |
+  | `0x03` | Rechtslauf | offen |
+  | `0x04` | Aufwärts | offen |
+  | `0x05` | Abwärts | offen |
+  | `0x06` | Schneeflocke | offen |
+  | `0x07` | Bild/Picture | offen |
+  | `0x08` | Laser | offen |
+
+  **Nicht verwechseln:** Die Moduswerte `0x04`, `0x06` und `0x08` sind Parameter des Befehls `0x06`, keine selbstständigen Opcodes. Der separate **Opcode `0x04` für gespeicherte Animationen** ist hiervon unabhängig. Ein Moduswechsel bestätigt noch keinen autonomen Szenenwechsel/keine Unterstützung einer bestimmten Animation.
 - **`0x04` gespeicherte Animation**: OpenSign meldet autonome Animationen auf **einem anderen Referenzboard** (ca. 30 KiB bzw. 80 Frames). **Nicht in unserer v0.2.0-Firmware implementiert, auf unserer Hardware ungetestet.**
 
 ### Verbindungskonflikte und Uploadverhalten

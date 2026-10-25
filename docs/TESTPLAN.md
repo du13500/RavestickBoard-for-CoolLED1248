@@ -1,8 +1,49 @@
 # RavestickBoard · Hardwaretests und Abnahmeprotokolle
 
+## v0.3.4 – Neuer Hardwaretest für zusätzliche Moduswerte (25.10.2026)
+
+**Neues Feature-Release, kein v0.3.3-Bugfix.** Quelle der Parameternamen: `UpDryTwist/coolledx-driver`; auf eigener Hardware sind nur Standbild und Linkslauf gesichert. Einen kurzen Text senden, dann Dropdown ohne Bildneuübertragung ausprobieren. Bei jedem Wert **BLE-Quittung, sichtbaren Effekt und eventuelle Prozentanzeige** unterscheiden. `0x01` / `0x02` als Rückkehrwerte. **NVS nicht löschen.**
+
+| Nr. | Test | Ergebnis | Bemerkungen |
+| --- | --- | --- | --- |
+| 1 | Arduino v0.3.4 kompiliert ohne Fehler | | |
+| 2 | WLAN/HTTP zeigt v0.3.4, NVS-Seiten vorhanden | | |
+| 3 | Kurzer Text wird gesendet und angezeigt | | |
+| 4 | Dropdown `0x01` – Standbild | | |
+| 5 | Dropdown `0x02` – Linkslauf | | |
+| 6 | Dropdown `0x03` – Rechtslauf? | | |
+| 7 | Dropdown `0x04` – Aufwärts? | | |
+| 8 | Dropdown `0x05` – Abwärts? | | |
+| 9 | Dropdown `0x06` – Schneeflocke? | | |
+| 10 | Dropdown `0x07` – Bild/Picture? | | |
+| 11 | Dropdown `0x08` – Laser? | | |
+| 12 | Wechsel zurück zu bekanntem Modus, keine neue Prozentanzeige? | | |
+| 13 | Mode-Hexcode wird im seriellen Log ausgegeben | | |
+| 14 | Gespeicherte Blockseiten, Helligkeit und Tempo weiterhin funktional | | |
+| 15 | Neue Textübertragung und Neustart ohne WLAN-/BLE-Störung | | |
+
+**Hinweis:** `0x04` als Modusparameter des Kommandos `0x06` ist unabhängig vom experimentellen eigenständigen Animationsbefehl `0x04`.
+
+## Archivierter Vorab-Testplan – Arbeitstitel „v0.3.3 Korrektur 1“ (nicht veröffentlicht)
+
+**Quelltextänderung, noch ungetestet.** Vorher kurzen Text per BLE übertragen. Danach jeden Wert im Dropdown einzeln auswählen und die sichtbare Reaktion protokollieren. Moduswechsel verwendet den *eigenständigen BLE-Befehl `0x06`* ohne neue Bilddaten. Bei leerer/unerwarteter Darstellung wieder `0x01` oder `0x02` wählen. Testergebnis = sichtbarer Effekt, nicht allein eine `JOB OK`-Meldung. **Kein Erase All Flash.**
+
+| Parameter des `0x06`-Befehls | Erwartung laut Referenz | BLE-Job OK? | Tafelreaktion / echte Bezeichnung | Prozentanzeige? |
+|---|---|---|---|---|
+| 0x01 | Standbild (bestätigt) | | | |
+| 0x02 | Linkslauf (bestätigt) | | | |
+| 0x03 | Rechtslauf (offen) | | | |
+| 0x04 | Aufwärts (offen) | | | |
+| 0x05 | Abwärts (offen) | | | |
+| 0x06 | Schneeflocke (offen) | | | |
+| 0x07 | Bild (offen) | | | |
+| 0x08 | Laser (offen) | | | |
+
+Nach Prüfung: Neustart/WLAN, gespeicherte Blockseiten, normale Textübertragung. Wichtig: Beim **neuen Textupload** wird der Modus wie zuvor auf Linkslauf gesetzt, während eine Blockseite Standbild setzt.
+
 ## v0.3.3 – Kompakter Hardwaretest (25.10.2026)
 
-**Testkandidat, noch nicht an Arduino IDE / ESP32-C3 / LED-Tafel verifiziert.** Der ausführliche Testbogen steht in [`ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md). Schwerpunkte: Start und gespeicherte Blockseiten; 600 und über 600 normale Zeichen; Schriftwechsel und spontane Live-Byteberechnung; 300 × ⚠️ (~30.701 B) vs. 301 × ⚠️ (~30.803 B, blockiert); getrennte Farben im Mini-Zweizeilen-Lauftext und synchrones Scrollen; erneuter WLAN/RAM-Stabilitätstest. Bitte bei Übertragungen `JOB OK` und **sichtbare Darstellung** unterscheiden. **NVS nicht löschen.**
+**Historischer Testplan vor der inzwischen erfolgreichen Hardwareabnahme von v0.3.3.** Der ausführliche Testbogen steht in [`ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md). Schwerpunkte: Start und gespeicherte Blockseiten; 600 und über 600 normale Zeichen; Schriftwechsel und spontane Live-Byteberechnung; 300 × ⚠️ (~30.701 B) vs. 301 × ⚠️ (~30.803 B, blockiert); getrennte Farben im Mini-Zweizeilen-Lauftext und synchrones Scrollen; erneuter WLAN/RAM-Stabilitätstest. Bitte bei Übertragungen `JOB OK` und **sichtbare Darstellung** unterscheiden. **NVS nicht löschen.**
 
 ## Abnahme-Nachtrag 25.10.2026 – reale Hardwaretests v0.3.2 Korrektur 2
 
