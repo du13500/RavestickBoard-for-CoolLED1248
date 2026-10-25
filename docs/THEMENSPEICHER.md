@@ -1,3 +1,11 @@
+## Ergänzung v0.3.5
+
+### v0.3.5 – Stand der Piktogramme
+
+Kussmund, Blume, Biene, Kuh als vollständige 16×16-Farbmatrizen aus Original-App-Screenshots rekonstruiert; LED-Board-Abgleich fehlt noch. Eigene Bilder: Ravestick-Banane, Quietscheente, Kaktus, UFO, UFO mit Strahl, Alien grün/schwarze Augen. Stern y-zentriert, Blume rechts ein Pixel enger. Weiter offen: weitere Ideen aus früheren Listen (z. B. Tropfen, Katze) nach gesonderter Planung. Die Symbolüberlagerung über zwei Mini-Zeilen wird ausdrücklich beibehalten.
+
+---
+
 # Themenspeicher und Aufgabenregister
 
 

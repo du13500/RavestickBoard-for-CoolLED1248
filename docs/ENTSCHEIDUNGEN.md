@@ -1,3 +1,11 @@
+## Ergänzung v0.3.5
+
+### 2026-10-25: Umfang v0.3.5
+
+Auf der stabilen v0.3.4 aufbauen; neue Komfortfunktionen und Symbole als v0.3.5 statt v0.3.4-Korrektur. Die erweiterten Modi bleiben manuell; keine Laufzeitkalibrierung für Sonderanimationen. Horizontale Textlaufzeit später für Playlist/Programmwechsel. LED Ein/Aus kurz und ohne Pixelupload, Wirkung auf realem Board noch zu testen. NVS-Schema bleibt unverändert. Symbole der zwei Mini-Zeilen dürfen sich absichtlich überlagern.
+
+---
+
 # Entscheidungen und Designprinzipien
 
 **Stand 23.10.2026.** Entscheidungslog (ADR = Architecture Decision Record). Bestehende IDs bleiben stabil; historische Entscheidungen und spätere Präzisierungen werden getrennt dokumentiert. Eine Entscheidung ist nicht automatisch bereits implementiert.

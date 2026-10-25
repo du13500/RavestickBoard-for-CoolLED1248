@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version v0.3.4 Testkandidat" src="https://img.shields.io/badge/version-v0.3.4--testkandidat-7056d8">
+  <img alt="Version v0.3.5 Testkandidat" src="https://img.shields.io/badge/version-v0.3.5--testkandidat-7056d8">
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
   <img alt="Hardware Testing" src="https://img.shields.io/badge/status-hardware%20testing-2e8b71">
   <img alt="Nichtkommerzielles Hobbyprojekt" src="https://img.shields.io/badge/project-non--commercial-f39c49">
@@ -35,7 +35,26 @@ Die Hersteller-Firmware der LED-Tafel wird dabei **nicht verändert**. Die Tafel
 
 Dieses Projekt ist ein privates, **nichtkommerzielles** Experiment für ein Festival-Totem. Es befindet sich aktiv in Entwicklung und ist noch kein fertiges Produkt.
 
-## Aktuell: v0.3.4 · Erweiterte BLE-Anzeigemodi (25.10.2026)
+## Aktuell: v0.3.5 · Steuerung und zusätzliche Pixelmotive (25.10.2026)
+
+**Neue Version auf Grundlage der hardwarebestätigten v0.3.4.** Die Änderungen betreffen die Websteuerung und Symbol-Matrizen; das NVS-Format und die bislang bestätigte BLE-Paketübertragung bleiben unverändert. **v0.3.5 selbst ist ein noch nicht auf Hardware geprüfter Testkandidat.**
+
+- **LED-Anzeige EIN/AUS** als eigener Schalter bei der Helligkeit, ohne erneuten Bild-Upload. CoolLEDX-Referenzbefehl `0x09 0x01` (ein) / `0x09 0x00` (aus). **Hardwarewirkung auf unserer Tafel noch nicht geprüft**; Anzeige im UI ist der zuletzt erfolgreich gesendete Befehl, keine Rückmeldung des physischen Zustands.
+- **Geschwindigkeit 60–100**, Standard **80**; Umrechnung BLE `round(Reglerwert × 255 / 100)` beibehalten; keine Laufzeitberechnung oder Kalibrierung.
+- **Acht hardwaregetestete Modi** aus v0.3.4 jetzt ohne „experimentell“; `0x07` heißt **Aufdecken**. Dropdown-Überschrift „Anzeigemodus erzwingen (keine Vorschau möglich)“.
+- **Hersteller-Piktogramme aus Screenshots:** 💋 Kussmund, 🌼 Blume (alter Alias 🌹 weiterhin gültig), 🐝 Biene, 🐄 Kuh. Die 16×16-Farbmatrizen stammen aus den zur Verfügung gestellten Original-App-Screenshots; **Anzeige auf echter Tafel für diese vier Symbole noch zu prüfen**.
+- **Eigene 16×16-Pixelmotive:** 🍌 vertikal gespiegelte Ravestick-Banane über separate Zeichenvariante, 🦆 Quietscheente, 🌵 Kaktus, 🛸 UFO, 🛸︎ UFO mit grünem Traktorstrahl (Unterscheidung über Unicode VS15), 👽 grüner Alien mit unbeleuchteten schwarzen Augen.
+- **Bestandssymbole:** Stern bleibt gegenüber altem Original vertikal zentriert; Blume bekommt auf der **rechten Seite einen um 1 Pixel reduzierten Zeichenabstand**. Die anderen ursprünglichen Symboldaten bleiben erhalten; bewusste 16-px-Überlagerungen in der Mini-Zweizeile werden nicht unterdrückt.
+
+**Direktupdate installieren:** ZIP in den Repository-Stammordner entpacken, dann in Arduino IDE **`firmware/RavestickBoard_v0_3_5/RavestickBoard_v0_3_5.ino`** öffnen. Gleiches ESP32-C3-Boardprofil wie v0.3.4; **kein „Erase All Flash“**, um NVS-Seiten zu erhalten. Nach dem Flashen zuerst die neue **Ein/Aus-Funktion**, anschließend neue Symbole mit wenigen Zeichen auf dem Display prüfen. Die neue Variante befindet sich in einem eigenen Sketchordner; v0.3.4 bleibt als Rückfallversion separat erhalten.
+
+**Dokumentation:** [Entwicklungsstand und Testprotokoll v0.3.5](docs/ENTWICKLUNGSSTAND_v0.3.5_2026-10-25.md) · [Testplan](docs/TESTPLAN.md). Die genaue Laufzeitmessung horizontaler Lauftexte und Spezialeffekt-Automatisierung sind **nicht** Teil von v0.3.5.
+
+### Rückblick: v0.3.4 · Hardwarebestätigt
+
+Am 25.10.2026 wurden alle acht Moduswerte `0x01` bis `0x08` auf echter CoolLEDX-Tafel bestätigt, ohne erneuten Bild-Upload und ohne Prozentanzeige. Bei `0x07` lautet die intern vereinbarte Bezeichnung „Aufdecken“. Die v0.3.4-Testrunde bestätigte außerdem die gespeicherten Blockseiten, die Symbolüberlagerung in der Mini-Zweizeile sowie die erfolgreiche BLE-Modusdiagnose. Im damaligen 26-Punkte-Testbogen waren 25 Punkte positiv; der konkrete Dateiname des Diagnoseexports wurde nicht unabhängig aus dem seriellen Log verifiziert.
+
+## Historisch: v0.3.4 · Erweiterte BLE-Anzeigemodi (25.10.2026)
 
 **Neue eigenständige Version:** v0.3.3 wurde am 25.10.2026 auf echter Hardware erfolgreich getestet. Die nachträglich entwickelten Moduswerte werden daher **als neues Feature in v0.3.4** veröffentlicht, nicht als „v0.3.3 Korrektur 1“. Die v0.3.3 bleibt **unverändert** in ihrem eigenen Firmwareordner erhalten.
 

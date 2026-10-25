@@ -1,3 +1,11 @@
+## Ergänzung v0.3.5
+
+### v0.3.5 – 2026-10-25 (neuer Testkandidat)
+
+LED Ein/Aus über 0x09 ohne Bildupload; Tempo 60–100/Standard 80; acht endgültig benannte Modi; vier Screenshot-rekonstruierte Hersteller-Motive, sechs eigene Motive; Blume-Abstand korrigiert. Hardwaretest offen. Zeitberechnung für horizontale Laufschrift später; Spezialeffekte werden ausschließlich manuell erzwungen.
+
+---
+
 # 🍌 RavestickBoard · Roadmap
 
 **Fortgeschrieben: 25. Oktober 2026 · hardwaregetesteter Stand: v0.3.3 · neuer Testkandidat: v0.3.4.**  

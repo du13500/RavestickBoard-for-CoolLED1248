@@ -1,3 +1,15 @@
+## v0.3.5 · LED-Steuerung und Pixelmotive (2026-10-25)
+
+**Status: fertig gepackter Firmware-Testkandidat; Arduino-Kompilierung und Hardwaretest offen.**
+
+- LED-Anzeige Ein/Aus mit `0x09 0x00/01` als kurzer BLE-Befehl ohne Pixelupload; physische Funktion und Ein-Schalten nach Aus sind **noch hardwareseitig zu bestätigen**.
+- Laufgeschwindigkeit 60–100 statt 1–100; Startwert 80; unveränderte BLE-Skalierung.
+- Hardwarebestätigte acht Anzeigemodi eindeutiger benannt, `0x07 = Aufdecken`; präzisierte Dropdown-Überschrift.
+- Vier zusätzliche aus den bereitgestellten Original-App-Screenshots abgelesene 16×16-Piktogramme: Kussmund, Blume, Biene, Kuh; Rose-Emoji als abwärtskompatibles Alias für Blume.
+- Fünf eigene neue Motive (Quietscheente, Kaktus, UFO, UFO mit Traktorstrahl, Alien) und überarbeitete vertikal gespiegelte Ravestick-Banane; Pixelpalette auf sieben LED-Farben begrenzt.
+- Blume: rechter Abstand um 1 Pixel reduziert; Stern zentriert; alle alten Hersteller-Spriteindizes bleiben erhalten.
+- Separate neue Firmwaremappe, keine Änderung der NVS-Seitenstruktur, kein neues Playlist-/Laufzeit-System.
+
 # Changelog
 
 ## [0.3.4] · 25.10.2026 · Erweiterte BLE-Anzeigemodi (Hardwaretest ausstehend)

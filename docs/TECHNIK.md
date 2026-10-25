@@ -1,3 +1,15 @@
+## Ergänzung v0.3.5
+
+### v0.3.5 – zusätzliche Steuer- und Symbolcodes
+
+- `0x09 0x00` Display AUS, `0x09 0x01` Display EIN gemäß CoolLEDX-Referenztreiber; auf unserer Hardware noch **nicht** geprüft. UI kennt nur zuletzt gesendeten Befehl, liest den physischen Zustand nicht aus.
+- Tempo `0x07` bisheriges Mapping 60..100 → 153..255 (`round(255 × slider / 100)`). Keine Laufzeitkalibrierung.
+- 34 Sprite-Matrizen à 128 Byte (16×16×4 Bit); Indizes 0..23 alte Original-App, 24 Ravestick-Banane, 25 Kussmund, 26 Blume, 27 Biene, 28 Ente, 29 Kuh, 30 Kaktus, 31 UFO, 32 UFO mit grünem Strahl, 33 Alien. Vier neue App-Motive aus Screenshots beprobt, sechs eigene Motive.
+- `🌼` und das historische Alias `🌹` zeigen beide Bitmap 26. UFO+Strahl über `🛸` + VS15 (U+FE0E) → interner PUA-Code U+E34D, analog zur Ravestick-Banane.
+- Alle Symbole in Mini-Zweizeile bleiben 16 px hoch, Überlappung ist bewusst zulässig. Für Blume reduziert `tokenGap` den rechten Abstand um ein Pixel in Firmware **und** JS-Vorschau.
+
+---
+
 # RavestickBoard · Technische Bestandsaufnahme
 
 **Aktualisiert: 25.10.2026 · Auf Hardware geprüft: v0.3.3; neues Modus-Feature v0.3.4 noch ungetestet.**

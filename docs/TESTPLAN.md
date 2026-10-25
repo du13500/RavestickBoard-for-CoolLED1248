@@ -1,3 +1,38 @@
+## Ergänzung v0.3.5
+
+
+
+| Nr. | Bereich | Prüfung | Ergebnis | Bemerkung |
+|---|---|---|---|---|
+| 01 | Build | Sketch v0.3.5 kompiliert und flasht | | |
+| 02 | Start | WLAN/Webinterface, korrekte v0.3.5 | | |
+| 03 | NVS | Gespeicherte Blockseiten unverändert | | |
+| 04 | EIN/AUS | Ausschalten ohne Prozentanzeige | | |
+| 05 | EIN/AUS | Einschalten ohne Prozentanzeige, letzter Inhalt bleibt | | |
+| 06 | EIN/AUS | Log zeigt POWER 0x09 0x00/0x01 | | |
+| 07 | Geschwindigkeit | Regler 60..100, Standard 80 | | |
+| 08 | Geschwindigkeit | 60, 80 und 100 ändern Bewegung | | |
+| 09 | Modus | 8 Modi vorhanden, Aufdecken statt Bild | | |
+| 10 | Modus | Überschrift „Anzeigemodus erzwingen (keine Vorschau möglich)“ | | |
+| 11 | Symbol | Kussmund gegenüber Screenshot (Farbe/Form/Abstand) | | |
+| 12 | Symbol | Blume mit engerem rechten Abstand | | |
+| 13 | Symbol | Biene gegenüber Screenshot | | |
+| 14 | Symbol | Kuh gegenüber Screenshot | | |
+| 15 | Symbol | Quietscheente | | |
+| 16 | Symbol | Ravestick-Banane vertikal gespiegelt | | |
+| 17 | Symbol | Kaktus | | |
+| 18 | Symbol | UFO ohne Strahl | | |
+| 19 | Symbol | UFO mit Traktorstrahl als eigene Variante | | |
+| 20 | Symbol | Alien grün, Augen schwarz/unbeleuchtet | | |
+| 21 | Symbol | Stern vertikal zentriert | | |
+| 22 | Regression | Mini Zweizeilig: Symbolüberlagerung weiterhin erlaubt | | |
+| 23 | Regression | Alle 5 Schriften und beide Farben | | |
+| 24 | Regression | Blockseitenprogramm und bestehende Piktogramme | | |
+| 25 | Stabilität | Mehrfachsteuerung/Upload ohne Fehler | | |
+
+
+---
+
 # RavestickBoard · Hardwaretests und Abnahmeprotokolle
 
 ## v0.3.4 – Neuer Hardwaretest für zusätzliche Moduswerte (25.10.2026)
