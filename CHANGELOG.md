@@ -1,3 +1,20 @@
+## v0.4.0-dev · 26.10.2026 – WebUX-Neustrukturierung und MIT-Lizenz
+
+**Status:** Browser- und Syntaxprüfung abgeschlossen, Arduino-Kompilierung und Hardwaretests offen. Letzter hardwarebestätigter Rückfallstand: **v0.3.5.1**.
+
+- Neue Navigation über die Banane, fixierter Header auf allen sieben Seiten: Start, Bibliothek, Programme, Texteditor, Ambiente, Diagnose, Einstellungen.
+- Startbildschirm ohne vertikales Scrollen: sechs Kurzwahl-Kacheln (vorerst unbelegt), visueller Belegungsmodus, Helligkeit sowie Ein/Aus.
+- Bibliothek und Programme mit geplanten festen Aktionsleisten, scrollbarem Listenbereich, globalen Reglern und Modus-Override. **Noch Platzhalter:** Speicherung, Textauswahl, Drag-and-drop und Programmverkettung.
+- Vorhandenen Text-/Blockseiteneditor und Diagnosefunktionen in eigene Seiten überführt; keine NVS-Migration, ältere Sketchordner unberührt.
+- Symbol-Picker über ♥ geöffnet, thematisch geordnet und mit echten 16×16-Pixelbild-Kacheln statt Unicode-Emoji-Vorschaubildern. Vorhandene 36 Sprites unverändert, neuere Excel-Grafiken noch nicht importiert.
+- Globale Helligkeits- und Tempowerte über alle Ansichten synchron; `/api/status` um `brightness`/`speed` ergänzt. Neue Textaufträge ändern diese Sollwerte nicht mehr. Geschwindigkeitsregler wieder **1–100**, Standard 80.
+- Neues Ambiente: sieben große Farbtasten senden über `/api/ambience` einen normalen, einfarbigen 64×16-Pixel-Upload. **Hardwarewirkung noch nicht getestet.**
+- README vollständig in gemeinschaftlicher Wir-Perspektive neu aufgebaut, tatsächliche Feature-Reife getrennt dokumentiert, selbst erstellter Code von All Rights Reserved auf MIT umgestellt; fremde Glyphen/Bilder bleiben rechtevorbehalten.
+
+Siehe [Entwicklungsstand](docs/ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md) und [Testplan](docs/TESTPLAN_v0.4.0.md).
+
+---
+
 ## v0.3.5.1 – 25.10.2026 – Pixelart-Update (Hardwaretest offen)
 
 - Seven Excel-created 16×16 graphics implemented directly from the cells and the eight-state LED color legend (`Pixel-Art.xlsx`): Huhn, Ravestick-Banane, Gummiente, UFO, UFO+Traktorstrahl, new Küken and Frosch. Existing sprite IDs preserved.

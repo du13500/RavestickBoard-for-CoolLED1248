@@ -1,3 +1,9 @@
+## Entscheidung v0.4.0-dev · 26.10.2026
+
+Wir wechseln von einer Editor-zentrierten Oberfläche zu sieben Bereichen mit festem Header und Menü über den Bananen-Button. Die Startseite besitzt sechs Kurzwahlen statt der früheren acht. Bibliothek und Programme sind getrennte Datenebenen, Programmzeilen referenzieren Bibliothekseinträge und übernehmen spätere Textänderungen. Globale Helligkeit und Geschwindigkeit bleiben bei Inhaltswechseln unverändert; ein manueller Modus-Override gilt nur bis zum nächsten Inhalt, dessen gespeicherter Modus wieder gilt. Einzelheiten dokumentiert `ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md`. Unsere **eigenen Codebestandteile** veröffentlichen wir ab dieser Version unter MIT; Herstellerpixel und andere Fremdmaterialien sind davon ausgenommen.
+
+---
+
 ## Ergänzung v0.3.5
 
 ### 2026-10-25: Umfang v0.3.5

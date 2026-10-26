@@ -1,3 +1,9 @@
+## Aktuelle Prioritäten ab v0.4.0-dev · 26.10.2026
+
+Wir folgen dem gemeinsam entwickelten WebUX-Konzept: **v0.4.0** Navigation und vorbereitete sieben Ansichten; **v0.4.1** Bibliothek mit referenzierten Texten, Drag-and-drop, sechs Kurzwahlbelegungen; **v0.4.2** Programme als Verkettung dieser Texte mit BLE-Größen-/Kompatibilitätsprüfung; **v0.4.3 (optional)** Textabschnitte mit individuellen Farben. Erst danach priorisieren wir weitere Gerätefunktionen und die autonome Animation ohne sichtbare Uploads zwischen Seiten. Tempo/Helligkeit sind global; Modus pro Text. Mehrfarbige Symbol-Buttons verwenden tatsächliche 16×16-Sprites. Die neue Excel-Sammlung wird als separater Import behandelt.
+
+---
+
 ## Ergänzung v0.3.5
 
 ### v0.3.5 – 2026-10-25 (neuer Testkandidat)

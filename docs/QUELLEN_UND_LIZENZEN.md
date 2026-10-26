@@ -1,57 +1,39 @@
-# RavestickBoard · Quellen, Codeherkunft und Nutzungsrechte
+# RavestickBoard · Quellen, Lizenzumfang und Rechte
 
-**Stand: 23.10.2026.** Technische Herkunftsdokumentation, **keine anwaltliche Rechtsberatung**. Für die ursprünglichen Quellen und den Prüfumfang siehe auch [`VEROEFFENTLICHUNGS_AUDIT_2026-10-23.md`](VEROEFFENTLICHUNGS_AUDIT_2026-10-23.md).
+**Aktueller Stand: 26.10.2026 · Projektcode unter MIT.** Diese Übersicht trennt von uns lizenzierbare Bestandteile, fremde Werke und technische Gerätefakten. Sie ersetzt keine individuelle rechtliche Prüfung.
 
-## Projekt- und Lizenzentscheidung
+## MIT ab v0.4.0-dev
 
-Die Repository-Sichtbarkeit und eine Open-Source-Lizenz sind unterschiedliche Entscheidungen. Für **eigene, vom Rechteinhaber kontrollierte Projektbestandteile** gilt die [`LICENSE`](../LICENSE): **All Rights Reserved**, keine allgemeine Erlaubnis zum Kopieren, Bearbeiten oder Weiterverbreiten. GitHub-Forking-/Viewing-Rechte, geltendes Recht und **fremde Lizenzen** bleiben unberührt.
+Wir geben den **eigenständig erstellten Programmcode für Firmware und Webinterface** und unsere eigenen Dokumentationstexte unter der [MIT-Lizenz](../LICENSE) frei. Die vormalige Einstellung **„All Rights Reserved“** war eine frühere, bewusst gewählte Projektphase und ist für die nun unter MIT veröffentlichten eigenen Codebestandteile nicht mehr der geltende Lizenzstatus.
 
-Das Repository `du13500/RavestickBoard-for-CoolLED1248` ist seit dem 23.10.2026 **öffentlich (Public)**, über die GitHub-Schnittstelle bestätigt. Es ist **nicht** unter einer Open-Source-Lizenz freigegeben; der eigene Projektcode bleibt All Rights Reserved. Eine offene Lizenz wurde **nicht** beschlossen.
+MIT gestattet ausdrücklich auch kommerzielle Nutzung. Dass wir RavestickBoard als privates und überwiegend nichtkommerzielles Festivalprojekt betreiben, ist **keine weitere Lizenzbedingung**.
 
-## Dokumentierte Fremdprojekte
+## Nicht von unserer MIT-Erlaubnis umfasst
 
-| Quelle | Lizenzstand beim Prüfen 23.10.2026 | Nutzung / Grenze |
+Wir können nur Rechte vergeben, die wir selbst besitzen oder wirksam weiterlizenzieren dürfen. Unsere MIT-Lizenz verleiht daher keine Rechte an:
+
+- **Hersteller-App und daraus rekonstruierten Symbolgrafiken oder Schriftzeichen.** Einzelne 16×16-Matrizen wurden nach Screenshots der Original-App rekonstruiert und liegen als Daten in `RavestickBoard_Assets.h` sowie den Webassets. Wir beanspruchen daran keine originären Herstellerrechte und sagen keine MIT-Lizenz für diese fremden Gestaltungen zu.
+- **Herstellerlogos, Namen und Marken.** Die Nennung von CoolLED1248/CoolLEDX dient der Kompatibilitätsbeschreibung und bedeutet keine Zusammenarbeit oder Freigabe durch den Hersteller.
+- **Fremdcode**, für den uns keine passende Lizenz oder ausdrückliche Erlaubnis vorliegt.
+- **Fotos, GIFs und andere externe Materialien**, soweit ihre Rechte nicht ausdrücklich uns gehören. Ein öffentlich sichtbares Bild wird dadurch nicht gemeinfrei.
+- **Plattform-Abhängigkeiten** (Arduino-ESP32, BLE, WebServer usw.); deren eigene Lizenzen bleiben wirksam.
+
+Die von uns selbst entwickelten Pixelmotive sind eigenständig erstellte Inhalte; wir führen die Herkunft der Sammlungen getrennt von rekonstruierten Herstellermotiven nach. Dass Web-Buttons die Herkunft der Motive **nicht mehr unterscheiden**, ändert an diesen Rechtevorbehalten nichts.
+
+## Externe technische Referenzen
+
+| Projekt | Bekannter Lizenzstatus / Nutzung | Umgang |
 | --- | --- | --- |
-| [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) | **MIT-Lizenz**, Copyright © 2025 Greg Tatham | Technische BLE-Protokollreferenz. Bei **tatsächlicher** Übernahme geschützter Codebestandteile MIT-Lizenz- und Copyright-Hinweise mitführen. |
-| [ohtaras/led](https://github.com/ohtaras/led) | Keine allgemeine Code-Wiederverwendungslizenz festgestellt | Protokoll-/Rendererreferenz; unlizenzierte Quellcodepassagen nicht kopieren oder nahezu wortgetreu portieren. |
-| [schulzad/coolled-sign-controller (OpenSign)](https://github.com/schulzad/coolled-sign-controller) | README erklärt ausdrücklich „all rights reserved until one is added“, **keine Lizenzdatei** | Wertvolle Referenz zur autonomen Animation, aber keine Nutzungserlaubnis für dessen konkreten Python-Code. |
+| [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) | MIT, Copyright © 2025 Greg Tatham; technische BLE-Protokollreferenz | Bei konkreter Übernahme urheberrechtlich geschützter Codeanteile Attribution und Lizenz erhalten |
+| [ohtaras/led](https://github.com/ohtaras/led) | Zum früheren Prüfzeitpunkt keine allgemeine Wiederverwendungslizenz gesichert | Nur technische Fakten untersuchen, keinen unlizenzierbaren Code übernehmen |
+| [schulzad/coolled-sign-controller (OpenSign)](https://github.com/schulzad/coolled-sign-controller) | Zum früheren Prüfzeitpunkt „All rights reserved until one is added“ | Keine Quellcodeübernahme/Portierung ohne geeignete Erlaubnis |
 
-**Stand OpenSign-Kontakt:** Adam Schulz wurde am 23.10.2026 **per E-Mail** um eine Erlaubnis zur Übernahme, Anpassung, Portierung und Veröffentlichung relevanter OpenSign-Codeteile gebeten. **Versand vom Nutzer bestätigt; Antwort/Erlaubnis derzeit ausstehend.** Bis zur ausdrücklichen Erlaubnis: kein Kopieren/Portieren von OpenSign-Implementierung. Ein öffentliches Repository oder nichtkommerzielle Nutzung schaffen keine automatische Weiterverwendungslizenz.
+Wir haben Adam Schulz am 23.10.2026 um eine Erlaubnis zur Einbeziehung geeigneter OpenSign-Teile gebeten. **Bis zum hier dokumentierten Stand liegt keine bestätigte Erlaubnis vor.** Unsere künftige Recherche zum Animationsbefehl `0x04` trennt ungeschützte Geräteprotokollfakten von konkreter externer Implementierung.
 
-## Technische Protokollkenntnisse gegenüber Fremdcode
+**Historische Einordnung:** Ältere Entwicklungsberichte in `docs/` können weiterhin den früheren Lizenzstand „All Rights Reserved“ nennen. Sie dokumentieren ihren damaligen Zustand; für neu veröffentlichte eigene Codebestandteile gilt die aktuelle [`LICENSE`](../LICENSE) mit diesen Grenzen.
 
-In den bei der ursprünglichen Prüfung verfügbaren Firmwarepaketen (FirstText, v0.1.0, v0.1.1, v0.1.2, v0.2.0 Korrektur 1) wurde **keine konkret nachweisbare Übernahme unlizenzierter Quellcodepassagen** festgestellt. Die Funktionen für ESC-Byte-Framing, 128-Byte-Chunks, Checksummen, RGB-Bitebenen und BLE-Kommandos implementieren gemeinsame technische Geräteanforderungen. Gleiche Paketwerte allein belegen keine Codekopie.
+## Rechteprüfung bei neuen Beiträgen
 
-**Abgrenzung:** Diese Feststellung ist ein technischer, begrenzter Prüfbefund und **keine rechtssichere Garantie**. Eine automatische Textsuche kann auch sinngemäße Codebearbeitungen nicht vollständig ausschließen. **Die tatsächliche private Git-Historie wurde nicht unabhängig ausgelesen**; laut Nutzer enthält sie nur die zuvor hier gemeinsam erzeugten Projektdateien.
+Wir dokumentieren für zusätzliche Quellen künftig URL/Urheber/Lizenzstand, konkrete Verwendung und ggf. abweichende Nutzungsbedingungen. Externe Beiträge nehmen wir erst dann unter MIT an, wenn deren Weiterlizenzierung geklärt ist. Bei eigenen Copyright-Hinweisen und der Verteilung der Software erhalten wir die MIT-Hinweise.
 
-Die aktuelle v0.2.0-Firmware ist in C++ für ESP32-C3 geschrieben. Protokollreferenz ist nicht identisch mit der Übernahme eines geschützten Python- oder JavaScript-Implementierungstexts. Eigenständig erstellte Glyphen sind nicht als originaler Herstellerfont auszugeben.
-
-## OpenSign-Animation: externer Forschungsbefund
-
-OpenSign dokumentiert auf **seiner** 64×16-CoolLEDX-Referenztafel (Firmwarekennung 6) gespeicherte Animationen per `0x04`, ungefähr **30 KiB / 80 Frames** sowie eine **gemeinsame Haltezeit pro Frame**. Es beschreibt „store-and-loop“ und keinen bestätigten dauerhaften Frame-Stream.
-
-**Diese Angaben sind nicht auf unsere Tafel übertragen oder verifiziert.** Ein eigenes Testpaket und reale Messungen (Frames, ACKs, Timeraster, Übertragung, Stromausfall, sichtbare Anzeige) sind in [`THEMENSPEICHER.md`](THEMENSPEICHER.md) unter `ANM-01` bis `ANM-14` vorgemerkt. Die kompatible eigene Implementierung wird anhand eigener Tests und technischer Fakten erstellt oder nach eindeutig erteilter Erlaubnis.
-
-## Weitere Rechte und bewusst akzeptierte Veröffentlichungspunkte
-
-- **WLAN-AP-Schlüssel:** `Banane1248!` ist vom Nutzer **bewusst zur Dokumentation freigegeben**; spätere UI-Konfiguration ist optional. Für Nutzer in Funkreichweite ist der AP damit nicht geheim.
-- **BLE-Testadresse:** `ff:00:00:03:7e:c3` identifiziert nur die aktuell getestete Tafel und ist kein Geheimnis; spätere Gerätesuche geplant.
-- **Eigenes Totem-Foto:** EXIF-Angaben zum iPhone-Modell und Festival-Geotags sind dem Nutzer bewusst und akzeptiert.
-- **Original-App-Screenshots, Fonts, Herstellerlogos:** Vor Einbindung in ein öffentlich sichtbares Repository gesondert auf Rechte prüfen. Referenzaufnahmen im Chat sind nicht automatisch zur öffentlichen Wiederverwendung freigegeben.
-- **Plattformbibliotheken:** Arduino-ESP32-Core, WiFi, WebServer, BLE, Preferences werden über ihre jeweiligen Paket-/Abhängigkeitslizenzen bereitgestellt. Eine eigene `LICENSE` im Repository ändert diese Rechte nicht.
-
-## Laufende Pflege
-
-1. Jede neue externe Quelle mit URL, Lizenzstand, Abrufdatum und konkret verwendetem Inhalt dokumentieren.
-2. Zwischen protokolltechnischen Fakten, **eigener** Implementierung und tatsächlich übernommener Codepassage unterscheiden.
-3. Bei MIT-Codeübernahme Copyright und erforderliche Lizenzhinweise mitliefern; bei unlizenzierter Quelle erst schriftliche Freigabe erhalten.
-4. Änderungen an einer tatsächlichen späteren OpenSign-Erlaubnis **wörtlich und mit Datum dokumentieren**; nicht aus einer freundlichen Antwort pauschale Rechte ableiten.
-5. Nach Import neuer Fonts/Bilder/Animationen Provenienz erneut prüfen.
-
-## Herkunft der Originalsymbole (v0.3.0)
-
-Die als „CoolLED1248-Originalsymbole“ gekennzeichneten Pixelgrafiken wurden anhand der offiziellen CoolLED1248-App (Apple App Store, Entwicklerangabe: **玲玉 代**) rekonstruiert.
-
-RavestickBoard beansprucht keine Rechte an den ursprünglichen Symbolgestaltungen. Etwaige Rechte verbleiben bei den jeweiligen Rechteinhabern.
-
-Eigenständig entwickelte Symbole werden separat als „RavestickBoard-Eigensymbole“ gekennzeichnet. Die Quellenangabe ersetzt eine gegebenenfalls erforderliche Nutzungserlaubnis nicht.
+Unsere Diagnoseexports enthalten bewusst keine persönlichen Texte, WLAN-Zugangsdaten oder Bluetooth-Geräteadressen. Das derzeit im Quelltext enthaltene Standard-WLAN-Passwort gilt als öffentliche Beispielkonfiguration und sollte vor einem breiteren Einsatz angepasst werden.
