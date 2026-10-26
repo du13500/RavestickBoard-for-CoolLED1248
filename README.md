@@ -1,5 +1,3 @@
-> **v0.3.5.1 (25.10.2026):** Pixelart-Korrektur/Erweiterung: sieben 16×16-Motive aus `docs/Pixel-Art.xlsx`, vier Hersteller-Piktogramme ohne X-Versatz und ohne rechts abgeschnittene Spalte, neue Küken-/Frosch-Symbole. Keine NVS-Migration; der Geschwindigkeitshinweis aus dem v0.3.5-Test bleibt zur Kalibrierung offen.
-
 <p align="center">
   <img src="docs/assets/board-gif.gif" alt="Animierte Vorschau der CoolLED1248-LED-Tafel" />
 </p>
@@ -277,6 +275,14 @@ RavestickBoard baut auf eigenen Hardwaretests und öffentlich dokumentierten Erk
 **RavestickBoard ist öffentlich einsehbar, aber derzeit nicht unter einer Open-Source-Lizenz freigegeben.** Es gilt der Copyright- und Nutzungshinweis in [`LICENSE`](LICENSE) (All Rights Reserved). Sichtbarkeit, Dokumentation und technische Diskussion sind erwünscht; daraus entsteht keine allgemeine Erlaubnis zum Kopieren, Bearbeiten oder Weiterverbreiten des eigenen Projektcodes. GitHubs Nutzungsbedingungen und gesetzliche Rechte bleiben unberührt.
 
 Nichtkommerzieller Einsatz allein ersetzt keine Nutzungsrechte an fremdem Code. Insbesondere übernehmen wir OpenSign-Code ohne Erlaubnis **nicht** und portieren ihn nicht einfach nach C++. Die Quellcodeherkunft und die Abgrenzung dokumentierter Protokolldaten von fremder Software dokumentiert [`docs/QUELLEN_UND_LIZENZEN.md`](docs/QUELLEN_UND_LIZENZEN.md).
+
+## KI-unterstützte Entwicklung
+
+RavestickBoard ist ein unabhängiges Hobbyprojekt, das mit Unterstützung von KI-Werkzeugen entwickelt wird, insbesondere **ChatGPT von OpenAI** und **Claude von Anthropic**. Die Werkzeuge unterstützen unter anderem bei der Softwareentwicklung, bei Code-Reviews, technischen Analysen und der Dokumentation.
+
+**Konzeption, Anforderungen sowie sämtliche Design- und Funktionsentscheidungen liegen beim Projektbetreiber.** Auch die praktische Arbeit an der Hardware, einschließlich der Untersuchung der LED-Tafel, des Flashens der Firmware und der Tests am realen Gerät, führt der Projektbetreiber selbst durch.
+
+KI-Unterstützung ersetzt keine praktische Überprüfung. Der Entwicklungsstand und die Testergebnisse werden entsprechend dem jeweils tatsächlich geprüften Funktionsumfang dokumentiert.
 
 ---
 
