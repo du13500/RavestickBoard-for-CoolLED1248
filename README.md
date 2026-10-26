@@ -14,9 +14,9 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-v0.4.0--dev-7056d8">
+  <img alt="Version" src="https://img.shields.io/badge/version-v0.4.0.1--dev-7056d8">
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
-  <img alt="Hardwarestatus" src="https://img.shields.io/badge/status-v0.4.0%20Testkandidat-f3b653">
+  <img alt="Hardwarestatus" src="https://img.shields.io/badge/status-v0.4.0.1%20Testkandidat-f3b653">
   <img alt="Lizenz" src="https://img.shields.io/badge/code%20license-MIT-2e8b71">
   <img alt="Mission" src="https://img.shields.io/badge/mission-Hugs%20and%20Love-ff69b4">
 </p>
@@ -25,7 +25,7 @@
   <img src="docs/assets/webux-v0.4.0.png" width="340" alt="Mobile Vorschau des v0.4.0-Startbildschirms mit sechs Kurzwahltasten" />
 </p>
 
-> **Entwicklungsstand vom 26. Oktober 2026:** Wir bauen v0.4.0 als **neues WebUX-Fundament** auf der zuletzt erfolgreich hardwaregetesteten **v0.3.5.1**. Der v0.4.0-Code ist ein **Testkandidat**: Browserseitige Tests sind durchgeführt, Arduino-Kompilierung und Hardwaretest stehen aus. Die Bibliothek und die Verkettung sind vorbereitete Ansichten, noch keine neue Datenbank oder autonome Wiedergabe.
+> **Entwicklungsstand vom 26. Oktober 2026:** **v0.4.0** wurde auf dem ESP32-C3 kompiliert, installiert und in **30 von 31 Prüfpunkten erfolgreich** hardwaregetestet; der 30-Minuten-Dauerbetrieb ist noch offen. **v0.4.0.1-dev** bündelt nach diesem Test die überarbeitete Platzaufteilung, Kurzwahl-Navigation und Symbolbibliothek. Für **v0.4.0.1 selbst** liegen Browser- und statische Prüfungen vor, aber noch **kein Arduino-/Boardtest**. Bibliothek und Programme bleiben ausdrücklich vorbereitete Ansichten.
 
 ## Worum geht es?
 
@@ -45,26 +45,41 @@ Die Hersteller-Firmware der Tafel bleibt unverändert. Für das lokale Steuern b
 
 ## Was funktioniert schon?
 
-Die **zuletzt hardwarebestätigte Basis v0.3.5.1** bietet:
+Unsere **auf realer Hardware bestätigte Basis v0.4.0** (aufbauend auf v0.3.5.1) bietet:
 
 - **Texte übertragen:** linkslaufender Text mit datenbasierter Längenprüfung; die experimentell gesetzte Obergrenze beträgt 30 KiB Bilddaten. Im Hardwaretest der Vorgängerfassung wurden 650 Zeichen bei 30.689 Byte erfolgreich übertragen und dargestellt.
 - **Schriften:** Original Normal, Original Bold, Engschrift, Mini Einzeilig und Mini Zweizeilig. Im zweizeiligen Lauftext können die beiden Zeilen verschiedene Farben haben.
-- **Pixelgrafiken:** 36 rekonstruierte und selbst entwickelte 16×16-Symbole; die RGB-Bilder sind Teil des LED-Renders. Die Herzvarianten unterstützen sieben Farben.
+- **Pixelgrafiken:** In v0.4.0 waren 36 16×16-Symbole enthalten; **v0.4.0.1-dev enthält 63 Motive** einschließlich 27 neuer Excel-Grafiken. Die neue Krabbe ersetzt die bisherige Grafik unter derselben ID; die neue Schneeflocke kommt separat hinzu. Alle sieben Herzfarben bleiben erhalten.
 - **Blockseiten:** Einzelne Seiten gestalten, speichern und manuell anzeigen; bis zu zwölf Seiten in der bestehenden NVS-Struktur. Eine einfache ESP32-gesteuerte Wiedergabe ist vorhanden und erfordert weiterhin neue BLE-Bildübertragungen zwischen den Seiten.
 - **Live-Steuerung:** Helligkeit, Tempo, acht Anzeigeeffekte sowie Ein/Aus per BLE, ohne dafür jeweils ein neues Bild hochzuladen. Die tatsächlich sichtbare Wirkung wurde im Projekt getestet; BLE-Quittungen allein sind kein Bildnachweis.
 - **Diagnose:** Status, BLE-Zähler, Fehlermeldungen und Ereignisse; TXT-Export ohne gespeicherte Texte, Passwörter oder Geräteadressen.
 
-### Neu in v0.4.0-dev
+### v0.4.0.1-dev: WebUX-Feinschliff und Pixelart
+
+Wir haben nach dem erfolgreichen v0.4.0-Hardwaretest die Bedienung gezielt verfeinert:
+
+- **Kurzwahl ist dauerhaft der erste Menüpunkt**, danach folgen Texteditor, Bibliothek, Programme, Ambiente, Diagnose und Einstellungen. Der Bananen-Button bleibt auf jeder Seite verfügbar.
+- **Bibliothek und Programme nutzen fast die gesamte verfügbare Höhe für ihre scrollbaren Listen**; die festen oberen Aktionen und unteren Geräteeinstellungen sind kompakter.
+- **Helligkeit und Tempo:** keine separaten Überschriften mehr, sondern eigene monochrome 16×16-Piktogramme (kleine/große Glühlampe beziehungsweise Schnecke/Pferd). Die Werte bleiben global und geräteweit synchron.
+- **Statusmeldungen:** kein permanenter Hinweisfuß mehr; normale Meldungen verschwinden nach etwa 2,7 Sekunden. Fehler bleiben bis zum Antippen sichtbar. Unbelegte Kurzwahlen geben nur ein kurzes visuelles Feedback.
+- **Symbol-Picker:** 63 originale und eigene Motive in **einer thematischen Sammlung**, mit ihren tatsächlichen 16×16-Pixelgrafiken auf den Schaltflächen. Alien bei den UFOs; neue Krabbe ersetzt die alte, zweite Schneeflocke bleibt zusätzlich.
+- **Unverändert:** BLE-Steuerprotokoll, dynamisches 30-KiB-Datenbudget, NVS-Schema und bestehende Blockseiten. Die Firmware v0.4.0 bleibt als Rückfalloption erhalten.
+
+Die **35 Ausgangsmotive** stammen aus der neuesten GitHub-Datei [`docs/Pixel-Art.xlsx`](docs/Pixel-Art.xlsx) und sind als [Symbolregister](docs/PIXELART_REGISTER_v0.4.0.1.json) mit Quellzuordnung und Pixel-Prüfsummen nachgewiesen. Die Vorschau steht unter [`docs/assets/pixelart-v0.4.0.1.png`](docs/assets/pixelart-v0.4.0.1.png). **Der Frosch bleibt vorerst unverändert; seine gestalterische Überarbeitung ist noch offen.**
+
+**Teststatus:** Chromium-Prüfung bei 360×640, 390×844 und 1366×768 erfolgreich; JavaScript-Syntax und Datenidentität zwischen eingebettetem Webinterface und Firmware-Sprites geprüft. Ein echter Arduino-/Hardwaretest von v0.4.0.1 steht aus.
+
+### Grundlage: v0.4.0-dev
 
 | Bereich | Stand dieser Version | Was folgt später? |
 | --- | --- | --- |
-| Startseite | Sechs große Kurzwahl-Kacheln; Bearbeiten-Modus visuell vorbereitet; Helligkeit und Ein/Aus bedienbar | Echte Kachelbelegung aus der Bibliothek |
+| Kurzwahl | Sechs große Kurzwahl-Kacheln; Bearbeiten-Modus visuell vorbereitet; Helligkeit und Ein/Aus bedienbar | Echte Kachelbelegung aus der Bibliothek |
 | Navigation | Bananen-Button öffnet das Menü; sieben getrennte Bereiche; Header auf jeder Seite | – |
 | Bibliothek | Layout mit fester Aktionsleiste, Liste, globalen Reglern und Modusauswahl | Anlegen, Auswahl, Drag-and-drop, Löschen, Übertragen (**v0.4.1**) |
 | Programme | Eigenständige Ansicht und Bedienstruktur | Referenzbasierte Verkettung und Größenprüfung (**v0.4.2**) |
 | Texteditor | Vorhandene Lauftext- und Blockseitenfunktionen bleiben erreichbar | Individuelle Farbgebung innerhalb eines Textes (**v0.4.3**, geplant) |
-| Symbol-Picker | Eine thematisch sortierte Palette; **echte 16×16-Bildvorschauen** statt Emoji-Platzhaltern; Öffnen mit Herz ♥ | Zusätzliche Motive aus der erweiterten Excel-Sammlung |
-| Ambiente | Sieben große Farbtasten; jedes Tippen sendet ein vollständig einfarbiges 64×16-Bild | Hardwaretest der neuen Funktion |
+| Symbol-Picker | **63 echte 16×16-Bildvorschauen** inklusive vollständiger neuer Excel-Sammlung; Öffnen mit Herz ♥ | Optional neue Motive |
+| Ambiente | Sieben große Farbtasten; jedes Tippen sendet ein vollständig einfarbiges 64×16-Bild | In v0.4.0 hardwarebestätigt |
 | Diagnose | Eigene Seite statt Fußbereich im Editor | Weitere Diagnosewerkzeuge |
 | Einstellungen | Eigene Seite, aktueller Geräteanschluss beschrieben | BLE-Suche und Wechsel zwischen Tafeln |
 
@@ -74,7 +89,7 @@ Die **zuletzt hardwarebestätigte Basis v0.3.5.1** bietet:
 
 ### Startbildschirm: unmittelbar steuern
 
-Die sechs Kacheln sind in einem 2×3-Raster angeordnet. Die Seite ist für einen Smartphonebildschirm ohne vertikales Scrollen ausgelegt. Helligkeit und Ein/Aus sind direkt erreichbar. Im derzeitigen Entwicklungsstand sind die sechs Kacheln bewusst *nicht belegt*; nach dem Aktivieren des Bearbeiten-Modus verweist die Oberfläche auf die noch ausstehende Bibliothek.
+Die sechs Kacheln sind in einem 2×3-Raster angeordnet. Die Seite heißt jetzt **Kurzwahl** und steht immer als erster Menüpunkt zur Verfügung. Die Seite ist für einen Smartphonebildschirm ohne vertikales Scrollen ausgelegt. Helligkeit und Ein/Aus sind direkt erreichbar. Im derzeitigen Entwicklungsstand sind die sechs Kacheln bewusst *nicht belegt*; nach dem Aktivieren des Bearbeiten-Modus verweist die Oberfläche auf die noch ausstehende Bibliothek.
 
 ### Bibliothek und Programme: unterschiedliche Aufgaben
 
@@ -92,7 +107,7 @@ Der **Anzeigemodus** ist dagegen in unserer künftigen Bibliothek ein Bestandtei
 
 Unser Symbol-Picker verwendet die vorhandenen Pixelmatrizen direkt. Das sichtbare 16×16-Motiv entspricht damit der Grundlage des späteren LED-Renders. Die Herkunft (Hersteller-Screenshot oder eigene Pixelart) spielt für die Bedienung keine Rolle; die Quellen dokumentieren wir separat. Die Symbole sind thematisch sortiert, nicht nach Herkunft.
 
-Wir pflegen weitere Motive in der Excel-Sammlung `docs/assets/Pixel-Art.xlsx` im Repository. **Die neu ergänzten Excel-Motive sind in v0.4.0 noch nicht automatisch importiert.** Die von uns neu gezeichnete Krabbe soll die alte Krabbe ersetzen, während die zusätzliche Schneeflocke als eigene Variante erhalten bleibt. Der Frosch wartet noch auf eine Überarbeitung.
+Wir pflegen weitere Motive in der Excel-Sammlung `docs/assets/Pixel-Art.xlsx` im Repository. **Seit v0.4.0.1-dev sind die Excel-Motive importiert und in Webvorschau und Firmware synchron.** Die von uns neu gezeichnete Krabbe soll die alte Krabbe ersetzen, während die zusätzliche Schneeflocke als eigene Variante erhalten bleibt. Der Frosch wartet weiterhin auf seine Überarbeitung.
 
 ## Installation / erster Test
 
@@ -101,17 +116,17 @@ Wir pflegen weitere Motive in der Excel-Sammlung `docs/assets/Pixel-Art.xlsx` im
 - ESP32-C3 Super Mini / ESP32C3 Dev Module und passende USB-Datenverbindung.
 - Arduino IDE mit ESP32-Boardpaket und den durch Arduino-ESP32 bereitgestellten Bibliotheken `WiFi`, `WebServer`, `Preferences` und BLE-Unterstützung.
 - CoolLEDX-Tafel mit 64 × 16 Pixeln; die Firmware ist derzeit auf die **bekannte BLE-Adresse einer Testtafel** ausgerichtet und scannt noch nicht selbst nach anderen Boards.
-- Zum Flashen: Boardprofil **ESP32C3 Dev Module**, USB CDC On Boot aktiviert und Partitionierung **No OTA (2MB APP / 2MB SPIFFS)**; mit dieser Einstellung haben wir den bisherigen Sketch getestet. Für v0.4.0 steht der Kompiliertest noch aus.
+- Zum Flashen: Boardprofil **ESP32C3 Dev Module**, USB CDC On Boot aktiviert und Partitionierung **No OTA (2MB APP / 2MB SPIFFS)**; mit dieser Einstellung haben wir den bisherigen Sketch getestet. v0.4.0 wurde erfolgreich kompiliert; v0.4.0.1-dev ist noch nicht mit der Arduino IDE kompiliert.
 
 ### Flashen
 
 1. Das Versionspaket in die **Wurzel des lokalen Git-Repositories** entpacken. Bestehende Versionsordner bleiben als Rückfalloption erhalten.
-2. In der Arduino IDE `firmware/RavestickBoard_v0_4_0/RavestickBoard_v0_4_0.ino` öffnen. Die beiden `.h`-Dateien müssen **im gleichen Ordner** liegen.
+2. In der Arduino IDE `firmware/RavestickBoard_v0_4_0_1/RavestickBoard_v0_4_0_1.ino` öffnen. Die beiden `.h`-Dateien müssen **im gleichen Ordner** liegen.
 3. Board-/Port-Einstellungen wie bei v0.3.5.1 wählen. **„Erase All Flash“ nicht aktivieren.** Wir behalten das bestehende NVS-Schema bei, damit gespeicherte Blockseiten erhalten bleiben.
 4. Flashen, das Smartphone mit **`CoolLED1248`** verbinden und **`http://192.168.4.1`** öffnen. Das vorhandene Demo-WLAN-Passwort steht im Firmwarequelltext; vor dem Einsatz in einer fremden Umgebung bitte anpassen.
 5. Erst Navigation, gespeicherte Blockseiten und die vertrauten BLE-Funktionen testen; anschließend Ambiente und globale Regler prüfen. Nach jedem Hardwaretest den Diagnoselog sichern.
 
-**Wichtig:** Den Testkandidaten nicht allein aufgrund bestandener JavaScript-Tests als freigegeben betrachten. Bei Problemen können wir v0.3.5.1 aus ihrem eigenen Sketchordner flashen. Das Update führt keine NVS-Migration durch.
+**Wichtig:** v0.4.0.1 nicht allein aufgrund bestandener Browser- und JavaScript-Tests als hardwarebestätigt betrachten. Bei Problemen können wir v0.3.5.1 aus ihrem eigenen Sketchordner flashen. Das Update führt keine NVS-Migration durch.
 
 ## Projektstruktur
 
@@ -121,7 +136,9 @@ RavestickBoard-for-CoolLED1248/
 ├── LICENSE                           MIT für unsere lizenzierbaren Codebestandteile
 ├── CHANGELOG.md                      Versionen und nachprüfbarer Teststatus
 ├── docs/
+│   ├── ENTWICKLUNGSSTAND_v0.4.0.1_2026-10-26.md
 │   ├── ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md
+│   ├── TESTPLAN_v0.4.0.1.md
 │   ├── TESTPLAN_v0.4.0.md
 │   ├── QUELLEN_UND_LIZENZEN.md       Rechte und externe Referenzen
 │   ├── ROADMAP.md                    Entwicklungsschritte
@@ -129,11 +146,12 @@ RavestickBoard-for-CoolLED1248/
 │   └── assets/                       Totemfotos, GIF, UI-Bild, Pixelart-Excel
 ├── firmware/
 │   ├── RavestickBoard_v0_3_5_1/     Hardwaregetesteter Rückfallstand
-│   └── RavestickBoard_v0_4_0/       Neuer Sketch + WebUI + Pixelassets
+│   ├── RavestickBoard_v0_4_0/       Hardwarebestätigter Rückfallstand
+│   └── RavestickBoard_v0_4_0_1/     WebUX-Feinschliff + neue Pixelassets
 └── web/index.html                    Bearbeitbare Weboberfläche (Quelle)
 ```
 
-Die Datei `firmware/RavestickBoard_v0_4_0/RavestickBoard_WebUI.h` bettet die aktuelle `web/index.html` für den ESP32 ein. **Beide Versionen müssen synchron bleiben.** Die vielen alten Sketchordner sind gewollt: Wir archivieren Meilensteine, statt stabile Stände kommentarlos zu überschreiben.
+Die Datei `firmware/RavestickBoard_v0_4_0_1/RavestickBoard_WebUI.h` bettet die aktuelle `web/index.html` für den ESP32 ein. **Beide Versionen müssen synchron bleiben.** Die vielen alten Sketchordner sind gewollt: Wir archivieren Meilensteine, statt stabile Stände kommentarlos zu überschreiben.
 
 ## Protokoll und bekannte Grenzen
 
@@ -141,15 +159,16 @@ Wir arbeiten mit der bestehenden Hersteller-Firmware und deren BLE-Protokoll. Zu
 
 Das Display zeigt während neuer Bildübertragungen eine prozentuale Fortschrittsanzeige. Für autonome Programme ohne Fortschrittsanzeige zwischen den Seiten erforschen wir künftig den Animationsweg über `0x04`. Eine kompatible Implementierung für unser konkretes Board haben wir **noch nicht bestätigt**. Programmlaufzeit-Schätzungen für Schneeflocke, Aufdecken, Laser und die anderen Spezialeffekte stehen nicht auf unserer Prioritätenliste.
 
-Das v0.4.0-Webinterface ist mobil ausgerichtet, aber noch kein stabiler Release. Besonders offen sind Arduino-Flashgrößen, Speicherverhalten, das neue Ambiente und die Abläufe mit mehreren gleichzeitig verbundenen Smartphones.
+Die neue **v0.4.0.1-dev** wurde browserseitig getestet, ist aber noch kein auf Hardware bestätigtes Release. Aus v0.4.0 sind die Ambiente-Farbwirkung und die Bedienung mit zwei Smartphones bereits bestätigt. Offen bleiben der 30-Minuten-Dauertest, das beobachtete Heap-Minimum und der Boardtest sämtlicher neuer Symbole und Piktogramme.
 
 ## Dokumentation und Mitarbeit
 
 Wir halten technische Entscheidungen, Beobachtungen und Messungen getrennt von Ideen fest. Was in der Praxis bestätigt ist, erhält einen anderen Status als eine Implementierung, die erst noch auf der Tafel ausprobiert werden muss.
 
 - [CHANGELOG](CHANGELOG.md) – was sich tatsächlich geändert hat.
-- [Entwicklungsstand v0.4.0](docs/ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md) – Architektur und Status der neuen Oberfläche.
-- [Testplan v0.4.0](docs/TESTPLAN_v0.4.0.md) – die nächste Hardware-Prüfrunde.
+- [Entwicklungsstand v0.4.0.1](docs/ENTWICKLUNGSSTAND_v0.4.0.1_2026-10-26.md) – Änderungen und noch offene Hardwareprüfung.
+- [Testplan v0.4.0.1](docs/TESTPLAN_v0.4.0.1.md) – aktuelle Prüfrunde.
+- [Entwicklungsstand v0.4.0](docs/ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md) – dokumentierte WebUX-Basis.
 - [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md) – nächste Schritte und langfristige Ideen.
 - [Quellen und Lizenzen](docs/QUELLEN_UND_LIZENZEN.md) – saubere Abgrenzung zu fremdem Code und Bildmaterial.
 

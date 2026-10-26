@@ -1,3 +1,15 @@
+## Priorität und bestätigte Reihenfolge (26.10.2026, nach v0.4.0-Hardwaretest)
+
+- **v0.4.0.1-dev:** Navigation „Kurzwahl“ immer im Menü, kompakte Listen- und Regleransichten, dezente Statusmeldung, neue Pixelbilder aus der Excel-Sammlung. Das BLE-/NVS-Schema bleibt unverändert.
+- **v0.4.1:** Persistente Textbibliothek; Auswahl, Löschen mit Referenzschutz, Drag-and-drop, Backups, sechs echte Kurzwahlbelegungen.
+- **v0.4.2:** Programme als Referenzen auf Bibliothekstexte. Änderungen an Texten müssen alle referenzierenden Programme aktualisieren; Datenbudget/Übertragungen minimieren.
+- **v0.4.3 (optional):** Einzelne Zeichen und Textabschnitte farbig gestalten.
+- **Langfristig:** native autonome Programme (`0x04`) weiter eigenständig untersuchen; Countdown, Stoppuhr, Punktestand, BLE-Gerätesuche.
+
+Alte Roadmap-Abschnitte mit acht statt sechs Schnellzugriffen beschreiben frühere Konzeptstände. Für die aktuelle WebUX gelten **sechs**.
+
+---
+
 ## Aktuelle Prioritäten ab v0.4.0-dev · 26.10.2026
 
 Wir folgen dem gemeinsam entwickelten WebUX-Konzept: **v0.4.0** Navigation und vorbereitete sieben Ansichten; **v0.4.1** Bibliothek mit referenzierten Texten, Drag-and-drop, sechs Kurzwahlbelegungen; **v0.4.2** Programme als Verkettung dieser Texte mit BLE-Größen-/Kompatibilitätsprüfung; **v0.4.3 (optional)** Textabschnitte mit individuellen Farben. Erst danach priorisieren wir weitere Gerätefunktionen und die autonome Animation ohne sichtbare Uploads zwischen Seiten. Tempo/Helligkeit sind global; Modus pro Text. Mehrfarbige Symbol-Buttons verwenden tatsächliche 16×16-Sprites. Die neue Excel-Sammlung wird als separater Import behandelt.

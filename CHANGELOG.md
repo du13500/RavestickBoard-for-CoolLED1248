@@ -1,3 +1,20 @@
+## v0.4.0.1-dev · 26.10.2026 · WebUX-Feinschliff und Pixelart
+
+**Status: Browser-/Quellcodeprüfung erfolgreich; Arduino-Kompilierung und Hardwaretest noch ausstehend.** Basis v0.4.0: **30/31 Hardwareprüfungen OK**, Dauerbetriebspunkt Nr. 30 noch offen.
+
+- Navigation jetzt **Kurzwahl → Texteditor → Bibliothek → Programme → Ambiente → Diagnose → Einstellungen**; Kurzwahl immer sichtbar.
+- Scrollflächen von Bibliothek und Programmen erheblich vergrößert; Aktionsleiste und globale Regler platzsparend angeordnet.
+- Vier eigenständige monochrome 16×16-Pixel-Piktogramme an den Reglern: kleine und große Glühlampe, Schnecke und galoppierendes Pferd. Keine zusätzliche Reglerüberschrift.
+- Status unten nicht länger permanent: normale Meldungen als 2,7-Sekunden-Toast, Fehler bis zur Bestätigung sichtbar; unbelegte Kurzwahl nur als kurzes Kachelsignal.
+- **63 Symbole insgesamt** (36 bisherige einschließlich unverändert nummerierter Krabben-ID plus 27 zusätzliche). Neue Excel-Krabbe ersetzt alte Grafik; ursprüngliche und handgezeichnete Schneeflocke sind separat. Alien steht bei UFO/Weltraum. Herkunfts-Trennung im Picker entfällt.
+- Alle neuen Pixelbilder identisch in Web-Canvas und C++-Flashsprites; 35 Excel-Motive und ihre Farbmatrizen im Register mit Hashes dokumentiert. Historische IDs abseits der Krabbe bleiben pixelidentisch.
+- **Keine Änderung** an BLE-Befehlen, NVS-Layout oder Speicherformat. Keine neue Bibliotheks-Datenbank und keine autonome Programmverkettung. Der Frosch bleibt als offener Zeichenfeinschliff notiert.
+- Kontrolle: Chromium 360×640, 390×844, 1366×768; Startseite ohne Scrollen, größere Listen, Menü, Pixelbuttons, Einfügen neuer Symbole und synchronisierte Daten; keine JavaScript-Fehler.
+
+**Für den Hardwaretest:** Flash ohne vollständiges Löschen des Flashs; bestehende neun Seiten und BLE erneut prüfen. Minimaler Heap in v0.4.0 beim Diagnoselog 9.416 Byte, daher RAM-Reserve beobachten; 30 Minuten Dauerbetrieb separat durchführen.
+
+---
+
 ## v0.4.0-dev · 26.10.2026 – WebUX-Neustrukturierung und MIT-Lizenz
 
 **Status:** Browser- und Syntaxprüfung abgeschlossen, Arduino-Kompilierung und Hardwaretests offen. Letzter hardwarebestätigter Rückfallstand: **v0.3.5.1**.
