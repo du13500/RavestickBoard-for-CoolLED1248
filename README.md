@@ -14,9 +14,9 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-v0.4.0.1--dev-7056d8">
+  <img alt="Version" src="https://img.shields.io/badge/version-v0.4.0.2--dev-7056d8">
   <img alt="ESP32-C3" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
-  <img alt="Hardwarestatus" src="https://img.shields.io/badge/status-v0.4.0.1%20Testkandidat-f3b653">
+  <img alt="Hardwarestatus" src="https://img.shields.io/badge/status-v0.4.0.2%20RAM%20Test-f3b653">
   <img alt="Lizenz" src="https://img.shields.io/badge/code%20license-MIT-2e8b71">
   <img alt="Mission" src="https://img.shields.io/badge/mission-Hugs%20and%20Love-ff69b4">
 </p>
@@ -25,7 +25,7 @@
   <img src="docs/assets/webux-v0.4.0.png" width="340" alt="Mobile Vorschau des v0.4.0-Startbildschirms mit sechs Kurzwahltasten" />
 </p>
 
-> **Entwicklungsstand vom 26. Oktober 2026:** **v0.4.0** wurde auf dem ESP32-C3 kompiliert, installiert und in **30 von 31 Prüfpunkten erfolgreich** hardwaregetestet; der 30-Minuten-Dauerbetrieb ist noch offen. **v0.4.0.1-dev** bündelt nach diesem Test die überarbeitete Platzaufteilung, Kurzwahl-Navigation und Symbolbibliothek. Für **v0.4.0.1 selbst** liegen Browser- und statische Prüfungen vor, aber noch **kein Arduino-/Boardtest**. Bibliothek und Programme bleiben ausdrücklich vorbereitete Ansichten.
+> **Entwicklungsstand vom 27. Oktober 2026:** **v0.4.0.1-dev** wurde auf dem ESP32-C3 erfolgreich kompiliert und in **20 von 21 Testpunkten** als OK bewertet; ein erster Diagnoselog zeigte **324 B historischen Minimal-Heap**, ein weiterer unter anderer Belastung **48.108 B**, ein großer 30.713-B-Upload **11.052 B**. Diese unterschiedlichen, nicht gleichzeitig beobachteten Tiefstwerte erfordern eine gezielte Analyse. **v0.4.0.2-dev** ergänzt dafür eine RAM-Verlaufsdiagnose und übernimmt die neueste Pixelart-Excel. **v0.4.0.2 ist noch nicht kompiliert oder auf der Hardware getestet.** Die Bibliothek und Programme bleiben vorerst vorbereitete Ansichten.
 
 ## Worum geht es?
 
@@ -49,10 +49,22 @@ Unsere **auf realer Hardware bestätigte Basis v0.4.0** (aufbauend auf v0.3.5.1)
 
 - **Texte übertragen:** linkslaufender Text mit datenbasierter Längenprüfung; die experimentell gesetzte Obergrenze beträgt 30 KiB Bilddaten. Im Hardwaretest der Vorgängerfassung wurden 650 Zeichen bei 30.689 Byte erfolgreich übertragen und dargestellt.
 - **Schriften:** Original Normal, Original Bold, Engschrift, Mini Einzeilig und Mini Zweizeilig. Im zweizeiligen Lauftext können die beiden Zeilen verschiedene Farben haben.
-- **Pixelgrafiken:** In v0.4.0 waren 36 16×16-Symbole enthalten; **v0.4.0.1-dev enthält 63 Motive** einschließlich 27 neuer Excel-Grafiken. Die neue Krabbe ersetzt die bisherige Grafik unter derselben ID; die neue Schneeflocke kommt separat hinzu. Alle sieben Herzfarben bleiben erhalten.
+- **Pixelgrafiken:** In v0.4.0 waren 36 16×16-Symbole enthalten; **v0.4.0.2-dev enthält intern 64 Motive** (einschließlich 28 zusätzlicher Excel-Grafiken; sechs verworfene Warnvarianten bleiben aus Kompatibilitätsgründen nur intern reserviert). Die neue Krabbe ersetzt die bisherige Grafik unter derselben ID; die neue Schneeflocke kommt separat hinzu. Alle sieben Herzfarben bleiben erhalten.
 - **Blockseiten:** Einzelne Seiten gestalten, speichern und manuell anzeigen; bis zu zwölf Seiten in der bestehenden NVS-Struktur. Eine einfache ESP32-gesteuerte Wiedergabe ist vorhanden und erfordert weiterhin neue BLE-Bildübertragungen zwischen den Seiten.
 - **Live-Steuerung:** Helligkeit, Tempo, acht Anzeigeeffekte sowie Ein/Aus per BLE, ohne dafür jeweils ein neues Bild hochzuladen. Die tatsächlich sichtbare Wirkung wurde im Projekt getestet; BLE-Quittungen allein sind kein Bildnachweis.
 - **Diagnose:** Status, BLE-Zähler, Fehlermeldungen und Ereignisse; TXT-Export ohne gespeicherte Texte, Passwörter oder Geräteadressen.
+
+### v0.4.0.2-dev: RAM-Verlaufsdiagnose und aktuelle Pixelart
+
+Dieser **Diagnose-Testbuild** enthält keine neue Bibliotheksarchitektur. Stattdessen messen wir gezielt, wann die RAM-Reserve absinkt:
+
+- **RAMTRACE** mit Zeitstempel, Jobnummer, Jobtyp, WLAN-Clients, freiem Heap, ESP32-System-Tiefstwert und größtem zusammenhängendem Block. Messpunkte: beim Booten, während des Webabrufs, vor/nach Rendern und Pufferreservierung, BLE-Verbindungsaufbau, alle 32 BLE-Pakete beziehungsweise beim neuen gemessenen Tiefstwert, vor und nach Freigabe sowie am Jobende.
+- **Diagnose-Seite:** zusätzliche Schaltfläche **„RAM-Verlauf TXT“**, erreichbar auch direkt unter `/api/ram.txt`. Das vorhandene Standard-Diagnose-TXT erhält die wichtigsten RAMTRACE-Minima. Der Ringpuffer wird nicht in NVS geschrieben und belegt statisch ca. 1,5 KiB RAM.
+- **Pixelart aus aktueller GitHub-Excel:** 36 Quelldatensätze; kleine Korrekturen an Frosch, Zigarette, Joint und Verbotssymbolen, neue **Ziggi II** als eigenes Motiv. Die sechs verworfenen farbigen Warnungen werden im Picker nicht mehr angeboten. Ihre IDs und bisherigen Bitmaps bleiben erhalten, damit gespeicherte Texte nicht versehentlich verändert werden.
+- **Original-Banane bleibt unverändert:** Das Excel-Bananenmotiv weicht bereits stark von der bisherigen Original-Banane unter ID 14 ab; ohne ausdrücklichen Austausch behalten wir sie aus Gründen der Kompatibilität. Die eigene Ravestick-Banane bleibt ebenfalls unverändert.
+- **Unverändert:** BLE-Kommandos, NVS-Schema, zwölf Blockseiten, globale Helligkeit/Tempo, 30-KiB-Bildlimit und die bisherige Editor-UX. Noch keine LittleFS-Bibliothek.
+
+**Teststatus v0.4.0.2:** Statische Checks vorgesehen/durchgeführt; Arduino-Kompilierung und Hardwaretest müssen nach dem Flashen bestätigt werden. Siehe [`RAM_DIAGNOSE_v0.4.0.2.md`](docs/RAM_DIAGNOSE_v0.4.0.2.md), [Testplan](docs/TESTPLAN_v0.4.0.2.md) und [Symbolregister](docs/PIXELART_REGISTER_v0.4.0.2.json).
 
 ### v0.4.0.1-dev: WebUX-Feinschliff und Pixelart
 
@@ -65,9 +77,9 @@ Wir haben nach dem erfolgreichen v0.4.0-Hardwaretest die Bedienung gezielt verfe
 - **Symbol-Picker:** 63 originale und eigene Motive in **einer thematischen Sammlung**, mit ihren tatsächlichen 16×16-Pixelgrafiken auf den Schaltflächen. Alien bei den UFOs; neue Krabbe ersetzt die alte, zweite Schneeflocke bleibt zusätzlich.
 - **Unverändert:** BLE-Steuerprotokoll, dynamisches 30-KiB-Datenbudget, NVS-Schema und bestehende Blockseiten. Die Firmware v0.4.0 bleibt als Rückfalloption erhalten.
 
-Die **35 Ausgangsmotive** stammen aus der neuesten GitHub-Datei [`docs/Pixel-Art.xlsx`](docs/Pixel-Art.xlsx) und sind als [Symbolregister](docs/PIXELART_REGISTER_v0.4.0.1.json) mit Quellzuordnung und Pixel-Prüfsummen nachgewiesen. Die Vorschau steht unter [`docs/assets/pixelart-v0.4.0.1.png`](docs/assets/pixelart-v0.4.0.1.png). **Der Frosch bleibt vorerst unverändert; seine gestalterische Überarbeitung ist noch offen.**
+Die **35 Ausgangsmotive von v0.4.0.1** stammen aus der damals verwendeten Datei [`docs/assets/Pixel-Art.xlsx`](docs/assets/Pixel-Art.xlsx) und sind als [Symbolregister](docs/PIXELART_REGISTER_v0.4.0.1.json) mit Quellzuordnung und Pixel-Prüfsummen nachgewiesen. Die Vorschau steht unter [`docs/assets/pixelart-v0.4.0.1.png`](docs/assets/pixelart-v0.4.0.1.png). **Der Frosch bleibt vorerst unverändert; seine gestalterische Überarbeitung ist noch offen.**
 
-**Teststatus:** Chromium-Prüfung bei 360×640, 390×844 und 1366×768 erfolgreich; JavaScript-Syntax und Datenidentität zwischen eingebettetem Webinterface und Firmware-Sprites geprüft. Ein echter Arduino-/Hardwaretest von v0.4.0.1 steht aus.
+**Teststatus v0.4.0.1:** Chromium-/JavaScript-Prüfung erfolgreich, anschließend Arduino-Kompilierung und **20 von 21** Funktionstests auf realer Hardware OK. Der Datenexport nach 33:09 Minuten zeigt stabile BLE-Jobs, aber ein sehr niedriges historisches Heap-Minimum; genaue Ursache wird nun mit v0.4.0.2 untersucht.
 
 ### Grundlage: v0.4.0-dev
 

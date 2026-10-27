@@ -1,3 +1,11 @@
+## Nächster Schritt – RAM-Diagnose (27.10.2026)
+
+- **v0.4.0.2-dev:** begrenzter RAMTRACE mit Messpunkten für Rendern, BLE, große Übertragungen, HTTP, Freigabe; aktualisierte Pixelart aus `docs/assets/Pixel-Art.xlsx` inklusive Ziggi II. Hardware-/Compile-Test noch offen.
+- **Danach:** Ursache des 324-B-Heap-Minimums einengen, zuerst C3 optimieren, erst bei Bedarf Controllerwechsel.
+- **v0.4.1:** Persistente Bibliothek auf dem ESP32, möglichst flashbasiert und ohne vollständiges Laden in den Heap; NVS-Seitenschema getrennt und unverändert lassen.
+
+---
+
 ## Priorität und bestätigte Reihenfolge (26.10.2026, nach v0.4.0-Hardwaretest)
 
 - **v0.4.0.1-dev:** Navigation „Kurzwahl“ immer im Menü, kompakte Listen- und Regleransichten, dezente Statusmeldung, neue Pixelbilder aus der Excel-Sammlung. Das BLE-/NVS-Schema bleibt unverändert.

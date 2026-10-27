@@ -1,3 +1,18 @@
+## v0.4.0.2-dev · 27.10.2026 · RAM-Analyse + aktuelle Pixelart
+
+**Status: Diagnose-Testbuild, noch nicht mit Arduino IDE kompiliert und nicht auf ESP32-C3 getestet.** Letzter erfolgreich hardwaregetesteter Stand: **v0.4.0.1-dev**, 20/21 Testpunkte OK (Langzeitpunkt zum Zeitpunkt der Checkliste offen), BLE-Aufträge fehlerfrei. Historische Heap-Minima je nach Szenario: 324 B, 48.108 B und 11.052 B.
+
+- Kleine, fest begrenzte RAMTRACE-Ringaufzeichnung (`64 × 24 B`) im RAM; keine Flash-/NVS-Schreibvorgänge.
+- Messungen vor/nach Bildpufferreservierung, am Rendering-Ende, beim BLE-Verbindungsaufbau, vor/während/nach Übertragung (alle 32 Pakete und beobachtete neue Minima), vor/nach Pufferfreigabe und nach Jobende.
+- Jede Probe enthält Zeit seit Boot, Job-ID/Typ, freie Heapbytes, historischen System-Minimumwert, maximal allokierbaren Block, Paket-/Payloadangabe und WLAN-Clientzahl. Drei niedrigste beobachtete Kenngrößen bleiben separat erhalten, auch wenn der Ring überschrieben wird.
+- `/api/ram.txt` als zeilenweiser Export mit eigenem Diagnose-Button; regulärer Diagnoseexport enthält Zusammenfassungswerte. Der Export selbst verursacht keine große zusätzliche RAM-Kopie.
+- Aktualisierte Excel-Sammlung mit 36 Quellmotiven: sechs bunte Warnsymbolvarianten aus dem Picker entfernt (bestehende Sprite-IDs zur Kompatibilität reserviert), neue Ziggi-II-Variante mit ID 63, aktualisierte Frosch-/Zigaretten-/Joint-Grafiken. Alle vorhandenen Schrift-/Symbolcodes außer bewusst geänderten Pixelgrafiken kompatibel. Excel-Banane ID 14 wird nicht ungefragt ersetzt.
+- Keine Änderungen an BLE-Protokoll, NVS-Seitenschema, Dateisystem, gespeicherten Daten und bisheriger UI-Navigation.
+
+**Wichtig:** Der systemweite Heap-Tiefststand kann zwischen zwei Messpunkten entstanden sein; er darf nicht ungeprüft der letzten beobachteten Funktion zugeschrieben werden. Hardware-RAMTEST und Funktionstests stehen aus.
+
+---
+
 ## v0.4.0.1-dev · 26.10.2026 · WebUX-Feinschliff und Pixelart
 
 **Status: Browser-/Quellcodeprüfung erfolgreich; Arduino-Kompilierung und Hardwaretest noch ausstehend.** Basis v0.4.0: **30/31 Hardwareprüfungen OK**, Dauerbetriebspunkt Nr. 30 noch offen.
