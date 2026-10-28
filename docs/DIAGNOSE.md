@@ -1,3 +1,9 @@
+# Diagnosestatus v0.4.2-dev
+
+Der umfangreiche RAMTRACE und die BLE-Auftragsdiagnose aus v0.4.0.3/v0.4.1 sind weiter enthalten. Neue Blockprogramme senden lange Bildbänder über Kacheln; genaue Speicherreserve und das Verhalten bei BLE-Timeouts sind **am ESP32-C3 noch zu testen**. Nach Hardwaretests bitte Diagnose und RAM-Protokoll exportieren. Frühere Messwerte gelten für frühere Firmwares.
+
+---
+
 # RavestickBoard · Diagnose und Fehlerprotokoll
 
 **Fortgeschrieben 25.10.2026 · v0.3.3 hardwaregetestet; Modus-Testversion v0.3.4 noch ungetestet.**

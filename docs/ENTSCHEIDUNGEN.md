@@ -1,3 +1,17 @@
+## ADR v0.4.2-dev (aktueller Arbeitsstand)
+
+- **Entwurfsmodell:** Neue Blockfolgen beginnen leer; bis zu 25 Seiten, bearbeitbar in NVS als temporäre Arbeitskopie; gespeicherte Seiten als RBB2-Begleitdateien in LittleFS, ohne Bitmap-Rückrekonstruktion.
+- **Übertragungsmodell:** Native Tafel-Blätterfunktion mit einem quer verketteten Pixelband im Standbildmodus `0x06 0x01`; Tempo `0x07`. Diese Eigenschaft wurde vom Nutzer an der CoolLEDX-Tafel beobachtet, die konkrete v0.4.2-Implementierung noch nicht hardwaregetestet.
+- **Programme:** Bibliothekseinträge werden als referenzierte Sequenz gespeichert; aufeinanderfolgende Blockfolgen bündeln, kompatible Lauftexte verbinden; ein Programmwechsel zwischen unterschiedlichen Arten kann erneut Prozentanzeigen erzeugen.
+- **Datenhaltung:** Vorhandene v0.4.1-RBL1-Textdateien und RBM1-Metadaten werden gelesen; neue Blockfolgen RBB2, Programme RBP2, Kurzwahlen RBS2. Vorhandene Kurzwahlzuordnungen bleiben erhalten.
+- **UX:** Kurzwahlen werden auf der Startseite konfiguriert; eigene kurze Labels, versteckte Suchleiste, Backup in den Einstellungen, Leeren mit Bestätigung, Aktualisieren im Homescreen-Menü und eigenes Apple-Touch-Icon.
+- **Lizenz:** Unser eigener Code steht unter MIT; fremde Pixelglyphen, Motive und Markennamen sind dadurch nicht automatisch mitlizenziert.
+- **Nachweis:** Host- und Browser-Tests sind kein Arduino-ESP32-Compile und kein realer Bluetooth- oder Hardwaretest.
+
+---
+
+**Historische Entscheidungsnotizen:** Sie dokumentieren frühere Zwischenstände, die nicht den aktuellen Funktionsumfang beschreiben müssen.
+
 ## Entscheidung v0.4.0-dev · 26.10.2026
 
 Wir wechseln von einer Editor-zentrierten Oberfläche zu sieben Bereichen mit festem Header und Menü über den Bananen-Button. Die Startseite besitzt sechs Kurzwahlen statt der früheren acht. Bibliothek und Programme sind getrennte Datenebenen, Programmzeilen referenzieren Bibliothekseinträge und übernehmen spätere Textänderungen. Globale Helligkeit und Geschwindigkeit bleiben bei Inhaltswechseln unverändert; ein manueller Modus-Override gilt nur bis zum nächsten Inhalt, dessen gespeicherter Modus wieder gilt. Einzelheiten dokumentiert `ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md`. Unsere **eigenen Codebestandteile** veröffentlichen wir ab dieser Version unter MIT; Herstellerpixel und andere Fremdmaterialien sind davon ausgenommen.
@@ -56,7 +70,7 @@ Als kleine Zusatzfunktion erlaubt Mini Zweizeilig als **Lauftext** getrennte Far
 - Wie Original-App-Geschwindigkeitsanzeige (~80) in BLE-Rohwerte übersetzt wird.
 - Welche Speicherkapazitäten/Kompressionsstrategien für Bibliothek und Animationen realistisch sind.
 - Ob eine optionale native App/Watch/Widget-Oberfläche später einen Mehrwert bietet.
-- GitHub ist inzwischen **Public**, unabhängig bestätigt am 24.10.2026; die Lizenz bleibt All Rights Reserved.
+- GitHub ist inzwischen **Public**, unabhängig bestätigt am 24.10.2026; die eigene Code-Lizenz wurde danach auf MIT geändert.
 
 ## 22.10.2026 · v0.1.2: deutsche Sprache, Pixelvorschau und Modi
 
@@ -82,11 +96,9 @@ Als kleine Zusatzfunktion erlaubt Mini Zweizeilig als **Lauftext** getrennte Far
 | ID | Datum | Entscheidung / Designvorgabe | Begründung / Einschränkung |
 | --- | --- | --- | --- |
 | ADR-021 | 2026-10-23 | **Seite → Programm → Playlist** als drei getrennte Ebenen | Keine ständigen Uploads zwischen Seiten eines Programms; bewusste neue Uploads zwischen Programmen erlaubt. |
-| ADR-022 | 2026-10-23 | **`0x04`-Animation als Untersuchungspriorität** | OpenSign meldet autonome gespeicherte Animation, aber nur auf Referenzpanel; bei unserer Tafel erst isoliert nachweisen. |
 | ADR-023 | 2026-10-23 | **Mini zweizeilig unverändert als Ausgangsbasis; zusätzlich Mini einzeilig; Mini-Ausgabe in Versalien** | Echte Nutzerfotos überzeugen für Großbuchstaben; Kleinbuchstaben in Mini unleserlich; ß-Pixelkorrektur als Detail. |
 | ADR-024 | 2026-10-23 | **Entwurf, Bibliothek, aktives Programm trennen** | Lauftexteditor verliert Entwurf nach Reload, gespeicherte Blockseiten bleiben jedoch in NVS. Browser-Entwurf später wiederherstellen. |
 | ADR-025 | 2026-10-23 | **Bibliothek zuerst im ESP32-Flash (LittleFS), microSD optional** | Wenig Zusatzhardware; einheitlich von verschiedenen Browsern erreichbar, Ex-/Import als Backup. |
-| ADR-026 | 2026-10-23 | **OpenSign keine Codequelle ohne Erlaubnis** | Repo enthält ausdrücklich keine Lizenz; Eigenimplementierung aus Protokollfakten und eigenen Tests bzw. explizite Freigabe erforderlich. |
 | ADR-027 | 2026-10-23 | **Live-Steuerbefehle ohne Neu-Upload** | `0x08` Helligkeit, `0x07` Geschwindigkeit, `0x06` Modus getrennt nutzen. |
 | ADR-028 | 2026-10-23 | **Excel-kopierbare Testtabelle zu jedem Firmware-Updatepaket ausschließlich im Chat** | Unabhängiges manuelles Testprotokoll mit Ergebnis und Bemerkungen; keine zusätzliche Test-Datei. |
 | ADR-029 | 2026-10-23 | **Firmware v0.2.0 vorerst nicht verändern** | Erst aktuelles Hardwareverhalten systematisch testen, dann Änderungen gebündelt umsetzen. |
@@ -96,14 +108,13 @@ Als kleine Zusatzfunktion erlaubt Mini Zweizeilig als **Lauftext** getrennte Far
 
 | ID | Datum | Entscheidung | Grund / Auswirkung |
 | --- | --- | --- | --- |
-| ADR-030 | 2026-10-23 | **Eigenen Code öffentlich sichtbar zeigen ist keine Open-Source-Lizenz** | `LICENSE` bleibt „All Rights Reserved“, Rechte Dritter und GitHub-Plattformrechte bleiben bestehen. Keine neue Firmwarefunktion. |
+| ADR-030 | 2026-10-23 | **Eigenen Code öffentlich sichtbar zeigen ist keine Open-Source-Lizenz** | damals `LICENSE`: All Rights Reserved (historisch, mittlerweile MIT), Rechte Dritter und GitHub-Plattformrechte bleiben bestehen. Keine neue Firmwarefunktion. |
 | ADR-031 | 2026-10-23 | **Festes Testpasswort und BLE-MAC bewusst dokumentiert** | AP-Passwort `Banane1248!` darf im öffentlichen Quelltext bleiben; individuelles WLAN-Passwort per UI später optional. Die MAC gilt nur für die Testtafel. |
 | ADR-032 | 2026-10-23 | **Titelbild im README zentriert und ohne Größenattribut** | `docs/assets/totem.jpg` soll in natürlicher Größe erscheinen; kein `width`/CSS-Zwang. |
 | ADR-033 | 2026-10-23 | **README: Badges in Englisch, Beschreibung in Deutsch** | `status: hardware testing`, `mission: hugs and love`, außerdem Version/Hardware/Projekt/Lizenz. Kein gesonderter Abschnitt „Projektstruktur“ mehr. |
 | ADR-034 | 2026-10-23 | **README als Nutzer-Vorlage bewahren** | Nicht bei Dokumentationspflege die Nutzeranpassungen durch ältere generierte README-Fassungen ersetzen. Bei nächster inhaltlicher Änderung eigene Minischrift klar benennen. |
 | ADR-035 | 2026-10-23 | **v0.2.0 als erfolgreich hardwaregetesteter Prototyp** | Nutzer hat 13 von 14 Testpunkten mit Ja bewertet, ein Punkt unbewertet; konkrete Mängel (Kleinbuchstaben-Mini, ß, Prozentanzeige) bleiben offen. |
 | ADR-036 | 2026-10-23 | **Schrift-Feinschliff gezielt und nicht pauschal** | Großbuchstaben-Mini zweizeilig beibehalten; Mini-Text in Versalien; zusätzliche einzeilige Mini; g/p/q/y mit gemeinsamer x-Höhe und Unterlängen; ß/ẞ nur minimal unterschiedlich, markierter Pixel aus. |
-| ADR-037 | 2026-10-23 | **OpenSign-Kontakt per E-Mail statt öffentlichem Issue** | Die englische Lizenzanfrage an Adam wurde **am 23.10.2026 per E-Mail versendet**. **Antwort und Erlaubnis ausstehend**; kein OpenSign-Quellcode übernommen. |
 | ADR-038 | 2026-10-23 | **Dokumente regelmäßig gegen aktuellen Firmwarestand abgleichen** | Jede neue Firmware erhält im Chat eine direkt nach Excel kopierbare Testtabelle; `docs/TESTPLAN.md` dient für historische Befunde und spezifische Regressionstests. |
 
 ## Designentscheidungen v0.3.0 (24.10.2026)

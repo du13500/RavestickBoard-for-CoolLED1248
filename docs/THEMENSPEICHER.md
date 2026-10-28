@@ -1,3 +1,5 @@
+# Stand v0.4.2-dev: Neue, noch ungetestete Firmwarefunktionen siehe [ROADMAP](ROADMAP.md) und [ENTWICKLUNGSSTAND](ENTWICKLUNGSSTAND_v0.4.2.md). Die unten stehenden älteren Einträge sind Planungshistorie, nicht der aktuelle Status.
+
 ## Ergänzung v0.3.5
 
 ### v0.3.5 – Stand der Piktogramme
@@ -221,45 +223,23 @@ Nach nachgewiesener Umsetzung einer Funktion: den passenden Eintrag (etwa `PRE-0
 - [ ] **BLE-16 · P1** Modi der Original-App (Block, links, rechts, Laser, Schneefall usw.) per Steuerbefehl getrennt vom Inhalt testen. Moduscodes einzeln verifizieren, nicht erraten. Geschwindigkeits-Skala mit Original-App-Wert ~80 experimentell abgleichen.
 - [ ] **QA-01 · P0** **Jeder neuen Firmwareversion und jedem Korrekturpaket eine kompakte, direkt im Chat kopierbare Testtabelle** (`Nr.`, `Bereich`, `Testpunkt`, `Ergebnis`, `Bemerkungen`) beigeben. Letzte zwei Spalten **leer**, keine Testtabelle als zusätzliche Download-Datei. Funktionstests + Regression.
 
-## 23.10.2026 · Forschung: OpenSign / CoolLEDX-Animationen (NEU)
+## Zukunft: Hardware-Animationen und Quellenkontrolle
 
-**Quelle:** [schulzad/coolled-sign-controller](https://github.com/schulzad/coolled-sign-controller), README, `protocol.md`, `ROADMAP.md` (abgerufen 23.10.2026). **Achtung: Ohne Lizenz; im README ausdrücklich „all-rights-reserved until one is added“. Keine Sourcecode-Übernahme!** Das Projekt bestätigt Funktionen an **seiner** 64×16-CoolLEDX-Referenztafel, Firmware 6; unsere konkrete Tafel muss separat geprüft werden.
-
-- [ ] **ANM-01 · P1** **Gespeicherte Animation** über CoolLEDX-Opcode **`0x04`** kontrolliert auf unserer Tafel testen. OpenSign bezeichnet Speicherung und autonomen Loop für die Referenztafel als verifiziert; **nicht** als Nachweis für unsere Hardware markieren.
-- [ ] **ANM-02 · P1** Referenzgrenze **ca. 30 KiB / bis zu 80 Frames bei 64×16** messen und die tatsächlich akzeptierten Größen, ACKs, Anzeigeverhalten, Stromausfall-Persistenz und Uploadzeiten unserer Tafel dokumentieren.
-- [ ] **ANM-03 · P1** Zwei individuell gerenderte Seiten (Beispiel „SUCHE:“ / „JOINT + ZIGARETTE“) als **ein gespeichertes Animationspaket** hochladen, autonomen Wechsel **ohne wiederholte Prozentanzeige** testen.
-- [ ] **ANM-04 · P1** **Zeitmodell der Animation** untersuchen: OpenSign dokumentiert **global gleiche Haltezeit pro Einzelbild**, kürzere Zeit = schneller; individuelle 5/7/10-s-Seitenzeiten nicht ohne Weiteres unterstützt. Möglichkeiten mit wiederholten Frames, abgestufter Gesamtdauer, Frameslimit und Bildrate prüfen; keine freie Einzelbilddauer behaupten.
-- [ ] **ANM-05 · P1** **Native Blocktext-Darstellung** (mehrere Seiten über `0x02`/Modus) gegen `0x04` Animation vergleichen: Qualität, Handhabung, Farbmix, 2 Zeilen, Übertragung, Grenzen und Prozentanzeige.
-- [ ] **ANM-06 · P2** Eigene Effekte als **vorgerenderte 64×16-Bildfolgen**: Wellenlauf, Glitzer/Sternenhimmel, pulsierendes Herz, Pixel-Vorhang, einblendende Buchstaben, Aufblitzen, Auflösen, freie Seitenübergänge; Browser/ESP32 als Renderer, Tafel als Loop-Player.
-- [ ] **ANM-07 · P2** Grafik-/Animation-Import: **GIF, WebP, APNG**, Skalierung/Seitenverhältnis, Beschnitt, transparente/key-color Hintergründe, Vorschau und Importlimits; bei ESP32-Ressourcen Browser-seitige Vorberechnung bevorzugen.
-- [ ] **ANM-08 · P2** Nur hardwareechte **7 LED-Farben + Schwarz** rendern, optional Ordered-/Floyd–Steinberg-Dithering für Bilder; **temporales Dithering/FRC** und Flimmern separat prüfen, keine echten zusätzlichen LED-Farben behaupten.
-- [ ] **ANM-09 · P2** Pixel-/Grafikeditor, Spritebewegung und programmierbare Übergänge entwickeln; Wellen-/Partikeleffekte bei Framelimit auf Speicher, Geschwindigkeit und Qualität prüfen.
-- [ ] **ANM-10 · P1** **Echtzeit-Streaming nicht voraussetzen.** OpenSign beschreibt für sein Referenzboard „store-and-loop“, kein funktionierendes permanentes Frame-Streaming. Unsere dynamischen Uhren/Countdowns/Scoreboards brauchen eigene technische Strategie.
-- [ ] **ANM-11 · P1** **Native Effekte (`0x06`) vs. eigene `0x04`-Animationen vs. Controller-Playlist** als getrennte Ausführungswege; Fähigkeit/Protokoll-Kompatibilität nach Modell/Firmware versionieren.
-- [ ] **ANM-12 · P2** OpenSign-Idee **Evidenzstufen** adaptieren: `unverified` → `experimental` → `verified` nur nach realem eigenen Hardwaretest, mit protokollierter Firmware-/Boardrevision, erwarteten Notifications, Rollback und manueller Sichtkontrolle. Keine fremden Testergebnisse als eigene deklarieren.
-- [ ] **ANM-13 · P2** Protokolldiagnose: Chunk-ACKs, akzeptierte Übertragung, Timeout/NAK, reales sichtbares Ergebnis separat messen, niemals BLE-Write automatisch mit erfolgreicher Anzeige gleichsetzen.
-- [ ] **ANM-14 · P2** Latenz und RAM-Bedarf für Animation kompilieren/übertragen gegen reine Textübergänge messen. Firmware-/Datenspeicher des ESP32 sowie Tafel-Puffer sauber getrennt betrachten.
-
-## 23.10.2026 · Lizenz-/Provenienzentscheidungen zu OpenSign
-
-- [x] **LIC-01 · P0** OpenSign/`schulzad/coolled-sign-controller` ist **öffentlich sichtbar, aber ohne Nutzungslizenz**. Das README verlangt, die Implementierung als **all rights reserved** zu behandeln. **Keinen geschützten Sourcecode, keine Grafiken oder langen Textpassagen übernehmen oder aus Python nahezu zeilengleich nach C++ übertragen.**
-- [ ] **LIC-02 · P0** **Eigenständige ESP32-C3-Implementierung** ausschließlich anhand protokolltechnischer Fakten, öffentlich zugänglicher Funktionsbeschreibungen und eigener BLE-Messungen. Testdaten dokumentieren, eigene Architektur, eigene Benennungen, eigener Code und eigene Testvektoren. Ein bloßes Umbenennen/Umformatieren ist **kein Clean-Room-Verfahren**.
-- [x] **LIC-03 · P1** E-Mail an Adam Schulz am **23.10.2026 versendet**: schriftliche Freigabe für Übernahme, Anpassung, Portierung nach C++ und Veröffentlichung auf GitHub angefragt. **Kontaktaufnahme erledigt; Antwort und Lizenzberechtigung offen.**
-- [ ] **LIC-04 · P1** Separat `UpDryTwist/coolledx-driver` mit **MIT-Lizenz** als mögliche rechtssichere Codequelle prüfen; bei tatsächlicher Übernahme Lizenz- und Copyright-Hinweise beibehalten. Keine pauschale Lizenzübertragung von MIT auf andere Repositories annehmen.
-- [ ] **LIC-05 · P1** Jede neue Implementierung/Quelle mit URL, Abrufdatum, technischem Fakt vs. übernommenem Code, Nachweis und Teststatus im Lizenzregister dokumentieren. Initialer Sketch-/Paketabgleich wurde 23.10.2026 durchgeführt, eine private Git-Historie nicht unabhängig geprüft; laufende Pflege erforderlich.
-
-**Offene technische Entscheidung:** Ist das gewünschte „mehrere Seiten, pro Seite individuell formatiert und unterschiedlich lange sichtbar, nur ein Upload“ als native Boardfunktion möglich, oder brauchen wir eine begrenzte Bildfolge mit entsprechendem Timeraster? Erst anhand unserer eigenen Hardwareversuche entscheiden. **Bestehende v0.2.0-Firmware nicht ungeprüft ersetzen.**
-
+- [ ] **ANM-01 · P1** Separaten CoolLEDX-Opcode `0x04` zunächst mit sieben vorhandenen 64×16-Ambiente-Farbbildern und einer sicheren seriellen Testkonsole auf der eigenen Tafel erproben. Nur real bestätigte Ergebnisse in die Firmware übernehmen.
+- [ ] **ANM-02 · P1** Frame-Limit, Zeitsteuerung, Wiederholung, Dateiformat, ACK und reales Anzeigeverhalten messen. Nie aus BLE-Quittungen auf sichtbaren Erfolg schließen.
+- [ ] **ANM-03 · P2** GIF-Import, Farbkonvertierung auf sieben LED-Farben, browserseitige Vorberechnung und Animationsvorschau erforschen.
+- [ ] **ANM-04 · P2** Native Animation `0x04`, Effektmodus `0x06` und Controller-gesteuerte Programme voneinander trennen.
+- [ ] **SYM-WIDE · P2** Frei gestaltbare Symbole mit 16 Pixel Höhe und variabler Breite (z. B. 40×16 Flugzeug) im Renderer und in der Vorschau ermöglichen; 16×16-Originalsymbole bleiben erhalten.
+- [ ] **LIC-04 · P1** Bei tatsächlicher Übernahme fremder MIT- oder Apache-lizenzierter Bestandteile Lizenztexte und Urheberhinweise beibehalten; nur technische Protokollrecherche erfordert keine Codeübernahme.
 
 ## 23.10.2026 · GitHub, Dokumentationsdesign und fortlaufender Testprozess
 
 - [x] **DOC-10 · P1** Dokumente werden zu jeder neuen Firmwarefassung zusammen mit README, Changelog und Roadmap aktualisiert. **Keine alten Statusbehauptungen zurückkopieren.**
-- [x] **DOC-11 · P1** README-Gestaltung: Zentriertes eigenes Totem-Foto `docs/assets/totem.jpg` **ohne width/style-Vorgabe**, zentrierter 🍌-Titel, englische Badges `version`, `hardware`, `status: hardware testing`, `project: non-commercial`, `license: all rights reserved`, `mission: hugs and love`. Fließtext deutsch. **Keinen ausgeschiedenen Abschnitt „Projektstruktur“ wieder einführen.**
+- [x] **DOC-11 · P1** README-Gestaltung: Zentriertes eigenes Totem-Foto `docs/assets/totem.jpg` **ohne width/style-Vorgabe**, zentrierter 🍌-Titel, englische Badges `version`, `hardware`, `status: hardware testing`, `project: non-commercial`, `license: MIT`, `mission: hugs and love`. Fließtext deutsch. **Keinen ausgeschiedenen Abschnitt „Projektstruktur“ wieder einführen.**
 - [ ] **DOC-12 · P1** Bei nächster README-Überarbeitung die **eigens entwickelte zweizeilige Minischrift** ausdrücklich benennen. Nicht eigens die vom Nutzer angepasste README bei einer reinen Dokumentenpflege überschreiben.
 - [x] **DOC-13 · P1** **Zu jedem Firmware-Updatepaket eine kurze, Excel-kopierbare Testtabelle ausschließlich im Chat** (Nr., Bereich, Testpunkt, Ergebnis, Bemerkungen), mit leeren Feldern für Nutzerbefunde; kein separater Excel-Download und keine Pflichtdatei im Updatepaket. `docs/TESTPLAN.md` bleibt technische Testhistorie/Checkliste.
-- [x] **LIC-06 · P1** Bewusste Freigabeentscheidung: Repo darf sichtbar gemacht werden, eigene Teile bleiben mangels Open-Source-Freigabe **all rights reserved**. Die GitHub-Sichtbarkeit ist keine neue Firmwarefunktion und kein offener „Release“-Meilenstein. Das Repository ist Public, die Lizenz des eigenen Codes bleibt All Rights Reserved.
+- [x] **LIC-06 · P1** Bewusste Freigabeentscheidung: Repo darf sichtbar gemacht werden, eigene Codebestandteile sind inzwischen **MIT-lizenziert**. Die GitHub-Sichtbarkeit ist keine neue Firmwarefunktion und kein offener „Release“-Meilenstein. Das Repository ist Public, die aktuelle Lizenz des eigenen Codes ist MIT.
 - [x] **LIC-07 · P1** Festes AP-Passwort `Banane1248!` ist bewusst öffentlich dokumentierbar; individuell änderbares Passwort bleibt Zukunftsthema. Fest codierte BLE-MAC ist ein dokumentierter Gerätespezialfall. Totem-EXIF (iPhone-Modell/Festivalgeotag) wird akzeptiert.
-- [ ] **LIC-08 · P1** Antwort von Adam abwarten und Bedingungen einer eventuellen Erlaubnis schriftlich dokumentieren, bevor OpenSign-Code übernommen oder portiert wird. **Keine Freigabe bislang bestätigt.**
 - [ ] **SYS-13 · P2** WLAN-AP-Passwort optional über Weboberfläche ändern, mit sicherer Wiederherstellung bei Verlust und klarer Bedienanleitung.
 
 **Hinweis zur IDs-Konsolidierung:** In einer alten Fassung war `FNT-06` zweimal vergeben. Die gemeinsame Glyphentabelle wird ausschließlich unter `FNT-08` geführt; `FNT-06` bezeichnet allein die Mini-Schrift. Bestehende Aufgaben werden nicht gelöscht.
@@ -275,7 +255,6 @@ Nach nachgewiesener Umsetzung einer Funktion: den passenden Eintrag (etwa `PRE-0
 - [ ] **FNT-16 · P1** „Mini, eine Zeile“ horizontal und vertikal zentrieren; Großbuchstabenautomatik inklusive Ä/Ö/Ü/ẞ. **Code zum Zeitpunkt dieser Planung vorhanden; siehe nachfolgenden Praxistest.**
 - [ ] **BLE-14/15/16 (Referenz)** Helligkeit, Tempo und Modus ohne Content-Upload mit kurzzeitiger Wiederverwendung der BLE-Verbindung senden. **Code vor dem Praxistest vorhanden; Ergebnis siehe nachfolgenden Abschnitt.**
 - [ ] **LIB-11 (Referenz)** Lauftextentwurf/aktiven Reiter im Browser wiederherstellen. **Implementiert; Praxistest siehe nachfolgenden Abschnitt.**
-- [ ] **DOC-10 (Referenz)** OpenSign-Mail 23.10.2026 und öffentliches GitHub-Repository durchgehend aktuell dokumentieren. Antwort ausstehend.
 
 Die bestehenden v0.2.0-NVS-Seiten werden im v0.3.0-Entwurf nicht automatisch gelöscht oder migriert. **Keine Auto-Ausführung nach dem Booten.**
 

@@ -1,22 +1,21 @@
+> Historische Archivrevision. Aktuelle Lizenz: MIT für eigenen Code, Rechte fremder Werke gesondert. Siehe `docs/QUELLEN_UND_LIZENZEN.md`.
+
 # RavestickBoard · Dokumentation des Veröffentlichungsaudits
 
 **Prüfstand: 23.10.2026.** Dieses Protokoll dokumentiert die Grenzen einer technischen Sichtung; es ist **keine rechtliche Freigabebescheinigung**.
 
 ## 1. Warum diese Prüfung durchgeführt wurde
 
-Das Projekt soll für andere Interessierte, insbesondere den OpenSign-Entwickler, einsehbar sein können. **Sichtbarkeit ist nicht gleich Open-Source-Lizenz:** Für eigene Bestandteile bleibt eine `LICENSE` mit **All Rights Reserved** vorgesehen/erstellt. Die Entscheidung über öffentliche Sichtbarkeit wurde getroffen; **ob der GitHub-Schalter gegenwärtig bereits auf Public steht, wurde beim Dokumentenreview nicht unabhängig verifiziert.**
 
 ## 2. Umfang und konkrete Ergebnisse
 
 | Thema | Dokumentierter Befund / Grenze |
 | --- | --- |
-| Quellen | Bei der früheren Prüfung wurden die verfügbaren Projektarchive von erstem BLE-Test bis v0.2.0 Korrektur 1 mit `UpDryTwist`, `ohtaras` und OpenSign verglichen. |
 | Fremde Codepassagen | **Keine konkrete unlizenzierte Quellcodeübernahme festgestellt.** Protokoll-Paketwerte und Algorithmen teilen sich notwendigerweise Geräteanforderungen. Nicht sämtliche abstrakten Bearbeitungs-/Rechtefragen lassen sich automatisch ausschließen. |
 | Geheimnisse | In den überprüften Text-/Projektpaketen keine erkannten API-Keys/Private-Keys. Der **bekannte** WLAN-AP-Schlüssel ist bewusst öffentlich. Neue Commits sind jeweils separat zu prüfen. |
 | Geräteadresse | BLE-Testadresse ist gerätespezifisch, soll aber nach Nutzerentscheidung vorerst nicht entfernt werden. |
 | Foto | Nutzer bestätigt, dass das Totem-Foto keine unerwünschten persönlichen Angaben zeigt. iPhone-13-Pro-Modell/Geotags vom Festivalgelände dürfen laut Nutzer bleiben; Originaldatei/EXIF wurden in dieser Prüfung nicht unabhängig ausgelesen. |
 | Git-Historie | Laut Nutzer ausschließlich von ChatGPT bereitgestellte Projektdateien, keine fremden Forks oder Zusatzdaten. **Historie war für den Assistenten nicht vollständig direkt zugänglich**; die Aussage ist daher eine dokumentierte Nutzerangabe, kein eigener lückenloser Git-Historiennachweis. |
-| OpenSign | Technische Referenz, **keine Codeübernahme**. E-Mail mit Lizenzanfrage an Adam Schulz am 23.10.2026 versendet; Antwort und Rechteerteilung noch ausstehend. |
 | `LICENSE` | Eigenes Copyright-/Nutzungsdokument erzeugt; wirksam nur für Bestandteile, für die die Rechte tatsächlich beim erklärenden Rechteinhaber liegen. Lizenzen Dritter werden nicht überschrieben. |
 
 ## 3. Bewusst akzeptierte Rahmenbedingungen
@@ -29,7 +28,6 @@ Das Projekt soll für andere Interessierte, insbesondere den OpenSign-Entwickler
 ## 4. Was das Audit nicht behauptet
 
 - Keine Garantie rechtlicher Unbedenklichkeit eines beliebigen späteren GitHub-Commits.
-- Keine Freigabe zur Verwendung fremder, nicht lizenzierter OpenSign-/ohtaras-Quelltexte.
 - Keine vollständige Prüfung von privater Git-Historie oder Originalfoto; diese Grenzen wurden offengelegt.
 - Keine Aussage, dass v0.2.0 schon universell mit allen CoolLEDX-Geräten funktioniert.
 

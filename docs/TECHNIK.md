@@ -1,3 +1,9 @@
+# Technikstand v0.4.2-dev (aktueller Testkandidat)
+
+**Die nachfolgenden v0.2/v0.3-Abschnitte sind historische Architektur- und Testnotizen.** Das aktuelle Design steht in [BIBLIOTHEK_v0.4.2.md](BIBLIOTHEK_v0.4.2.md). Aktuell gelten: bis zu 25 Arbeitsseiten; LittleFS Textdateien RBL1, Blockbegleitdaten RBB2, Programme RBP2, Kurzwahlen RBS2; alter RBM1-Journalindex wird weiterhin gelesen. Pixelbänder verwenden ein 384-Byte-RGB-Kachelverfahren bei größeren Transfers und bleiben innerhalb des konservativen 30-KiB-Datenlimits. BLE-Sendebefehle bleiben `0x02` sowie `0x06` für den Modus, `0x07` für Tempo und `0x08` für Helligkeit. Weder die Arduino-ESP32-Kompilierung noch das neue Band auf Hardware sind bereits nachgewiesen.
+
+---
+
 ## Ergänzung v0.3.5
 
 ### v0.3.5 – zusätzliche Steuer- und Symbolcodes
@@ -72,7 +78,7 @@ Nach der ersten v0.2.0-Kompilierungsfehlermeldung (`'function' does not name a t
   | `0x08` | Laser | offen |
 
   **Nicht verwechseln:** Die Moduswerte `0x04`, `0x06` und `0x08` sind Parameter des Befehls `0x06`, keine selbstständigen Opcodes. Der separate **Opcode `0x04` für gespeicherte Animationen** ist hiervon unabhängig. Ein Moduswechsel bestätigt noch keinen autonomen Szenenwechsel/keine Unterstützung einer bestimmten Animation.
-- **`0x04` gespeicherte Animation**: OpenSign meldet autonome Animationen auf **einem anderen Referenzboard** (ca. 30 KiB bzw. 80 Frames). **Nicht in unserer v0.2.0-Firmware implementiert, auf unserer Hardware ungetestet.**
+- **`0x04` gespeicherte Animation** bleibt Forschungsgegenstand, an unserer Tafel noch nicht hardwarebestätigt und nicht als eigenständiges Animationsprogramm implementiert.
 
 ### Verbindungskonflikte und Uploadverhalten
 

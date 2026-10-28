@@ -1,24 +1,14 @@
-# Host-Differenztest für den neuen Stream-Renderer
+# Tests RavestickBoard v0.4.2-dev
 
-Der C++-Testcode enthält den ursprünglichen Renderer und den Kachelrenderer mit Daten aus den echten Firmware-Assets. Er vergleicht die **107-Byte-Header und alle drei Farbebenen Byte für Byte**. Die Testfälle umfassen 5 Layouts, sieben Chunkgrößen, Symbole und Unicode, einzeilige und zweizeilige sowie sehr lange Texte.
-
-Unter Linux/WSL mit g++:
+**Diese Tests sind Host- und Browserprüfungen, keine reale ESP32-Kompilierung und kein Test auf der CoolLEDX-Tafel.**
 
 ```bash
-cd tests
-g++ -std=c++17 -O2 -I. -o stream_renderer_test stream_renderer_host_test.cpp
-./stream_renderer_test
+g++ -std=c++17 -O2 tests/v042_program_core_test.cpp -o /tmp/rb042_test
+/tmp/rb042_test
+python tests/browser_v042_smoke.py
+python tools/sync_web.py
 ```
 
-Erwartung: `PASS 135 byte-exact tiled image test cases against full renderer, at 7 read chunk sizes`.
+Der C++-Test prüft Seite/Verkettungsgrenzen, RGB-Ebenen, Tile-Streaming und Programmplanung anhand eines portablen Kernmodells. Der Browser-Mocktest prüft Webnavigation, Textspeichern, Blockfolge, Programmspeichern und Kurzwahlen. Er testet simulierte Serverantworten, **nicht** die reale LittleFS- oder BLE-Anbindung. Die frühere Regression v0.4.1 liegt weiterhin unter `library_host_test.cpp`, `browser_library_test.py` und `stream_renderer_host_test.cpp`.
 
-Die Testdatei ist eine hostseitige Kopie der relevanten Rendering-Funktionen, kein Ersatz für die Firmwarekompilierung und **kein Hardware-Nachweis** für BLE-Verbindungen und Laufzeit. Alle Prüfergebnisse beziehen sich nur auf diese Version.
-
-## v0.4.1-dev – Library host/browser regression
-
-- `g++ -std=c++17 -Itests/mock tests/library_host_test.cpp -o tests/library_host_test && tests/library_host_test`: **PASS** (simuliertes LittleFS; CRUD, CRC, Journal, Neustart, Wiederherstellung und Kurzwahl-Löschschutz). Der Test nutzt absichtlich Mocks und ersetzt keine native ESP32-Kompilierung.
-- `python tests/browser_library_test.py`: **PASS** (Headless Chromium/Playwright mit simulierten HTTP-Antworten, Editor- und Bibliotheks-Interaktion, Kurzwahl, Duplizieren, aktualisiertes Speichern).
-- `node` JavaScript-Syntaxprüfung des in `web/index.html` eingebetteten Scripts: **PASS**.
-- `firmware/.../RavestickBoard_WebUI.h` enthält HTML aus `web/index.html` byteidentisch: **PASS**.
-
-**Offen:** Arduino-ESP32-Kompilierung, echte LittleFS-Dateisystempartition, BLE-Hardware, Transfer und Dauertest.
+Für die Hardwareabnahme siehe `docs/TESTPLAN_v0.4.2.md`.

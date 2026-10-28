@@ -1,3 +1,25 @@
+# Changelog
+
+## [0.4.2-dev] · Blockfolgen, Bibliothek, Programme und Kurzwahlen
+
+**Entwicklungsstand, noch keine echte Arduino-Kompilierung oder LED-Hardwareabnahme.**
+
+### Neue Funktionen
+- 25-Seiten-Blockeditor mit gezieltem Leeren, bearbeitbarer LittleFS-Blockfolge und einem zusammenhängenden BLE-Bildband (1–79 Seiten rechnerisch pro Upload).
+- Bibliotheksbestand aus v0.4.1 weiterhin lesbar (`RBL1`, `RBM1`); alter 64er-Metadatenindex wird beim Lesen kompatibel erweitert, nun 192 Plätze und mindestens 64 KiB Flashreserve.
+- 24 speicherbare Programme mit je bis zu 24 Bibliotheksschritten und 5–180 s Gruppenzeit; Zusammenfassen benachbarter Blöcke und kompatibler Lauftexte, erneuter Upload bei Gruppenwechsel.
+- Sechs Kurzwahlen mit eigenem Quellentyp (Bibliothek/Programm/Ambiente) und eigenem Titel; Migration bestehender Bibliotheksreferenzen.
+- UI: Bibliothekssuche hinter Lupe, Bearbeiten-Beschriftung, Backup unter Einstellungen, Live-Namenslängenprüfung, Menü-Refresh und eigenes iPhone-Icon.
+- JSON-Backup Schema 2 inkl. Blockfolgen, Programmen und neuen Kurzwahlen; Import Schema 1 bleibt möglich.
+- README neu aufgebaut, Roadmap, Quellen/Technik/Installation/Testplan überarbeitet, frühere Firmwareversionen erhalten.
+
+### Prüfung / offen
+- JavaScript Syntax- und Chromium-Mocktests. Separater C++-Hosttest des Bandformats.
+- Echte Arduino-ESP32-3.3.12-Kompilierung, RAM-Regression und BLE-Bildtest ausstehend. Alte NVS-Seiten dürfen bei Schemawechsel entfallen; gespeicherte LittleFS-Texte nicht.
+- Keine native `0x04`-Animation, kein GIF-Upload, keine variabel breiten Icons und noch kein kompletter automatischer Retry nach BLE-ACK-Timeout.
+
+---
+
 ## v0.4.1-dev · 27.10.2026 · Persistente Flash-Bibliothek
 
 **Status:** C++-Hosttests (Bibliothek/Journaling) und Browser-Interaktionstests bestanden; **Arduino-Kompilierung und echter Hardwaretest ausstehend**.
@@ -93,7 +115,6 @@ Siehe [Entwicklungsstand](docs/ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md) und [Test
 - Blume: rechter Abstand um 1 Pixel reduziert; Stern zentriert; alle alten Hersteller-Spriteindizes bleiben erhalten.
 - Separate neue Firmwaremappe, keine Änderung der NVS-Seitenstruktur, kein neues Playlist-/Laufzeit-System.
 
-# Changelog
 
 ## [0.3.4] · 25.10.2026 · Erweiterte BLE-Anzeigemodi (Hardwaretest ausstehend)
 
@@ -198,7 +219,6 @@ Siehe [Entwicklungsstand](docs/ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md) und [Test
 - NVS-Datensatzformat der bestehenden 12 Seiten bleibt unverändert; neue Layoutwerte 2–4 werden ergänzt.
 - Kein `0x04`-Animationsupload, keine LittleFS-Programmbibliothek und keine vollständige Zeichen-für-Zeichen-Formatierung in diesem Kandidaten.
 - Browser-Smoketest ohne JavaScript-Ausnahme; vollständige Arduino-/Hardwareprüfung ausstehend.
-- Lizenzanfrage an OpenSign-Autor Adam Schulz wurde am 23.10.2026 **per E-Mail** versendet; Antwort/Erlaubnis weiterhin ausstehend. Repository ist auf GitHub **Public**.
 
 ---
 
@@ -212,7 +232,6 @@ Siehe [Entwicklungsstand](docs/ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md) und [Test
 - **Bekannter Mangel:** Der ESP32 lädt bei jedem Seitenwechsel den gesamten Inhalt erneut hoch. Die tafelseitige **Prozentanzeige** erscheint jedes Mal. Der Player wird deshalb als technische Vorstufe einer späteren **Playlist zwischen Programmen** betrachtet.
 - **Schriftentscheidungen:** Zwei Zeilen in der aktuellen Großbuchstaben-Mini beibehalten; Kleinbuchstaben in Mini künftig automatisch als Versalien rendern; „Mini, eine Zeile“ ergänzen; `ß/ẞ` mit Entfernen des blau markierten Pixels; `g/p/q/y` an gemeinsame x-Höhe und Unterlängen anpassen.
 - **Editor-Beobachtung:** Gespeicherte Blockseiten bleiben bei Browser-Reload erhalten; **Lauftextentwurf und zuletzt gewählter Reiter nicht**. Bibliothek/Entwurfswiederherstellung geplant.
-- **Forschung, noch nicht implementiert:** Einmaliger Upload mehrerer Seiten über nativen Blocktext oder `0x04`-Animation; OpenSign-Referenz ist **kein** Gerätetest unserer Tafel.
 - **Dokumentationsentscheidung:** Kurze Excel-kopierbare Testtabelle zu jedem späteren **Firmwarepaket direkt im Chat**, keine zusätzliche Download-Datei.
 
 ---
