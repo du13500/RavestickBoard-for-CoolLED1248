@@ -8,7 +8,7 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
-<img alt="Mission" src="https://img.shields.io/badge/mission-Hugs%20and%20Love-ff69b4">
+<img alt="Mission" src="https://img.shields.io/badge/mission-hugs%20and%20love-ff69b4">
 </p>
 
 ## Was ist RavestickBoard?
