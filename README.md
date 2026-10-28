@@ -1,3 +1,22 @@
+## v0.4.1-dev (27.10.2026) – Bibliothek im ESP32-Flash 🍌
+
+**Neue Testversion, noch nicht auf der CoolLEDX-Hardware bestätigt.** Aufbauend auf der
+auf realer Hardware getesteten v0.4.0.3-dev mit RAM-Streaming (8-Stunden-Leerlauf-/Stabilitätstest).
+
+- Bis zu **64 dauerhaft gespeicherte Lauftexte** auf dem ESP32 über LittleFS; 1.599 UTF-8-Bytes je Textzeile, maximal 47 UTF-8-Bytes für den Namen. Fonts (5 Layouts), beide Farben, ein Modus (Stand/Lauf) und Favorit bleiben pro Datensatz erhalten. Das reale 30-KiB-LED-Budget gilt weiterhin.
+- **Gemeinsame Bibliothek** im WLAN des ESP32 statt nur im lokalen Smartphone-Browser: öffnen, aus dem Editor neu speichern oder aktualisieren, duplizieren, umbenennen, löschen, Favorit markieren und sortieren (Desktop Drag & Drop, mobil mit Pfeilen).
+- **Sechs frei belegbare Kurzwahltasten** auf der Startseite. Antippen überträgt den jeweiligen gespeicherten Text per bewährtem BLE-Auftrag. Belegungen überleben einen Neustart; Löschen eines verwendeten Textes ist gesperrt.
+- **JSON-Backup/Import** über den Browser. Import fügt Einträge hinzu, vergibt neue stabile IDs und übernimmt Backup-Kurzwahlen ausschließlich in bisher freie Felder. Import ist nicht atomar: Einträge, die vor einem Fehler schon gespeichert wurden, bleiben erhalten.
+- Flash-Datenformat: versionierte, prüfsummengesicherte Einträge und zwei abwechselnde Metadaten-Journaldateien; beim Aktualisieren vorübergehend eine Rückfallkopie. Maximal ein begrenzter Datensatz im RAM, keine komplette Bibliothek.
+- **Sicherheitsentscheidung:** kein automatisches LittleFS-Format bei einem Fehler. Bei frischer Partition muss die Ersteinrichtung auf der Bibliotheksseite ausdrücklich bestätigt werden. Wenn Metadaten beschädigt sind, erfolgt kein automatisches Löschen.
+- Die **zwölf bestehenden Blockseiten bleiben binär unverändert in NVS**. Der Streaming-Renderer, RAMTRACE, BLE-Protokoll und alle bisherigen Pixelart-Sprite-IDs sind übernommen. Programme aus mehreren Bibliothekstexten bleiben für v0.4.2 vorgesehen.
+
+**Installation und Test:** [`docs/INSTALLATION_v0.4.1.md`](docs/INSTALLATION_v0.4.1.md),
+[`docs/TESTPLAN_v0.4.1.md`](docs/TESTPLAN_v0.4.1.md) und
+[`docs/BIBLIOTHEK_v0.4.1.md`](docs/BIBLIOTHEK_v0.4.1.md).
+
+---
+
 <p align="center">
   <img src="docs/assets/board-gif.gif" alt="CoolLEDX-Tafel mit wechselnden LED-Motiven" />
 </p>
@@ -26,6 +45,10 @@
 </p>
 
 > **Entwicklungsstand vom 27. Oktober 2026:** **v0.4.0.1-dev** wurde auf dem ESP32-C3 erfolgreich kompiliert und in **20 von 21 Testpunkten** als OK bewertet; ein erster Diagnoselog zeigte **324 B historischen Minimal-Heap**, ein weiterer unter anderer Belastung **48.108 B**, ein großer 30.713-B-Upload **11.052 B**. Diese unterschiedlichen, nicht gleichzeitig beobachteten Tiefstwerte erfordern eine gezielte Analyse. **v0.4.0.2-dev** ergänzt dafür eine RAM-Verlaufsdiagnose und übernimmt die neueste Pixelart-Excel. **v0.4.0.2 ist noch nicht kompiliert oder auf der Hardware getestet.** Die Bibliothek und Programme bleiben vorerst vorbereitete Ansichten.
+
+## 🍌 v0.4.0.3-dev — Speicheroptimierung (Hardwaretest offen)
+
+**Neuer experimenteller Firmwarestand:** 64-Spalten-Kachelrenderer für große Lauftexte (ab 8 KiB Bildpayload, 384 B Tile statt bis zu 30 KiB dynamischem Vollbild), einmaliger BLE-MTU-Recovery-Versuch bei ungültiger MTU und jobbezogene RAMTRACE-Minima. Die WebUX und Symbolsammlung bleiben gleich. Hostseitige C++-Differenztests bestätigten bytegleiche Bilddaten in 135 Fällen; Arduino-Kompilierung und echter Hardwaretest stehen noch aus. Siehe [RAM-Optimierung](docs/RAM_OPTIMIERUNG_v0.4.0.3.md), [Installation](docs/INSTALLATION_v0.4.0.3.md) und [Testplan](docs/TESTPLAN_v0.4.0.3.md).
 
 ## Worum geht es?
 

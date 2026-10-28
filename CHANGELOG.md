@@ -1,3 +1,28 @@
+## v0.4.1-dev · 27.10.2026 · Persistente Flash-Bibliothek
+
+**Status:** C++-Hosttests (Bibliothek/Journaling) und Browser-Interaktionstests bestanden; **Arduino-Kompilierung und echter Hardwaretest ausstehend**.
+
+- Bis zu 64 Flash-basierte Textvorlagen in LittleFS, stabil nummeriert. Speichert beide Zeilen, Schrift, zwei Farben, Modus, Name und Favoritenflag. Indizes werden in zwei alternierenden, prüfsummengesicherten Kopien gespeichert. Beim Ersetzen wird eine Rückfallkopie erstellt und beim Neustart ein unterbrochener Austausch wiederhergestellt.
+- Browser-Bibliothek mit Textauswahl, Öffnen, Speichern aus dem Editor, Überschreiben, Kopieren, Umbenennen, Löschen mit Kurzwahl-Referenzschutz, Suchen, Favorisieren und Reihenfolge ändern (Drag & Drop/Desktop und Pfeile/mobil).
+- Sechs Kurzwahlen referenzieren stabile IDs und senden gespeicherte Texte direkt via vorhandener BLE-Warteschlange. Entwurf und aktiver LED-Inhalt bleiben separat.
+- JSON-Backup und additiver Import mit neuer ID-Zuordnung, Kurzwahl-Migration nur in freie Felder. Kein automatisches Überschreiben bestehender Vorlagen.
+- LittleFS-Ersteinrichtung per expliziter Bestätigung; kein automatisches Formatieren bei Mount-/Metadatenfehlern. Bestehendes NVS-Schema der 12 Blockseiten vollständig unverändert.
+- Weitergeführt: v0.4.0.3-Streaming für große Texte, BLE-MTU-Neuverbindung, RAMTRACE und Pixelart-Excel-Stand (Ziggi II etc.).
+- Statische JS-Syntaxprüfung, vollständige WebUI-Header-Synchronisierung. Hosttests prüfen unter anderem simulierten Neustart und unterbrochene Dateiumbenennung.
+- Grenzen: max. 64 Texte und 1.599 UTF-8-Bytes pro Zeile, zunächst nur Stand/Lauf als gespeicherter Textmodus; keine Programmkette, kein Löschen referenzierter Texte, keine automatischen Anzeigen beim Boot. Schreibvorgänge verbrauchen Flash-Zyklen und sollten nicht an jeden Tastendruck gekoppelt werden.
+
+---
+
+## v0.4.0.3-dev · 27.10.2026 · Stream-Renderer / Speicheroptimierung (Testbuild)
+
+**Status:** C++-Hosttests 135/135 bytegenau erfolgreich; Arduino-Kompilierung und Hardwaretest noch offen.
+
+- Lange Lauftexte (Payload ≥8 KiB) jetzt mit 384-Byte-Kachelrenderer statt bis zu 30-KiB-Vollbildpuffer. Alle Farbkanäle, Symbole, Layouts und CoolLEDX-BLE-Paketbytes bleiben im Vergleichstest identisch.
+- Nach MTU kleiner 160: kontrolliert einmalige BLE-Neuverbindung mit erneuter FFF0/FFF1-Abfrage und MTU-Prüfung vor Schreibbefehlen.
+- Diagnoseversion korrigiert; RAMTRACE mit per-Job-Minima, auch nach Überschreiben des Ringpuffers.
+- WebUX unverändert außer Versionsbezeichnung, aktualisierte Pixel-Art-Sammlung v0.4.0.2 bleibt vollständig erhalten, keine NVS-/LittleFS-Änderung.
+- Testplan und Installationsanleitung für v0.4.0.3 ergänzt.
+
 ## v0.4.0.2-dev · 27.10.2026 · RAM-Analyse + aktuelle Pixelart
 
 **Status: Diagnose-Testbuild, noch nicht mit Arduino IDE kompiliert und nicht auf ESP32-C3 getestet.** Letzter erfolgreich hardwaregetesteter Stand: **v0.4.0.1-dev**, 20/21 Testpunkte OK (Langzeitpunkt zum Zeitpunkt der Checkliste offen), BLE-Aufträge fehlerfrei. Historische Heap-Minima je nach Szenario: 324 B, 48.108 B und 11.052 B.

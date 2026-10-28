@@ -1,3 +1,13 @@
+## Zwischenstand v0.4.1-dev · 27.10.2026
+
+- 🟡 **Flashbibliothek implementiert:** bis zu 64 Texte auf LittleFS, gemeinsame Nutzung durch alle Clients, stabile IDs, Suchen, Favoriten, Kopieren, Umbenennen, Löschen, Sortieren und Browser-Backups. Erst auf echter Hardware testen, bevor die Punkte ✅ erhalten.
+- 🟡 **Sechs Kurzwahlen:** Textreferenzen auf stabile Bibliotheks-IDs, Löschschutz und BLE-Auftrag wie beim Lauftexteditor. Keine eigenständigen Programmobjekte in v0.4.1.
+- 🟡 **Integritäts-/Migrationsschutz:** NVS-Seitenschema unverändert, LittleFS ohne automatisches Formatieren, doppeltes Metadatenjournal. Kompilierung/HW-Test noch ausstehend.
+- ⬜ **v0.4.2:** Verkettete Programme, referenzierte Texte, Transportdatenbudget und technische Grenzen.
+- Aus Sicherheitsgründen ist der erste LittleFS-Formatierungsschritt eine ausdrücklich bestätigte Benutzeraktion; eine bestehende, beschädigte Bibliothek wird nicht automatisch gelöscht.
+
+---
+
 ## Nächster Schritt – RAM-Diagnose (27.10.2026)
 
 - **v0.4.0.2-dev:** begrenzter RAMTRACE mit Messpunkten für Rendern, BLE, große Übertragungen, HTTP, Freigabe; aktualisierte Pixelart aus `docs/assets/Pixel-Art.xlsx` inklusive Ziggi II. Hardware-/Compile-Test noch offen.
