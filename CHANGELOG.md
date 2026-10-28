@@ -6,8 +6,8 @@
 - **Zweite Programm-Wiedergabeart:** Programm kann alternativ alle Lauftext- und Blocksegmente horizontal verketten; 16 Pixel Zwischenraum, gleiche Farb-/Glyphenrenderer, möglichst ein Upload, Datenlimit 30 KiB; Splits an Seitengrenzen bzw. zwischen ganzen Texten. Originalmodus für vorhandene Programme bleibt der Standard. Programmschema nutzt bisher reserviertes Byte (RBP2 bleibt bestehen).
 - **Bibliothek/Editor:** Neuer-Inhalt-Button direkt nach Speichern und bearbeitete Vorlagen weiter editierbar; leere Kurzwahl öffnet Einrichtung; unvollständige Programm-Kurzwahl rötlich.
 - **Backup-Import:** Inhalts- und Namensvergleich vor Wiederverwendung sowie ID-Neuzuordnung für Programme/Kurzwahlen; Schema 1/2 lesbar. Kein unkontrolliertes Überschreiben, kein atomarer Import bei Fehlern.
-- **Icon-Oberfläche:** Offline-Lucide-SVGs für Navigation, Schaltflächen, Regler und acht kompakte erzwungene BLE-Modi, die jeden Klick senden, ohne aktiven Zustand. Third-party-ISC- und Feather-MIT-Texte in THIRD_PARTY_NOTICES.md; unveränderte eigene Rechte im LICENSE referenziert. Hersteller-Pixelmotive bleiben unberührt.
-- **Dokumentation:** Gemeinsame Wir-Perspektive und KI-Werkzeuge ChatGPT/Claude wieder aufgenommen; README-Lizenzbehauptung an reale LICENSE angepasst.
+- **Icon-Oberfläche:** Offline-Lucide-SVGs für Navigation, Schaltflächen, Regler und acht kompakte erzwungene BLE-Modi, die jeden Klick senden, ohne aktiven Zustand. Third-party-ISC- und Feather-MIT-Texte in THIRD_PARTY_NOTICES.md; RavestickBoard-eigener Code bleibt MIT-lizenziert. Hersteller-Pixelmotive bleiben unberührt.
+- **Dokumentation:** Gemeinsame Wir-Perspektive und KI-Werkzeuge ChatGPT/Claude wieder aufgenommen; MIT-Lizenz im Nachtrag wiederhergestellt; die zwischenzeitliche restriktive Fassung war fehlerhaft.
 - **Noch offen:** Echter ESP32-Build, Betrieb mit gleichzeitigem WLAN/BLE und die neue Laufbanddarstellung sind hardwareseitig zu testen; Lauftextgeschwindigkeiten weiterhin unkalibriert.
 
 ## v0.4.2.2-dev – Gemischte Programme, sichere Bibliotheksabhängigkeiten, Editorführung

@@ -7,7 +7,7 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 <img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.3--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-hardware%20test%20pending-f3b653">
-<img alt="Lizenz" src="https://img.shields.io/badge/source%20rights-reserved-6b7280">
+<img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
 <img alt="Mission" src="https://img.shields.io/badge/mission-Hugs%20and%20Love-ff69b4">
 </p>
 
@@ -80,6 +80,6 @@ Wir entwickeln RavestickBoard gemeinsam: Wir entwerfen, programmieren, dokumenti
 
 RavestickBoard ist eine eigenständige C++-/HTML-/JavaScript-Implementierung. Die beiden aktuellen Referenzen für zukünftige Animationsforschung sind [jean-santos/coolled1248-rs](https://github.com/jean-santos/coolled1248-rs) und [zackmcmurrin-dev/coolledux-linux-uploader](https://github.com/zackmcmurrin-dev/coolledux-linux-uploader). Ergänzend dokumentieren wir den früh untersuchten [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) und [ohtaras/led](https://github.com/ohtaras/led). Die technischen Protokollfakten wurden für unsere Firmware eigenständig umgesetzt. Ob eine Datenformatvariante des anderen Panels auf unserer eigenen CoolLEDX funktioniert, ist separat zu prüfen.
 
-**Rechte und Drittmaterialien:** Unsere aktuelle [LICENSE](LICENSE) gewährt für eigene RavestickBoard-Quellen **keine Open-Source-Lizenz**. Drittmaterialien behalten ihre jeweiligen Rechte. Für die eingebetteten Lucide-Symbole gelten insbesondere ISC und für ausgewählte Feather-Ableitungen MIT – ihre Texte stehen vollständig in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Ältere README-Fassungen bezeichneten den Eigen-Code abweichend als MIT; wir richten diese Angabe an der tatsächlich vorhandenen LICENSE aus. Privat genutztes, nichtkommerzielles Hobbyprojekt.
+**Lizenz und Drittmaterialien:** Unser selbst entwickelter RavestickBoard-Code steht unter der **[MIT-Lizenz](LICENSE)** (Copyright © 2026 du13500). Die Lizenz erlaubt auch kommerzielle Nutzung, Bearbeitung und Weitergabe unter ihren Bedingungen. RavestickBoard ist derzeit ein privates Hobbyprojekt, ohne die MIT-Rechte einzuschränken. Für eingebettete Lucide-Icons gelten ISC und für ausgewählte Feather-Ableitungen zusätzlich MIT; siehe [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Fremde Originalmotive, Marken und sonstige Drittmaterialien werden durch unsere MIT-Lizenz nicht automatisch mitlizenziert.
 
 <p align="center"><strong>Made for the rave, powered by a banana. 🍌</strong><br><sub>Independent project, not affiliated with the CoolLED1248/CoolLEDX manufacturer.</sub></p>

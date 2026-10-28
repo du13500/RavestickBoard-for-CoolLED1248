@@ -1,47 +1,21 @@
-RavestickBoard for CoolLED1248
-Copyright and Usage Notice
+MIT License
 
 Copyright (c) 2026 du13500
-All rights reserved.
 
-This repository is made publicly accessible for viewing, documentation,
-research, and discussion of a personal, non-commercial hobby project.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-NO OPEN-SOURCE LICENSE IS GRANTED.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-Unless separately authorized in writing by the relevant rights holder,
-no permission is granted to reproduce, modify, redistribute, sublicense,
-or incorporate the original RavestickBoard source code, firmware, web
-interface, documentation, or original assets into other projects.
-
-This notice does not restrict rights that apply independently under
-applicable law or GitHub's Terms of Service, including GitHub's permitted
-viewing and forking of public repositories.
-
-THIRD-PARTY MATERIALS
-
-RavestickBoard v0.4.2.3-dev bundles a local subset of Lucide SVG icons.
-See THIRD_PARTY_NOTICES.md for the complete ISC and applicable Feather/MIT
-license texts. Those permissions apply independently to the Lucide icons.
-Our own no-open-source-license notice does NOT supersede their licenses.
-
-
-This notice covers only materials for which the above copyright holder
-owns or controls the necessary rights. Third-party code, libraries,
-trademarks, fonts, images, protocol research, and other materials remain
-subject to their respective copyright notices, licenses, and permissions.
-This notice does not relicense or override those terms.
-
-A project's mention or citation in this repository does not imply that
-its code has been licensed to RavestickBoard or that its authors endorse
-this project.
-
-PERMISSION REQUESTS
-
-For permissions beyond those expressly provided by applicable law or
-GitHub's Terms of Service, please contact the repository owner through
-GitHub: https://github.com/du13500/RavestickBoard-for-CoolLED1248
-
-This project is experimental and is supplied without any promise of
-fitness, availability, support, or compatibility, to the extent permitted
-by applicable law.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

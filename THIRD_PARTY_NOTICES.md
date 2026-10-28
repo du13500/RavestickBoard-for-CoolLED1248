@@ -64,5 +64,5 @@ OTHER DEALINGS IN THE SOFTWARE.
 Lucide's and Feather's notices apply only to their respective third-party
 icon contributions. They do not relicense the original RavestickBoard source,
 CoolLEDX original assets, or third-party content whose rights belong to
-other parties. RavestickBoard's root `LICENSE` remains the authoritative
-notice for the original repository-authored code and documentation.
+other parties. RavestickBoard's root `LICENSE` contains the project's MIT license for original repository-authored code and documentation.
+Third-party rights are not replaced by the project's MIT license.
