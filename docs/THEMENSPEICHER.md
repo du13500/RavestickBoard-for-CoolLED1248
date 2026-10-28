@@ -1,3 +1,28 @@
+# Themenstand v0.4.2.1-dev
+
+## Messwerte und offene Fragen zu gemischten Programmen (v0.4.2.2)
+
+Originalmessungen auf CoolLEDX, Zeit vom Start der ersten Seite bis zu deren erneutem Erscheinen:
+
+| Seiten | Tempo | Start | Ende | Umlauf |
+|---|---|---|---|---|
+| 4 | 60 | 00:01,64 | 00:14,29 | 12,65 s |
+| 4 | 70 | 00:00,93 | 00:10,35 | 9,42 s |
+| 4 | 80 | 00:00,30 | 00:06,61 | 6,31 s |
+| 4 | 90 | 00:00,34 | 00:03,43 | 3,09 s |
+| 6 | 80 | 00:09,64 | 00:19,14 | 9,50 s |
+
+Heuristik im getesteten Bereich: `T[s] ≈ Seiten × 0,0795 × (100 - Tempo)`, nicht automatisch auf Tempo 1–59 oder 91–100 extrapolieren. Die Formel ist für Blöcke, nicht für laufende Pixelband-Texte kalibriert. Exakter Start der Darstellung nach dem BLE-Upload und Synchronisationsjitter bleiben offen. Gemischte Programmgruppen dürfen Prozentanzeigen beim notwendigen Upload haben. Direkte Nutzertests für TEXT → BAND → TEXT und leere/verwaiste Programmschritte ausführen.
+
+
+- **Datenbudget prüfen:** Das vorläufige Limit von 30 KiB bleibt aus Sicherheitsgründen in der Firmware. Tatsächliche Hardwaregrenze der CoolLEDX und Verhalten jenseits 30 KiB später systematisch bestimmen, ohne unkontrolliertes Übertragen im Livebetrieb.
+- **Erweiterter Editor:** Einzelne Buchstaben/Abschnitte einfärben; erst dort ist eine benutzerdefinierte Rückgängig-/Wiederholen-Historie sinnvoll. Native Texteingabe-Rücknahme bleibt im Basis-Editor erhalten.
+- **BLE-Modi:** Alle acht Darstellungsmodi laut erstem Nutzer-Hardwaretest funktionsfähig, einschließlich Anwendung auf verkettete Blockbilder. Technische Kommandonummern gehören in die Dokumentation/Diagnose, nicht in die Standardauswahl.
+- **Programmgruppen:** Für gemischte Gruppen erfolgt weiterhin ein Upload bei einem Wechsel des Modus; Optimierungen und Prüfung der Gruppendauer als eigene Tests.
+- **Speichergrenze:** Der Bibliotheksindex erlaubt bis zu 192 IDs; variable Dateigrößen, Flash-Verbrauch und Stromausfalltests bleiben Zukunftsthemen.
+
+---
+
 # Stand v0.4.2-dev: Neue, noch ungetestete Firmwarefunktionen siehe [ROADMAP](ROADMAP.md) und [ENTWICKLUNGSSTAND](ENTWICKLUNGSSTAND_v0.4.2.md). Die unten stehenden älteren Einträge sind Planungshistorie, nicht der aktuelle Status.
 
 ## Ergänzung v0.3.5

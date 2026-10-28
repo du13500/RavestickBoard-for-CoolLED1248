@@ -1,6 +1,17 @@
-# Technikstand v0.4.2-dev (aktueller Testkandidat)
+# Technikstand v0.4.2.1-dev (aktueller Testkandidat)
 
-**Die nachfolgenden v0.2/v0.3-Abschnitte sind historische Architektur- und Testnotizen.** Das aktuelle Design steht in [BIBLIOTHEK_v0.4.2.md](BIBLIOTHEK_v0.4.2.md). Aktuell gelten: bis zu 25 Arbeitsseiten; LittleFS Textdateien RBL1, Blockbegleitdaten RBB2, Programme RBP2, Kurzwahlen RBS2; alter RBM1-Journalindex wird weiterhin gelesen. Pixelbänder verwenden ein 384-Byte-RGB-Kachelverfahren bei größeren Transfers und bleiben innerhalb des konservativen 30-KiB-Datenlimits. BLE-Sendebefehle bleiben `0x02` sowie `0x06` für den Modus, `0x07` für Tempo und `0x08` für Helligkeit. Weder die Arduino-ESP32-Kompilierung noch das neue Band auf Hardware sind bereits nachgewiesen.
+## v0.4.2.2: Programm-Timer, Anzeigegruppen und Flash-Abhängigkeiten
+
+`v042Tick()` wird in `loop()` nach `web.handleClient()` geprüft. Nach jedem erfolgreichen Gruppen-Upload legt `v042AfterJob()` für gemischte Programme den nächsten Umschaltzeitpunkt fest. Bei **einer** homogenen Gruppe bleibt die Tafel in ihrer autonomen Endlosschleife; der ESP32 schickt keine periodischen neuen Bilder. Für zusammenhängende Blöcke wird bei Geschwindigkeit 60–90 die empirische Laufzeit aus Seitenzahl und Tempo verwendet, sonst für die Gruppe ein Fallback von 5–180 Sekunden. Lauftextgruppen verwenden bis zu einer separaten Kalibrierung ebenfalls den Fallback. Das Tempo bleibt während aktiver gemischter Wiedergabe unverändert.
+
+`RBP2`-Dateien enthalten weiterhin die ursprüngliche Liste von Bibliotheks-IDs; bei Löschung einer ID wird **die Programmdatei nicht verändert**. `rb42ReadCollection()` validiert die Struktur, fehlende IDs werden im Listen-/Detail-JSON gezählt, und nur `rb42QueueStep()`/Start lehnen unvollständige Programme ab. Direkte Kurzwahlen auf gelöschte Bibliotheks-IDs werden einschließlich Beschriftung zurückgesetzt; `libraryMeta.shortcuts` wird ebenfalls aktualisiert. Ein gerade spielendes betroffenes Programm wird angehalten. Die Wiedergabe von `0x06`/`0x07` und BLE-Bitmapdaten ist unverändert.
+
+Webserver und BLE befinden sich weiterhin in einer Hauptschleife; deshalb können Statusabfragen während längerer Uploads verzögert sein. Die Browser-UI blendet auf einzelne Timeouts keine Offline-Meldung mehr ein und protokolliert Verbindungsprobleme nur bei anhaltenden Fehlschlägen. **Dies ist kein asynchroner HTTP-Server** und keine garantierte Verbindungsüberwachung.
+
+
+**Neu: Der Blockeditor ist ab v0.4.2.1 nur RAM-Arbeitsfläche; nur explizites Bibliotheksspeichern schreibt LittleFS. Die bisherigen NVS-Daten werden nicht gelesen, geändert oder gelöscht. Blockfolgen/Programme werden vor dem Dateiaustausch mit 128-Byte-Puffer verifiziert; die frühere große Kopie verursachte einen Stackschutz-Absturz beim Speichern.**
+
+**Die nachfolgenden v0.2/v0.3-Abschnitte sind historische Architektur- und Testnotizen.** Das aktuelle Design steht in [BIBLIOTHEK_v0.4.2.md](BIBLIOTHEK_v0.4.2.md). Aktuell gelten: bis zu 25 Arbeitsseiten; LittleFS Textdateien RBL1, Blockbegleitdaten RBB2, Programme RBP2, Kurzwahlen RBS2; alter RBM1-Journalindex wird weiterhin gelesen. Pixelbänder verwenden ein 384-Byte-RGB-Kachelverfahren bei größeren Transfers und bleiben innerhalb des konservativen 30-KiB-Datenlimits. BLE-Sendebefehle bleiben `0x02` sowie `0x06` für den Modus, `0x07` für Tempo und `0x08` für Helligkeit. Die Pixelband-Übertragung und acht Anzeigemodi sind durch den Nutzer auf der CoolLEDX hardwarebestätigt. Die Speicherfehlerkorrektur der v0.4.2.1 ist dagegen noch nicht auf Hardware gegengeprüft.
 
 ---
 

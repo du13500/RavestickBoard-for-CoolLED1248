@@ -1,6 +1,26 @@
-## ADR v0.4.2-dev (aktueller Arbeitsstand)
+## ADR v0.4.2.1-dev · Editor als volatile Arbeitsfläche
 
-- **Entwurfsmodell:** Neue Blockfolgen beginnen leer; bis zu 25 Seiten, bearbeitbar in NVS als temporäre Arbeitskopie; gespeicherte Seiten als RBB2-Begleitdateien in LittleFS, ohne Bitmap-Rückrekonstruktion.
+## Programm- und Bibliotheksregeln ab v0.4.2.2
+
+- Homogene Programme verwenden grundsätzlich **einen** Upload pro kompatiblem Bildband und autonomes Endlosabspielen auf der Tafel; große Daten werden nur an echten Limitgrenzen gruppenweise geteilt.
+- Gemischte Programme dürfen beim Wechsel zwischen notwendigen Gruppen die boardseitige Prozentanzeige zeigen. Kein Preload-Versprechen.
+- Blockgruppen bekommen bei Tempo 60–90 eine aus Hardwaremessungen abgeleitete Umlaufzeit; Lauftexte sind noch nicht kalibriert.
+- Bearbeiten erhält ID und Vorlage, Duplizieren erzeugt eine neue ID. Der Editor zeigt die Herkunft eindeutig und bietet unmittelbare Rückkehr ohne unnötige Nachfrage.
+- Löschen referenzierter Inhalte ist zulässig: direkte Kurzwahlen automatisch freigeben; Programme mit fehlenden IDs unverändert als reparaturbedürftig behalten und Start sperren.
+- Benachrichtigungen nur bei bewussten Aktionen bzw. echten Eingabefehlern, nicht für jeden Poll; Fehler-/Erfolgstoasts verschwinden automatisch.
+
+
+- **Bestätigter Hardware-Erfolg:** Verkettete 64×16-Pixelbänder und erzwungene Anzeigemodi funktionieren auf der CoolLEDX, ohne wiederholte Einzeluploads.
+- **Datenhaltung:** Der Blockeditor verwendet ausschließlich RAM, keine NVS-Autospeicherung. Ein gespeicherter Bibliothekseintrag bleibt editierbar in LittleFS. Historische NVS-Daten werden nicht verändert.
+- **Fehlerkorrektur:** Große Template-Objekte von `rb42Read`/`rb42Write` nicht auf den `loopTask`-Stack legen; stückweise Dateikontrolle mit kleinem Puffer. Snapshot-Bestätigung durch Testhardware steht aus.
+- **Bedienung:** Gewöhnlicher Reiter-/Seitenwechsel darf keinen Entwurf löschen. „Alles löschen“ ist ein expliziter bestätigungspflichtiger Vorgang. Keine zweite Wiedergabesteuerung im Blockeditor.
+- **Dokumentation/Anzeige:** Technische Forschungsbefunde in Diagnose/Roadmap/Themenspeicher dokumentieren, nicht als dauernde Hilfetexte im normalen Webinterface.
+
+---
+
+## Archiv: ursprüngliche Entscheidungen v0.4.2-dev
+
+- **Entwurfsmodell:** Neue Blockfolgen beginnen leer; bis zu 25 Seiten, damals noch in NVS als temporäre Arbeitskopie; gespeicherte Seiten als RBB2-Begleitdateien in LittleFS, ohne Bitmap-Rückrekonstruktion.
 - **Übertragungsmodell:** Native Tafel-Blätterfunktion mit einem quer verketteten Pixelband im Standbildmodus `0x06 0x01`; Tempo `0x07`. Diese Eigenschaft wurde vom Nutzer an der CoolLEDX-Tafel beobachtet, die konkrete v0.4.2-Implementierung noch nicht hardwaregetestet.
 - **Programme:** Bibliothekseinträge werden als referenzierte Sequenz gespeichert; aufeinanderfolgende Blockfolgen bündeln, kompatible Lauftexte verbinden; ein Programmwechsel zwischen unterschiedlichen Arten kann erneut Prozentanzeigen erzeugen.
 - **Datenhaltung:** Vorhandene v0.4.1-RBL1-Textdateien und RBM1-Metadaten werden gelesen; neue Blockfolgen RBB2, Programme RBP2, Kurzwahlen RBS2. Vorhandene Kurzwahlzuordnungen bleiben erhalten.

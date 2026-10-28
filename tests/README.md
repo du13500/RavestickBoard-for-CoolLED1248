@@ -1,14 +1,12 @@
-# Tests RavestickBoard v0.4.2-dev
+# Host- und Browsertests v0.4.2.2-dev
 
-**Diese Tests sind Host- und Browserprüfungen, keine reale ESP32-Kompilierung und kein Test auf der CoolLEDX-Tafel.**
+Neue Prüfungen:
 
 ```bash
-g++ -std=c++17 -O2 tests/v042_program_core_test.cpp -o /tmp/rb042_test
-/tmp/rb042_test
-python tests/browser_v042_smoke.py
+python tests/browser_v0422_smoke.py
+python tests/browser_v0422_layout.py
+python tests/source_invariants_v0422.py
 python tools/sync_web.py
 ```
 
-Der C++-Test prüft Seite/Verkettungsgrenzen, RGB-Ebenen, Tile-Streaming und Programmplanung anhand eines portablen Kernmodells. Der Browser-Mocktest prüft Webnavigation, Textspeichern, Blockfolge, Programmspeichern und Kurzwahlen. Er testet simulierte Serverantworten, **nicht** die reale LittleFS- oder BLE-Anbindung. Die frühere Regression v0.4.1 liegt weiterhin unter `library_host_test.cpp`, `browser_library_test.py` und `stream_renderer_host_test.cpp`.
-
-Für die Hardwareabnahme siehe `docs/TESTPLAN_v0.4.2.md`.
+Zusätzlich in der vollständigen Repository-Arbeitskopie (`g++`/`-std=c++17`) die vorhandenen Tests `stream_renderer_host_test.cpp` (135 Vergleiche) und `library_host_test.cpp` ausführen. **Browser-Smoke-Tests verwenden HTTP-Mocks**; die C++-Tests simulieren Renderer und Flash. Eine vollständige ESP32-Firmwarekompilierung und echte Bluetooth-/LittleFS-Läufe sind damit nicht ersetzt. Details im Hardwaretestplan `docs/TESTPLAN_v0.4.2.2.md`.

@@ -10,7 +10,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "web" / "index.html"
-HEADER = ROOT / "firmware" / "RavestickBoard_v0_4_2" / "RavestickBoard_WebUI.h"
+HEADER = ROOT / "firmware" / "RavestickBoard_v0_4_2_2" / "RavestickBoard_WebUI.h"
 
 html = WEB.read_text(encoding="utf-8").rstrip("\n")
 if ')RBHTML"' in html:

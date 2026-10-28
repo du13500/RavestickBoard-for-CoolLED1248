@@ -10,14 +10,21 @@
 - ✅ v0.4.0.x: Modus- und Ambiente-Steuerung, RAMTRACE, Streaming-Lauftext mit 384-Byte-Kacheln. Mehrfach große BLE-Übertragungen bestätigt, achtstündiger Stabilitätstest. Ein einmaliger 436-Byte-Heap-Tiefstwert bleibt ein Untersuchungsfall.
 - ✅ v0.4.1: LittleFS-Textbibliothek und sechs Kurzwahlen in ersten Nutzertests grundsätzlich erfolgreich. Umfangreiche Stromausfall-/Langzeittests fehlen weiterhin.
 
-## v0.4.2-dev · Zum Hardwaretest bereit
+## v0.4.2.2-dev · Aktueller Entwicklungsstand
 
-- 🟡 Blockeditor 25 Seiten, getrenntes Leeren, gespeicherte bearbeitbare Blockfolgen.
-- 🟡 Mehrere fertige 64×16-Seiten als Pixelband in einem einzigen BLE-Auftrag; native automatische Seitenaufteilung, Wiederholung und Temporegelung sind vom Nutzer bereits mit langen Standbild-Lauftexten beobachtet worden. Unser neuer kombinierter Renderer selbst ist noch ungetestet.
-- 🟡 Gespeicherte Programme mit mehreren Bibliothekseinträgen und Gruppierung kompatibler Bilder/Schriften.
-- 🟡 Neue Kurzwahlquellen, eigene Beschriftungen, JSON-Schema 2 und Legacy-Bibliothek-Kompatibilität.
-- 🟡 Apple-Touch-Icon, Menü-Refresh, verschlankte Bibliothek und überarbeitete Dokumente.
-- 🔬 Vor Freigabe: Arduino-Kompilierung, Block-BLE-Test, Programmlauf, Legacy-Flashbestand, Export/Import, RAM-Diagnose und Langzeittest.
+- ✅ **Auf Hardware bestätigt (v0.4.2.1):** Blockbandsendungen und autonome Wiederholung, gespeicherte reine Lauftextprogramme sowie reine Blockfolgenprogramme. Kein Nachweis für zuverlässige gemischte Programme.
+- 🛠️ **Gemischte Programme:** fehlenden `v042Tick()`-Aufruf ergänzt. Gruppenwechsel nach erstem vollständigen BLE-Upload; Funktionstests auf echter Hardware sind offen.
+- 🛠️ **Blockzyklus-Kalibrierung:** Fünf reale Messungen stützen `T ≈ N × 0,0795 × (100−V)` Sekunden für V=60–90. Automatische Gruppenlaufzeit nur für Blöcke in diesem Bereich; außerhalb und bei Lauftexten Ersatzzeit 5–180 s. Kalibrierung der Pixelgeschwindigkeit von Lauftexten bleibt offen.
+- 🛠️ **Datenkonsistenz:** Löschen referenzierter Vorlagen, Kurzwahlen automatisch freigeben, unvollständige Programme anzeigen und Reparatur verlangen. Echte Stromausfall- und Mehrfachlöschtests offen.
+- 🛠️ **Editor/UX:** visuell eigener Bearbeitungsmodus und Aktualisieren derselben ID, direkte Bibliotheksrückkehr, Header/Preview-Fix, reduzierte Statusmeldungen.
+- 🔬 **Abnahme:** Arduino-ESP32-Kompilierung und Flash; gemischtes Programm TEXT → BAND → TEXT auf der echten LED-Tafel; automatischer 6-Seiten-Zyklus bei Tempo 80; Bibliothekseintrag löschen (auch wenn Programm/Kurzwahl ihn verwendet); Neustart und Backup-Kontrolle.
+
+## Offene Produktfragen
+
+- 🔬 **Lauftext-Zykluszeit:** Pixelbreite und Geschwindigkeit auf echter Tafel messen und eine zuverlässige Kurvenformel bestimmen. Bisher ist die 5–180-s-Gruppe ein bewusst dokumentierter Kompromiss.
+- 🔬 **Prozentanzeige:** Nur notwendige Uploads beim Wechsel zwischen Lauftext- und Blockgruppen oder bei Überschreitung der sicheren Datenmenge; ein unsichtbares Vorladen ist nicht bestätigt und wird nicht vorausgesetzt.
+- 🔬 **Grenzen der Blockkalibrierung:** Messpunkte für Tempo unter 60 und über 90 und exakten Start nach Upload; keine Garantie auf präzise Bildwechsel ohne Tafel-Rückmeldesignal.
+- 🔬 **Datenbudget 30 KiB:** Vorsichtiger Softwarewert, keine bestätigte Hardwaregrenze. Technische Prüfung fortsetzen; Zähler im Webinterface bleibt sichtbar.
 
 ## Nächste Schritte, nach Hardwareabnahme
 
@@ -35,4 +42,4 @@
 - Keine über die MIT-Lizenz hinausgehende Rechtebehauptung an Herstellerfonts/-grafiken.
 - Kein automatisches Öffnen/Formatieren unbekannter LittleFS-Dateisysteme.
 
-Referenzen und externe Forschung stehen in [QUELLEN_UND_LIZENZEN.md](QUELLEN_UND_LIZENZEN.md), laufende Detailideen im [THEMENSPEICHER.md](THEMENSPEICHER.md) und die Hardwaretestliste in [TESTPLAN_v0.4.2.md](TESTPLAN_v0.4.2.md).
+Referenzen und externe Forschung stehen in [QUELLEN_UND_LIZENZEN.md](QUELLEN_UND_LIZENZEN.md), laufende Detailideen im [THEMENSPEICHER.md](THEMENSPEICHER.md) und die Hardwaretestliste in [TESTPLAN_v0.4.2.2.md](TESTPLAN_v0.4.2.2.md).

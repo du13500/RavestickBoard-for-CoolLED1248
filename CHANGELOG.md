@@ -1,5 +1,28 @@
 # Changelog
 
+## v0.4.2.2-dev – Gemischte Programme, sichere Bibliotheksabhängigkeiten, Editorführung
+
+- **Gemischte Programme repariert (Code):** `v042Tick()` wird in der Arduino-Hauptschleife aufgerufen; bisher wurden nur erste Programmgruppen übertragen. Nach erfolgreichem BLE-Upload startet der Timer für den nächsten Gruppenwechsel. Reine Ein-Gruppen-Programme laufen auf der Tafel weiterhin autonom endlos.
+- **Blockdauer kalibriert:** Hardwaremessungen 4 Seiten: Tempo 60 = 12,65 s; 70 = 9,42 s; 80 = 6,31 s; 90 = 3,09 s. 6 Seiten bei Tempo 80 = 9,50 s. Vorläufige Berechnung `T[s] ≈ Seiten × 0,0795 × (100 - Tempo)` für 60–90; sonst vorhandene Dauer. Lauftexte bleiben vorerst zeitbasiert, bis ihre Pixelgeschwindigkeit gemessen ist. Programmspeed während aktiver Wiedergabe gesperrt.
+- **Abhängigkeiten:** Bibliothekseinträge trotz Verwendung löschen. Betroffene direkte Kurzwahlen werden geleert, unvollständige Programme inklusive fehlender IDs behalten und rot gekennzeichnet. Ein solches Programm kann erst nach Reparatur gestartet werden; laufende Programme mit betroffenem Eintrag werden gestoppt.
+- **Editor UX:** Neue und bestehende Vorlagen sichtbar getrennt; beim Bearbeiten nur die betreffende Anzeigeart. Direkte Rückkehr zur Bibliothek, Bestätigung nur bei ungesicherten Änderungen, Speichern aktualisiert vorhandene ID. Vorschau bleibt beim Scrollen unter dem Hauptheader sichtbar.
+- **Meldungen:** Kein ständiges Toast „ESP32 nicht erreichbar“ während BLE-Verkehr; erst nach wiederholt fehlschlagenden Statusabfragen über mehr als 30 s dezent im Header. Normale Poll-Statuswerte ohne Toast; Meldungen enden selbstständig.
+- **Web und Diagnose:** Browser-Mocktest inkl. Programmreparatur; Renderer-Regression (135 Fälle), v0.4.1-Bibliotheks-Hosttest und JS-Syntaxprüfung ausgeführt. Arduino-Kompilierung und Bestätigung auf ESP32-C3 noch ausstehend. Keine automatische LittleFS-Formatierung und keine Änderung der bisherigen BLE-Bilddatenformate.
+
+## v0.4.2.1-dev – Stabilisierung und Editorbereinigung
+
+- **Hardwarebefund aus v0.4.2:** Blockfolge als ein durchgehendes Pixelband über BLE übertragen; autonomes Blättern und erzwungene Anzeigemodi funktionieren auf der CoolLEDX.
+- **Kritischer Fehler behoben (Code):** `Stack protection fault` der Arduino-`loopTask` bei `/api/block/save`. Ursache waren große Stack-Kopien in `rb42Read`/`rb42Write`. Verifikation nun stückweise mit 128-Byte-Puffer; Rückfallkopien erhalten. Auch Metadaten-Journalpuffer werden statisch gehalten. Hardware-Nachtest ausstehend.
+- Editor-Arbeitsfläche nur im RAM, keine NVS-Autospeicherung; bestehendes NVS bleibt unverändert. Alte Einzel-Seitenplayer-Bedienung und Aufrufpunkte entfernt.
+- „Alles löschen“ mit Sicherheitsabfrage, neuer Seiten-/Reiterwechsel ohne implizites Zurücksetzen. Vorschau im Blockeditor zeigt nur die ausgewählte Seite; zusätzliche Wiedergabeknöpfe entfallen.
+- Lauftext „Text leeren“ unter dem Textfeld, standardmäßige Undo-/Redo-Bedienelemente aus dem einfachen Editor entfernt; Datenbudget-Zähler bleibt.
+- Programmseite auf dem iPhone vollständig scrollbar, Speichern dauerhaft erreichbar.
+- Kurzwahl-Dropdown mit ungewählter Quelle; Beschriftung erst nach gültigem Ziel; kompletter Löschbutton mit Rückfrage, Label wird ebenfalls gelöscht.
+- Einstellungsansicht flach gegliedert, Backup/Import weiterhin unter Einstellungen; veraltete Erklärungen und BLE-Hexcodes aus der normalen UI entfernt.
+- Bestehende Bibliotheksformate und BLE-Blockbandprotokoll unverändert. Kein automatisches LittleFS-Formatieren.
+
+**Status:** Codekorrektur und lokale Tests, **noch keine erneute ESP32-/CoolLEDX-Hardwarefreigabe**.
+
 ## [0.4.2-dev] · Blockfolgen, Bibliothek, Programme und Kurzwahlen
 
 **Entwicklungsstand, noch keine echte Arduino-Kompilierung oder LED-Hardwareabnahme.**
