@@ -183,3 +183,10 @@ Siehe [`ROADMAP.md`](ROADMAP.md) und [`THEMENSPEICHER.md`](THEMENSPEICHER.md): e
 **Layoutcodes (Speicherschema unverändert):** `0=Engschrift`, `1=Mini Zweizeilig`, `2=Mini Einzeilig`, `3=Standard`, `4=Standard Bold`. Für zweizeiligen Lauftext werden die beiden 7-Pixel-Zeilen auf eine gemeinsame Breite gerendert und synchron horizontal bewegt. Gleiche Farbe, keine neue Blockseitenstruktur.
 
 **Webinterface:** v0.3.1 hatte im HTML des Symbol-Overlays einen fehlenden schließenden `</div>`-Tag. Dadurch wurden Status und Diagnose als weitere Flex-Kinder im Overlay angeordnet, was den schmalen, unlesbaren Dialog sowie überlagernde Statusfelder erklärt. In v0.3.2 ist die Hierarchie korrigiert und mit einem emulierten 375-Pixel-Mobilviewport auf eine 351-Pixel-Dialogbreite geprüft. Dies ist ein Browser-Smoketest, noch kein Test in mobilem Safari. Der Browserentwurf bleibt auf dem Endgerät in `localStorage`, NVS-Blockseiten auf dem ESP32.
+
+
+## v0.4.2.3: gemeinsames horizontales Programm-Laufband
+
+Ein Programm speichert im bislang reservierten `RBP2`-Byte `playback=0` (Originalmodus) oder `playback=1` (alles scrollend); vorhandene Datensätze bleiben gültig. Beim all-scroll-Gruppenaufbau werden bis zu 96 Teilsegmente nacheinander aus LittleFS ermittelt und innerhalb des 30-KiB-Budgets mit 16 leeren Pixelspalten getrennt. Einzelne Blockseiten bleiben 64 Spalten breit, getrennt wird nur an Segmentgrenzen. Die RGB-Daten entstehen in einem maximal 30-KiB großen temporären Heap-Puffer, anschließend werden wie bisher die 107-Byte-Protokollheader und drei RGB-Ebenen übertragen. Änderungen an BLE-Framing, Paketgröße, Board-Firmware und LittleFS-Format sind dafür nicht nötig.
+
+Ein bereits vollständig übertragenes Ein-Gruppen-Programm wiederholt die Tafel selbstständig. Bei mehreren Gruppen benötigt der ESP32 weiterhin neue Uploads samt sichtbarer Prozentanzeige. Lauftext-Zykluszeiten sind nicht hardwarekalibriert, weshalb die 5–180-Sekunden-Ersatzzeit bei notwendiger Teilung weiterhin ausdrücklich vorläufig ist.

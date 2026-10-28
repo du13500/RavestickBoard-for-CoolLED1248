@@ -1,12 +1,16 @@
-# Host- und Browsertests v0.4.2.2-dev
-
-Neue Prüfungen:
+# RavestickBoard v0.4.2.3-dev – lokale Tests
 
 ```bash
-python tests/browser_v0422_smoke.py
-python tests/browser_v0422_layout.py
-python tests/source_invariants_v0422.py
+python tests/source_invariants_v0423.py
+python tests/browser_v0423_smoke.py
+python tests/browser_v0423_layout.py
+python tests/browser_v0423_icons.py
 python tools/sync_web.py
 ```
 
-Zusätzlich in der vollständigen Repository-Arbeitskopie (`g++`/`-std=c++17`) die vorhandenen Tests `stream_renderer_host_test.cpp` (135 Vergleiche) und `library_host_test.cpp` ausführen. **Browser-Smoke-Tests verwenden HTTP-Mocks**; die C++-Tests simulieren Renderer und Flash. Eine vollständige ESP32-Firmwarekompilierung und echte Bluetooth-/LittleFS-Läufe sind damit nicht ersetzt. Details im Hardwaretestplan `docs/TESTPLAN_v0.4.2.2.md`.
+Die Browsertests arbeiten mit simulierten ESP32-Antworten. Vorhandene
+C++-Hosttests aus dem vollständigen Repository prüfen außerdem
+Renderer und Bibliotheksformate, ersetzen aber **weder einen Arduino-Build**
+noch echte BLE- oder LittleFS-Hardwaretests.
+
+Neue Hardwaretests: `docs/TESTPLAN_v0.4.2.3.md`.

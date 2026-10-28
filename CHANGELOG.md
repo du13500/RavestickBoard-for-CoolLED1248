@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.4.2.3-dev – Alles als Laufband, Lucide und Bibliothekskomfort
+
+- **Hardwarestand davor:** Unsere v0.4.2.2-dev-Tests bestätigen gemischte Programmwechsel, bestehende Bibliotheks-IDs, Rücknavigation, Programmlöschung/-reparatur. Blockgruppe mit vier Seiten bei Tempo 80: gemessene 6,33 s; vorausberechnet 6,31 s. Die Mischprogrammübergänge sind noch nicht synchron.
+- **Zweite Programm-Wiedergabeart:** Programm kann alternativ alle Lauftext- und Blocksegmente horizontal verketten; 16 Pixel Zwischenraum, gleiche Farb-/Glyphenrenderer, möglichst ein Upload, Datenlimit 30 KiB; Splits an Seitengrenzen bzw. zwischen ganzen Texten. Originalmodus für vorhandene Programme bleibt der Standard. Programmschema nutzt bisher reserviertes Byte (RBP2 bleibt bestehen).
+- **Bibliothek/Editor:** Neuer-Inhalt-Button direkt nach Speichern und bearbeitete Vorlagen weiter editierbar; leere Kurzwahl öffnet Einrichtung; unvollständige Programm-Kurzwahl rötlich.
+- **Backup-Import:** Inhalts- und Namensvergleich vor Wiederverwendung sowie ID-Neuzuordnung für Programme/Kurzwahlen; Schema 1/2 lesbar. Kein unkontrolliertes Überschreiben, kein atomarer Import bei Fehlern.
+- **Icon-Oberfläche:** Offline-Lucide-SVGs für Navigation, Schaltflächen, Regler und acht kompakte erzwungene BLE-Modi, die jeden Klick senden, ohne aktiven Zustand. Third-party-ISC- und Feather-MIT-Texte in THIRD_PARTY_NOTICES.md; unveränderte eigene Rechte im LICENSE referenziert. Hersteller-Pixelmotive bleiben unberührt.
+- **Dokumentation:** Gemeinsame Wir-Perspektive und KI-Werkzeuge ChatGPT/Claude wieder aufgenommen; README-Lizenzbehauptung an reale LICENSE angepasst.
+- **Noch offen:** Echter ESP32-Build, Betrieb mit gleichzeitigem WLAN/BLE und die neue Laufbanddarstellung sind hardwareseitig zu testen; Lauftextgeschwindigkeiten weiterhin unkalibriert.
+
 ## v0.4.2.2-dev – Gemischte Programme, sichere Bibliotheksabhängigkeiten, Editorführung
 
 - **Gemischte Programme repariert (Code):** `v042Tick()` wird in der Arduino-Hauptschleife aufgerufen; bisher wurden nur erste Programmgruppen übertragen. Nach erfolgreichem BLE-Upload startet der Timer für den nächsten Gruppenwechsel. Reine Ein-Gruppen-Programme laufen auf der Tafel weiterhin autonom endlos.

@@ -1,0 +1,920 @@
+#pragma once
+// Embedded RavestickBoard v0.4.1-dev WebUI; source of truth: web/index.html.
+static const char PAGE_HTML[] PROGMEM = R"RBHTML(
+
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#11141c" name="theme-color"/>
+<title>RavestickBoard · v0.4.2.3-dev</title>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="RavestickBoard"/>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#11141c;color:#f3f5fa}
+*{box-sizing:border-box}body{margin:0;padding:16px 13px calc(78px + env(safe-area-inset-bottom,0px))}main{max-width:720px;margin:auto}
+header{display:flex;align-items:center;gap:11px;margin:5px 0 19px}.logo{width:44px;height:44px;flex:0 0 44px;border-radius:12px;background:#303744;display:grid;place-items:center;font-size:25px}
+h1{font-size:23px;margin:0;line-height:1.2;letter-spacing:-.5px}.sub{color:#a7b5c9;font-size:12px;margin-top:3px}.version{display:inline-block;font-size:11px;color:#ffdc83;background:#353d4b;padding:4px 8px;border-radius:20px;vertical-align:middle;letter-spacing:0}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:#222934;border:1px solid #373f4b;border-radius:13px;margin:0 0 14px}
+.tab{border:0;border-radius:9px;background:transparent;color:#bbc6d5;font:750 14px system-ui;padding:12px 8px;cursor:pointer}.tab.active{background:#ffd35c;color:#111820}
+.preview-sticky{position:sticky;top:5px;z-index:5;box-shadow:0 9px 22px #0508108a}
+.preview-sticky .hint{display:none}
+.picker-input{display:flex;gap:6px;align-items:stretch}.picker-input input{min-width:0;flex:1}.symbol-open{flex:0 0 49px;background:#333f54;color:#fff;font-size:22px;padding:7px}
+.power-control{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:4px 0 12px}.power-control span{display:grid;gap:3px}.power-control small{font-size:11px;color:#9eafc2}.power-control button.active{background:#ffd45c;color:#121820}.power-control button{min-width:52px}.power-control [role=group]{display:flex;gap:6px;flex-shrink:0}
+.symbol-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:#050810dd;padding:12px;box-sizing:border-box;width:100vw;height:100dvh}
+.symbol-modal .symbol-sheet{box-sizing:border-box;background:#1d222e;border:1px solid #576476;border-radius:17px;padding:14px;width:min(700px,calc(100vw - 24px));min-width:0;max-height:82dvh;overflow-y:auto;overflow-x:hidden;overflow-wrap:anywhere}
+.symbol-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.undo-tools{display:flex;gap:6px;margin:9px 0}.undo-tools button{padding:9px 12px;background:#343e50;color:#f0f4fb;font-size:13px}
+.panel{background:#1d222e;border:1px solid #353e50;border-radius:17px;padding:17px;margin-bottom:14px;min-width:0}.label{display:block;color:#b2bed0;font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;margin:0 0 9px}
+.hint{color:#aebacc;font-size:12px;line-height:1.5;margin:7px 0 11px}.tiny{color:#9eafc2;font-size:11px;line-height:1.45}
+button{font:inherit;font-weight:750;border:0;border-radius:10px;padding:12px 11px;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.primary{background:#ffd45c;color:#111821}.secondary{background:#343e50;color:#f6f7fb}.small-btn{padding:9px 10px;font-size:12px;background:#353d4d;color:#edf2fa;white-space:nowrap}.small-btn.active{background:#ffcf52;color:#151b25}.danger{background:#522f35;color:#ffccd2}
+input[type=text],input[type=number],select{width:100%;background:#111823;color:#f7f8fa;border:1px solid #4d596d;border-radius:9px;padding:11px 12px;font:16px system-ui;outline:none}input:focus,select:focus{border-color:#ffcc50}
+input[type=range]{width:100%;accent-color:#ffd45c;min-width:0}.range-row{display:flex;align-items:center;gap:12px;margin-bottom:18px}.range-row b{min-width:65px;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
+#matrix{width:100%;height:auto;display:block;aspect-ratio:4/1;background:#080b10;border-radius:8px}.preview-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:12px 0 5px}.preview-tools .tiny{margin-left:auto}
+.segment{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:0 0 15px}.segment button{background:#131b28;color:#c9d3df;border:1px solid #46556a;padding:11px 8px;font-size:13px}.segment button.active{border-color:#ffd45c;background:#423a25;color:#ffe392}
+.swatches{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:6px 0 15px}.swatch{width:clamp(26px,7.5vw,39px);height:clamp(26px,7.5vw,39px);padding:0;border-radius:50%;border:3px solid #303948;justify-self:center}.swatch.selected{outline:2px solid white;outline-offset:2px}
+.stack{display:grid;gap:11px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.actions button{flex:1 1 auto;font-size:13px}.actions .primary{flex:2 1 150px}
+#status{overflow-wrap:anywhere;max-width:100%;box-sizing:border-box}#status{background:#293343;border-radius:10px;padding:11px 12px;color:#e1e9f4;font-size:13px;line-height:1.55;min-height:40px;margin-bottom:14px}
+#pageRail{display:flex;gap:10px;overflow-x:auto;overscroll-behavior-x:contain;padding:4px 2px 12px;scroll-snap-type:x proximity}.page-card{flex:0 0 164px;max-width:164px;padding:9px;background:#111924;border:1px solid #43516a;border-radius:11px;text-align:left;color:#dce6f3;scroll-snap-align:start}.page-card.selected{border:2px solid #ffd45c;padding:8px}.page-card canvas{width:100%;height:auto;background:#090c11;border-radius:5px;display:block;aspect-ratio:4/1}.page-card-top{display:flex;justify-content:space-between;gap:4px;align-items:center;font-size:12px;margin-bottom:8px}.page-card span.duration{color:#aebbc9;font-size:11px}
+.page-tools{display:flex;flex-wrap:wrap;gap:6px}.page-tools .small-btn{flex:1 1 auto}.page-form{display:grid;gap:12px}.field label{font-size:12px;color:#b0bdce;display:block;margin:0 0 6px}.two-lines{border-top:1px solid #3b4452;padding-top:11px;margin-top:2px}
+.over-limit{color:#ff575f!important;font-weight:900!important;font-size:14px!important}.warning{background:#352b1d;border:1px solid #9b733a;color:#ffe0a9;border-radius:9px;padding:10px 11px;font-size:12px;line-height:1.5;margin:10px 0}
+.save-indicator{font-size:12px;color:#ffd98b;white-space:nowrap}.muted{color:#aab6c7}.hidden,[hidden]{display:none!important}
+details summary{cursor:pointer;font-weight:800;list-style:none}details summary::-webkit-details-marker{display:none}details summary:before{content:"▸";margin-right:7px}details[open] summary:before{content:"▾"}
+.diag-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:15px 0}.diag-cell{background:#111925;padding:10px;border-radius:9px;min-width:0}.diag-cell small{display:block;font-size:11px;color:#b2bdcc}.diag-cell strong{display:block;font-size:13px;overflow-wrap:anywhere}.diag-log{background:#0e1722;border-radius:9px;padding:11px;max-height:240px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.6 ui-monospace,monospace} .symbol-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(57px,1fr));gap:6px;margin-bottom:14px}.symbol-grid button{padding:7px 2px;background:#263349;border:1px solid #44536d;color:#fff;font-size:23px;min-height:47px}.symbol-grid button:focus{outline:2px solid #ffd45c}.symbol-grid small{font-size:9px;color:#d4e0ef;display:block}.symbol-grid button[data-pick="custom"]{background:#4b3c20}textarea{width:100%;height:130px;background:#101824;color:white;border:1px solid #657385;border-radius:8px}
+.capacity-info{margin:7px 0 15px;display:grid;gap:6px}.capacity-track{height:8px;border-radius:8px;background:#384456;overflow:hidden}.capacity-fill{height:100%;width:0;background:#65d796;transition:width .12s}.capacity-fill.over-limit{background:#ff575f}.capacity-info .over-limit{color:#ff575f!important;font-weight:900!important}
+@media(max-width:440px){.grid2{grid-template-columns:1fr}.page-card{flex-basis:146px}.panel{padding:14px}.actions button{flex:1 1 120px}h1{font-size:21px}}
+
+/* v0.4.0: navigation and mobile-first application shell */
+body{padding:0 12px calc(62px + env(safe-area-inset-bottom,0px))}main{max-width:720px;margin:auto}
+.app-header{position:sticky;top:0;z-index:90;background:#11141cf5;padding:12px 0 10px;margin:0 0 12px;backdrop-filter:blur(12px);border-bottom:1px solid #333f50}
+.app-header .logo{border:1px solid #5a6780;color:inherit;cursor:pointer;padding:0}.app-header .logo:focus-visible{outline:2px solid #ffd45c}
+.app-view{min-width:0}.app-view h2{font-size:19px;margin:2px 0 14px}.app-view.hidden{display:none!important}
+.menu-backdrop{position:fixed;inset:0;z-index:100;background:#03060acc;display:flex;align-items:flex-start;padding-top:67px}
+.menu-panel{background:#202836;width:min(88vw,330px);border:1px solid #455167;border-radius:0 16px 16px 0;box-shadow:6px 16px 45px #000a;padding:14px 10px;max-height:calc(100dvh - 80px);overflow:auto}
+.menu-title{font-size:13px;font-weight:800;color:#ffd45c;margin:4px 12px 12px}.menu-panel button{display:flex;align-items:center;gap:15px;background:transparent;color:#ecf1fa;width:100%;padding:13px 14px;text-align:left;border-radius:10px}.menu-panel button:hover,.menu-panel button.current{background:#344052;color:#ffe08d}
+body.home-active{padding-bottom:0}.home-view{height:calc(100dvh - 114px);min-height:320px}.home-controls{height:100%;display:flex;flex-direction:column;gap:12px;padding:3px 0 8px}
+.shortcut-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));flex:1;min-height:0;gap:10px}
+.shortcut{min-width:0;min-height:0;background:#222a38;color:#eef3fc;border:1px solid #48556a;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:8px;font-size:clamp(12px,3.3vw,15px)}
+.shortcut-icon{font-size:clamp(18px,4vh,29px);color:#ffd45c}.shortcut small{font-size:clamp(9px,1.7vh,11px);color:#adb9c9}.shortcut.editing{border-style:dashed;border-color:#ffd45c}
+.dashboard-settings{padding:10px 10px 6px;background:#1c2431;border:1px solid #38485e;border-radius:12px}.dashboard-settings .label{display:flex;justify-content:space-between}.home-actions{display:flex;gap:7px;margin-top:8px}.home-actions button{flex:1;font-size:12px;padding:9px 4px}.home-actions button.is-active{background:#ffd45c;color:#11141c}
+.inner-panel{display:flex;flex-direction:column;min-height:calc(100dvh - 130px);max-height:calc(100dvh - 130px);margin:0}.fixed-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-bottom:9px}.fixed-actions button{padding:10px 3px;font-size:11px;background:#343e50;color:#ecf2fc}.fixed-actions button:disabled{opacity:.65;cursor:not-allowed}
+.entry-list{min-height:85px;flex:1;overflow:auto;border:1px solid #364256;border-radius:10px;background:#111823;padding:12px}.empty-state{margin:16px 2px;color:#d1dae8;line-height:1.6;text-align:center}.empty-state small{display:block;color:#9cacc0;margin-top:10px}
+.bottom-controls{flex:0 0 auto;border-top:1px solid #43506a;margin-top:13px;padding-top:12px}.bottom-controls .range-row{margin-bottom:9px}.bottom-controls .label{margin-bottom:5px}
+.ambience-colors{display:grid;gap:8px;flex:1}.ambience-colors button{min-height:49px;border:1px solid #ffffff60;color:#11161d;font-size:16px;letter-spacing:.4px;box-shadow:inset 0 0 18px #ffffff32;text-shadow:0 1px 1px #ffffff44}
+#view-ambience .inner-panel{min-height:calc(100dvh - 130px)}#view-ambience .bottom-controls{margin-top:15px}
+#status{position:fixed;left:12px;right:12px;bottom:calc(8px + env(safe-area-inset-bottom,0px));max-width:694px;margin:0 auto;min-height:0;padding:9px 12px;z-index:80;box-shadow:0 5px 25px #000b;font-size:12px;max-height:54px;overflow:hidden}
+.symbol-grid{grid-template-columns:repeat(auto-fill,minmax(57px,1fr));gap:8px}.symbol-grid button{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;padding:6px 3px;min-height:72px;background:#263349!important}
+.symbol-grid .pixel-canvas{width:42px;height:42px;image-rendering:pixelated;background:#090d16;border-radius:4px}.symbol-grid small{line-height:1.1;white-space:normal;max-width:100%;font-size:9px}.symbol-category{margin:14px 0 9px;padding-top:7px;border-top:1px solid #3b485a}
+#view-diagnostics #diagnostics{display:block}#view-diagnostics details.panel{margin-top:4px}
+@media(max-height:690px){.home-controls{gap:7px}.shortcut-grid{gap:6px}.shortcut{gap:1px;padding:3px;border-radius:11px}.dashboard-settings{padding:5px 8px}.home-actions{margin-top:3px}.shortcut-icon{font-size:18px}}
+@media(max-width:390px){.fixed-actions button{font-size:10px}.inner-panel{padding:10px}.shortcut small{font-size:9px}}
+
+/* v0.4.0.1 compact library/program shell and 16x16 monochrome pixel controls */
+body{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+#status.toast{position:fixed;z-index:150;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));
+ transform:translateX(-50%);width:max-content;max-width:min(calc(100vw - 24px),540px);
+ box-shadow:0 12px 32px #000a;border:1px solid #506482;background:#27364b;color:#edf5ff;
+ padding:9px 12px;border-radius:10px;font-size:12px;min-height:0;line-height:1.3;margin:0;
+ pointer-events:auto;cursor:pointer}
+#status.toast[hidden]{display:none!important}
+#status.toast-error{border-color:#e17878;background:#522b37;color:#fff}
+.shortcut-pulse{animation:shortcutHint .5s ease-in-out}
+@keyframes shortcutHint{50%{border-color:#ffdb6d;box-shadow:0 0 0 2px #ffdb6d99}}
+#view-library .inner-panel,#view-programs .inner-panel{
+ height:calc(100dvh - 96px - env(safe-area-inset-bottom,0px));
+ min-height:0;max-height:none;padding:9px 10px 8px;overflow:hidden}
+#view-library h2,#view-programs h2{font-size:16px;line-height:1.1;margin:0 0 8px}
+#view-library .fixed-actions,#view-programs .fixed-actions{gap:4px;margin-bottom:6px}
+#view-library .fixed-actions button,#view-programs .fixed-actions button{min-height:31px;padding:6px 2px;font-size:11px}
+#view-library .entry-list,#view-programs .entry-list{flex:1 1 auto;min-height:45px;overflow-y:auto;
+ overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:8px}
+#view-library .empty-state,#view-programs .empty-state{margin:10px 2px;font-size:13px;line-height:1.4}
+#view-library .empty-state small,#view-programs .empty-state small{margin-top:5px;font-size:11px}
+#view-library .bottom-controls,#view-programs .bottom-controls{flex:0 0 auto;margin-top:6px;padding-top:7px;
+ display:grid;gap:4px}
+#view-library .bottom-controls select,#view-programs .bottom-controls select{padding:5px 9px;font-size:12px;min-height:32px}
+.pixel-range{display:flex;align-items:center;gap:7px;min-height:29px}
+.pixel-range input[type=range]{flex:1;min-width:0;margin:0;height:20px}
+.pixel-range b{flex:0 0 52px;font-size:11px;text-align:right;color:#d5e1ee;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pixel-range .range-pict{width:24px;height:24px;flex:0 0 24px;image-rendering:pixelated;background:transparent}
+.dashboard-settings .pixel-range b{flex-basis:40px}
+#view-ambience .bottom-controls{padding-top:8px;margin-top:8px}
+.visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-height:640px){#view-library .inner-panel,#view-programs .inner-panel{height:calc(100dvh - 87px - env(safe-area-inset-bottom,0px))}#view-library .empty-state small,#view-programs .empty-state small{display:none}}
+
+/* v0.4.1: functional flash-backed library, compact on small screens */
+#view-library .inner-panel{height:auto;min-height:calc(100dvh - 120px);max-height:none}
+#view-library .library-actions{display:flex;flex-wrap:wrap;gap:5px}
+#view-library .library-actions button{flex:1 1 26%;min-height:34px}
+.library-filter{display:flex;gap:7px;margin:8px 0}.library-filter input{flex:1;min-width:0;padding:8px;border-radius:7px}
+.library-filter button{min-width:42px}
+#view-library .library-list{flex:1;min-height:140px;max-height:44dvh;overflow-y:auto}
+.library-row{border:1px solid #4c5568;border-radius:9px;padding:8px;margin-bottom:5px;display:flex;align-items:center;gap:6px;min-height:50px}
+.library-row.selected{border-color:#ecdc67;background:rgba(240,210,100,.07)}
+.library-row .lib-name{min-width:0;flex:1;word-break:break-word;line-height:1.2;font-size:13px}
+.library-row small{display:block;font-size:10px;color:#b1bdcf;margin-top:2px}
+.library-row .lib-pick{flex:1;min-width:0;text-align:left;background:transparent;border:none;padding:2px 4px;color:inherit}
+.library-row button{flex:none;min-width:28px;min-height:32px;padding:4px}
+.library-row .lib-drag{cursor:grab;touch-action:none}
+.library-row.dragged{opacity:.5}
+.library-footer{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.library-footer select{min-width:55px}.library-footer button,.library-import{font-size:12px;min-height:32px;padding:8px;border-radius:6px}
+.library-import{border:1px solid #6b7280;cursor:pointer}
+#libEditorInfo{padding:6px 0}
+
+/* v0.4.2 compact workflows and mobile edit forms */
+.v42-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0}
+.v42-row>*{min-width:0}.v42-row input,.v42-row select{flex:1;padding:9px;border:1px solid #495366;border-radius:8px;background:#111925;color:#f1f5fb}
+.v42-panel{padding:12px;border:1px solid #364454;border-radius:10px;margin-top:12px}
+.v42-list{display:grid;gap:7px;margin:10px 0;max-height:280px;overflow:auto}
+.v42-list>div{display:flex;align-items:center;gap:8px;padding:9px;background:#17202a;border-radius:8px}
+.v42-list>div span{flex:1;overflow:hidden;text-overflow:ellipsis}
+.v42-list button{padding:6px 9px;min-height:30px}
+.v42-name{width:100%;min-width:0;padding:10px;border:1px solid #536274;border-radius:8px;background:#111925;color:#fff}
+.v42-dialog{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:#000b;padding:15px}
+.v42-dialog.hidden{display:none}.v42-sheet{width:min(100%,480px);max-height:85vh;overflow:auto;padding:16px;background:#171f2a;border-radius:12px;border:1px solid #5a6774}
+#libSearchWrap.hidden{display:none}.v42-hint{font-size:12px;color:#a4b0c5}
+/* v0.4.2.1: mobile program editor uses document scrolling, never clipped by its viewport. */
+#view-programs .inner-panel{height:auto!important;min-height:calc(100dvh - 120px);max-height:none;overflow:visible!important;display:block!important;padding-bottom:calc(26px + env(safe-area-inset-bottom,0px))}
+#view-programs .v42-panel{overflow:visible;min-width:0}
+#view-programs #v42ProgramSteps{max-height:min(42dvh,360px);min-height:40px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#view-programs #v42SaveProgram{display:block;width:100%;position:relative;min-height:44px}
+#v42SettingsBackup{border:0;padding:0;margin:0}
+.settings-section{padding:14px 0 18px;border-bottom:1px solid #384252}
+.settings-section:last-of-type{border-bottom:0}
+.settings-section .label{margin:0 0 10px}
+.settings-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.settings-actions button,.settings-actions .library-import{min-height:45px;text-align:center;display:flex;align-items:center;justify-content:center;line-height:1.2;font-size:12px;border-radius:9px;background:#283345;border:1px solid #41516a;color:#ecf3fc;cursor:pointer}
+.settings-actions button{width:100%;padding:8px 5px}
+.settings-actions .library-import{padding:8px 5px}
+#v42ShortcutLabel:disabled{opacity:.48;cursor:not-allowed}
+#v42ShortcutDelete{margin-right:auto}
+#view-editor .preview-sticky:has(~ #pagesEditor:not(.hidden)) .preview-tools{display:none}
+@media(max-width:420px){.settings-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* v0.4.2.2: editing context, visible and reachable preview, invalid program rows */
+:root{--rb-header-height:79px}
+#view-editor .preview-sticky{top:calc(var(--rb-header-height) + 5px);z-index:15}
+.editor-context{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;margin-bottom:10px;border:1px solid #485566;border-radius:11px;background:#202a36}
+.editor-context strong{display:block;font-size:14px}.editor-context small{display:block;color:#aebccc;font-size:11px;line-height:1.4;margin-top:2px;overflow-wrap:anywhere}
+.editor-context button{flex-shrink:0;padding:9px;font-size:12px}
+#view-editor.editing-library .editor-context{border-color:#d6ac4d;background:#352e23}
+#view-editor.editing-library .editor-context strong{color:#ffe49d}
+#view-editor.editing-library .tabs{display:none}
+.v42-program-invalid{border:1px solid #b76567!important;background:#34242b!important}
+.v42-program-invalid span,.v42-program-invalid small{color:#ffb6b6!important}
+#v42ProgramSteps .v42-program-invalid{flex-wrap:wrap}#v42ProgramSteps .v42-program-invalid select{order:9;width:100%;background:#1e2631;color:#fff;border:1px solid #d68c88;border-radius:7px;padding:8px}
+#view-programs #v42Programs>div{display:flex;align-items:center;gap:8px;padding:6px 0}
+#v42ProgramError{margin:8px 0;color:#ffb6b6;font-size:12px}
+#rbConnectionStatus{color:#ffb8b8;margin-left:9px;font-size:11px}
+@media(max-width:410px){.editor-context{padding:9px}.editor-context strong{font-size:13px}}
+
+/* v0.4.2.3: compact manual BLE controls, no active highlighting. */
+.v43-force-modes{margin-top:7px;display:flex;justify-content:flex-start}
+.v43-force-grid{display:grid;grid-template-columns:repeat(4,34px);gap:5px}
+.v43-force-btn{width:34px;height:34px;min-height:34px;padding:5px;display:flex;align-items:center;justify-content:center;background:#313d51;border:1px solid #4c5c72;border-radius:7px;color:#e8f0fc}
+.v43-force-btn:active{background:#526079}.v43-force-btn svg{height:18px;width:18px}
+.v43-editor-actions{display:flex;gap:5px;flex-wrap:wrap}
+.shortcut.shortcut-invalid{background:#4b2b34!important;border-color:#dc797a!important;box-shadow:inset 0 0 0 1px #d6687477}
+.shortcut.shortcut-invalid small{color:#ffd3d3}
+.editor-context .v43-editor-actions button{font-size:11px;padding:8px}
+@media(max-width:420px){.v43-force-grid{grid-template-columns:repeat(4,32px)}.v43-force-btn{width:32px;height:32px;min-height:32px}}
+
+/* Lucide line icons: local, offline-only; copyright notices included. */
+.rb-lucide{width:20px;height:20px;flex:0 0 auto;display:inline-block;vertical-align:middle;pointer-events:none}
+button[data-rb-icon]{display:inline-flex;align-items:center;justify-content:center;gap:5px}
+button[data-rb-only="1"]{font-size:0!important}
+button[data-rb-only="1"] .rb-lucide{width:20px;height:20px}
+.menu-panel button[data-rb-icon]{justify-content:flex-start}
+.menu-panel button[data-rb-icon] .rb-lucide{width:24px;height:24px}
+.shortcut-icon .rb-lucide{width:clamp(22px,4vh,32px);height:clamp(22px,4vh,32px)}
+.rb-range-icon{display:flex;align-items:center;justify-content:center;width:24px;height:24px;flex:0 0 24px}
+.rb-range-icon .rb-lucide{width:22px;height:22px;color:#e9f1ff}
+.v43-force-btn .rb-lucide{width:18px!important;height:18px!important}
+#view-library .library-actions button[data-rb-only="1"]{min-width:45px;flex:1 1 17%;min-height:38px}
+</style></head>
+<body><main id="appShell">
+<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button">🍌</button><div><h1>RavestickBoard <span class="version">v0.4.2.3-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
+
+
+
+
+
+
+
+
+
+<div class="menu-backdrop hidden" id="mainMenu" role="presentation"><nav aria-label="Hauptnavigation" class="menu-panel">
+<div class="menu-title">🍌 Navigation</div>
+<button data-nav="home" type="button">⌂ <span>Kurzwahl</span></button>
+<button data-nav="editor" type="button">✎ <span>Texteditor</span></button>
+<button data-nav="library" type="button">▤ <span>Bibliothek</span></button>
+<button data-nav="programs" type="button">▶ <span>Programme</span></button>
+<button data-nav="ambience" type="button">◉ <span>Ambiente</span></button>
+<button data-nav="diagnostics" type="button">≡ <span>Diagnose</span></button>
+<button data-nav="settings" type="button">⚙ <span>Einstellungen</span></button>
+<button id="v42ReloadMenu" type="button">↻ <span>Webinterface neu laden</span></button>
+</nav></div><section aria-label="Kurzwahl" class="app-view home-view" id="view-home">
+<div class="home-controls">
+<div aria-label="Sechs Kurzwahlprogramme" class="shortcut-grid" id="shortcutGrid">
+<button class="shortcut" data-shortcut="1" type="button"><span class="shortcut-icon">✦</span><span>Kurzwahl 1</span><small>Noch nicht belegt</small></button>
+<button class="shortcut" data-shortcut="2" type="button"><span class="shortcut-icon">✦</span><span>Kurzwahl 2</span><small>Noch nicht belegt</small></button>
+<button class="shortcut" data-shortcut="3" type="button"><span class="shortcut-icon">✦</span><span>Kurzwahl 3</span><small>Noch nicht belegt</small></button>
+<button class="shortcut" data-shortcut="4" type="button"><span class="shortcut-icon">✦</span><span>Kurzwahl 4</span><small>Noch nicht belegt</small></button>
+<button class="shortcut" data-shortcut="5" type="button"><span class="shortcut-icon">✦</span><span>Kurzwahl 5</span><small>Noch nicht belegt</small></button>
+<button class="shortcut" data-shortcut="6" type="button"><span class="shortcut-icon">✦</span><span>Kurzwahl 6</span><small>Noch nicht belegt</small></button>
+</div>
+<div class="dashboard-settings">
+<div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" data-global="brightness" id="homeBrightness" max="100" min="1" type="range" value="75"/><b id="homeBrightnessValue">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div>
+<div class="home-actions"><button class="secondary" id="homePowerOff" type="button">○ Aus</button><button class="secondary" id="homePowerOn" type="button">◉ Ein</button><button aria-pressed="false" class="secondary" id="editShortcuts" type="button">✎ Bearbeiten</button></div>
+</div>
+</div>
+</section><section aria-label="Bibliothek" class="app-view inner-view hidden" id="view-library">
+<div class="panel inner-panel"><h2>Bibliothek</h2>
+<p class="tiny muted" id="libStatus" aria-live="polite">Bibliothek wird geladen …</p>
+<div id="libInitWrap" class="hidden"><p class="hint">LittleFS ist noch nicht eingerichtet. Die Einrichtung betrifft ausschließlich die Dateisystempartition, nicht deine zwölf NVS-Blockseiten. Ein vorhandenes beschädigtes Dateisystem wird niemals automatisch formatiert.</p><button type="button" class="secondary" id="libInit">Dateisystem erstmals einrichten</button></div>
+<div id="libWorkspace">
+<div aria-label="Bibliotheksaktionen" class="fixed-actions library-actions" role="toolbar">
+<button id="libOpen" type="button">✎ Bearbeiten</button><button id="libSend" type="button">↗ Senden</button><button id="libDuplicate" type="button">⧉ Duplizieren</button><button id="libRename" type="button">Umbenennen</button><button id="libDelete" type="button">Löschen</button>
+</div>
+<div class="library-filter"><button id="v42SearchToggle" type="button" aria-label="Suche ausklappen">⌕</button><div id="libSearchWrap" class="hidden" style="flex:1"><input id="libSearch" style="width:100%" placeholder="Texte suchen …" aria-label="Bibliothek durchsuchen" type="search"/></div><button id="libRefresh" type="button">↻</button></div>
+<div aria-label="Gespeicherte Texte" class="entry-list library-list" role="list" id="libList"><p class="empty-state">Noch keine Texte gespeichert.</p></div>
+<div class="library-footer hidden"><label for="libSlot">Kurzwahl</label><select id="libSlot"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><button id="libAssign" type="button">Belegen</button><button id="libUnassign" type="button">Freigeben</button></div>
+<div class="library-footer settings-actions" id="v42BackupFooter"><button id="libExport" type="button">↓ Backup exportieren</button><label class="library-import" for="libImport">↑ Backup zusammenführen</label><input type="file" accept=".json,application/json" id="libImport" class="visually-hidden"/></div>
+</div>
+<div class="bottom-controls"><div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" data-global="brightness" id="libBrightness" max="100" min="1" type="range" value="75"/><b data-global-label="brightness">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div>
+<div class="pixel-range" role="group" aria-label="Geschwindigkeit"><canvas class="range-pict" data-pict="snail" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Geschwindigkeit" data-global="speed" id="libSpeed" max="100" min="1" type="range" value="80"/><b data-global-label="speed">80 / 100</b><canvas class="range-pict" data-pict="horse" aria-hidden="true" width="16" height="16"></canvas></div>
+<div class="v43-force-modes" aria-label="Anzeigeverhalten erzwingen"></div>
+</div></div></section><section aria-label="Programme" class="app-view inner-view hidden" id="view-programs">
+<div class="panel inner-panel"><h2>Programme</h2>
+<p class="hint">Ein Programm kombiniert Bibliothekseinträge. Du entscheidest, ob Blockseiten stehen bleiben oder mit den Lauftexten als gemeinsames Laufband scrollen.</p>
+<div class="v42-panel"><div class="label">Gespeicherte Programme</div><div id="v42Programs" class="v42-list"></div>
+<div class="v42-row"><button id="v42NewProgram" class="secondary">＋ Neues Programm</button><button id="v42DeleteProgram" class="secondary">Löschen</button><button id="v42RunProgram" class="primary">▶ Starten</button><button id="v42StopProgram" class="secondary">■ Stoppen</button></div></div>
+<div class="v42-panel"><div class="label">Programm bearbeiten</div><label class="field">Name<input id="v42ProgramName" class="v42-name" maxlength="47" placeholder="Mein Festivalprogramm"></label>
+<label class="field">Wiedergabeart<select id="v43Playback" class="v42-name"><option value="0">Original: Blockseiten stehen, Lauftexte laufen</option><option value="1">Alles als Laufband (inklusive Blockmotive)</option></select></label><p class="v42-hint" id="v43PlaybackHelp">Standbilder bleiben stehen. Beim Wechsel zwischen den Anzeigearten überträgt der ESP32 die nächste Gruppe.</p>
+<label class="field">Ersatzlaufzeit für Gruppenwechsel (5–180 s)<input id="v42ProgramSeconds" type="number" min="5" max="180" value="20" class="v42-name"></label>
+<div class="v42-row"><select id="v42StepChoose" aria-label="Bibliotheksinhalt auswählen"></select><button id="v42StepAdd">＋ Hinzufügen</button></div>
+<div id="v42ProgramSteps" class="v42-list"></div><p id="v42ProgramError" hidden></p>
+<button id="v42SaveProgram" class="primary">Programm speichern</button><p class="v42-hint">Originalmodus: Blockgruppen bei Tempo 60–90 hardwarekalibriert; Lauftexte noch mit Ersatzdauer. Laufbandmodus: ein Upload, soweit das Datenbudget reicht. Geteilte Laufbänder wechseln vorläufig zeitgesteuert.</p></div>
+<div class="bottom-controls"><div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" data-global="brightness" id="progBrightness" max="100" min="1" type="range" value="75"/><b data-global-label="brightness">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div>
+<div class="pixel-range" role="group" aria-label="Geschwindigkeit"><canvas class="range-pict" data-pict="snail" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Geschwindigkeit" data-global="speed" id="progSpeed" max="100" min="1" type="range" value="80"/><b data-global-label="speed">80 / 100</b><canvas class="range-pict" data-pict="horse" aria-hidden="true" width="16" height="16"></canvas></div>
+<div class="v43-force-modes" aria-label="Anzeigeverhalten erzwingen"></div>
+</div></div></section><section aria-label="Texteditor" class="app-view hidden" id="view-editor"><div class="editor-context" id="v42EditorContext"><div><strong id="v42EditorHeading">Neuen Inhalt erstellen</strong><small id="v42EditorSubtitle">Eigenständiger Entwurf</small></div><div class="v43-editor-actions"><button id="v43NewContent" type="button" class="secondary">＋ Neu</button><button id="v42ReturnLibrary" type="button" class="secondary">← Bibliothek</button></div></div><nav aria-label="Editor wählen" class="tabs"><button class="tab active" id="tabScroll" type="button">↔ Lauftext</button><button class="tab" id="tabPages" type="button">▣ Blockanzeige</button></nav><section class="panel preview-sticky"><div class="label">LED-Vorschau · 64 × 16 Punkte</div><canvas aria-label="Pixelgenaue Punktvorschau" height="192" id="matrix" width="768"></canvas><div class="preview-tools" id="previewTools"><button class="small-btn" id="previewRestart" type="button">⏮ Anfang</button><button class="small-btn active" id="previewToggle" type="button">⏸ Pause</button><button class="small-btn" id="previewSpeed" type="button">⏩ 1×</button><span class="tiny" id="previewCaption">Lauftextvorschau</span></div><p class="hint" id="previewSpeedHint">1×, 2× oder 4× verändert nur die Vorschau. Die Anzeige auf der Tafel behält ihre eigene Geschwindigkeit.</p></section><section class="panel" id="scrollEditor"><div class="label">Lauftext bearbeiten</div><label class="field" for="scrollText"><span class="hint">Text · Datenverbrauch wird live berechnet, kein Zeichenlimit</span></label><div class="picker-input"><input autocomplete="off" id="scrollText" spellcheck="false" type="text" value=""/><button aria-label="Symbol für Lauftext auswählen" class="symbol-open" data-symbol-target="scrollText" title="Symbole einfügen" type="button">♥</button></div><div class="undo-tools"><button id="v42ClearText" class="small-btn danger" type="button">Text leeren</button></div><div class="capacity-info"><div aria-live="off" class="tiny" id="scrollCount"></div><div aria-hidden="true" class="capacity-track"><div class="capacity-fill" id="capacityFill"></div></div></div><div class="field"><label for="scrollLayout">Schriftart</label><select id="scrollLayout"><option value="3">Original - Normal</option><option value="4">Original - Bold</option><option value="0">Engschrift</option><option value="2">Mini - Einzeilig</option><option value="1">Mini - Zweizeilig</option></select></div><div class="field"><label for="libTextMode">Modus dieses Textes</label><select id="libTextMode"><option value="2">Lauftext</option><option value="1">Standbild (max. 64 Pixel)</option></select></div><div class="field hidden" id="scrollSecondWrap"><label for="scrollLine2">Text · Zeile 2</label><div class="picker-input"><input autocomplete="off" id="scrollLine2" spellcheck="false" type="text"/><button class="symbol-open" data-symbol-target="scrollLine2" title="Symbole einfügen" type="button">♥</button></div></div><div class="label" id="scrollColorLabel">Farbe</div><div class="swatches" id="scrollColors"></div><div class="hidden" id="scrollSecondColors"><div class="label">Farbe · Zeile 2</div><div class="swatches" id="scrollColors2"></div></div><div class="pixel-range" role="group" aria-label="Geschwindigkeit"><canvas class="range-pict" data-pict="snail" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Geschwindigkeit" id="scrollSpeed" max="100" min="1" type="range" value="80"/><b id="speedLabel">80 / 100</b><canvas class="range-pict" data-pict="horse" aria-hidden="true" width="16" height="16"></canvas></div><p class="hint">Tempo-Anpassungen werden auch ohne erneuten Textupload gesendet. Die Skala ist noch nicht gegen die Hersteller-App kalibriert.</p><div class="actions"><button class="primary" id="sendScroll">Lauftext senden</button><button class="secondary" id="libSaveAs" type="button">＋ In Bibliothek</button><button class="secondary hidden" id="libSaveChanges" type="button">Änderungen speichern</button></div><div class="tiny muted" id="libEditorInfo" aria-live="polite">Ungespeicherter Entwurf – unabhängig von der Bibliothek.</div></section><section class="hidden" id="pagesEditor">
+<section class="panel"><div class="label">Blockanzeige · eigene Seiten</div><div aria-label="Seitenübersicht" id="pageRail"></div><div class="page-tools"><button class="small-btn" id="pageAdd">＋ Neue Seite</button><button class="small-btn" id="pageCopy">⧉ Duplizieren</button><button class="small-btn" id="pageLeft">← Verschieben</button><button class="small-btn" id="pageRight">→ Verschieben</button><button class="small-btn danger" id="pageDelete">Löschen</button><button class="small-btn" id="v42NewBlock">Alles löschen</button></div><p class="hint">Jede Seite ist unabhängig. Kein automatisches Abschneiden und kein erzwungener Umbruch. Maximal 25 Seiten.</p></section>
+<section class="panel"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div class="label" id="pageTitle">Seite 1 bearbeiten</div><span class="save-indicator" id="dirty"></span></div>
+<div class="page-form">
+<div class="field"><label for="line1">Text · Zeile 1</label><div class="picker-input"><input autocomplete="off" id="line1" placeholder="" spellcheck="false" type="text"/><button aria-label="Symbol für Zeile 1 auswählen" class="symbol-open" data-symbol-target="line1" title="Symbole einfügen" type="button">♥</button></div></div>
+<div class="field" id="secondRow"><label for="line2">Text · Zeile 2</label><div class="picker-input"><input autocomplete="off" id="line2" placeholder="" spellcheck="false" type="text"/><button aria-label="Symbol für Zeile 2 auswählen" class="symbol-open" data-symbol-target="line2" title="Symbole einfügen" type="button">♥</button></div></div>
+<div class="grid2"><div class="field"><label for="pageLayout">Schriftdarstellung</label><select id="pageLayout"><option value="3">Original - Normal</option><option value="4">Original - Bold</option><option value="0">Engschrift</option><option value="2">Mini - Einzeilig</option><option value="1">Mini - Zweizeilig</option></select></div><div class="field"><label for="pageAlign">Ausrichtung</label><select id="pageAlign"><option value="0">Links</option><option value="1">Zentriert</option><option value="2">Rechts</option></select></div></div>
+<div class="field"><label>Farbe · Zeile 1</label><div class="swatches" id="pageColors1"></div></div>
+<div class="field" id="secondColors"><label>Farbe · Zeile 2</label><div class="swatches" id="pageColors2"></div></div>
+<div class="field"><label for="pageSpeed">Geschwindigkeit der LED-Tafel</label><div class="pixel-range"><canvas class="range-pict" data-pict="snail" aria-hidden="true" width="16" height="16"></canvas><input id="pageSpeed" aria-label="Geschwindigkeit" data-global="speed" type="range" min="1" max="100" value="80"/><b data-global-label="speed">80 / 100</b><canvas class="range-pict" data-pict="horse" aria-hidden="true" width="16" height="16"></canvas></div></div>
+</div>
+<div class="warning hidden" id="pageWarning"></div>
+<div class="actions"><button class="secondary" id="v42ClearPage">Seite leeren</button><button class="primary" id="pageShow">Diese Seite anzeigen</button></div>
+<div class="actions"><button class="primary" id="v42SaveBlock">In Bibliothek speichern</button><button class="secondary hidden" id="v42UpdateBlock">Blockfolge aktualisieren</button><button class="secondary" id="v42SendDraftBand">▶ Ganze Folge senden</button></div>
+<p class="v42-hint" id="v42BlockInfo">Neue Blockfolge, noch nicht in der Bibliothek gespeichert.</p>
+<p class="hint">Die Seiten bleiben im RAM-Editor, bis du die gesamte Blockfolge ausdrücklich in der Bibliothek speicherst. „Diese Seite anzeigen“ sendet nur die ausgewählte Seite.</p>
+</section>
+
+</section><section class="panel"><div class="label">Tafelsteuerung</div>
+<div class="power-control"><span><b>LED-Anzeige</b><small id="powerState">Status nach Neustart unbekannt</small></span><div aria-label="Anzeige ein- oder ausschalten" role="group"><button class="small-btn" id="powerOff" type="button">Aus</button><button class="small-btn" id="powerOn" type="button">Ein</button></div></div>
+<p class="hint">Nur das LED-Display, nicht den ESP32 ausschalten. Der zuletzt erfolgreich gesendete BLE-Befehl wird angezeigt; ein Zustandssensor ist nicht vorhanden.</p>
+<div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" id="brightness" max="100" min="1" type="range" value="75"/><b id="brightLabel">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div><div class="v43-force-modes" aria-label="Anzeigeverhalten erzwingen"></div></section><p class="tiny">WLAN: CoolLED1248 · http://192.168.4.1 · USB-Firmwareupdates, kein OTA.<br/>Entwürfe bleiben im RAM; Bibliothekseinträge werden in LittleFS gespeichert.</p></section><section aria-label="Ambiente" class="app-view inner-view hidden" id="view-ambience">
+<div class="panel inner-panel"><h2>Ambiente</h2><p class="hint">Eine Farbe antippen, um die gesamte 64×16-Tafel mit dieser Farbe zu füllen. Die aktuelle Textanzeige wird dadurch ersetzt.</p>
+<div aria-label="LED-Farben" class="ambience-colors" id="ambienceColors"></div>
+<div class="bottom-controls"><div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" data-global="brightness" id="ambBrightness" max="100" min="1" type="range" value="75"/><b data-global-label="brightness">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div></div>
+</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload">Aktualisieren</button><button class="primary" id="diagCopy">📋 Log kopieren</button><a class="secondary" download="RavestickBoard_Diagnose_v0.4.2.3-dev.txt" href="/api/diagnostics.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">TXT herunterladen</a><a class="secondary" download="RavestickBoard_RAM_v0.4.2.3-dev.txt" href="/api/ram.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
+<div class="panel"><h2>Einstellungen</h2>
+<div class="settings-section" id="v42SettingsBackup">
+<div class="label">▤ Bibliothek &amp; Datensicherung</div>
+<p class="hint">Texte, Blockfolgen, Programme und Kurzwahlen als JSON sichern.</p>
+</div>
+<p class="tiny muted">Beim Import werden bestehende Einträge nicht automatisch überschrieben.</p>
+<div class="settings-section"><div class="label">⌁ LED-Tafel</div>
+<div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><strong>CoolLEDX</strong><div class="tiny muted">Fest konfiguriertes Gerät</div></div><span class="tiny muted">Aktiv</span></div>
+</div>
+<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.2.3-dev</p></div>
+</section><div class="v42-dialog hidden" id="v42ShortcutDialog" role="dialog" aria-modal="true" aria-label="Kurzwahl belegen"><div class="v42-sheet">
+<h2 id="v42ShortcutTitle">Kurzwahl belegen</h2><label class="field">Quelle<select id="v42ShortcutType"><option value="0">Quelle auswählen</option><option value="1">Bibliothek</option><option value="2">Programme</option><option value="3">Ambiente</option><option value="4" disabled>Animationen (zukünftig)</option></select></label>
+<label class="field" id="v42ShortcutTargetWrap">Inhalt<select id="v42ShortcutTarget"></select></label>
+<label class="field">Beschriftung<input class="v42-name" id="v42ShortcutLabel" maxlength="47" placeholder="Meine Kurzwahl"></label><small id="v42ShortcutBytes" class="v42-hint">0 / 47 UTF-8-Bytes</small>
+<div class="v42-row"><button class="secondary danger" id="v42ShortcutDelete" type="button">Kurzwahl löschen</button><button class="secondary" id="v42ShortcutCancel">Abbrechen</button><button class="primary" id="v42ShortcutSave">Speichern</button></div></div></div>
+<div aria-live="polite" class="toast" id="status" role="status" aria-atomic="true" hidden></div><div aria-label="Symbole auswählen" aria-modal="true" class="symbol-modal hidden" id="symbolOverlay" role="dialog"><div class="symbol-sheet"><div class="symbol-head"><b>❤️ 🍌 Symbol einfügen</b><button aria-label="Symbolauswahl schließen" class="secondary" id="symbolClose" type="button">✕</button></div><div id="symbolsPicker"><p class="hint">Unsere 16×16-Pixelgrafiken – thematisch sortiert, direkt aus den LED-Matrizen gerendert. Tippen fügt das Motiv an der Cursorposition ein.</p><div id="symbolCategories"></div></div></div></div></main>
+<script>
+'use strict';
+const RB_ASSET_DATA = {"normal": "QQAHAAAAAAgAFAAiAEEAQQBBAH8AQQBBAEEAQQBBAAAAAABCAAcAAAAAfgBBAEEAQQBBAEIAfABCAEEAQQBBAH4AAAAAAEMABwAAAAA+AEEAQABAAEAAQABAAEAAQABAAEEAPgAAAAAARAAHAAAAAHwAQgBBAEEAQQBBAEEAQQBBAEEAQgB8AAAAAABFAAcAAAAAfwBAAEAAQABAAEAAfwBAAEAAQABAAH8AAAAAAEYABwAAAAB/AEAAQABAAEAAQAB/AEAAQABAAEAAQAAAAAAARwAHAAAAAD4AQQBAAEAAQABAAEAARwBBAEEAQQA+AAAAAABIAAcAAAAAQQBBAEEAQQBBAH8AQQBBAEEAQQBBAEEAAAAAAEkAAQAAAAABAAEAAQABAAEAAQABAAEAAQABAAEAAQAAAAAASgAHAAAAAAEAAQABAAEAAQABAAEAAQABAEEAQQA+AAAAAABLAAcAAAAAQQBCAEQASABQAGAAYABQAEgARABCAEEAAAAAAEwABwAAAABAAEAAQABAAEAAQABAAEAAQABAAEAAfwAAAAAATQAHAAAAAEEAYwBjAFUAVQBJAEkAQQBBAEEAQQBBAAAAAABOAAcAAAAAQQBhAGEAUQBRAEkASQBFAEUAQwBDAEEAAAAAAE8ABwAAAAAcACIAQQBBAEEAQQBBAEEAQQBBACIAHAAAAAAAUAAHAAAAAH4AQQBBAEEAQQBBAH4AQABAAEAAQABAAAAAAABRAAcAAAAAPgBBAEEAQQBBAEEAQQBBAEEARQBCAD0AAAAAAFIABwAAAAB+AEEAQQBBAEEAQgB8AFAASABEAEIAQQAAAAAAUwAHAAAAAD4AQQBBAEAAQAAwAA4AAQABAEEAQQA+AAAAAABUAAcAAAAAfwAIAAgACAAIAAgACAAIAAgACAAIAAgAAAAAAFUABwAAAABBAEEAQQBBAEEAQQBBAEEAQQBBACIAHAAAAAAAVgAHAAAAAEEAQQBBAEEAQQBBAEEAQQBBACIAFAAIAAAAAABXAAcAAAAAQQBBAEEAQQBBAEkASQBJAEkAVQBVACIAAAAAAFgABwAAAABBAEEAIgAiABQACAAIABQAIgAiAEEAQQAAAAAAWQAHAAAAAEEAQQBBACIAIgAUAAgACAAIAAgACAAIAAAAAABaAAcAAAAAfwABAAIABAAEAAgAEAAQACAA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", "bold": "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", "symbols": "AGYAAAAAAAAERAAAAAAAAEQUAAAAAAAAZEQAAAAAAAAEREAAAAAGYAREQAAABmRGBERGRkZERmQEREZGRkZkQARERkZEREZgBEREZGZGZAAARERGRERAAAAEREZmRgAAAABERERAAAAAAABgBgAAAAAAAGAGAAAAAAAGYGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAGYAAAAAAAAGZmAAAAAAAAZmYAAAAAAAZmZmAAAAZmZmZmZmZgAGZmZmZmZgAAAGZmZmYAAAAABmZmYAAAAABmZmZmAAAAAGYAAGYAAAAAZgAAZgAAAAYAAAAAYAAAAAAAAAAAAAAAAAYAAAAAAGAABgAAYAAGYGBgYGBmAAAGBmAGBgAAAGBgBgZgYAAABgBmYAYAAABmBgAGBmAAZgBmBgZgBmAAZgYABgZgAAAGAGZgBgAAAGBgBgBgYAAABgZgZgYAAAZgYGBgYGYAAGAABgAAYAAAAAAGAAAAAAAAAAAAAAAAAARAAAAEQAAAREQAAEREAAREREAERERAREREQARERERERERERERERERERERERERERERERERERERERERERERERARERERERERAAERERERERAAABERERERAAAAARERERAAAAAAERERAAAAAAABERAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREAAAFEREREQRAAAUQREURBAQABERRBEREBAAABRERBEAEAABREREEREQABFBdxREEAAAFEdmdEQQAAAUR2Z0RBAAABRBdxREEAAAFEREREQQAAARERERERAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmYAAABmYABnd2AABnd2Bnd3dgBnd3dmcRd2AGcRd2ZxF3YAZxF3Znd3dgBnd3dgZ3dwAAZ3dgAGZgAAAGZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEAAAAAAAAAEQAAAAAAAAEREAAAAAAAAREQAAAAAAAREREAAAAAABEd0QAAAAABER3REAAAAAERHdEQAAAAEREd0REAAAARER3REQAAARERHdEREAABEREREREQABERER3REREAERERHdEREQEREREREREREREREREREREQAAAABEAAAAAAAABERAAAAAAAAFmEAAAAAAAEWYRAAAAAAAWZmEAAAAAARZmZhAAAAABZhFmEAAAABFmEWYRAAAAFmYRZmEAAAEWZhFmYRAAAWZmZmZmEAARZmYRZmYRABZmZhFmZmEBZmZmZmZmZhFmZmZmZmZmEREREREREREQAAAARAAAAAAAAAREQAAAAAAABERAAAAAAABEREQAAAAAAEQARAAAAAAERABEQAAAAARAAARAAAAAREAABEQAAABEAAAARAAABEQAAABEQAAEQAAAAARAAERAAAAABEQARAAAAAAARARAAAAAAAAEREREREREREREREREREREREAAAAAAAAAAAAAARERAAAAAAAREREQAAAAAREREREAAAARGZkZmRAAGZGZmZmZkZgZkZxZmcWRmAGRhFmYRZGAABGVWZlVkAAAARmZmZkAAAAAERmZEAAAAAAAERAAAYAAAAEREQABAAAAARERABEAAAAREREREAAAABEZGRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHcAAARAAAAAB3AABEQAAAAHdwBEREQAAAB3REREREAAAHdER0REFAAAd0R3REREAAAHcHdEd0AAAHcABHd3AAAAdwBEAAAAAAdwAEAAAAAAdwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREAABERAAERAAAAABEQARERAAARERAREAAAAAABEREAAAwAwAAREQARERERABEBEREREREREAABERERERAAAAEREREREAAAERERERERABEAEREREQARAAAQARABAAABEQAAAAAREAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAEAAAAAABERAQERAAABREQRFEQQABREREREREEBRERERHdERBFERERERHREEURERERER0QRRERERERHRBFEREREREREEUREREREREQQFEREREREQQAURERERERBAAFERERERBAAABFEREQRAAAAABEREQAAAAAAAAAAAAAAAAICIgAAAAAAICAAIAAAAAAAIRAAAAAAABEVUREAAAABVRVRVRAAAAFVERFVEAAAABERVREAAAAAFVFVERAAAAAVUREVUQAAAAFVERVRAAAAAVUVURAAAAAAEVFREAAAAAABURVRAAAAAAAQFVEAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAREAAAAAAAABYQAAAAAAABYRAAAAAAARZhEBEREREWZhYQFmZmYWZmFhABZhEWZmYWEBERZmZmYWYRZmZmZmYWZhFmZmZmYWZmEBZmZmYWZmEAAREREWZmEAAAFmZmZmEAAAABZmZhEAAAAAARERAAAAAAAAAAAAAAAAB3d3d3cAAAB3d3d3d3AAB3d3d3d3dwB3d3dxEXd3AHd3d3dxd3cAd3cXd3F3d3B3d3dxcXd3cHdxd3EXd3d3d3F3d3d3dwd3F3d3d3d3B3dwB3d3d3cHdwAHcAAAdwd3AAdwAAB3AHcAB3AAAHcAAAAAAAAAAAAAAAAREQAAAAAAAXd3EAAAAAAXd3dxAAAAAXd3d3cQAAABd3d3dxAAABd3d3d3cQAAF3d3d3dxAAF3d3d3d3cQAXd3d3d3dxABd3d3d3d3EAF3d3d3d3cQABd3d3d3cQAAF3d3d3dxAAABd3d3dxAAAAARd3cRAAAAAAAREQAAAAAAAAABEREAAAAAABRERBAAAAABREREQQAAAAFEREdBAAAAFERER0EAAAAURER0QQAAAURERERBAAABRERERBAAABREREQRAAAAFEREEQAAAAF0RBEAAAABF3cRAAAAABd3cQAAAAAAF3cQAAAAAAARdxAAAAAAAAERAAAAAAAAAAAAAAAAAAAAAREREREAABERZmZmYREQEAFmZmZhABAQAWZmZmEAEAEBZmZmYQEAABFmZmZhEAAAABZmZhAAAAAAAWZhAAAAAAAAFhAAAAAAAAAWEAAAAAAAABYQAAAAAAABFhEAAAAAABZmZhAAAAAAFmZmEAAAAAAREREQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERAAAQzM0MzNEQABDMzQzM3RAAEMzNDM3M0REQzM0M3MzRERERERERERERERERERERERERBEURERBEURBd3FERBd3FAF3cQAAF3cQAXdxAAAXdxAAERAAAAERAAAAAARAAAAAAAAAREQAAAAAAABHdAAAAAAAB3d3cAAAAAAER3RAAAAAAAREREAAAAAABmZmYAAAAAB3cRd3AAAABxcREXFwAAB3F3EXcXcAB3cXd3dxd3AAABd3d3EAAAAABEREQAAAAAAAREQAAAAAAABGZAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREAAAAAAAF3dxEAAAARF3d3dxEAAXd3d3d3dxABd3dxd3F3EBd3d3F3cXdxd3d3V3d3V3d3d3d3F3F3EXd3d3dxF3EAERF3d3d3cQAAABEREREQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREQAAAAAAERmZkQAAAAEZiIiZkAAAEYiEREiZAAARiEAABJkAARiEAAAASZABGIQAAABJkAEYhAAAAEmQHd3dwAAd3d3d3d3AAB3d3cHd3AAAAd3cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREQAAAAFmZmZhAAAAAWZmZhAAAAAWZmZhAAAAABZmZhAAAAABZmZhEQAAAAFmZmZmEAAAFmZmZmEAAAABERZmEAAAAAABZmEAAAAAAAFmEAAAAAAAFmEAAAAAAAAWEAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAHdwAAAAAAAAd3cAAAAAAAAHdwAAAAAAAAd3cAAAAAAAB3dwAAAAAABnd3dgAAAABmZ3dmYAAAAGBmZmBgAAAAYAZmYGAAAABgBmZgAAAAAAAGZmAAAAAAAAZmYAAAAAAAZmYAAAAAAAZmZgAAAAAABmZgAAAAAAACIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEQAREAAAABREEURBAAABR0REREQQARR0REREREEUREREREREREERERREQREREUREQREUREQQFERERERHQQAURERER3RBAAFERERERBAAABERERERAAAAAAAAAAAAAAAAAAAAAAAAAABEREQAAAAABERmREAAAAAERndkQAAAAARGd2RAAAAABERmREAAAAAAREREAAAAAAAAIAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAICIiAAACIiAiIiIgACIiIiAiIiAAIiIgICIiAAACIiAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAEAEAAAAAAAAQEAAAAAAAARERAAAAAAAWZmEQERAAAWFmFmF3cQABYWYWYXd3EAFWZmVRF3cQEWYRZmFhdxFxZmZmFmYRAXcWZmFmZhAAF3EREWZmEAABERZmZmYQAAAAARZmEQAAAAAAAREAEAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAABmZgAAAAAABmZmYAAAAAAEY2ZgAAAABERmZmAAAAAAREZmAAAAAAAAZmBmZgYAAAZmZmZmdgAAZmZ2ZmdmAABmZnd3dmYAAGZmZmZmZgAABmZmZmZgAAAAZmZmZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQARAAAAAAFhABYQAAAAEWERFhEAAAATMzd3cQAAAAExNxcQAAAAATF3FxAAAAAXVVVXcQAAABdRUVdxEQAAAVVVVxN3EAAAERERM3MRAAAXd3MzcxEAABMzN3d3EQAAExERcRcQAAARAAARARAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAIiIAAAAAAAAiIgAAAAAAACIiAAAAAiAAIiIAAAAiIgAiIgIgACIiACIiIiIAIiIAIiIiIgAiIiIiIiIiAAIiIiIiIiAAAAAiIiIAAAAAACIiIgAAAAAAIiIiAAAAAAACIiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREQAAAAAAEzMTEAAAAAEzIzExAAAAd3d3d3dwAAcXFxcXFxcAAAERERERAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARERAAAAAAATMxMQAAAAATMjMTEAAAB3d3d3d3AABxcXFxcXFwAAAREREREAAAAABmZmAAAAAAAGZmYAAAAAAAZmZgAAAAAABmZmAAAAAAAGZmYAAAAAAAZmZgAAAAAABmZmAAAAAAAAAAAAAAAAAAIiIiAAAAACIiIiIiAAACIiIiIiIgACIiIiIiIiIAIiIiIiIiIgAiIAIiIAIiAAIgACIAAiAAAiIAIgAiIAAAIiIiIiIAAAACIiIiIAAAAAAiIiIAAAAAAAIiIAAAAAAAACIAAAAAAAAAAAAAAAAAAAAAAAAAAAZgAAAAAAAAZmAAAAAAAAZjYAAAAAAABGZgAAAAAAAAZmYAAAAAZgBmZgAAAGZmYGZmZmZmZmZgZmZmZmZmZgBmZmZmZmZmAGZmZmZmZmAABmZmZmZmAAAAZmZmZmAAAAAGZmZmAAAAAAAEAEAAAAAAAAQAQAAAAAAARARAAAAAIiIAAAAiIgJ3dyIiInd3InInJmZicicid3cmZmJ3dyAiImZmZiIiAmZmZmZmZmYiYAAAAAAABiJmZmZmZmZmICIiIiIiIiIAJmZmZmZmYgAmZmZmZmZiAmZmZmZmZmYiZiZiZiZiZiAmJmIiJmJiAiJmYgAmZiIgACIgAAIiAAAAAAAzAAAAAAAAAzMwAAAAAAAzMzMAAAAAAzMzMzAAAAAzMzMzMwAAAzMzMzMzMAAzMzMzMzMzAzMzMzMzMzMzMzMzMzMzMzAzMzMzMzMzAAMzMzMzMzAAADMzMzMzAAAAAzMzMzAAAAAAMzMzAAAAAAADMzAAAAAAAAAzAAAAAHBwBwBwBwcHcHAAdwAHB3AHAHB3BwBwB3BwB3dwBwdwAAcAdwBwAAAHAHB3BwBwBwBwB3dwBwBwd3d3d3d3dwB3d3d3d3d3BwBwB3dwBwBwBwBwdwcAcAAABwB3AHAAB3BwB3dwBwdwBwBwdwcAcAdwcAB3AAcHcHBwBwBwBwcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMzMzMzAAADMzMzMzMwADMzMzMzMzMAAzMTMzEzMAAAMzEzEzMAAAADMzMzMAAAAAAzMzMAAAAAAAMzMAAAAAAAADMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAAAAAIAACIAACAAAiAAIgACIAACIAAiAAIgAAAgACIAAgAAAAIAIgAgAAAAAgIiICAAAAACAiIgIAAAAAAiIiIAAAIiICIiIgIiIAIiIiIiIiAAAAACIiAAAAAAACAiAgAAAAIiACIAIiAAAAAAIgAAAAAAAAAiAAAAAAAAAAAABwAAAAAAA3cAcwAAAAAABzAHAAAAAAADcAcwAAAAAABzADAAAAAAADcAcAAAAAAABzMAAAAAAAADcHAAAAAAAABzAAAAAAAAADcAAAAAAAAAAAZmZnd3d3d1RmZmd3d3d3ZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAAAAADdwBzAAAAAAAHMAcAAAAAAANwBzAAAAAAAHMAMAAAAAAANwBwAAAAAAAHMwAAAAAAAANwcAAAAAAAAHMAAAAAAAAANwAAAAAAAAAABmYiIiIiIiVGZiIiIiIiJkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIAAAAAAAAAIgAAAAAAAAAiAAAAAAAAACIAAAAAAAAAIgAAAAAgAAAiAAACACIAACIAACIAIiAAIgACIgACIgAiACIgAAAiICICIgAAAAIiIiIgAAAAACIiIgAAAAAAAiIgAAAAAAAAIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAIiIAAAAAAAIiIiAAAAAAIiIiIgAAAAIiAiAiIAAAIiACIAIiAAIiAAIgACIgAiAAAiAAAiACAAACIAAAIAAAAAIgAAAAAAAAAiAAAAAAAAACIAAAAAAAAAIgAAAAAAAAAiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIiIiIiIiACIiIiIiIiIAAiIAAAAAAAAAIiAAAAAAAAACIgAAAAAAAAAiIAAAAAAAAAIiAAAAAAAAACIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIAAAAAAAAAIiAAAAAAAAACIgAAAAAAAAAiIAAAAAAAAAIiAAAAAAAAACIgACIiIiIiIiIAIiIiIiIiIgAAAAAAACIgAAAAAAACIgAAAAAAACIgAAAAAAACIgAAAAAAACIgAAAAAAACIgAAAAAAAAAAAAAABmAAAGYAAAZmZgAAZgAAZmBmYABmAAZmAAZmAAAAZmAAAGAAZgAGAAAAAGZmZgAAAAAAZmZmAAAGZgZmZmZgZmZmBmZmZmBmYAAAZmZmAAAAAABmZmYAAAAAYABmAAYAAAZmAAAAZmAAZmAAZgAGZgZmAABmAABmZmAAAGYAAAZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAEREAAAAAAAERERAAAAAAAREREAAAAAAAEREAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARERERERERERERERERERERERERERERERERERERERERERERERABERERERERAAARERERERAAAAERERERAAAAABERERAAAAAAARERAAAAAAAAERAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFUAAAAAAAAAMwAAAAAAAAMzMAAAAAAAAzMwAAAAAAADMzAAAAAAADMzMwAAAAAAMzMzAAAAAAAzMzMAAAAAAHd3dwAAAAAAERERAAAAAAAREREAAAAAABEREQAAAAAAERERAAAAAAAREREAAAAAAHd3dwAAAAAAMzMzAAAAAAAAAAAAAAAAd3d3d3cAAHd3d3d3d3cAAHd3d3d3AAAAAAAAAAAAAAAAAAAAAAAAB3d3d3d3cAd3d3d3d3d3d3d3d3d3d3dwB3d3d3d3cAAAAAAAAAAAAAAAAAAAAAAAAHd3d3d3AAB3d3d3d3d3AAB3d3d3dwAAAAAAAAAAAAAAAABVAAAAAAAAAFUAAAAAAAAFVVAAAAAAAAVVUAAAAAAAVVVVAAAAAABVd1UAAAAABVV3VVAAAAAFVXdVUAAAAFVVd1VVAAAAVVV3VVUAAAVVVXdVVVAABVVVVVVVUABVVVV3VVVVAFVVVXdVVVUFVVVVVVVVVVVVVVVVVVVVUAAAAGYAAAAAAAAAZgAAAAAAAAZmYAAAAAAABmZgAAAAAABmZmYAAAAAAGYAZgAAAAAGZgBmYAAAAAZmAGZgAAAAZmYAZmYAAABmZgBmZgAABmZmAGZmYAAGZmZmZmZgAGZmZgBmZmYAZmZmAGZmZgZmZmZmZmZmZmZmZmZmZmZgAAAAIgAAAAAAAAAiAAAAAAAAAiIgAAAAAAACIiAAAAAAACIiIgAAAAAAInciAAAAAAIidyIgAAAAAiJ3IiAAAAAiInciIgAAACIidyIiAAACIiJ3IiIgAAIiIiIiIiAAIiIidyIiIgAiIiJ3IiIiAiIiIiIiIiIiIiIiIiIiIiAAAAAAAAAAAAAAAAN3AEQAAAAAAAc0RAAAAAAAA0RHMAAAAAAERAAwAAAAAERHAHAAAAAERAczAAAAAERAA3BwAAAERAAAcwAAAERAAAA3AAAERAAAAAAGZkRHd3d3dUZkRHd3d3d2QERAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3cARAAAAAAABzREAAAAAAADREcwAAAAAAREADAAAAAAREcAcAAAAAREBzMAAAAAREADcHAAAAREAABzAAAAREAAADcAAAREAAAAAAZmREIiIiIlRmREIiIiIiZAREAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAAAMwAAAAAAAAAzAAAAAAAAAzMwAAAAAAADMzAAAAAAADMzMwAAAAAAM3czAAAAAAMzdzMwAAAAAzN3MzAAAAAzM3czMwAAADMzdzMzAAADMzN3MzMwAAMzMzMzMzAAMzMzdzMzMwAzMzN3MzMzAzMzMzMzMzMzMzMzMzMzMzAAAAARAAAAAAAAABEAAAAAAAABERAAAAAAAAEREAAAAAAAERERAAAAAAARdxEAAAAAARF3ERAAAAABEXcREAAAABERdxERAAAAERF3EREAAAEREXcRERAAAREREREREAARERF3ERERABEREXcREREBEREREREREREREREREREREAAAAHcAAAAAAAAAdwAAAAAAAAd3cAAAAAAAB3dwAAAAAAB3d3cAAAAAAHcAdwAAAAAHdwB3cAAAAAd3AHdwAAAAd3cAd3cAAAB3dwB3dwAAB3d3AHd3cAAHd3d3d3dwAHd3dwB3d3cAd3d3AHd3dwd3d3d3d3d3d3d3d3d3d3dwAAAAAAAAAAAAAAAzAAAAAAAAMzczAAAAAAMzczMwAAAAMzM3MzMAAAA3M3MzcwAAADNzMzczAAADMzczczMwAAMzMzMzMzAABzNwMwczcAAzcHB3BwczADM3AHcAczMAMzB3d3cDMwN3cAd3cAd3MzM3d3d3czMwAAAAAAAAAAAAAABVAAAAAAAAVVVVAAAAAABVVVUAAAAABVVVVVAAAAAFVVVVUAAAAABVVVUAAAAAAFVVVQAAAAAAAHcAAAAAAAAAdwAAAAAAAAB3AAAAAAAAAHcAAAAAAAAAdwAAAAAAAAB3AAAAAAAAAHcAAAAAAAAAdwAAAAAAAAB3AAAAAAAAAAAAAAAAAAAAAAAAVQAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAABVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB3cAd3cAdEAHAHBwAAdEQAd3AHdwBEQABwBwcABEQAAHAHBwBEQAAAcAcHdEQHdwAAAABEQAAAAAAABEQAAAAAd3BER3AHdwBwBEQAAHAAAHdER3cAcAAAdEQHAABwAABERwcAAHAAAEQHB3dwB3cAAAAAAAAAAARERERERERERERERERERERERERERERERERERERERERERERERHdERERERERHd3RERERERHd3d0RERERHd3d3dERERHd3d3d3RERHd3d3d3d0RHd3d3d3d3dHd3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3c="};
+const $=id=>document.getElementById(id);
+const COLORS=[['Rot',4,'#ff4141'],['Gelb',6,'#fff04c'],['Grün',2,'#39ed55'],['Cyan',3,'#4fe5e5'],['Blau',1,'#6571ff'],['Magenta',5,'#eb5bf2'],['Weiß',7,'#ffffff']];
+const FONT_FALLBACK=[14,17,1,2,4,0,4];
+const W=64,H=16,MAX_PAGES=25,MAX_LINE=40,MAX_IMAGE_BYTES=30*1024,IMAGE_HEADER_BYTES=107,BYTES_PER_COLUMN=6,PITCH=12;
+const ORIGINAL_ICONS=[['🐓','Huhn'],['⭐','Stern'],['❄️','Schneeflocke'],['❤️','Herz'],['☎️','Telefon'],['👀','Augen'],['🛑','Warnsymbol rot'],['⚠️','Warnsymbol gelb'],['🔺','Warndreieck'],['🐒','Affe'],['🐟','Fisch'],['🦀','Krabbe'],['🍎','Apfel'],['🍇','Trauben'],['🍌','Original-Banane'],['🐘','Elefant'],['🥚','Ei'],['🍗','Keule'],['🏆','Pokal'],['🚌','Bus'],['🚀','Rakete'],['☁️','Wolke'],['🌈','Regenbogen'],['⚡','Blitz']];
+const HEART_CHOICES=[['❤️','Rot'],['💛','Gelb'],['💚','Grün'],['🩵','Cyan'],['💙','Blau'],['💜','Magenta'],['🤍','Weiß']];
+const RAVESTICK_BANANA='🍌︎'; // VS15 differentiates our banana from the manufacturer's.
+const RECONSTRUCTED_ICONS=[['💋','Kussmund – Screenshot'],['🌼','Blume – Screenshot'],['🐝','Biene – Screenshot'],['🐄','Kuh – Screenshot']];
+const DUCK='🦆'; // Our rubber-duck sprite, distinct from vendor icons.
+const UFO_BEAM='🛸︎'; // Unicode VS15 selects private-use U+E34D on both platforms.
+const CUSTOM_ICONS=[['🐤','Küken – Excel-Pixelart'],['🐸','Frosch – Excel-Pixelart'],['🌵','Kaktus'],['🛸','UFO'],[UFO_BEAM,'UFO mit Traktorstrahl'],['👽','Alien grün · schwarze Augen']];
+// Excel source: docs/Pixel-Art.xlsx on GitHub. New motifs are appended as sprite IDs 36..62.
+// Actual pixel previews and BLE renderer use the same packed matrix, not these Unicode stand-ins.
+const EXTRA_ICON_LIST = [["🟦", "Viereck"], ["🌨️", "Schneeflocke"], ["💎", "Diamant"], ["🍃", "Blatt"], ["🚬", "Zigarette"], ["🌿", "Joint"], ["⬇️", "Pfeil nach unten"], ["⬆️", "Pfeil nach oben"], ["⬅️", "Pfeil nach links"], ["➡️", "Pfeil nach rechts"], ["☀️", "Sonne"], ["🔴", "Roter Punkt"], ["🟥", "Ziggi I"], ["💧", "Flasche Wasser"], ["🌫️", "Nebel"], ["🟣", "Warnung magenta"], ["🟡", "Warnung gelb (nicht ⚠️ aus dem originalen Satz)"], ["🟢", "Warnung grün"], ["🚭", "Zigarette verboten"], ["🚫", "Joint verboten"], ["🔹", "Warnung cyan"], ["🔵", "Warnung blau"], ["⚪", "Warnung weiß"], ["🪭", "Fächer"], ["🍭", "Lolli / Lutscher"], ["🥤", "Strohhalm"], ["📹", "Keine Aufnahmen \"NO REC\""], ["🔻", "Ziggi II"]];
+const EXTRA_ICON_IDS = new Map(EXTRA_ICON_LIST.map(([c],i)=>[c.codePointAt(0),36+i]));
+const ICON_CODES=ORIGINAL_ICONS.map(x=>x[0].codePointAt(0));
+const HEART_COLORS=new Map([['❤️',4],['💛',6],['💚',2],['🩵',3],['💙',1],['💜',5],['🤍',7]].map(([s,n])=>[s.codePointAt(0),n]));
+let originalFonts={normal:{},bold:{}},sprites=null,bounds=[];
+let font={},fontReady=false,tab='scroll',pages=[],selected=0,previewPage=0,dirty=false;
+let previewPlaying=true,previewRate=1,previewClock=0,previewX=W,lastTick=0;
+let scrollColor=7,scrollColor2=7,programRunning=false,boardCurrent=0,controllerBusy=false,statusMessage='';
+const cv=$('matrix'),ctx=cv.getContext('2d');
+function codepoints(s){const result=[];for(const c of Array.from(s||'')){if(c==='\ufe0e'){if(result.at(-1)==='🍌')result[result.length-1]='\uE34C';else if(result.at(-1)==='🛸')result[result.length-1]='\uE34D';continue;}if(c==='\ufe0f')continue;result.push(c);}return result;}
+function parseAssets(){for(const face of ['normal','bold']){const bs=Uint8Array.from(atob(RB_ASSET_DATA[face]),c=>c.charCodeAt(0));if(bs.length!==82*35)throw Error('Fontdaten unvollständig');for(let i=0;i<82;i++){const off=i*35,cp=bs[off]|(bs[off+1]<<8),width=bs[off+2];const rows=[];for(let y=0;y<16;y++)rows.push(bs[off+3+y*2]|(bs[off+4+y*2]<<8));originalFonts[face][cp]={width,rows};}}sprites=Uint8Array.from(atob(RB_ASSET_DATA.symbols),c=>c.charCodeAt(0));if(sprites.length!==64*128)throw Error('Symbol-Daten unvollständig');bounds=Array.from({length:64},(_,id)=>{let a=16,b=0;for(let x=0;x<16;x++)for(let y=0;y<16;y++)if(spritePixel(id,x,y)){a=Math.min(a,x);b=Math.max(b,x);}return {min:a===16?0:a,max:a===16?0:b,width:a===16?1:b-a+1};});}
+function spritePixel(id,x,y){const a=sprites[id*128+y*8+(x>>1)];return x&1?a&15:a>>4;}
+function iconFor(c){if(c==='\uE34C')return {id:24,color:0};const cp=c.codePointAt(0);if(cp===0x1F48B)return {id:25,color:0};if(cp===0x1F339)return {id:26,color:0};if(cp===0x1F41D)return {id:27,color:0};if(cp===0x1F986)return {id:28,color:0};if(cp===0x1F404)return {id:29,color:0};if(cp===0x1F424)return {id:34,color:0};if(cp===0x1F438)return {id:35,color:0};if(cp===0x1F335)return {id:30,color:0};if(cp===0x1F6F8)return {id:31,color:0};if(cp===0xE34D)return {id:32,color:0};if(cp===0x1F47D)return {id:33,color:0};if(cp===0x1F33C)return {id:26,color:0};if(HEART_COLORS.has(cp))return {id:3,color:HEART_COLORS.get(cp)};if(EXTRA_ICON_IDS.has(cp))return {id:EXTRA_ICON_IDS.get(cp),color:0};const id=ICON_CODES.indexOf(cp);return id>=0?{id,color:0}:null;}
+function displayCode(c,style){if(style!==1&&style!==2)return c;return c==='ß'?'ẞ':c.toLocaleUpperCase('de-DE');}
+function tokenWidth(c,style){const icon=iconFor(c);if(icon)return bounds[icon.id].width;const original=style===3?originalFonts.normal[c.codePointAt(0)]:style===4?originalFonts.bold[c.codePointAt(0)]:null;return original?.width||(c===' '&&(style===1||style===2)?2:5);}
+function tokenGap(c){return c==='🌹'||c==='🌼'?0:1;}
+function linePixels(line,style){const a=codepoints(line).map(c=>displayCode(c,style));return a.reduce((n,c,i)=>n+tokenWidth(c,style)+(i+1<a.length?tokenGap(c):0),0);}
+function glyph(c){return font[c.codePointAt(0)]||FONT_FALLBACK;}
+function hexColor(n){return COLORS.find(c=>c[1]===Number(n))?.[2]||'#ffffff';}
+function esc(s){return String(s).replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
+function samplePage(){return {line1:'',line2:'',layout:0,align:1,color1:6,color2:7,duration:7};}
+function makeSwatches(root,selected,onChange){root.replaceChildren();for(const [name,code,hex] of COLORS){const b=document.createElement('button');b.type='button';b.className='swatch'+(Number(selected)===code?' selected':'');b.style.background=hex;b.setAttribute('aria-label',name);b.title=name;b.dataset.color=code;b.addEventListener('click',()=>onChange(code));root.append(b);}}
+function setTab(next){tab=next;try{localStorage.setItem('rb03-tab',tab);}catch(e){}$('tabScroll').classList.toggle('active',next==='scroll');$('tabPages').classList.toggle('active',next==='pages');$('scrollEditor').classList.toggle('hidden',next!=='scroll');$('pagesEditor').classList.toggle('hidden',next!=='pages');$('previewTools').classList.toggle('hidden',next==='pages');$('previewSpeedHint').classList.toggle('hidden',next==='pages');$('previewCaption').textContent=next==='scroll'?'Lauftextvorschau':'';restartPreview();draw();}
+$('tabScroll').onclick=()=>setTab('scroll');$('tabPages').onclick=()=>setTab('pages');
+function drawDots(context,pitch){context.fillStyle='#080b10';context.fillRect(0,0,W*pitch,H*pitch);for(let x=0;x<W;x++)for(let y=0;y<H;y++){context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.27,0,Math.PI*2);context.fillStyle='#28303a';context.fill();}}
+function drawLine(context,line,color,align,yTop,scale,pitch,leftOverride=null,style=0){const chars=codepoints(line).map(c=>displayCode(c,style)),width=linePixels(line,style);if(style===2)align=1;let x0=leftOverride!==null?leftOverride:align===0?0:align===2?W-width:Math.floor((W-width)/2);function led(x,y,n){if(x<0||x>=W||y<0||y>=H)return;context.fillStyle=hexColor(n);context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.34,0,Math.PI*2);context.fill();}for(const c of chars){const icon=iconFor(c);if(icon){const b=bounds[icon.id];for(let y=0;y<16;y++)for(let x=b.min;x<=b.max;x++){const clr=spritePixel(icon.id,x,y);if(clr)led(x0+x-b.min,y,icon.color||clr);}}else if(style===3||style===4){const g=(style===3?originalFonts.normal:originalFonts.bold)[c.codePointAt(0)];if(g)for(let y=0;y<16;y++)for(let x=0;x<g.width;x++)if(g.rows[y]&(1<<(g.width-1-x)))led(x0+x,y,color);}else{const rows=glyph(c);for(let ry=0;ry<7;ry++)for(let rx=0;rx<5;rx++){if(!(rows[ry]&(1<<(4-rx))))continue;for(let dy=0;dy<scale;dy++)led(x0+rx,yTop+ry*scale+dy,color);}}x0+=tokenWidth(c,style)+tokenGap(c);}}
+function drawPage(context,p,pitch){drawDots(context,pitch);if(!fontReady||!p)return;const style=Number(p.layout);drawLine(context,p.line1,p.color1,Number(p.align),style===0?1:style===2?4:0,style===0?2:1,pitch,null,style);if(style===1)drawLine(context,p.line2,p.color2,Number(p.align),8,1,pitch,null,style);}
+function draw(){if(tab==='pages')drawPage(ctx,pages[selected],PITCH);else{drawDots(ctx,PITCH);if(fontReady){const st=Number($('scrollLayout').value);drawLine(ctx,$('scrollText').value,scrollColor,0,st===0?1:st===2?4:0,st===0?2:1,PITCH,previewX,st);if(st===1)drawLine(ctx,$('scrollLine2').value,scrollColor2,0,8,1,PITCH,previewX,st);}}}
+function restartPreview(){previewClock=0;previewX=$('libTextMode').value==='1'?0:W;previewPage=selected;draw();}
+function tick(now){if(!lastTick)lastTick=now;const dt=Math.min(90,now-lastTick);lastTick=now;if(previewPlaying&&fontReady){if(tab==='scroll'){if($('libTextMode').value==='1'){previewX=0;}else{previewX-=dt/1000*(4+Number($('scrollSpeed').value)*.26)*previewRate;if(previewX<-Math.max(linePixels($('scrollText').value,Number($('scrollLayout').value)),Number($('scrollLayout').value)===1?linePixels($('scrollLine2').value,1):0)-8)previewX=W;}draw();}}requestAnimationFrame(tick);}
+$('previewRestart').onclick=restartPreview;$('previewToggle').onclick=()=>{previewPlaying=!previewPlaying;$('previewToggle').textContent=previewPlaying?'⏸ Pause':'▶ Weiter';};$('previewSpeed').onclick=()=>{previewRate=previewRate===1?2:previewRate===2?4:1;$('previewSpeed').textContent='⏩ '+previewRate+'×';};
+function validatePage(p){const style=Number(p.layout),n1=codepoints(p.line1).length,n2=codepoints(p.line2).length,bytes=new TextEncoder();if(!p.line1.trim()&&(style!==1||!p.line2.trim()))return ''; if(n1>MAX_LINE||(style===1&&n2>MAX_LINE))return `Pro Zeile sind maximal ${MAX_LINE} Unicode-Zeichen möglich.`;if(bytes.encode(p.line1).length>47||bytes.encode(p.line2).length>47)return 'Maximal 47 UTF-8-Bytes pro Feld. Emojis benötigen mehrere Bytes.';const w1=linePixels(p.line1,style),w2=style===1?linePixels(p.line2,style):0;if(w1>64||w2>64)return `Inhalt zu breit (${Math.max(w1,w2)} von 64 LED-Spalten). Bitte kürzen oder andere Schrift wählen.`;return '';}
+function updateWarning(){if(tab!=='pages'||!pages.length)return;const msg=validatePage(pages[selected]);$('pageWarning').textContent=msg;$('pageWarning').classList.toggle('hidden',!msg);}
+function renderRail(){const rail=$('pageRail');rail.replaceChildren();pages.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='page-card'+(i===selected?' selected':'');const head=document.createElement('div');head.className='page-card-top';const strong=document.createElement('strong');strong.textContent='Seite '+(i+1);head.append(strong);const cn=document.createElement('canvas');cn.width=192;cn.height=48;const g=cn.getContext('2d');drawPage(g,p,3);b.append(head,cn);b.onclick=()=>selectPage(i);rail.append(b);});}
+function renderSelected(){if(!pages.length)return;const p=pages[selected];$('pageTitle').textContent=`Seite ${selected+1} von ${pages.length}`;$('line1').value=p.line1;$('line2').value=p.line2;resetPageHistory();$('pageLayout').value=String(p.layout);$('pageAlign').value=String(p.align);document.querySelectorAll('#secondRow,#secondColors').forEach(e=>e.classList.toggle('hidden',Number(p.layout)!==1));$('pageAlign').disabled=Number(p.layout)===2;renderPageColors();$('dirty').textContent=blockDraftDirty?'Nicht in Bibliothek gespeichert':'';updateWarning();renderRail();draw();}
+function renderPageColors(){if(!pages.length)return;makeSwatches($('pageColors1'),pages[selected].color1,c=>{pages[selected].color1=c;changed();renderPageColors();});makeSwatches($('pageColors2'),pages[selected].color2,c=>{pages[selected].color2=c;changed();renderPageColors();});}
+let blockDraftDirty=false;
+function changed(){dirty=true;blockDraftDirty=true;$('dirty').textContent='Nicht in Bibliothek gespeichert';updateWarning();renderRail();draw();}
+['line1','line2','pageLayout','pageAlign'].forEach(id=>$(id).addEventListener('input',()=>{const p=pages[selected];p.line1=$('line1').value;p.line2=$('line2').value;p.layout=Number($('pageLayout').value);p.align=Number($('pageAlign').value);document.querySelectorAll('#secondRow,#secondColors').forEach(e=>e.classList.toggle('hidden',p.layout!==1));$('pageAlign').disabled=p.layout===2;changed();}));
+async function api(path,data=null){const opt={cache:'no-store'};if(data){opt.method='POST';opt.headers={'Content-Type':'application/x-www-form-urlencoded'};opt.body=new URLSearchParams(data);}const r=await fetch(path,opt);let j=await r.json();if(!r.ok||j.ok===false)throw Error(j.message||'HTTP '+r.status);return j;}
+let toastTimeout=null;
+function notify(text){
+ const message=String(text||'').trim();
+ // Start/status-poll messages are visible on the Diagnose page, not as permanent banners.
+ if(!message || /^(Bereit[.!]?|Noch kein Inhalt|Verbindung wird geprüft)/i.test(message))return;
+ const toast=$('status'),problem=/Fehler|fehlgeschlagen|abgewiesen|Timeout|nicht erreichbar|ungültig/i.test(message);
+ clearTimeout(toastTimeout);toast.textContent=message;toast.hidden=false;
+ toast.classList.toggle('toast-error',problem);
+ toast.setAttribute('role',problem?'alert':'status');
+ toastTimeout=setTimeout(()=>{toast.hidden=true;},problem?5200:2200);
+}
+$('status').addEventListener('click',()=>{$('status').hidden=true;});
+async function saveCurrent(){if(!pages.length)return false;const p=pages[selected],problem=validatePage(p);if(problem){notify(problem);updateWarning();return false;}if(!dirty)return true;try{const j=await api('/api/program/set',{index:selected,line1:p.line1,line2:p.line2,layout:p.layout,align:p.align,color1:p.color1,color2:p.color2,duration:p.duration});dirty=false;$('dirty').textContent=blockDraftDirty?'Nicht in Bibliothek gespeichert':'';return true;}catch(e){notify('Speichern fehlgeschlagen: '+e.message);return false;}}
+async function refreshPages(){try{const data=await api('/api/program');pages=data.pages||[];boardCurrent=data.current||0;selected=Math.max(0,Math.min(selected,pages.length-1));dirty=false;previewPage=selected;renderSelected();}catch(e){notify('Seiten konnten nicht geladen werden: '+e.message);}}
+async function selectPage(i){if(i===selected)return;if(!(await saveCurrent()))return;selected=i;previewPage=i;previewClock=0;renderSelected();}
+async function pageAction(path,body){if(!(await saveCurrent()))return;try{const j=await api(path,body);notify(j.message||'Seiten geändert.');await refreshPages();}catch(e){notify('Fehler: '+e.message);}}
+$('pageAdd').onclick=async()=>{if(pages.length>=MAX_PAGES){notify('Höchstens 25 Seiten möglich.');return;}if(!(await saveCurrent()))return;try{await api('/api/program/add',{});blockDraftDirty=true;selected=pages.length;await refreshPages();}catch(e){notify(e.message);}};
+$('pageCopy').onclick=async()=>{if(pages.length>=MAX_PAGES){notify('Höchstens 25 Seiten möglich.');return;}if(!(await saveCurrent()))return;try{await api('/api/program/add',{copy:selected});blockDraftDirty=true;selected=pages.length;await refreshPages();}catch(e){notify(e.message);}};
+$('pageLeft').onclick=async()=>{if(selected<=0)return;const old=selected;blockDraftDirty=true;await pageAction('/api/program/move',{index:old,dir:-1});selected=Math.max(0,old-1);renderSelected();};
+$('pageRight').onclick=async()=>{if(selected>=pages.length-1)return;const old=selected;blockDraftDirty=true;await pageAction('/api/program/move',{index:old,dir:1});selected=Math.min(pages.length-1,old+1);renderSelected();};
+$('pageDelete').onclick=async()=>{if(pages.length<=1){notify('Mindestens eine Seite bleibt erhalten.');return;}if(!confirm('Seite '+(selected+1)+' wirklich löschen?'))return;dirty=false;try{await api('/api/program/delete',{index:selected});blockDraftDirty=true;selected=Math.min(selected,pages.length-2);await refreshPages();notify('Seite gelöscht.');}catch(e){notify('Löschen fehlgeschlagen: '+e.message);}};
+
+$('pageShow').onclick=async()=>{if(!(await saveCurrent()))return;try{const j=await api('/api/program/show',{index:selected});notify(j.message);}catch(e){notify(e.message);}};
+function makeScrollSwatches(){makeSwatches($('scrollColors'),scrollColor,c=>{scrollColor=c;makeScrollSwatches();draw();});makeSwatches($('scrollColors2'),scrollColor2,c=>{scrollColor2=c;makeScrollSwatches();draw();});}makeScrollSwatches();
+function scrollCapacity(){const layout=Number($('scrollLayout').value),t1=$('scrollText').value,t2=layout===1?$('scrollLine2').value:'';const chars=codepoints(t1).length+codepoints(t2).length;const cols=Math.max(W,linePixels(t1,layout),layout===1?linePixels(t2,1):0);const bytes=IMAGE_HEADER_BYTES+BYTES_PER_COLUMN*cols;return {chars,cols,bytes,exceeded:bytes>MAX_IMAGE_BYTES||(Number($('libTextMode').value)===1&&cols>64)};}
+function updateScrollCapacity(){const m=scrollCapacity();$('scrollCount').textContent=m.chars.toLocaleString('de-DE')+' Zeichen · '+m.cols.toLocaleString('de-DE')+' Spalten · '+m.bytes.toLocaleString('de-DE')+' / '+MAX_IMAGE_BYTES.toLocaleString('de-DE')+' Bytes ('+Math.round(100*m.bytes/MAX_IMAGE_BYTES)+' %)'+($('libTextMode').value==='1'&&m.cols>64?' · Standbild: maximal 64 Spalten':'');$('scrollCount').classList.toggle('over-limit',m.exceeded);$('capacityFill').style.width=Math.min(100,100*m.bytes/MAX_IMAGE_BYTES)+'%';$('capacityFill').classList.toggle('over-limit',m.exceeded);$('sendScroll').disabled=m.exceeded;return m;}
+$('scrollText').oninput=()=>{try{localStorage.setItem('rb03-scroll-draft',$('scrollText').value);}catch(e){}updateScrollCapacity();restartPreview();};
+$('scrollLayout').onchange=()=>{const mini=Number($('scrollLayout').value)===1;$('scrollSecondWrap').classList.toggle('hidden',!mini);$('scrollSecondColors').classList.toggle('hidden',!mini);$('scrollColorLabel').textContent=mini?'Farbe · Zeile 1':'Farbe';$('scrollText').dispatchEvent(new Event('input'));v42EditorMode('new');v42EditorSnapshot=v42TextSnapshot();v42BlockSnapshot=JSON.stringify(pages);restartPreview();};$('scrollLine2').oninput=()=>{try{localStorage.setItem('rb032-scroll-line2',$('scrollLine2').value);}catch(e){}$('scrollText').dispatchEvent(new Event('input'));restartPreview();};
+$('libTextMode').onchange=()=>{updateScrollCapacity();restartPreview();};
+$('scrollSpeed').oninput=()=>{$('speedLabel').textContent=$('scrollSpeed').value+' / 100';syncGlobalControls('speed',$('scrollSpeed').value);queueLive('speed',{speed:$('scrollSpeed').value});};
+$('brightness').oninput=()=>{$('brightLabel').textContent=$('brightness').value+' %';$('v42SettingsBackup').appendChild($('v42BackupFooter'));
+syncGlobalControls('brightness',$('brightness').value);queueLive('brightness',{brightness:$('brightness').value});};
+let activeText=$('scrollText'),pickerField=null,pickerSelection={start:0,end:0};
+for(const id of ['scrollText','scrollLine2','line1','line2'])$(id).addEventListener('focus',()=>activeText=$(id));
+function closeSymbolPicker(){ $('symbolOverlay').classList.add('hidden'); }
+for(const btn of document.querySelectorAll('[data-symbol-target]'))btn.onclick=()=>{
+  pickerField=$(btn.dataset.symbolTarget);activeText=pickerField;
+  pickerSelection={start:pickerField.selectionStart??pickerField.value.length,end:pickerField.selectionEnd??pickerField.value.length};
+  pickerField.blur();$('symbolOverlay').classList.remove('hidden');
+};
+$('symbolClose').onclick=closeSymbolPicker;
+$('symbolOverlay').addEventListener('click',e=>{if(e.target===$('symbolOverlay'))closeSymbolPicker();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSymbolPicker();});
+function insertEmoji(value){const field=pickerField||activeText||$('scrollText');const a=pickerSelection.start,b=pickerSelection.end;field.setRangeText(value,a,b,'end');pickerSelection={start:a+value.length,end:a+value.length};field.dispatchEvent(new Event('input',{bubbles:true}));/* Picker stays open; do not focus input or summon iOS keyboard. */}
+function addSymbolButton(root,emoji,label){
+ const b=document.createElement('button');b.type='button';b.title=label;b.setAttribute('aria-label',label);
+ const canvas=document.createElement('canvas');canvas.width=16;canvas.height=16;canvas.className='pixel-canvas';
+ const cx=canvas.getContext('2d',{alpha:false});cx.fillStyle='#080b12';cx.fillRect(0,0,16,16);
+ const icon=iconFor(codepoints(emoji)[0]);
+ if(icon && sprites){for(let y=0;y<16;y++)for(let x=0;x<16;x++){const n=spritePixel(icon.id,x,y);if(!n)continue;cx.fillStyle=hexColor(icon.color||n);cx.fillRect(x,y,1,1);}}
+ const caption=document.createElement('small');caption.textContent=label;b.append(canvas,caption);
+ b.onclick=()=>insertEmoji(emoji);root.appendChild(b);
+}
+function buildSymbolPicker(){
+ const pick=(label)=>EXTRA_ICON_LIST.find(([_,name])=>name===label)?.[0];
+ const groups=[
+ ['Liebe & Emotionen',[...HEART_CHOICES.map(([c,n])=>[c,'Herz '+n]),['💋','Kussmund'],['👀','Augen']]],
+ ['Tiere & Figuren',[['🐤','Küken'],['🐓','Huhn'],['🦆','Gummientchen'],['🐸','Frosch'],['🐄','Kuh'],['🦀','Krabbe'],['🐝','Biene'],['🐒','Affe'],['🐟','Fisch'],['🐘','Elefant']]],
+ ['Weltall & Fahrzeuge',[['🛸','UFO'],[UFO_BEAM,'UFO mit Strahl'],['👽','Alien'],['🚀','Rakete'],['🚌','Bus']]],
+ ['Natur & Wetter',[['🌼','Blume'],['🌵','Kaktus'],[pick('Blatt'),'Blatt'],[pick('Sonne'),'Sonne'],['☁️','Wolke'],['🌈','Regenbogen'],['⚡','Blitz'],['❄️','Schneeflocke Original'],[pick('Schneeflocke'),'Schneeflocke (neu)']]],
+ ['Formen & Richtungen',[['⭐','Stern'],[pick('Viereck'),'Viereck'],[pick('Diamant'),'Diamant'],[pick('Roter Punkt'),'Roter Punkt'],[pick('Pfeil nach oben'),'Pfeil nach oben'],[pick('Pfeil nach unten'),'Pfeil nach unten'],[pick('Pfeil nach links'),'Pfeil nach links'],[pick('Pfeil nach rechts'),'Pfeil nach rechts']]],
+ ['Essen & Trinken',[['🍎','Apfel'],['🍇','Trauben'],['🥚','Ei'],['🍗','Keule'],[pick('Flasche Wasser'),'Wasserflasche']]],
+ ['Festival & Zubehör',[['🍌','Banane'],[RAVESTICK_BANANA,'Ravestick-Banane'],[pick('Nebel'),'Nebel'],[pick('Zigarette'),'Zigarette'],[pick('Joint'),'Joint'],[pick('Ziggi I'),'Ziggi I'],[pick('Ziggi II'),'Ziggi II'],[pick('Fächer'),'Fächer'],[pick('Lolli / Lutscher'),'Lolli'],[pick('Strohhalm'),'Strohhalm'],['🏆','Pokal']]],
+ ['Hinweise & Verbote',[['🛑','Warnung rot'],['⚠️','Warnung gelb (Original)'],['🔺','Warndreieck'],[pick('Zigarette verboten'),'Zigarette verboten'],[pick('Joint verboten'),'Joint verboten'],[pick('Keine Aufnahmen "NO REC"'),'NO REC'],['☎️','Telefon']]]
+ ];
+ const root=$('symbolCategories');root.replaceChildren();
+ for(const [name,items] of groups){
+   const title=document.createElement('div');title.className='label symbol-category';title.textContent=name;
+   const grid=document.createElement('div');grid.className='symbol-grid';
+   for(const [code,label] of items){if(code)addSymbolButton(grid,code,label);}
+   root.append(title,grid);
+ }
+}
+// Native text-input undo remains available; no custom history in the basic editor.
+const editHistory={};
+function resetPageHistory(){}
+// Debounced controls; latest value wins and is sent without re-uploading the image.
+const latestControl=new Map();let liveTimer=null,livePumpRunning=false;
+function queueLive(key,params){if(key==='speed'&&programRunning)return;latestControl.set(key,params);clearTimeout(liveTimer);liveTimer=setTimeout(pumpLive,420);}
+async function pumpLive(){if(livePumpRunning)return;livePumpRunning=true;try{while(latestControl.size){const [key,args]=latestControl.entries().next().value;latestControl.delete(key);let allowed=false;for(let retry=0;retry<24;retry++){try{const st=await api('/api/status');if(st.state!=='sending'&&st.state!=='queued'){allowed=true;break;}}catch(e){}await new Promise(r=>setTimeout(r,250));}if(!allowed){notify('Controller beschäftigt, Live-Anpassung später erneut versuchen.');break;}try{await api('/api/'+key,args);}catch(e){notify('Live-'+key+': '+e.message);}await new Promise(r=>setTimeout(r,180));}}finally{livePumpRunning=false;if(latestControl.size){clearTimeout(liveTimer);liveTimer=setTimeout(pumpLive,550);}}}
+
+function showPowerState(known,on){$('powerState').textContent=known?'Letzter Befehl: '+(on?'Ein':'Aus'):'Status nach Neustart unbekannt';$('powerOn').classList.toggle('active',known&&on);$('powerOff').classList.toggle('active',known&&!on);}
+$('powerOn').addEventListener('click',()=>{showPowerState(false,true);$('powerState').textContent='Ein-Befehl wird gesendet …';queueLive('power',{state:'on'});});
+$('powerOff').addEventListener('click',()=>{showPowerState(false,false);$('powerState').textContent='Aus-Befehl wird gesendet …';queueLive('power',{state:'off'});});
+$('sendScroll').onclick=async()=>{const value=$('scrollText').value,second=$('scrollLine2').value,layout=Number($('scrollLayout').value);if((!value.trim()&&(layout!==1||!second.trim()))||scrollCapacity().exceeded){return;}try{const j=await api('/api/text',{text:value,line2:layout===1?second:'',layout,color:scrollColor,color2:layout===1?scrollColor2:scrollColor,brightness:$('brightness').value,mode:$('libTextMode').value==='1'?'static':'scroll',speed:$('scrollSpeed').value});notify(j.message);}catch(e){notify('Fehler: '+e.message);}};
+let rbPollFailures=0,rbPollFailureStarted=0,rbPollPending=false;
+async function poll(){
+ if(rbPollPending)return;
+ rbPollPending=true;
+ try{
+  const d=await api('/api/status');rbPollFailures=0;rbPollFailureStarted=0;$('rbConnectionStatus').hidden=true;
+  // Status belongs in the status view/diagnostics, never as a repeated toast.
+  statusMessage=d.message||'';
+  programRunning=!!d.programPlaying;document.querySelectorAll('input[data-global="speed"],#scrollSpeed').forEach(x=>x.disabled=programRunning);
+  controllerBusy=d.state==='queued'||d.state==='sending';boardCurrent=d.current||0;
+  showPowerState(!!d.powerKnown,!!d.powerOn);syncDashboardPower(!!d.powerKnown,!!d.powerOn);
+  if(!globalSliderEditing){if(Number.isFinite(Number(d.brightness)))syncGlobalControls('brightness',d.brightness);if(Number.isFinite(Number(d.speed)))syncGlobalControls('speed',d.speed);}
+  renderProgramState(d);
+ }catch(e){
+  if(!rbPollFailures++)rbPollFailureStarted=Date.now();
+  // BLE uploads block the Arduino loop for several seconds: do not claim an outage.
+  if(rbPollFailures>=5 && Date.now()-rbPollFailureStarted>30000)$('rbConnectionStatus').hidden=false;
+ }finally{rbPollPending=false;}
+}
+setInterval(poll,1700);
+// Keep the preview immediately below the real sticky header, including iOS zoom.
+const rbHeader=document.querySelector('.app-header');
+function rbSyncHeaderHeight(){document.documentElement.style.setProperty('--rb-header-height',rbHeader.getBoundingClientRect().height+'px');}
+rbSyncHeaderHeight();if(typeof ResizeObserver!=='undefined')new ResizeObserver(rbSyncHeaderHeight).observe(rbHeader);
+let reportCache='';async function refreshDiagnostics(){try{const [a,b]=await Promise.all([fetch('/api/diagnostics',{cache:'no-store'}),fetch('/api/diagnostics.txt',{cache:'no-store'})]);if(!a.ok||!b.ok)throw Error('HTTP Fehler');const d=await a.json();reportCache=await b.text();const rows=[['Firmware','v'+d.version],['Laufzeit',d.uptime],['Reset',d.reset],['Freier Heap',(d.freeHeap/1024).toFixed(1)+' KiB'],['Minimum Heap',(d.minHeap/1024).toFixed(1)+' KiB'],['Größter Block',(d.maxBlock/1024).toFixed(1)+' KiB'],['App frei',(d.appAvailable/1024).toFixed(0)+' KiB'],['WLAN',d.wifiClients],['BLE erfolgreich',d.bleSuccess],['Fehler',d.errors],['Jobs OK / Fehler',d.jobsOK+' / '+d.jobsFailed],['Seitenwechsel',d.pageShows||0]];$('diagGrid').replaceChildren();for(const [k,v] of rows){const card=document.createElement('div');card.className='diag-cell';const small=document.createElement('small');small.textContent=k;const strong=document.createElement('strong');strong.textContent=String(v);card.append(small,strong);$('diagGrid').append(card);}$('diagLog').textContent=d.recent||'Noch keine Ereignisse.';$('diagFeedback').textContent='Letzter Fehler: '+d.lastError;}catch(e){$('diagFeedback').textContent='Fehler: '+e.message;}}
+function copyOld(text){const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.append(t);t.focus();t.select();let ok=false;try{ok=document.execCommand('copy');}catch(e){}t.remove();return ok;}
+$('diagCopy').onclick=async()=>{if(!reportCache)await refreshDiagnostics();if(!reportCache){$('diagFeedback').textContent='Kein Log verfügbar.';return;}try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(reportCache);}else if(!copyOld(reportCache))throw Error('Safari blockiert das Kopieren');$('diagFeedback').textContent='Log in Zwischenablage kopiert.';}catch(e){$('copyManual').hidden=false;$('manualText').value=reportCache;$('manualText').focus();$('manualText').select();$('diagFeedback').textContent='Log im Textfeld markieren und manuell kopieren.';}};
+$('diagReload').onclick=refreshDiagnostics;$('diagnostics').addEventListener('toggle',()=>{if($('diagnostics').open)refreshDiagnostics();});
+
+// v0.4.0 navigation; previously working editor/BLE logic remains available.
+let activeView='home',shortcutsEditing=false,globalSliderEditing=false;
+function showMenu(open){$('mainMenu').classList.toggle('hidden',!open);$('bananaMenu').setAttribute('aria-expanded',String(open));}
+$('bananaMenu').addEventListener('click',()=>showMenu($('mainMenu').classList.contains('hidden')));
+$('mainMenu').addEventListener('click',e=>{if(e.target===$('mainMenu'))showMenu(false);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')showMenu(false);});
+function navigate(view){
+ if(!$("view-"+view))return;
+ activeView=view;document.body.classList.toggle('home-active',view==='home');document.querySelectorAll('.app-view').forEach(el=>el.classList.toggle('hidden',el.id!=='view-'+view));
+ document.querySelectorAll('[data-nav]').forEach(b=>{b.classList.toggle('current',b.dataset.nav===view);});
+ showMenu(false);window.scrollTo({top:0,behavior:'instant'});
+ if(view==='diagnostics')refreshDiagnostics();
+ if(view==='library')refreshLibrary();
+ if(view==='programs')v42RefreshPrograms();
+}
+document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.nav)));
+$('editShortcuts').addEventListener('click',()=>{shortcutsEditing=!shortcutsEditing;$('editShortcuts').setAttribute('aria-pressed',String(shortcutsEditing));$('editShortcuts').classList.toggle('is-active',shortcutsEditing);document.querySelectorAll('.shortcut').forEach(b=>b.classList.toggle('editing',shortcutsEditing));notify(shortcutsEditing?'Kurzwahl antippen, um Quelle und Beschriftung zu wählen.':'Bearbeitungsmodus beendet.');});
+document.querySelectorAll('.shortcut').forEach(b=>b.addEventListener('click',async()=>{const slot=Number(b.dataset.shortcut);if(shortcutsEditing||!v42Shortcuts[slot-1]?.type){await v42OpenShortcut(slot);return;}try{const j=await api('/api/shortcuts/run',{slot});notify(j.message);}catch(e){notify('Kurzwahl: '+e.message);}}));
+
+// v0.4.2.3-dev · Stored text library. The ESP32 is the source of truth, not
+// localStorage; draft/editor, stored record and current LED display are separate.
+let libraryItems=[],libraryShortcuts=[0,0,0,0,0,0],librarySelected=0,libraryEditorId=0,libraryReady=false;
+let libraryCurrentRecord=null,libraryDragId=0;
+let v42EditorOrigin='new',v42EditorSnapshot='',v42BlockSnapshot='';
+function v42TextSnapshot(){return JSON.stringify(libraryReadEditor());}
+function v42EditorDirty(){
+ if(tab==='pages')return JSON.stringify(pages)!==v42BlockSnapshot;
+ return v42TextSnapshot()!==v42EditorSnapshot;
+}
+function v42EditorMode(mode){
+ v42EditorOrigin=mode;
+ const edit=mode==='library';
+ $('view-editor').classList.toggle('editing-library',edit);
+ $('v42EditorHeading').textContent=edit?'Bibliothekseintrag bearbeiten':'Neuen Inhalt erstellen';
+ const current=tab==='pages'?libraryItems.find(r=>r.id===v42BlockEditorId):libraryItems.find(r=>r.id===libraryEditorId);
+ $('v42EditorSubtitle').textContent=edit&&current?current.name+' · '+(tab==='pages'?'Blockanzeige':'Lauftext'):'Eigenständiger Entwurf · ohne Bibliotheksbindung';
+ $('libSaveAs').classList.toggle('hidden',edit);
+ $('libSaveChanges').classList.toggle('hidden',!(edit&&tab==='scroll'&&libraryEditorId));
+ $('v42SaveBlock').classList.toggle('hidden',edit);
+ $('v42UpdateBlock').classList.toggle('hidden',!(edit&&tab==='pages'&&v42BlockEditorId));
+}
+async function v42ReturnLibrary(){
+ if(v42EditorDirty()&&!confirm('Ungespeicherte Änderungen verwerfen und zur Bibliothek zurückkehren?'))return;
+ // Clear just the editor working state. No library entry is ever removed.
+ libraryEditorId=0;libraryCurrentRecord=null;v42BlockEditorId=0;blockDraftDirty=false;dirty=false;
+ $('scrollText').value='';$('scrollLine2').value='';$('scrollText').dispatchEvent(new Event('input'));
+ try{await api('/api/block/reset',{});selected=0;await refreshPages();}catch(e){notify('Editor zurücksetzen: '+e.message);}
+ v42EditorMode('new');v42EditorSnapshot=v42TextSnapshot();v42BlockSnapshot=JSON.stringify(pages);
+ navigate('library');
+}
+$('v42ReturnLibrary').onclick=v42ReturnLibrary;
+$('v43NewContent').onclick=async()=>{
+ if(v42EditorDirty()&&!confirm('Ungespeicherte Änderungen verwerfen und neuen Inhalt beginnen?'))return;
+ const wasPages=tab==='pages';
+ libraryEditorId=0;libraryCurrentRecord=null;v42BlockEditorId=0;blockDraftDirty=false;dirty=false;
+ $('scrollText').value='';$('scrollLine2').value='';$('scrollText').dispatchEvent(new Event('input'));
+ try{await api('/api/block/reset',{});selected=0;await refreshPages();}catch(e){notify('Neuer Inhalt: '+e.message);return;}
+ v42EditorMode('new');v42EditorSnapshot=v42TextSnapshot();v42BlockSnapshot=JSON.stringify(pages);
+ if(wasPages)setTab('pages');else setTab('scroll');
+ v42EditorMode('new');
+};
+
+function librarySelectedItem(){return libraryItems.find(x=>x.id===librarySelected&&!x.corrupt);}
+function libraryRecordPayload(r){return {name:r.name,text:r.text,line2:r.line2||'',layout:r.layout,color1:r.color1,color2:r.color2,mode:r.mode||2,favorite:r.favorite?1:0};}
+function libShortcutsDraw(){document.querySelectorAll('.shortcut').forEach(b=>{const n=Number(b.dataset.shortcut),item=v42Shortcuts[n-1]||{},r=libraryItems.find(v=>v.id===item.id);const label=b.querySelector('span:nth-child(2)'),sub=b.querySelector('small');label.textContent=(item.type?item.label:'')||(item.type===1?r?.name:item.type===3?COLORS.find(c=>c[1]===item.id)?.[0]:v42ProgramItems.find(x=>x.id===item.id)?.name)||'Kurzwahl '+n;const broken=item.type===2&&v42ProgramItems.find(x=>x.id===item.id)?.missing;sub.textContent=broken?'Programm reparieren':item.type===1?'Bibliothek':item.type===2?'Programm':item.type===3?'Ambiente':'Noch nicht belegt';b.classList.toggle('shortcut-invalid',!!broken);b.classList.toggle('shortcut-empty',!item.type);const pict=b.querySelector('.shortcut-icon');if(pict)pict.dataset.rbIcon=!item.type?'star-plus':broken?'triangle-alert':'star';});}
+function renderLibrary(){
+ const list=$('libList');list.replaceChildren();const query=$('libSearch').value.trim().toLocaleLowerCase('de-DE');
+ const shown=libraryItems.filter(r=>!query||String(r.name||'').toLocaleLowerCase('de-DE').includes(query));
+ if(!shown.length){const p=document.createElement('p');p.className='empty-state';p.textContent=libraryItems.length?'Keine passenden Texte.':'Hier erscheinen gespeicherte Lauftexte. Öffne den Texteditor und wähle „In Bibliothek“.';list.appendChild(p);}
+ shown.forEach((r,i)=>{
+  const row=document.createElement('div');row.className='library-row'+(librarySelected===r.id?' selected':'');row.setAttribute('role','listitem');row.dataset.id=r.id;row.draggable=!r.corrupt;
+  const pick=document.createElement('button');pick.className='lib-pick';pick.type='button';pick.setAttribute('aria-pressed',String(librarySelected===r.id));
+  const title=document.createElement('strong');title.className='lib-name';title.textContent=r.corrupt?'⚠ Beschädigter Eintrag #'+r.id:r.name;
+  const info=document.createElement('small');info.textContent=r.corrupt?'Nur über Backup/Diagnose wiederherstellen':(r.kind==='block'?'Blockfolge · '+r.pages+' Seiten':r.mode===1?'Standbild':'Lauftext');
+  pick.append(title,info);pick.onclick=()=>{librarySelected=r.id;renderLibrary();};
+  const fav=document.createElement('button');fav.type='button';fav.textContent='';fav.dataset.rbIcon=r.favorite?'star-check':'star-plus';fav.dataset.rbOnly='1';fav.setAttribute('aria-label',r.favorite?'Favorit entfernen':'Als Favorit markieren');fav.title='Favorit umschalten';fav.disabled=!!r.corrupt;
+  fav.onclick=async()=>{try{const data=await api('/api/library/get?id='+r.id);const j=await api(r.kind==='block'?'/api/block/meta':'/api/library/save',r.kind==='block'?{id:r.id,favorite:data.favorite?0:1}:{id:r.id,...libraryRecordPayload({...data,favorite:!data.favorite})});notify(j.message);await refreshLibrary();}catch(e){notify(e.message);}};
+  const up=document.createElement('button');up.type='button';up.textContent='';up.dataset.rbIcon='arrow-up';up.dataset.rbOnly='1';up.title='Nach oben';up.disabled=i===0||!!query;
+  up.onclick=()=>libraryMove(r.id,-1);
+  const down=document.createElement('button');down.type='button';down.textContent='';down.dataset.rbIcon='arrow-down';down.dataset.rbOnly='1';down.title='Nach unten';down.disabled=i===shown.length-1||!!query;
+  down.onclick=()=>libraryMove(r.id,1);
+  row.addEventListener('dragstart',e=>{libraryDragId=r.id;row.classList.add('dragged');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',String(r.id));});
+  row.addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='move';});
+  row.addEventListener('drop',async e=>{e.preventDefault();const from=libraryDragId||Number(e.dataTransfer.getData('text/plain'));libraryDragId=0;const index=libraryItems.findIndex(x=>x.id===r.id);if(from&&from!==r.id)try{await api('/api/library/move',{id:from,to:index});await refreshLibrary();}catch(err){notify(err.message);}});
+  row.addEventListener('dragend',()=>{libraryDragId=0;row.classList.remove('dragged');});
+  row.append(pick,fav,up,down);list.appendChild(row);
+ });
+ const selection=!!librarySelectedItem();for(const id of ['libOpen','libSend','libDuplicate','libRename','libDelete'])$(id).disabled=!selection||!libraryReady;
+ $('libUnassign').disabled=!libraryReady;
+}
+async function refreshLibrary(){
+ try{const j=await api('/api/library');libraryReady=!!j.ready;libraryItems=j.items||[];libraryShortcuts=j.shortcuts||[0,0,0,0,0,0];
+ $('libInitWrap').classList.toggle('hidden',libraryReady||!!j.damaged);
+ $('libWorkspace').classList.toggle('hidden',!libraryReady);
+ $('libStatus').textContent=libraryReady?`${libraryItems.length} Einträge · Flash ${(j.used/1024).toFixed(0)} / ${(j.total/1024).toFixed(0)} KiB`:(j.damaged?'⚠ Bibliotheksmetadaten beschädigt – nicht formatieren.':'LittleFS muss einmalig eingerichtet werden.');
+ if(!libraryItems.some(r=>r.id===librarySelected))librarySelected=libraryItems.find(r=>!r.corrupt)?.id||0;
+ renderLibrary();libShortcutsDraw();
+ }catch(e){$('libStatus').textContent='Bibliotheksfehler: '+e.message;notify('Bibliothek: '+e.message);}
+}
+$('libInit').onclick=async()=>{if(!confirm('LittleFS-Dateisystem für die Textbibliothek erstmals einrichten? Nur die Dateisystempartition wird formatiert. Die bisherigen NVS-Blockseiten bleiben erhalten. NICHT ausführen, wenn auf dieser Partition bereits andere Dateien liegen.'))return;try{const j=await api('/api/library/init',{confirm:'INIT_LIBRARY_FS'});notify(j.message);await refreshLibrary();}catch(e){notify('Einrichtung: '+e.message);}};
+$('libRefresh').onclick=refreshLibrary;
+$('libSearch').oninput=renderLibrary;
+$('v42SearchToggle').onclick=()=>{$('libSearchWrap').classList.toggle('hidden');if(!$('libSearchWrap').classList.contains('hidden'))$('libSearch').focus();else{$('libSearch').value='';renderLibrary();}};
+async function libraryMove(id,dir){const index=libraryItems.findIndex(x=>x.id===id);const to=index+dir;if(index<0||to<0||to>=libraryItems.length)return;try{await api('/api/library/move',{id,to});librarySelected=id;await refreshLibrary();}catch(e){notify(e.message);}}
+function libraryReadEditor(){const layout=Number($('scrollLayout').value);return {name:'',text:$('scrollText').value,line2:layout===1?$('scrollLine2').value:'',layout,color1:scrollColor,color2:scrollColor2,mode:Number($('libTextMode').value),favorite:0};}
+function libraryEditorIndicator(){const r=libraryItems.find(x=>x.id===libraryEditorId);$('libEditorInfo').textContent=r?'Bibliotheksvorlage „'+r.name+'“ geöffnet · Änderungen erst nach Speichern in der Bibliothek.':'Ungespeicherter Entwurf – unabhängig von der Bibliothek.';v42EditorMode(v42EditorOrigin);}
+async function libraryOpenEditor(id){const data=await api('/api/library/get?id='+id);if(data.kind==='block'){if(blockDraftDirty&&!confirm('Ungespeicherte Blockfolge durch die Bibliotheksvorlage ersetzen?'))return;libraryEditorId=0;libraryCurrentRecord=null;libraryEditorIndicator();await api('/api/block/load',{id});v42BlockEditorId=id;await refreshPages();blockDraftDirty=false;setTab('pages');navigate('editor');v42BlockEditorLabel();v42BlockSnapshot=JSON.stringify(pages);v42EditorMode('library');return;}libraryEditorId=data.id;libraryCurrentRecord=data;
+ $('scrollText').value=data.text;$('scrollLine2').value=data.line2||'';$('scrollLayout').value=String(data.layout);$('libTextMode').value=String(data.mode||2);
+ scrollColor=Number(data.color1);scrollColor2=Number(data.color2);makeScrollSwatches();$('scrollLayout').dispatchEvent(new Event('change'));$('scrollText').dispatchEvent(new Event('input'));libraryEditorIndicator();
+ setTab('scroll');navigate('editor');v42EditorSnapshot=v42TextSnapshot();v42EditorMode('library');}
+$('libOpen').onclick=async()=>{if(!librarySelectedItem())return;try{await libraryOpenEditor(librarySelected);}catch(e){notify(e.message);}};
+$('libSend').onclick=async()=>{if(!librarySelectedItem())return;try{const item=librarySelectedItem();const j=await api(item.kind==='block'?'/api/block/send':'/api/library/send',{id:librarySelected});notify(j.message);}catch(e){notify(e.message);}};
+$('libSaveAs').onclick=async()=>{if(v42EditorOrigin==='library')return;const item=libraryReadEditor();const suggested=libraryCurrentRecord?.name||item.text.slice(0,35)||'Neuer Text';const name=await v42NamePrompt('Name für die neue Bibliotheksvorlage',suggested);if(name===null)return;
+ try{const j=await api('/api/library/save',{...item,name:name.trim()});libraryEditorId=j.id;await refreshLibrary();librarySelected=j.id;libraryCurrentRecord={...item,name,id:j.id};libraryEditorIndicator();v42EditorSnapshot=v42TextSnapshot();v42EditorMode('library');notify('Text in der ESP32-Bibliothek gespeichert.');}catch(e){notify('Speichern: '+e.message);}};
+$('libSaveChanges').onclick=async()=>{if(!libraryEditorId)return;const item=libraryReadEditor(),saved=libraryItems.find(x=>x.id===libraryEditorId);if(!saved)return;try{const name=libraryCurrentRecord?.name||saved.name;await api('/api/library/save',{...item,id:libraryEditorId,name,favorite:libraryCurrentRecord?.favorite?1:0,mode:item.mode});libraryCurrentRecord={...item,name,id:libraryEditorId};await refreshLibrary();v42EditorSnapshot=v42TextSnapshot();libraryEditorIndicator();notify('Bibliothekstext aktualisiert.');}catch(e){notify('Speichern: '+e.message);}};
+$('libDuplicate').onclick=async()=>{const selected=librarySelectedItem();if(!selected)return;const name=await v42NamePrompt('Name der Kopie',selected.name+' (Kopie)');if(name===null)return;try{const data=await api('/api/library/get?id='+selected.id);const j=selected.kind==='block'?await v42DuplicateBlock(selected.id,name.trim()):await api('/api/library/save',{...libraryRecordPayload(data),name:name.trim()});librarySelected=j.id;await refreshLibrary();notify('Vorlage dupliziert.');}catch(e){notify('Duplizieren: '+e.message);}};
+$('libRename').onclick=async()=>{const selected=librarySelectedItem();if(!selected)return;const name=await v42NamePrompt('Neuer Name',selected.name);if(name===null||name.trim()===selected.name)return;try{const data=await api('/api/library/get?id='+selected.id);await api(selected.kind==='block'?'/api/block/meta':'/api/library/save',selected.kind==='block'?{id:selected.id,name:name.trim()}:{...libraryRecordPayload(data),id:selected.id,name:name.trim()});if(libraryEditorId===selected.id&&libraryCurrentRecord)libraryCurrentRecord.name=name.trim();await refreshLibrary();libraryEditorIndicator();notify('Vorlage umbenannt.');}catch(e){notify(e.message);}};
+$('libDelete').onclick=async()=>{const selected=librarySelectedItem();if(!selected)return;const uses=(v42ProgramItems||[]).filter(p=>(p.ids||[]).includes(selected.id)).map(p=>p.name);
+ const shortcuts=(v42Shortcuts||[]).flatMap((s,i)=>s.type===1&&s.id===selected.id?[i+1]:[]);
+ const dependent=[...uses.map(n=>'Programm: '+n),...shortcuts.map(i=>'Kurzwahl '+i)];
+ const warning=dependent.length?'\n\nVerwendet von:\n'+dependent.join('\n')+'\n\nProgramme werden als unvollständig markiert. Kurzwahlen werden entfernt.':'';
+ if(!confirm('Vorlage „'+selected.name+'“ wirklich löschen?'+warning))return;try{await api('/api/library/delete',{id:selected.id});if(libraryEditorId===selected.id){libraryEditorId=0;libraryCurrentRecord=null;v42EditorMode('new');libraryEditorIndicator();}if(v42BlockEditorId===selected.id){v42BlockEditorId=0;v42EditorMode('new');v42BlockEditorLabel();}librarySelected=0;await refreshLibrary();await v42RefreshPrograms();await v42RefreshShortcuts();notify('Vorlage gelöscht.');}catch(e){notify('Löschen: '+e.message);}};
+$('libAssign').onclick=async()=>{if(!librarySelectedItem())return;try{const j=await api('/api/library/shortcut',{slot:$('libSlot').value,id:librarySelected});notify(j.message);await refreshLibrary();}catch(e){notify(e.message);}};
+$('libUnassign').onclick=async()=>{try{const j=await api('/api/library/shortcut',{slot:$('libSlot').value,id:0});notify(j.message);await refreshLibrary();}catch(e){notify(e.message);}};
+async function libraryBackup(){const full=[];for(const row of libraryItems){if(row.corrupt)throw Error('Bibliothek enthält beschädigte Einträge: zuerst Diagnose prüfen.');full.push(await api('/api/library/get?id='+row.id));}
+ return {format:'RavestickBoard-library',schema:1,firmware:'0.4.1-dev',created:new Date().toISOString(),items:full,shortcuts:[...libraryShortcuts]};}
+$('libExport').onclick=async()=>{try{const obj=await libraryBackup();const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='RavestickBoard_Bibliothek_'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);notify('Backup erstellt – Datei außerhalb des ESP32 aufbewahren.');}catch(e){notify('Backup fehlgeschlagen: '+e.message);}};
+$('libImport').onchange=async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;if(file.size>280000){notify('Backup zu groß (maximal 280 KB).');return;}
+ try{const obj=JSON.parse(await file.text());if(obj.format!=='RavestickBoard-library'||obj.schema!==1||!Array.isArray(obj.items)||obj.items.length>64||!Array.isArray(obj.shortcuts)||obj.shortcuts.length!==6)throw Error('Unbekanntes Backupformat.');
+ if(libraryItems.length+obj.items.length>64)throw Error('Bibliothek hat nicht genügend freie Plätze.');
+ if(!confirm(obj.items.length+' Vorlagen aus dem Backup zusätzlich importieren? Vorhandene Einträge werden nicht überschrieben.'))return;
+ const map=new Map();let done=0;for(const item of obj.items){const id=Number(item.id);if(!Number.isInteger(id)||id<1||map.has(id))throw Error('Ungültige oder doppelte ID im Backup.');const j=await api('/api/library/save',libraryRecordPayload(item));map.set(id,j.id);done++;}
+ await refreshLibrary();let shortcutCount=0;for(let i=0;i<6;i++){const old=Number(obj.shortcuts[i]);if(old&&map.has(old)&&!libraryShortcuts[i]){await api('/api/library/shortcut',{slot:i+1,id:map.get(old)});shortcutCount++;}}
+ await refreshLibrary();notify(done+' Texte importiert, '+shortcutCount+' freie Kurzwahlen übernommen.');
+ }catch(err){await refreshLibrary();notify('Import abgebrochen (bereits importierte Texte bleiben erhalten): '+err.message);}};
+$('homePowerOn').addEventListener('click',()=>$('powerOn').click());
+$('homePowerOff').addEventListener('click',()=>$('powerOff').click());
+function syncDashboardPower(known,on){$('homePowerOn').classList.toggle('is-active',known&&on);$('homePowerOff').classList.toggle('is-active',known&&!on);}
+// One brightness / speed source shared by all pages. No settings saved per text.
+function syncGlobalControls(kind,value){
+ const val=String(value),source=kind==='brightness'?'brightness':'scrollSpeed';
+ if($(source))$(source).value=val;
+ if(kind==='brightness')$('brightLabel').textContent=val+' %';else $('speedLabel').textContent=val+' / 100';
+ document.querySelectorAll('[data-global="'+kind+'"]').forEach(el=>el.value=val);
+ document.querySelectorAll('[data-global-label="'+kind+'"]').forEach(el=>el.textContent=val+(kind==='brightness'?' %':' / 100'));
+ if(kind==='brightness')$('homeBrightnessValue').textContent=val+' %';
+}
+document.querySelectorAll('[data-global]').forEach(el=>{
+ el.addEventListener('pointerdown',()=>{globalSliderEditing=true;});
+ el.addEventListener('pointerup',()=>{setTimeout(()=>globalSliderEditing=false,2000);});
+ el.addEventListener('input',()=>{const base=$(el.dataset.global==='brightness'?'brightness':'scrollSpeed');base.value=el.value;base.dispatchEvent(new Event('input'));});
+});
+// Eight manual BLE override keys. No selected state: EVERY click sends,
+// even if the website believes this mode is already active. No image upload.
+const RB43_FORCE_MODES=[['scroll','chevron-left','Linkslauf'],['right','chevron-right','Rechtslauf'],
+ ['up','chevron-up','Aufwärts'],['down','chevron-down','Abwärts'],
+ ['static','square-off','Standbild'],['snowflake','cloud-snow','Schneeflocke'],
+ ['picture','chevrons-left-right','Aufdecken'],['laser','laser','Laser']];
+for(const group of document.querySelectorAll('.v43-force-modes')){
+ const grid=document.createElement('div');grid.className='v43-force-grid';
+ for(const [mode,icon,label] of RB43_FORCE_MODES){const b=document.createElement('button');b.type='button';b.className='v43-force-btn';
+ b.title=label;b.setAttribute('aria-label',label+' erzwingen');b.dataset.rbIcon=icon;
+ b.onclick=async()=>{try{await api('/api/mode',{mode});}catch(e){notify(label+': '+e.message);}};grid.append(b);}
+ group.append(grid);
+}
+const ambienceNames=[['Rot',4],['Gelb',6],['Grün',2],['Cyan',3],['Blau',1],['Magenta',5],['Weiß',7]];
+for(const [name,color] of ambienceNames){
+ const b=document.createElement('button');b.type='button';b.textContent=name;b.title=name+' auf der ganzen Tafel anzeigen';
+ b.style.background=hexColor(color);b.style.color=color===1||color===4?'#fff':'#0b1019';
+ b.addEventListener('click',async()=>{try{const result=await api('/api/ambience',{color});notify(result.message||name+' wird angezeigt.');}catch(e){notify('Ambiente: '+e.message);}});
+ $('ambienceColors').appendChild(b);
+}
+$('v42SettingsBackup').appendChild($('v42BackupFooter'));
+syncGlobalControls('brightness',$('brightness').value);syncGlobalControls('speed',$('scrollSpeed').value);navigate('home');
+const RB_CONTROL_PICTS = {"bulb-small":["0000000000000000","0000000000000000","0000000000000000","0000000110000000","0000001111000000","0000011001100000","0000010000100000","0000010000100000","0000001001000000","0000001111000000","0000000110000000","0000000110000000","0000000110000000","0000000000000000","0000000000000000","0000000000000000"],"bulb-large":["0000000110000000","0001000110001000","0000100000010000","0000011111100000","0000110000110000","0001100000011000","0001000000001000","0001000000001000","0001100000011000","0000110000110000","0000011111100000","0000001111000000","0000001111000000","0000000110000000","0000000110000000","0000000000000000"],"snail":["0000000000000000","0000000000000000","0000000000000000","0000000000000000","0000000111100000","0000001100110000","0000011000011000","0000010011001000","0000010110101000","0000010011001000","0000011000011000","0000001111110000","0010000111000010","0011000111110010","0111111111111110","0000000000000000"],"horse":["0000000000000000","0000000000011000","0000000000111100","0000000001101100","0000011111111000","0001111111101000","0011111111100000","0111101111100000","1110001110000000","0010010111000000","0000110011100000","0000100000110000","0001100000011000","0011000000001100","0110000000000110","0000000000000000"]};
+function paintControlPictograms(){
+ document.querySelectorAll('.range-pict').forEach(canvas=>{
+   const rows=RB_CONTROL_PICTS[canvas.dataset.pict];if(!rows)return;
+   const cx=canvas.getContext('2d');cx.clearRect(0,0,16,16);cx.fillStyle='#f4f8ff';
+   rows.forEach((row,y)=>{for(let x=0;x<16;x++)if(row[x]==='1')cx.fillRect(x,y,1,1);});
+ });
+}
+paintControlPictograms();
+
+
+// v0.4.2: typed shortcuts, editable block entries, collections and archive v2.
+let v42BlockEditorId=0, v42ProgramItems=[],v42Shortcuts=Array.from({length:6},()=>({type:0,id:0,label:''}));
+let v42ProgramId=0, v42ProgramSteps=[],v42ShortcutSlot=0;
+const v42Bytes=s=>new TextEncoder().encode(String(s)).length;
+function v42BoundName(s,limit=47){let out='';for(const c of Array.from(s)){if(v42Bytes(out+c)>limit)break;out+=c;}return out;}
+function v42NamePrompt(title,suggested){return new Promise(resolve=>{
+ const overlay=document.createElement('div');overlay.className='v42-dialog';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');
+ const sheet=document.createElement('div');sheet.className='v42-sheet';
+ const heading=document.createElement('h2');heading.textContent=title;
+ const input=document.createElement('input');input.className='v42-name';input.type='text';input.maxLength=47;input.value=v42BoundName(suggested||'');
+ const info=document.createElement('div');info.className='v42-hint';
+ const row=document.createElement('div');row.className='v42-row';
+ const cancel=document.createElement('button');cancel.className='secondary';cancel.textContent='Abbrechen';
+ const okay=document.createElement('button');okay.className='primary';okay.textContent='Speichern';
+ const update=()=>{input.value=v42BoundName(input.value);info.textContent=v42Bytes(input.value)+' / 47 UTF-8-Bytes (Umlaute und Emojis zählen mehrfach)';okay.disabled=!input.value.trim();};
+ input.addEventListener('input',update);
+ const done=v=>{overlay.remove();resolve(v);};
+ cancel.onclick=()=>done(null);okay.onclick=()=>done(input.value.trim());
+ input.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();if(!okay.disabled)done(input.value.trim());}if(e.key==='Escape')done(null);};
+ row.append(cancel,okay);sheet.append(heading,input,info,row);overlay.append(sheet);document.body.append(overlay);update();input.focus();input.select();
+ });}
+async function v42NewBlockDraft(ask=false){
+ if(ask&&!confirm('Gesamte Blockfolge aus dem Editor löschen? Alle Seiten und Inhalte werden verworfen. Bereits gespeicherte Bibliothekseinträge bleiben erhalten.'))return false;
+ try{await api('/api/block/reset',{});v42BlockEditorId=0;blockDraftDirty=false;selected=0;await refreshPages();v42BlockSnapshot=JSON.stringify(pages);v42EditorMode('new');v42BlockEditorLabel();return true;}
+ catch(e){notify('Blockeditor: '+e.message);return false;}
+}
+function v42BlockEditorLabel(){const saved=libraryItems.find(r=>r.id===v42BlockEditorId);
+ $('v42BlockInfo').textContent=saved?'Bearbeite „'+saved.name+'“. Änderungen werden erst mit „Blockfolge aktualisieren“ in LittleFS übernommen.':'Neue Blockfolge. Beim Speichern wird die komplette Folge in LittleFS abgelegt.';
+ v42EditorMode(v42EditorOrigin);}
+$('v42NewBlock').onclick=async()=>{await v42NewBlockDraft(true);};
+
+$('v42ClearText').onclick=()=>{if(!confirm('Gesamten aktuellen Lauftext inklusive Symbole löschen?'))return;
+ $('scrollText').value='';$('scrollLine2').value='';$('scrollText').dispatchEvent(new Event('input'));$('scrollLine2').dispatchEvent(new Event('input'));};
+$('v42ClearPage').onclick=()=>{if(!confirm('Nur Seite '+(selected+1)+' leeren? Andere Seiten bleiben erhalten.'))return;
+ const p=pages[selected];p.line1='';p.line2='';p.layout=0;p.color1=6;p.color2=7;p.align=1;p.duration=7;
+ renderSelected();changed();};
+$('v42SaveBlock').onclick=async()=>{if(!(await saveCurrent()))return;
+ const name=await v42NamePrompt('Blockfolge in Bibliothek speichern',pages[0]?.line1||'Neue Blockfolge');if(name===null)return;
+ try{const j=await api('/api/block/save',{name});v42BlockEditorId=j.id;blockDraftDirty=false;await refreshLibrary();v42BlockSnapshot=JSON.stringify(pages);v42EditorMode('library');v42BlockEditorLabel();notify('Blockfolge mit '+pages.length+' Seiten gespeichert.');}
+ catch(e){notify('Blockfolge: '+e.message);}};
+$('v42UpdateBlock').onclick=async()=>{if(!v42BlockEditorId||!(await saveCurrent()))return;
+ try{const name=libraryItems.find(r=>r.id===v42BlockEditorId)?.name||'Blockfolge';
+ await api('/api/block/save',{id:v42BlockEditorId,name});blockDraftDirty=false;await refreshLibrary();v42BlockSnapshot=JSON.stringify(pages);v42BlockEditorLabel();notify('Blockfolge im Flash aktualisiert.');}
+ catch(e){notify('Speichern: '+e.message);}};
+$('v42SendDraftBand').onclick=async()=>{if(!(await saveCurrent()))return;
+ try{const j=await api('/api/block/show',{});notify(j.message);}catch(e){notify('Senden: '+e.message);}};
+async function v42DuplicateBlock(id,name){return api('/api/block/clone',{id,name});}
+
+function v42RenderProgramSteps(){const root=$('v42ProgramSteps');root.replaceChildren();
+ if(!v42ProgramSteps.length){root.textContent='Noch keine Einträge ausgewählt.';return;}
+ v42ProgramSteps.forEach((id,i)=>{const row=document.createElement('div');const text=document.createElement('span');
+ const missing=!libraryItems.some(x=>x.id===id);if(missing)row.classList.add('v42-program-invalid');
+ text.textContent=(i+1)+'. '+(libraryItems.find(x=>x.id===id)?.name||'⚠ Fehlender Bibliothekseintrag (ID '+id+')');
+ const up=document.createElement('button');up.textContent='';up.dataset.rbIcon='arrow-up';up.dataset.rbOnly='1';up.disabled=i===0;up.onclick=()=>{[v42ProgramSteps[i-1],v42ProgramSteps[i]]=[v42ProgramSteps[i],v42ProgramSteps[i-1]];v42RenderProgramSteps();};
+ const down=document.createElement('button');down.textContent='';down.dataset.rbIcon='arrow-down';down.dataset.rbOnly='1';down.disabled=i===v42ProgramSteps.length-1;down.onclick=()=>{[v42ProgramSteps[i+1],v42ProgramSteps[i]]=[v42ProgramSteps[i],v42ProgramSteps[i+1]];v42RenderProgramSteps();};
+ const del=document.createElement('button');del.textContent='';del.dataset.rbIcon='x';del.dataset.rbOnly='1';del.title='Schritt entfernen';del.onclick=()=>{v42ProgramSteps.splice(i,1);v42RenderProgramSteps();};
+ if(missing){const replace=document.createElement('select');replace.setAttribute('aria-label','Fehlenden Eintrag ersetzen');
+  const hint=document.createElement('option');hint.value='';hint.textContent='Ersetzen durch …';replace.append(hint);
+  libraryItems.filter(x=>!x.corrupt).forEach(item=>{const opt=document.createElement('option');opt.value=item.id;opt.textContent=item.name;replace.append(opt);});
+  replace.onchange=()=>{if(!replace.value)return;v42ProgramSteps[i]=Number(replace.value);v42RenderProgramSteps();};
+  row.append(replace);
+ }
+ row.append(text,up,down,del);root.append(row);});
+ const missing=v42ProgramSteps.filter(id=>!libraryItems.some(x=>x.id===id)).length;
+ $('v42ProgramError').hidden=!missing; $('v42ProgramError').textContent=missing?'⚠ '+missing+' Bibliothekseintrag(e) fehlen. Schritt(e) entfernen oder ersetzen, dann Programm speichern.':'';
+ $('v42RunProgram').disabled=!!missing;}
+function v42PopulateProgramChoices(){const select=$('v42StepChoose');select.replaceChildren();
+ libraryItems.filter(x=>!x.corrupt).forEach(item=>{const o=document.createElement('option');o.value=item.id;o.textContent=item.name+(item.kind==='block'?' · Block':' · Text');select.append(o);});}
+function v42ShowPrograms(){const list=$('v42Programs');list.replaceChildren();
+ if(!v42ProgramItems.length){const p=document.createElement('p');p.className='v42-hint';p.textContent='Noch kein Programm angelegt.';list.append(p);}
+ v42ProgramItems.forEach(item=>{const row=document.createElement('div');if(item.missing)row.classList.add('v42-program-invalid');const b=document.createElement('button');b.textContent=item.name+(item.missing?' ⚠':'');b.className=v42ProgramId===item.id?'primary':'secondary';b.style.flex='1';b.onclick=async()=>{
+ try{const p=await api('/api/collections/get?id='+item.id);v42ProgramId=item.id;v42ProgramSteps=p.ids||[];$('v42ProgramName').value=p.name;$('v42ProgramSeconds').value=p.seconds;$('v43Playback').value=String(p.playback||0);v43PlaybackHelp();v42RenderProgramSteps();v42ShowPrograms();}
+ catch(e){notify(e.message);}};
+ const small=document.createElement('small');small.textContent=item.missing?item.missing+' fehlen':item.count+' Einträge';row.append(b,small);list.append(row);});}
+async function v42RefreshPrograms(){try{const r=await api('/api/collections');v42ProgramItems=r.items||[];v42ShowPrograms();v42PopulateProgramChoices();libShortcutsDraw();}catch(e){if(libraryReady)notify('Programme: '+e.message);}}
+$('v42StepAdd').onclick=()=>{const id=Number($('v42StepChoose').value);if(!id)return;if(v42ProgramSteps.length>=24){notify('Maximal 24 Schritte.');return;}v42ProgramSteps.push(id);v42RenderProgramSteps();};
+$('v42NewProgram').onclick=()=>{v42ProgramId=0;v42ProgramSteps=[];$('v42ProgramName').value='';$('v42ProgramSeconds').value='20';$('v43Playback').value='0';v43PlaybackHelp();v42RenderProgramSteps();v42ShowPrograms();};
+$('v42SaveProgram').onclick=async()=>{const name=$('v42ProgramName').value.trim(),seconds=Number($('v42ProgramSeconds').value);
+ if(!name||v42Bytes(name)>47||!v42ProgramSteps.length||seconds<5||seconds>180||v42ProgramSteps.some(id=>!libraryItems.some(x=>x.id===id))){$('v42ProgramError').hidden=false;$('v42ProgramError').textContent='Name, Laufzeit oder fehlende Programmschritte prüfen.';return;}
+ try{const j=await api('/api/collections/save',{...(v42ProgramId?{id:v42ProgramId}:{}),name,seconds,playback:Number($('v43Playback').value),ids:v42ProgramSteps.join(',')});v42ProgramId=j.id;await v42RefreshPrograms();notify(j.message);}catch(e){notify('Programm: '+e.message);}};
+$('v42RunProgram').onclick=async()=>{if(!v42ProgramId){notify('Bitte gespeichertes Programm auswählen.');return;}if(v42ProgramItems.find(p=>p.id===v42ProgramId)?.missing){$('v42ProgramError').hidden=false;$('v42ProgramError').textContent='Bitte repariertes Programm zuerst speichern.';return;}if(v42ProgramSteps.some(id=>!libraryItems.some(x=>x.id===id))){$('v42ProgramError').hidden=false;return;}try{const j=await api('/api/collections/run',{id:v42ProgramId});notify(j.message);}catch(e){notify(e.message);}};
+$('v42StopProgram').onclick=async()=>{try{const j=await api('/api/collections/stop',{});notify(j.message);}catch(e){notify(e.message);}};
+$('v42DeleteProgram').onclick=async()=>{if(!v42ProgramId)return;if(!confirm('Programm löschen? Die Bibliothekseinträge bleiben bestehen.'))return;
+ try{await api('/api/collections/delete',{id:v42ProgramId});$('v42NewProgram').click();await v42RefreshPrograms();notify('Programm gelöscht.');}catch(e){notify(e.message);}};
+function v43PlaybackHelp(){const mode=$('v43Playback').value; $('v43PlaybackHelp').textContent=mode==='1'?'Texte und Blockseiten laufen als ein gemeinsames Pixelband mit 16 Pixel Leerraum dazwischen. Bei Überschreitung des Datenbudgets erfolgt ein weiterer Upload.':'Blockseiten bleiben stehen. Lauftexte laufen durch; Wechsel zwischen Anzeigearten erfordern einen neuen BLE-Upload.';}
+$('v43Playback').addEventListener('change',v43PlaybackHelp);
+$('v42ProgramName').addEventListener('input',e=>e.target.value=v42BoundName(e.target.value));
+
+async function v42RefreshShortcuts(){try{const j=await api('/api/shortcuts');v42Shortcuts=j.items||v42Shortcuts;libShortcutsDraw();}catch(e){if(libraryReady)notify('Kurzwahlen: '+e.message);}}
+async function v42OpenShortcut(slot){v42ShortcutSlot=slot;await v42RefreshPrograms();await v42RefreshShortcuts();
+ const s=v42Shortcuts[slot-1]||{type:0,id:0,label:''};$('v42ShortcutTitle').textContent='Kurzwahl '+slot+' belegen';
+ $('v42ShortcutType').value=String(s.type||0);v42ShortcutPopulate();$('v42ShortcutTarget').value=String(s.id||0);
+ $('v42ShortcutLabel').value=s.type?s.label||'':'';v42ShortcutCount();v42ShortcutUpdate();$('v42ShortcutDialog').classList.remove('hidden');}
+function v42ShortcutPopulate(){const type=Number($('v42ShortcutType').value),target=$('v42ShortcutTarget');target.replaceChildren();if(!type)$('v42ShortcutLabel').value='';
+ let sources=type===1?libraryItems.filter(r=>!r.corrupt).map(r=>[r.id,r.name]):type===2?v42ProgramItems.map(r=>[r.id,r.name]):type===3?COLORS.map(r=>[r[1],r[0]]):[];
+ const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Inhalt auswählen';target.append(placeholder);
+ for(const [id,name] of sources){const option=document.createElement('option');option.value=id;option.textContent=name;target.append(option);}
+ $('v42ShortcutTargetWrap').classList.toggle('hidden',type===0);v42ShortcutUpdate();}
+$('v42ShortcutType').onchange=v42ShortcutPopulate;
+$('v42ShortcutTarget').onchange=v42ShortcutUpdate;
+function v42ShortcutUpdate(){const type=Number($('v42ShortcutType').value),id=Number($('v42ShortcutTarget').value);const usable=type>0&&id>0;$('v42ShortcutLabel').disabled=!usable;$('v42ShortcutSave').disabled=!usable;$('v42ShortcutDelete').classList.toggle('hidden',!v42Shortcuts[v42ShortcutSlot-1]?.type);v42ShortcutCount();}
+
+function v42ShortcutCount(){const i=$('v42ShortcutLabel');i.value=v42BoundName(i.value);$('v42ShortcutBytes').textContent=v42Bytes(i.value)+' / 47 UTF-8-Bytes';}
+$('v42ShortcutLabel').addEventListener('input',v42ShortcutCount);
+$('v42ShortcutCancel').onclick=()=>$('v42ShortcutDialog').classList.add('hidden');
+$('v42ShortcutDelete').onclick=async()=>{if(!v42Shortcuts[v42ShortcutSlot-1]?.type)return;if(!confirm('Kurzwahl '+v42ShortcutSlot+' vollständig löschen, einschließlich Beschriftung?'))return;try{await api('/api/shortcuts/set',{slot:v42ShortcutSlot,type:0,id:0,label:''});$('v42ShortcutDialog').classList.add('hidden');await v42RefreshShortcuts();notify('Kurzwahl entfernt.');}catch(e){notify('Kurzwahl: '+e.message);}};
+$('v42ShortcutSave').onclick=async()=>{const type=Number($('v42ShortcutType').value),id=type?Number($('v42ShortcutTarget').value):0;
+ if(!type||!id){notify('Bitte zuerst Quelle und Inhalt auswählen.');return;}
+ try{const j=await api('/api/shortcuts/set',{slot:v42ShortcutSlot,type,id,label:$('v42ShortcutLabel').value.trim()});$('v42ShortcutDialog').classList.add('hidden');await v42RefreshShortcuts();notify(j.message);}catch(e){notify('Kurzwahl: '+e.message);}};
+$('v42ReloadMenu').onclick=()=>{if((dirty||blockDraftDirty)&&!confirm('Webinterface neu laden? Nicht in der Bibliothek gesicherte Änderungen können verloren gehen.'))return;
+ // Server sends Cache-Control: no-store, including the standalone iPhone web app.
+ location.reload();};
+
+async function v42Backup(){const items=[];for(const row of libraryItems){if(row.corrupt)throw Error('Beschädigter Bibliothekseintrag '+row.id);
+ const r=await api('/api/library/get?id='+row.id);if(r.kind==='block'){r.pages=(await api('/api/block/get?id='+row.id)).pages;}items.push(r);}
+ const collections=[];for(const p of v42ProgramItems)collections.push(await api('/api/collections/get?id='+p.id));
+ return {format:'RavestickBoard-library',schema:2,firmware:'0.4.2.3-dev',created:new Date().toISOString(),items,collections,shortcuts:v42Shortcuts};}
+$('libExport').onclick=async()=>{try{const backup=await v42Backup();const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=url;a.download='RavestickBoard_Backup_v0423_'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);notify('Vollständiges Backup erstellt.');}
+ catch(e){notify('Backup: '+e.message);}};
+async function v42WritePageSet(source){await api('/api/block/reset',{});
+ for(let i=0;i<source.length;i++){const p=source[i];if(i)await api('/api/program/add',{});
+ await api('/api/program/set',{index:i,line1:p.line1||'',line2:p.line2||'',layout:p.layout??0,align:p.align??1,color1:p.color1??7,color2:p.color2??7,duration:p.duration??7});}}
+$('libImport').onchange=async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;if(file.size>2500000){notify('Backup größer als 2,5 MB.');return;}
+ let oldPages=null;
+ try{const obj=JSON.parse(await file.text());if(obj.format!=='RavestickBoard-library'||![1,2].includes(obj.schema)||!Array.isArray(obj.items)||obj.items.length>192)throw Error('Unbekanntes Backupformat.');
+ if(!confirm('Backup zusammenführen? Gleiche Namen UND Inhalte werden wiederverwendet. Unterschiedliche Einträge bleiben getrennt; vorhandene Daten werden nicht überschrieben.'))return;
+ // Import is idempotent: compare names AND canonical contents, not only IDs.
+ // IDs from the backup are remapped to reused or newly created records.
+ const sigText=r=>JSON.stringify([r.name,r.text||'',r.line2||'',Number(r.layout||0),Number(r.color1||7),Number(r.color2||7),Number(r.mode||2)]);
+ const sigPage=p=>[p.line1||'',p.line2||'',Number(p.layout||0),Number(p.align??1),Number(p.color1??7),Number(p.color2??7),Number(p.duration??7)];
+ const sigBlock=r=>JSON.stringify([r.name,(r.pages||[]).map(sigPage)]);
+ const known=new Map();for(const row of libraryItems){
+  if(row.corrupt)continue;const r=await api('/api/library/get?id='+row.id);
+  if(r.kind==='block')r.pages=(await api('/api/block/get?id='+row.id)).pages;
+  const sig=r.kind==='block'?'b'+sigBlock(r):'t'+sigText(r);
+  if(!known.has(sig))known.set(sig,row.id);
+ }
+ const map=new Map();let done=0,reused=0;
+ oldPages=(await api('/api/program')).pages;
+ for(const item of obj.items){if(map.has(Number(item.id)))throw Error('Doppelte Import-ID.');let j;
+  const sig=item.kind==='block'?'b'+sigBlock(item):'t'+sigText(item);
+  if(known.has(sig)){map.set(Number(item.id),known.get(sig));reused++;continue;}
+  if(item.kind==='block'){if(!Array.isArray(item.pages)||item.pages.length<1||item.pages.length>25)throw Error('Ungültige Blockseiten.');await v42WritePageSet(item.pages);j=await api('/api/block/save',{name:item.name});if(item.favorite)await api('/api/block/meta',{id:j.id,favorite:1});}
+  else j=await api('/api/library/save',{...libraryRecordPayload(item),name:item.name});
+  map.set(Number(item.id),j.id);known.set(sig,j.id);done++;
+ }
+ const programMap=new Map();const knownPrograms=new Map();for(const p of v42ProgramItems){
+  const sig=JSON.stringify([p.name,p.ids||[],Number(p.seconds||20),Number(p.playback||0)]);
+  if(!knownPrograms.has(sig))knownPrograms.set(sig,p.id);
+ }
+ let reusedPrograms=0;
+ if(obj.schema===2)for(const pr of (obj.collections||[])){
+  const ids=(pr.ids||[]).map(id=>map.get(Number(id)));
+  if(ids.length&&!ids.includes(undefined)){
+   const sig=JSON.stringify([pr.name,ids,Number(pr.seconds||20),Number(pr.playback||0)]);
+   if(knownPrograms.has(sig)){programMap.set(Number(pr.id),knownPrograms.get(sig));reusedPrograms++;continue;}
+   const j=await api('/api/collections/save',{name:pr.name,seconds:pr.seconds||20,playback:Number(pr.playback)||0,ids:ids.join(',')});
+   programMap.set(Number(pr.id),j.id);knownPrograms.set(sig,j.id);
+  }
+ }
+ await refreshLibrary();await v42RefreshPrograms();await v42RefreshShortcuts();
+ let count=0;const shortcuts=obj.schema===2?obj.shortcuts:(obj.shortcuts||[]).map(id=>({type:id?1:0,id,label:''}));
+ for(let i=0;i<Math.min(6,shortcuts.length);i++){const item=shortcuts[i];const type=Number(item.type||0);
+ const newId=type===1?map.get(Number(item.id)):type===2?programMap.get(Number(item.id)):type===3?Number(item.id):0;
+ if(type&&newId&&!v42Shortcuts[i]?.type){await api('/api/shortcuts/set',{slot:i+1,type,id:newId,label:item.label||''});count++;}}
+ notify(done+' neue Einträge, '+reused+' vorhandene erkannt; '+(programMap.size-reusedPrograms)+' neue Programme, '+reusedPrograms+' vorhandene; '+count+' Kurzwahlen übernommen.');
+ }catch(err){notify('Import abgebrochen, bereits importierte Daten bleiben erhalten: '+err.message);}
+ finally{if(oldPages){try{await v42WritePageSet(oldPages);await refreshPages();}catch(e){notify('Achtung: Editor-Arbeitsfläche konnte nach Import nicht wiederhergestellt werden: '+e.message);}}await refreshLibrary();await v42RefreshPrograms();await v42RefreshShortcuts();}};
+
+
+// RavestickBoard local SVG subset, sourced from Lucide Icons.
+// ISC / selected Feather MIT notices: THIRD_PARTY_NOTICES.md and LICENSE.
+// No external network required on ESP32 AP.
+const RB43_LUCIDE={
+'chevron-left':'<path d="m15 18-6-6 6-6"/>',
+'chevron-right':'<path d="m9 18 6-6-6-6"/>',
+'chevron-up':'<path d="m18 15-6-6-6 6"/>',
+'chevron-down':'<path d="m6 9 6 6 6-6"/>',
+'square-off':'<path d="M20.4 20.4a2 2 0 01-1.4.6H5a2 2 0 01-2-2V5a2 2 0 01.59-1.41"/><path d="M21 15.3V5a2 2 0 00-2-2H8.7"/><path d="M22 22 2 2"/>',
+'cloud-snow':'<path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M8 15h.01"/><path d="M8 19h.01"/><path d="M12 17h.01"/><path d="M12 21h.01"/><path d="M16 15h.01"/><path d="M16 19h.01"/>',
+'chevrons-left-right':'<path d="m9 7-5 5 5 5"/><path d="m15 7 5 5-5 5"/>',
+'laser':'<path d="m13 8 .95-.95"/><path d="M13.95 16.95 13 16"/><path d="M22 12h-9"/><path d="M4 12H2"/><path d="M4.05 16.95 5 16"/><path d="m5 8-.95-.95"/><path d="M9 12h.01"/><path d="M9 19v-2"/><path d="M9 7V5"/>',
+'banana':'<path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/>',
+'house':'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+'pencil-sparkles':'<path d="M10 3H8"/><path d="m15.007 5.008 3.987 3.986"/><path d="M20 15v4"/><path d="M21.174 6.813a2.82 2.82 0 0 0-3.986-3.987L3.842 16.175a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="M22 17h-4"/><path d="M4 5v4"/><path d="M6 7H2"/><path d="M9 2v2"/>',
+'library':'<path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/>',
+'list-video':'<path d="M21 5H3"/><path d="M10 12H3"/><path d="M10 19H3"/><path d="M15 12.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997a1 1 0 0 1-1.517-.86z"/>',
+'spray-can':'<path d="M3 3h.01"/><path d="M7 5h.01"/><path d="M11 7h.01"/><path d="M3 7h.01"/><path d="M7 9h.01"/><path d="M3 11h.01"/><rect width="4" height="4" x="15" y="5"/><path d="m19 9 2 2v10c0 .6-.4 1-1 1h-6c-.6 0-1-.4-1-1V11l2-2"/><path d="m13 14 8-2"/><path d="m13 19 8-2"/>',
+'activity':'<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>',
+'wrench':'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/>',
+'refresh-cw':'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+'eye-closed':'<path d="m15 18-.722-3.25"/><path d="M2 8a10.645 10.645 0 0 0 20 0"/><path d="m20 15-1.726-2.05"/><path d="m4 15 1.726-2.05"/><path d="m9 18 .722-3.25"/>',
+'eye':'<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>',
+'sunset':'<path d="M12 10V2"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m16 6-4 4-4-4"/><path d="M16 18a4 4 0 0 0-8 0"/>',
+'sunrise':'<path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/>',
+'snail':'<path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/>',
+'rabbit':'<path d="M13 16a3 3 0 0 1 2.24 5"/><path d="M18 12h.01"/><path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/><path d="M20 8.54V4a2 2 0 1 0-4 0v3"/><path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/>',
+'plane-takeoff':'<path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55a2 2 0 0 1 1.8 0l.17.1a2 2 0 0 0 1.8 0L8 12 5 6l.9-.45a2 2 0 0 1 2.09.2l4.02 3a2 2 0 0 0 2.1.2l4.19-2.06a2.41 2.41 0 0 1 1.73-.17L21 7a1.4 1.4 0 0 1 .87 1.99l-.38.76c-.23.46-.6.84-1.07 1.08L7.58 17.2a2 2 0 0 1-1.22.18Z"/>',
+'copy':'<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+'binoculars':'<path d="M10 10h4"/><path d="M19 7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3"/><path d="M20 21a2 2 0 0 0 2-2v-3.851c0-1.39-2-2.962-2-4.829V8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2z"/><path d="M22 16H2"/><path d="M4 21a2 2 0 0 1-2-2v-3.851c0-1.39 2-2.962 2-4.829V8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2z"/><path d="M9 7V4a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v3"/>',
+'arrow-up':'<path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>',
+'arrow-down':'<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
+'database-arrow-down':'<path d="m16 19 3 3 3-3"/><path d="M19 16v6"/><path d="M21 12.536V5"/><path d="M3 12A9 3 0 0 0 15.182 14.806"/><path d="M3 5V19A9 3 0 0 0 13.318 21.968"/><ellipse cx="12" cy="5" rx="9" ry="3"/>',
+'database-arrow-up':'<path d="M19 22v-6"/><path d="M21 12.536V5"/><path d="m22 19-3-3-3 3"/><path d="M3 12A9 3 0 0 0 14.457 14.886"/><path d="M3 5V19A9 3 0 0 0 13.318 21.968"/><ellipse cx="12" cy="5" rx="9" ry="3"/>',
+'triangle-alert':'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+'plus':'<path d="M5 12h14"/><path d="M12 5v14"/>',
+'monitor-x':'<path d="m14.5 12.5-5-5"/><path d="m9.5 12.5 5-5"/><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M12 17v4"/><path d="M8 21h8"/>',
+'x':'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+'line-height':'<path d="M15 14H9"/><path d="M21 21H3"/><path d="M21 3H3"/><path d="m8 16 3.453-7.648a.6.6 0 011.094.001L16 16"/>',
+'letter-spacing':'<path d="M15 14H9"/><path d="M21 3v18"/><path d="M3 3v18"/><path d="m8 16 3.453-7.648a.6.6 0 011.094.001L16 16"/>',
+'heart-plus':'<path d="m14.479 19.374-.971.939a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5a5.2 5.2 0 0 1-.219 1.49"/><path d="M15 15h6"/><path d="M18 12v6"/>',
+'trash':'<path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+'save':'<path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/>',
+'eraser':'<path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/>',
+'folder-plus':'<path d="M12 10v6"/><path d="M9 13h6"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+'clipboard-copy':'<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/>',
+'database-backup':'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/>',
+'check':'<path d="M20 6 9 17l-5-5"/>',
+'arrow-left':'<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+'arrow-right':'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+'pencil-line':'<path d="M13 21h8"/><path d="m15 5 4 4"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>',
+'pencil':'<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>',
+'skip-back':'<path d="M17.971 4.285A2 2 0 0 1 21 6v12a2 2 0 0 1-3.029 1.715l-9.997-5.998a2 2 0 0 1-.003-3.432z"/><path d="M3 20V4"/>',
+'pause':'<rect x="14" y="3" width="5" height="18" rx="1"/><rect x="5" y="3" width="5" height="18" rx="1"/>',
+'play':'<path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/>',
+'fast-forward':'<path d="M12 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 12 18z"/><path d="M2 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 2 18z"/>',
+'bluetooth':'<path d="m7 7 10 10-5 5V2l5 5L7 17"/>',
+'star-plus':'<path d="M11.013 18.582 6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16l2.309-4.679a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904L20 11.5"/><path d="M15 18h6"/><path d="M18 15v6"/>',
+'star':'<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>',
+'star-check':'<path d="m19.06 12.501 2.78-2.707a.53.53 0 0 0-.294-.905l-5.166-.755a2.1 2.1 0 0 1-1.595-1.16l-2.31-4.68a.53.53 0 0 0-.95.001L9.216 6.974a2.1 2.1 0 0 1-1.597 1.16l-5.165.755a.53.53 0 0 0-.294.906l3.736 3.637a2.1 2.1 0 0 1 .611 1.879l-.88 5.139a.53.53 0 0 0 .769.56l4.617-2.428.027-.014"/><path d="m15 18 2 2 4-4"/>'
+};
+function rb43Lucide(name){const path=RB43_LUCIDE[name];if(!path)return null;
+ const holder=document.createElement('span');holder.innerHTML='<svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+path+'</svg>';return holder.firstChild;}
+function rb43PaintIcons(){document.querySelectorAll('[data-rb-icon]').forEach(node=>{
+ const name=node.dataset.rbIcon;if(node.dataset.rbPainted===name)return;const svg=rb43Lucide(name);if(!svg)return;
+ const old=node.querySelector(':scope > svg.rb-lucide');if(old)old.remove();
+ if(node.classList.contains('shortcut-icon')||node.classList.contains('v43-force-btn')||node.dataset.rbOnly==='1'){
+  [...node.childNodes].forEach(child=>{if(child.nodeType===3)child.remove();});
+ }else if(node.firstChild&&node.firstChild.nodeType===3){node.firstChild.textContent=node.firstChild.textContent.replace(/^[^\p{L}\p{N}]+/u,'');}
+ node.insertBefore(svg,node.firstChild);node.dataset.rbPainted=name;
+ });}
+function rb43StaticIcons(){
+ const menu=['star','pencil-sparkles','library','list-video','spray-can','activity','wrench','refresh-cw'];
+ document.querySelectorAll('#mainMenu [data-nav],#v42ReloadMenu').forEach((b,i)=>{if(menu[i])b.dataset.rbIcon=menu[i];});
+ const buttons={bananaMenu:'banana',homePowerOff:'eye-closed',homePowerOn:'eye',editShortcuts:'pencil',libOpen:'pencil',libSend:'plane-takeoff',libDuplicate:'copy',libRename:'pencil-line',libDelete:'trash',v42SearchToggle:'binoculars',libRefresh:'refresh-cw',libExport:'database-arrow-down',v42NewProgram:'plus',v42DeleteProgram:'trash',v42RunProgram:'plane-takeoff',v42StopProgram:'monitor-x',v42StepAdd:'plus',v42SaveProgram:'save',v42ReturnLibrary:'arrow-left',v43NewContent:'plus',tabScroll:'line-height',tabPages:'letter-spacing',previewRestart:'skip-back',previewToggle:'pause',previewSpeed:'fast-forward',v42ClearText:'eraser',sendScroll:'plane-takeoff',libSaveAs:'plus',libSaveChanges:'save',v42SaveBlock:'folder-plus',v42UpdateBlock:'save',v42SendDraftBand:'plane-takeoff',v42ClearPage:'eraser',v42NewBlock:'plus',pageAdd:'plus',pageCopy:'copy',pageLeft:'arrow-left',pageRight:'arrow-right',pageDelete:'trash',pageShow:'plane-takeoff',diagCopy:'clipboard-copy',diagReload:'database-backup'};
+ const only=new Set(['libOpen','libSend','libDuplicate','libRename','libDelete','v42SearchToggle','libRefresh']);
+ for(const [id,icon] of Object.entries(buttons)){const b=document.getElementById(id);if(!b)continue;b.dataset.rbIcon=icon;
+  if(only.has(id)){b.dataset.rbOnly='1';b.title=b.textContent.trim()||id;b.setAttribute('aria-label',b.title);}
+ }
+ document.querySelectorAll('.range-pict').forEach(old=>{const name=({'bulb-small':'sunset','bulb-large':'sunrise',snail:'snail',horse:'rabbit'})[old.dataset.pict];if(!name)return;
+ const replacement=document.createElement('span');replacement.className='range-pict rb-range-icon';replacement.dataset.rbIcon=name;replacement.dataset.rbOnly='1';replacement.setAttribute('aria-hidden','true');old.replaceWith(replacement);});
+ document.querySelectorAll('[aria-label^="Symbol für"]').forEach(b=>{b.dataset.rbIcon='heart-plus';b.dataset.rbOnly='1';});
+ rb43PaintIcons();
+ // Dynamic list rows and shortcut status changes retain actual icon geometry.
+ new MutationObserver(()=>rb43PaintIcons()).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['data-rb-icon']});
+}
+
+async function init(){try{rb43StaticIcons();parseAssets();buildSymbolPicker();try{const draft=localStorage.getItem('rb03-scroll-draft');if(draft!==null)$('scrollText').value=draft;try{$('scrollLine2').value=localStorage.getItem('rb032-scroll-line2')||'';}catch(e){}if(editHistory.scrollText)editHistory.scrollText.current=$('scrollText').value;}catch(e){}const r=await fetch('/api/font',{cache:'no-store'});if(!r.ok)throw Error('Schrift nicht erreichbar');font=await r.json();fontReady=true;await refreshPages();await refreshLibrary();await v42RefreshPrograms();await v42RefreshShortcuts();try{if(localStorage.getItem('rb03-tab')==='pages')setTab('pages');}catch(e){}$('scrollText').dispatchEvent(new Event('input'));restartPreview();}catch(e){notify('Fehler beim Start: '+e.message);}poll();requestAnimationFrame(tick);}init();
+</script></body></html>
+)RBHTML";

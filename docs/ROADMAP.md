@@ -10,10 +10,10 @@
 - ✅ v0.4.0.x: Modus- und Ambiente-Steuerung, RAMTRACE, Streaming-Lauftext mit 384-Byte-Kacheln. Mehrfach große BLE-Übertragungen bestätigt, achtstündiger Stabilitätstest. Ein einmaliger 436-Byte-Heap-Tiefstwert bleibt ein Untersuchungsfall.
 - ✅ v0.4.1: LittleFS-Textbibliothek und sechs Kurzwahlen in ersten Nutzertests grundsätzlich erfolgreich. Umfangreiche Stromausfall-/Langzeittests fehlen weiterhin.
 
-## v0.4.2.2-dev · Aktueller Entwicklungsstand
+## v0.4.2.3-dev · Aktueller Entwicklungsstand
 
-- ✅ **Auf Hardware bestätigt (v0.4.2.1):** Blockbandsendungen und autonome Wiederholung, gespeicherte reine Lauftextprogramme sowie reine Blockfolgenprogramme. Kein Nachweis für zuverlässige gemischte Programme.
-- 🛠️ **Gemischte Programme:** fehlenden `v042Tick()`-Aufruf ergänzt. Gruppenwechsel nach erstem vollständigen BLE-Upload; Funktionstests auf echter Hardware sind offen.
+- ✅ **Auf Hardware bestätigt (v0.4.2.2):** Gemischte Programmwechsel grundsätzlich möglich, reine Lauftext- und Blockfolgen autonom, Bibliotheksbearbeitung und -reparatur funktionieren. Aber Übergänge noch nicht exakt synchron.
+- 🛠️ **Alternative Laufbandwiedergabe:** Neu: Texte und Blockseiten in einem fortlaufenden scrollenden Bild, mit 16 Spalten Abstand. Hardwaredarstellung und Teilung an der Payloadgrenze noch nicht bestätigt.
 - 🛠️ **Blockzyklus-Kalibrierung:** Fünf reale Messungen stützen `T ≈ N × 0,0795 × (100−V)` Sekunden für V=60–90. Automatische Gruppenlaufzeit nur für Blöcke in diesem Bereich; außerhalb und bei Lauftexten Ersatzzeit 5–180 s. Kalibrierung der Pixelgeschwindigkeit von Lauftexten bleibt offen.
 - 🛠️ **Datenkonsistenz:** Löschen referenzierter Vorlagen, Kurzwahlen automatisch freigeben, unvollständige Programme anzeigen und Reparatur verlangen. Echte Stromausfall- und Mehrfachlöschtests offen.
 - 🛠️ **Editor/UX:** visuell eigener Bearbeitungsmodus und Aktualisieren derselben ID, direkte Bibliotheksrückkehr, Header/Preview-Fix, reduzierte Statusmeldungen.
@@ -39,7 +39,7 @@
 ## Nicht im aktuellen Scope
 
 - Keine Hersteller-Firmwareänderung oder Zugriff auf unbekannte Board-Speicherbereiche.
-- Keine über die MIT-Lizenz hinausgehende Rechtebehauptung an Herstellerfonts/-grafiken.
+- Keine Rechtebehauptung an Herstellerfonts/-grafiken; die gesonderten Lucide/Feather-Icons behalten ihre ISC-/MIT-Lizenzhinweise.
 - Kein automatisches Öffnen/Formatieren unbekannter LittleFS-Dateisysteme.
 
-Referenzen und externe Forschung stehen in [QUELLEN_UND_LIZENZEN.md](QUELLEN_UND_LIZENZEN.md), laufende Detailideen im [THEMENSPEICHER.md](THEMENSPEICHER.md) und die Hardwaretestliste in [TESTPLAN_v0.4.2.2.md](TESTPLAN_v0.4.2.2.md).
+Referenzen und externe Forschung stehen in [QUELLEN_UND_LIZENZEN.md](QUELLEN_UND_LIZENZEN.md), laufende Detailideen im [THEMENSPEICHER.md](THEMENSPEICHER.md) und die Hardwaretestliste in [TESTPLAN_v0.4.2.3.md](TESTPLAN_v0.4.2.3.md).

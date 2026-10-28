@@ -1,4 +1,12 @@
-# Themenstand v0.4.2.1-dev
+# Themenstand v0.4.2.3-dev
+
+## Ergänzung v0.4.2.3-dev – unsere neuen Themen
+
+- **Alles als Laufband:** Alternative zu gemischten, stehenden Blockfolgen ist programmiert: Lauftext und jede 64×16-Blockseite mit 16 Leerspalten horizontal verbinden. **Noch nicht auf CoolLEDX abgenommen.** Längere Programme werden am Inhalt/Seitenrand unterteilt; Übergänge bleiben vorerst zeitgesteuert.
+- **Lucide-Oberfläche:** Iconplan als lokale Inline-SVG-Sammlung, inklusive acht manueller Direktbefehle ohne aktive Auswahlmarkierung; Lizenztexte für ISC und Feather/MIT stehen in `THIRD_PARTY_NOTICES.md` und sind in `LICENSE` referenziert. Hardware- und iPhone-Test ausstehend.
+- **Backup-Import:** Erkennung identischer Namen **und** Inhalte und ID-Neuzuordnung ist eingeführt, Test mit mehrfach importierten Backups noch ausstehend.
+- **UI-Korrektur:** „+ Neu“ im Editor, leere Kurzwahl öffnet Einrichtung, defektes Programm in Kurzwahl optisch hervorgehoben.
+- **Noch offen:** reale Lauftextzeitkalibrierung; Tempo-Sperrverhalten bei Programmende prüfen; langfristige Transaktionssicherheit von Backup-Merges; Stromausfalltests.
 
 ## Messwerte und offene Fragen zu gemischten Programmen (v0.4.2.2)
 
