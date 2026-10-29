@@ -1,8 +1,24 @@
 # RavestickBoard Roadmap
 
+## Aktuell · 29.10.2026 – v0.4.2.4.2-dev-A/B
+
+**Zwei getrennte Diagnose-/Optimierungsbuilds, noch nicht Arduino-kompiliert oder hardwaregeprüft.**
+
+- [x] **v0.4.2.4.1 auf Hardware:** kurzer gemischter Laufband-Upload inkl. 16 Leer-Pixelspalten; großes geteiltes Laufband ohne 20-s-Abschneiden; gemischtes Standardprogramm funktioniert näherungsweise synchron; Kurzwahlen, Modi, Preview, Bibliothek und Backup getestet; etwa drei Stunden Laufzeit und mehrere WLAN-Clients. F-06 `.bak`-Löschfehler im Hotfix behoben.
+- [ ] **RAM-Sicherheitsreserve:** Bei etwa 2:55 h wurde ein historischer System-Heap-Tiefstwert von **1.076 Byte** bei zwei WLAN-Clients beobachtet. Kein kontinuierliches Speicherleck belegt; Ursache offen. BLE-Paketfehler konnte nicht reproduziert werden.
+- [ ] **Build A hardwaretesten:** HTTP-Endpunkt-/404-Profiling, temporäre 20-ms-Speicherminima; Webseite weiter unkomprimiert. Beim Vergleich jeweils vor Messreihe neu starten.
+- [ ] **Build B hardwaretesten:** identischer Profiler, gzip-9, Inhalts-ETag und 304; 200- und 304-Antworten getrennt auswerten. A/B mit einem und zwei WLAN-Clients vergleichen.
+- [ ] **Weiter offen:** F-01/02/03 (Schema, Webserver während BLE und echte Paketantwortprüfung), F-04/05/07/08/09, S-01–S-05, Lauftextkalibrierung und Animationen. Der neue HTTP-Profiler ersetzt keine Hardwareabnahme.
+- [ ] **Bedienungswünsche nach dem Speichervergleich:** Kapazitätsanzeige für 30-KiB-Gruppen im Programmeditor; „Als neuen Eintrag speichern“ bei Bibliotheksbearbeitung; kein kurzes Emoji-Logo beim Neuladen.
+
+Siehe [Vergleichstest](VERGLEICHSTEST_v0.4.2.4.2.md). Historischer Status der vorherigen Versionen folgt unverändert.
+
+---
+
+
 **Lesart:** „Programmiert“ ist nicht dasselbe wie „auf CoolLEDX hardwarebestätigt“. Alte Entwicklungsentscheidungen sind im Changelog und in den Versionsberichten archiviert. Die folgenden Themen sind der aktuelle Plan.
 
-## Statusübersicht · 29.10.2026
+## Historischer Stand aus v0.4.2.4.1 · 29.10.2026
 
 **Hardware-Ergebnisse v0.4.2.4 (29.10.2026):** Kompilierung/Boot, Bestandserhalt und kurzes gemischtes Laufband mit 16 Leer-Pixelspalten bestätigt. Lange geteilte Laufbänder, RAMTRACE und BLE-Recovery noch offen. Die schwebende Steuerleiste war im Praxistest hinderlich; v0.4.2.4.1 legt sie in den Seitenfluss. Kurzwahl-Icons und sichere Löschung der Programm-`.bak` sind im Hotfix implementiert, aber noch nicht hardwareabgenommen.
 

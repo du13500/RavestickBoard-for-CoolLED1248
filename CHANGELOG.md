@@ -1,3 +1,11 @@
+## v0.4.2.4.2-dev-A/B – 29.10.2026 · Kontrollierte HTTP-/RAM-Messung
+
+- **Build A:** Unveränderte, unkomprimierte Webseitenauslieferung wie v0.4.2.4.1-dev; neue HTTP-/RAM-Messung für alle registrierten Routen und unbekannte 404-Pfade. `/api/http.txt` exportiert die letzten 32 Anfragen, Zeit, WLAN-Clientzahl, 20-ms-Speicherminima und historische System-Minima vor/nach der Anfrage. Identische Instrumentierung in Build B.
+- **Build B:** Dieselbe Webseite komprimiert (gzip-9, 44.911 statt 157.222 Byte HTML). Auslieferung aus `PROGMEM` mittels `send_P(..., length)`; `Content-Encoding: gzip`; inhaltsbasierter ETag (`SHA-256`-Präfix) aus der Webquelle; registriertes `If-None-Match`, `Cache-Control: no-cache` und 304 für unveränderte Version. API weiterhin `no-store`.
+- **Messplan:** A und B jeweils nach Neustart mit einem und zwei WLAN-Clients, Seitenaufrufen und passivem zweiten Client vergleichen. HTTP 200 und 304 unterscheiden. Kein neuer BLE-/Renderingpfad.
+- **Diagnosekorrekturen:** Veraltete Behauptung, dass Editorseiten in NVS persistieren, berichtigt; Überschrift „ZÄHLER“ korrigiert. Frühere Bibliotheksdatensätze und Partitionierung unverändert.
+- **Status:** Keine Arduino-Kompilierung und kein Hardwaretest für A/B durchgeführt. Timing und Speicherwirkung des Timers sind selbst zu messen. 20-ms-Abtastung kann kürzere Spitzen verpassen.
+
 ## v0.4.2.4.1-dev – 29.10.2026 · Bedienungs-Hotfix und überprüfter Hardwarestand
 
 - **Hardware v0.4.2.4 bestätigt:** Sketch kompiliert, Boot ohne Panic, Bibliothek/Kurzwahlen erhalten; kleines gemischtes Laufband mit einem Upload und korrekten Farben/Reihenfolge; 16 leere Pixelspalten zwischen Einträgen. Die Langzeit-, Retry- und >30-KiB-Prüfungen bleiben ausdrücklich offen; Original-Mischprogramm in dieser Runde nicht reproduzierbar.

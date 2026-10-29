@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="#11141c" name="theme-color"/>
-<title>RavestickBoard · v0.4.2.4.1-dev</title>
+<title>RavestickBoard · v0.4.2.4.2-dev</title>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="RavestickBoard"/>
@@ -255,7 +255,7 @@ body,body.home-active{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px)
 
 </style></head>
 <body><main id="appShell">
-<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button">🍌</button><div><h1>RavestickBoard <span class="version">v0.4.2.4.1-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
+<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button">🍌</button><div><h1>RavestickBoard <span class="version">v0.4.2.4.2-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
 
 
 
@@ -336,7 +336,7 @@ body,body.home-active{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px)
 <div class="panel inner-panel"><h2>Ambiente</h2><p class="hint">Eine Farbe antippen, um die gesamte 64×16-Tafel mit dieser Farbe zu füllen. Die aktuelle Textanzeige wird dadurch ersetzt.</p>
 <div aria-label="LED-Farben" class="ambience-colors" id="ambienceColors"></div>
 
-</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload">Aktualisieren</button><button class="primary" id="diagCopy">📋 Log kopieren</button><a class="secondary" download="RavestickBoard_Diagnose_v0.4.2.4.1-dev.txt" href="/api/diagnostics.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">TXT herunterladen</a><a class="secondary" download="RavestickBoard_RAM_v0.4.2.4.1-dev.txt" href="/api/ram.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
+</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload">Aktualisieren</button><button class="primary" id="diagCopy">📋 Log kopieren</button><a class="secondary" download="RavestickBoard_Diagnose_v0.4.2.4.2-dev.txt" href="/api/diagnostics.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">TXT herunterladen</a><a class="secondary" download="RavestickBoard_RAM_v0.4.2.4.2-dev.txt" href="/api/ram.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
 <div class="panel"><h2>Einstellungen</h2>
 <div class="settings-section" id="v42SettingsBackup">
 <div class="label">▤ Bibliothek &amp; Datensicherung</div>
@@ -346,7 +346,7 @@ body,body.home-active{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px)
 <div class="settings-section"><div class="label">⌁ LED-Tafel</div>
 <div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><strong>CoolLEDX</strong><div class="tiny muted">Fest konfiguriertes Gerät</div></div><span class="tiny muted">Aktiv</span></div>
 </div>
-<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.2.4.1-dev</p></div>
+<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.2.4.2-dev</p></div>
 </section><aside id="rbDock" class="rb-dock" aria-label="Tafelsteuerung">
  <div class="pixel-range" role="group" aria-label="Globale Helligkeit"><span class="rb-range-icon" data-rb-icon="sunset" aria-hidden="true"></span><input aria-label="Helligkeit" data-global="brightness" id="dockBrightness" min="1" max="100" type="range" value="75"/><b data-global-label="brightness">75 %</b><span class="rb-range-icon" data-rb-icon="sunrise" aria-hidden="true"></span></div>
  <div class="pixel-range rb-dock-speed" role="group" aria-label="Globale Geschwindigkeit"><span class="rb-range-icon" data-rb-icon="snail" aria-hidden="true"></span><input aria-label="Geschwindigkeit" data-global="speed" id="dockSpeed" min="1" max="100" type="range" value="80"/><b data-global-label="speed">80 / 100</b><span class="rb-range-icon" data-rb-icon="rabbit" aria-hidden="true"></span></div>
@@ -553,7 +553,7 @@ document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()
 $('editShortcuts').addEventListener('click',()=>{shortcutsEditing=!shortcutsEditing;const b=$('editShortcuts');b.setAttribute('aria-pressed',String(shortcutsEditing));b.classList.toggle('is-active',shortcutsEditing);b.dataset.rbIcon=shortcutsEditing?'pencil-off':'pencil';b.title=shortcutsEditing?'Bearbeitungsmodus beenden':'Kurzwahlen bearbeiten';b.setAttribute('aria-label',b.title);document.querySelectorAll('.shortcut').forEach(tile=>tile.classList.toggle('editing',shortcutsEditing));rb43PaintIcons();});
 document.querySelectorAll('.shortcut').forEach(b=>b.addEventListener('click',async()=>{const slot=Number(b.dataset.shortcut);if(shortcutsEditing||!v42Shortcuts[slot-1]?.type){await v42OpenShortcut(slot);return;}try{const j=await api('/api/shortcuts/run',{slot});notify(j.message);}catch(e){notify('Kurzwahl: '+e.message);}}));
 
-// v0.4.2.4.1-dev · Stored text library. The ESP32 is the source of truth, not
+// v0.4.2.4.2-dev · Stored text library. The ESP32 is the source of truth, not
 // localStorage; draft/editor, stored record and current LED display are separate.
 let libraryItems=[],libraryShortcuts=[0,0,0,0,0,0],librarySelected=0,libraryEditorId=0,libraryReady=false;
 let libraryCurrentRecord=null,libraryDragId=0;

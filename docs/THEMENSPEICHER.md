@@ -1,3 +1,26 @@
+# Aktueller Themenstatus · v0.4.2.4.2-dev-A/B (29.10.2026)
+
+## Hardwarebestätigt unter v0.4.2.4.1-dev
+- [x] Boot/Compile ohne Panic; LittleFS-Bibliothek und Kurzwahlen nach Update erhalten.
+- [x] Kleine Text→Block→Text-Laufbandkombination, korrekte Farben und 16 Leer-Pixelspalten.
+- [x] Gemischtes Laufband über 30 KiB vollständig über geteilte Gruppen abgespielt, keine 20-s-Abschneidung.
+- [x] Normaler gemischter Programmablauf, 2×3-Kurzwahlen, acht BLE-Modi, Preview-Icons, Diagnose-Menü, Bibliothek, Backup-Zusammenführung.
+- [x] 2:55 h Laufzeit mit 75/76 Jobs erfolgreich; der einzelne Fehler war „Tafel nicht erreichbar“ (nicht Pakettimeout). **Kein stabiler Speicherbetrieb bewiesen:** System-Minimum 1.076 B bei zwei WLAN-Clients.
+
+## Aktuelles Laborexperiment – A/B
+- [ ] **v0.4.2.4.2-dev-A:** HTTP-Pfade/404, 20-ms-Heap-Sampler, `/api/http.txt`; Startseite unverändert unkomprimiert. Hardwaretest offen.
+- [ ] **v0.4.2.4.2-dev-B:** gleiche Instrumentierung, gzip und Hash-ETag; korrekte HTTP 200/304 prüfen. Hardwaretest offen.
+- [ ] Vor jeder Reihe Neustart; 1 und 2 WLAN-Clients, 20 Reloads, unveränderte/komprimierte HTTP-200-Aufrufe, 304 separat, unbekannte System-404-Pfade dokumentieren.
+- [ ] Ursachenanalyse historische Heap-Einbrüche; bisher nur zeitlicher Zusammenhang mit zweitem WLAN-Client, **kein nachgewiesener Verursacher**.
+
+## Weitere offene Punkte
+- [ ] Eigene gespeicherte Text-/Blockvarianten per **„Als neuen Eintrag speichern“** anlegen, ohne ursprüngliche ID zu überschreiben.
+- [ ] Im Programm-Editor **30-KiB-Kapazitätsanzeige** einschließlich tatsächlicher Upload-Gruppierung.
+- [ ] Originale Lucide-Banane ohne kurz aufblitzendes Emoji beim Seitenstart.
+- [ ] Claude-Befunde F-01–F-12 und S-01–S-06 weiterverfolgen; F-06 bereits in v0.4.2.4.1 korrigiert. BLE-Retry selbst weiterhin nicht provozierbar.
+
+---
+
 # Aktueller Themenstatus · v0.4.2.4-dev (28.10.2026)
 
 **Prinzip:** Historische Abschnitte darunter bleiben als Entscheidungs- und Ideenarchiv stehen. Ein `[x]` bescheinigt nur den explizit genannten Test-/Implementierungsumfang; **in der neuen Firmware nicht automatisch erneut hardwaregetestet**. Alle alten Aussagen „noch offen“ sind für ihren damaligen Versionsstand zu lesen.

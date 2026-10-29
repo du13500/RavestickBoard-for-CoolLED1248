@@ -4,9 +4,9 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.4.1--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.4.2--dev--A%2FB-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
-<img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
+<img alt="Status" src="https://img.shields.io/badge/status-diagnostic%20builds%20not%20hardware%20tested-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
 <img alt="Mission" src="https://img.shields.io/badge/mission-hugs%20and%20love-ff69b4">
 </p>
@@ -15,7 +15,18 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 
 Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` des **ESP32-C3 Super Mini**. Das lokale Webinterface unter **http://192.168.4.1** überträgt die Darstellung via Bluetooth Low Energy (FFF0/FFF1) an die **CoolLEDX-Tafel**. Die LED-Tafel benötigt keine modifizierte Herstellerfirmware und kann einmal hochgeladene Inhalte autonom wiederholen. Die Bedienoberfläche läuft ohne Internetzugang; USB bleibt der einzige Firmware-Updateweg, **kein OTA**.
 
-## Aktuell: v0.4.2.4.1-dev
+## Aktuell: v0.4.2.4.2-dev-A/B (HTTP-/RAM-Vergleichsbuilds)
+
+**A und B sind absichtlich zwei eigenständige Versuchsfirmwares, keine aufeinanderfolgenden Upgrades.**
+A ergänzt unsere bewährte v0.4.2.4.1-dev ausschließlich um dieselbe HTTP-/RAM-Protokollierung, die auch in B enthalten ist. Die Startseite bleibt bei A unkomprimiert und mit `Cache-Control: no-store`. B verwendet für **dieselbe HTML-Quelle** gzip-Stufe 9, ETag und optional `304 Not Modified`. Die Geräteversion unterscheidet `-A` und `-B` auch in den Logdateinamen. Für die Messung wird jeweils ein Sketch geflasht, nicht beide.
+
+**Teststatus:** Weder A noch B ist lokal mit Arduino kompiliert oder auf dem ESP32-C3 getestet worden. Unsere zuvor bestätigten Hardwaretests gelten für v0.4.2.4.1-dev und dürfen nicht auf die beiden Testbuilds übertragen werden. Die 20-ms-Stichproben können sehr kurze Speicherpeaks übersehen und verändern selbst die RAM-Grundlast geringfügig. Der historische `ESP.getMinFreeHeap()`-Wert wird erst durch ESP32-Neustart zurückgesetzt.
+
+**Neuer Mess-Export:** `http://192.168.4.1/api/http.txt` protokolliert HTTP-Pfade (inklusive unbekannter 404-Pfade), Status, WLAN-Clientzahl, Laufzeit, Heap- und Maxblockwerte vor/nach der Anfrage, den niedrigsten in 20-ms-Schritten beobachteten Wert während der Anfrage und das historische System-Minimum vor/nach der Anfrage. Queryparameter, Textinhalte, Passwörter und BLE-Adressen werden nicht exportiert. Ältere Exporte `/api/ram.txt` und `/api/diagnostics.txt` funktionieren weiterhin.
+
+**Testablauf und Grenzen:** [docs/VERGLEICHSTEST_v0.4.2.4.2.md](docs/VERGLEICHSTEST_v0.4.2.4.2.md). Zwei Sketches: `firmware/RavestickBoard_v0_4_2_4_2_A` und `firmware/RavestickBoard_v0_4_2_4_2_B`. Webquelle `web/index.html` wird durch `python tools/sync_web.py` in beide Header synchronisiert. Das Build-B-HTML umfasst nach gzip **44.911 B** gegenüber **157.222 B** Rohdaten (inklusive des bisherigen Raw-String-Zeilenumbruchs).
+
+### Historisch: v0.4.2.4.1-dev
 
 **Hardwaretest vom 29.10.2026, Basis v0.4.2.4-dev:** Firmware kompiliert und startet ohne Panic; LittleFS-Bibliothek und sechs Kurzwahlen erhalten. Ein kleines Laufband (Lauftext → 4 Blockseiten → Lauftext) mit Originalfarben und Reihenfolge funktioniert als ein Upload; auch die 16 echten Leer-Pixelspalten wurden bestätigt. **Noch offen:** geteilte Laufbänder über 30 KiB, Langzeit-RAMTRACE, ACK-/Retry-Test, die weiteren UI- und Backupregressionen. Der normale gemischte Programmablauf mit stehenden Blockseiten war in dieser Runde nicht reproduzierbar; das ist weder ein Bestehen noch ein belegter Fehler.
 
