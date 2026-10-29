@@ -19,19 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-
--------------------------------------------------------------------------------
-THIRD-PARTY ICONS — NOTICE (informational; not a modification of the MIT license above)
--------------------------------------------------------------------------------
-
-RavestickBoard includes selected icons from Lucide (https://lucide.dev/).
-These icons are licensed separately under ISC; certain icons derived from
-Feather Icons also carry an MIT license notice.
-
-The complete copyright notices, license texts, and applicable third-party
-attributions are provided in THIRD_PARTY_NOTICES.md, which accompanies this
-LICENSE in the repository and distribution packages.
-
-The RavestickBoard MIT license above does not replace or override those
-third-party notices and rights.
