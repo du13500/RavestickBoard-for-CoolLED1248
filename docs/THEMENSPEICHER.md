@@ -1,3 +1,37 @@
+# Aktueller Themenstatus · v0.4.2.4-dev (28.10.2026)
+
+**Prinzip:** Historische Abschnitte darunter bleiben als Entscheidungs- und Ideenarchiv stehen. Ein `[x]` bescheinigt nur den explizit genannten Test-/Implementierungsumfang; **in der neuen Firmware nicht automatisch erneut hardwaregetestet**. Alle alten Aussagen „noch offen“ sind für ihren damaligen Versionsstand zu lesen.
+
+## Abgeschlossen oder hardwarebestätigt
+
+- [x] Eigenes BLE/WLAN, Text-/Blockeditor, 7 Farben, Originalfonts und 16×16-Grafiken, Inline-Symbole, NVS-/LittleFS-Speicherung.
+- [x] Sechs Kurzwahlen, Bearbeitung gespeicherter Einträge unter gleicher ID; aus leeren Kurzwahlen direkt Einrichtung öffnen.
+- [x] Programme aus benachbarten Lauftexten oder Blockfolgen werden verkettet, soweit das Datenbudget reicht; bei einem Einzelupload läuft die Tafel autonom.
+- [x] Gemischte Programme mit ursprünglicher Standbilddarstellung wechseln automatisch (v0.4.2.2 Hardwaretest), jedoch nicht exakt synchron.
+- [x] Neue alternative Verkettung **„Alles als Laufband“** über Blockseiten und unterschiedlich formatierte Texte (v0.4.2.3 Hardwaretest: kleines Laufband, Farben/Symbole korrekt).
+- [x] Blockzyklus-Messungen bei Tempo 60/70/80/90, 4 Seiten 80: 6,33 s. Nicht für Lauftextgeschwindigkeit extrapolieren.
+- [x] Löschung verwendeter Bibliothekseinträge, Programme rot markiert, Reparatur vor Wiedergabe; direkte Kurzwahl wird bei Löschen geleert.
+- [x] Lucide-Iconplan, acht BLE-Direktmodi, MIT-Lizenz plus eigene ISC-/MIT-Drittanbieterhinweise (v0.4.2.3 / Repo).
+
+## Für v0.4.2.4 umgesetzt, Test offen
+
+- [ ] **STAB-24:** Geteiltes Laufband darf nicht nach fixen 20 s abgeschnitten werden; vorläufig konservative Zeitsteuerung prüfen.
+- [ ] **BLE-24:** Paketabbruch (Paket 70/106 in v0.4.2.3) – einmaliger vollständiger Retry mit Neuverbindung; tatsächliches Recovery auf der LED-Tafel prüfen.
+- [ ] **RAM-24:** Gemischte Laufbänder tileweise rendern; Langzeit-/Mehrfachtests und Heap-Fragmentierung prüfen.
+- [ ] **UI-24:** Eine globale feste Tafelsteuerung mit wiederverwendeten Bestandselementen, kleine Kacheln wie in den Paint-Mockups. Mobiles Layout auf echter Hardware prüfen.
+- [ ] **PRE-24:** Nur Lucide-Icons in Preview: Anfang, Play/Pause, Schnecke/Vogel/Hase; dynamische Symbole bleiben nach Tastenbetätigung sichtbar.
+- [ ] **DOC-24:** Dokumentation/Community-Dateien aufeinander abstimmen, README in Wir-Perspektive und KI-Mithilfe beibehalten; Repository-Abnahme offen.
+
+## Weiterhin offen / bewusst später
+
+- [ ] Lauftextkalibrierung: reale Zykluszeit abhängig von Textpixelbreite und Tempo (mindestens zwei Messwerte bei Tempo 80); auch Blockgeschwindigkeit außerhalb Tempo 60–90 untersuchen.
+- [ ] Geteilte Scrollbänder an Inhaltsgrenzen synchron mit dem tatsächlichen LED-Durchlauf wechseln; der 30-KiB-Wert ist eine vorsichtige Softwaregrenze.
+- [ ] Langzeitstabilität BLE/WLAN, zeitweilige RAM-Tiefstwerte, mehrere Clients, Diagnosen bei langen Uploads; fehlende Paketbestätigungen ohne verlorenen Programmzustand behandeln.
+- [ ] Pixelgenaue Fortschreibung der originalen Pixelarts und Lizenz-/Herkunftsfragen für Herstellerinhalte getrennt betrachten.
+- [ ] Animationen, GIF, Countdown, Stoppuhr, Punktetafel, per Zeichen formatierbarer Text, individuelle WLAN-Zugangsdaten, BLE-Gerätesuche, mehrere Displays – keine Implementierung in v0.4.2.4.
+
+---
+
 # Themenstand v0.4.2.3-dev
 
 ## Ergänzung v0.4.2.3-dev – unsere neuen Themen

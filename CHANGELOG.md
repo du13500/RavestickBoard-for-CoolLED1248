@@ -1,3 +1,10 @@
+## v0.4.2.4-dev – 28.10.2026 (Implementierung, Hardwaretest offen)
+
+- **Befund aus v0.4.2.3 auf echter CoolLEDX:** Kurzes gemischtes Scrollband funktioniert; bei größerem, aufgeteiltem Band schnitt die alte 20-s-Gruppenzeit ab. Der letzte BLE-Upload brach bei Paket 70/106 ohne Bestätigung ab. Kein nachgewiesener RAM-Panic (RAMTRACE Heap-Minimum 17 KB, später 31 KB frei).
+- **Firmware:** Gemischte Laufbänder werden tilebasiert mit einem 384-B-Puffer generiert; 20-s-Ersatzzeit beeinflusst Programme nicht mehr. Stattdessen vorläufige Breite/Tempo-Schätzung, die eine volle Wiedergabe bevorzugt. Maximal ein kompletter Neu-Upload mit neuem BLE-Verbindungsaufbau nach Paketbestätigungsfehler. Nicht hardwareabgenommen.
+- **Web:** Ein gemeinsames, kompaktes Tafelsteuer-Dock am unteren Rand; kleinere Kurzwahlkacheln (2×3), unveränderte direkte Kurzwahl-Einrichtung, acht BLE-Icon-Tasten. Preview nur mit Lucide (Anfang/Play/Pause/Schnecke/Vogel/Hase). Diagnose-Icon `bug`, Menüüberschrift weg, Editor-Fußinfo entfernt, Gruppensekunden-Eingabe entfernt. Mobile Anordnung an Paint-Skizzen orientiert.
+- **Repository:** README, Roadmap, Themenspeicher und Testpläne auf Hardwarebefunde abgeglichen; Community-Unterlagen und Templates hinzugefügt. Unsere MIT-Lizenz ist unverändert, Drittanbieterrechte Lucide ISC/Feather MIT einschließlich `LICENSE`-Hinweis bleiben erhalten. Generische KI-„Nutzer“-Formulierungen werden vermieden; Entwicklung als gemeinsame Arbeit mit ChatGPT/Claude transparent benannt.
+
 # Changelog
 
 ## v0.4.2.3-dev – Alles als Laufband, Lucide und Bibliothekskomfort
@@ -6,8 +13,8 @@
 - **Zweite Programm-Wiedergabeart:** Programm kann alternativ alle Lauftext- und Blocksegmente horizontal verketten; 16 Pixel Zwischenraum, gleiche Farb-/Glyphenrenderer, möglichst ein Upload, Datenlimit 30 KiB; Splits an Seitengrenzen bzw. zwischen ganzen Texten. Originalmodus für vorhandene Programme bleibt der Standard. Programmschema nutzt bisher reserviertes Byte (RBP2 bleibt bestehen).
 - **Bibliothek/Editor:** Neuer-Inhalt-Button direkt nach Speichern und bearbeitete Vorlagen weiter editierbar; leere Kurzwahl öffnet Einrichtung; unvollständige Programm-Kurzwahl rötlich.
 - **Backup-Import:** Inhalts- und Namensvergleich vor Wiederverwendung sowie ID-Neuzuordnung für Programme/Kurzwahlen; Schema 1/2 lesbar. Kein unkontrolliertes Überschreiben, kein atomarer Import bei Fehlern.
-- **Icon-Oberfläche:** Offline-Lucide-SVGs für Navigation, Schaltflächen, Regler und acht kompakte erzwungene BLE-Modi, die jeden Klick senden, ohne aktiven Zustand. Third-party-ISC- und Feather-MIT-Texte in THIRD_PARTY_NOTICES.md; RavestickBoard-eigener Code bleibt MIT-lizenziert. Hersteller-Pixelmotive bleiben unberührt.
-- **Dokumentation:** Gemeinsame Wir-Perspektive und KI-Werkzeuge ChatGPT/Claude wieder aufgenommen; MIT-Lizenz im Nachtrag wiederhergestellt; die zwischenzeitliche restriktive Fassung war fehlerhaft.
+- **Icon-Oberfläche:** Offline-Lucide-SVGs für Navigation, Schaltflächen, Regler und acht kompakte erzwungene BLE-Modi, die jeden Klick senden, ohne aktiven Zustand. Third-party-ISC- und Feather-MIT-Texte in THIRD_PARTY_NOTICES.md; RavestickBoard-eigener Code bleibt MIT-lizenziert. Hersteller-Pixelmotive bleiben von dieser Freigabe unberührt.
+- **Dokumentation:** Gemeinsame Wir-Perspektive und KI-Werkzeuge ChatGPT/Claude wieder aufgenommen; MIT-Lizenz unserer eigenen Software im Nachtrag wiederhergestellt (die zwischenzeitliche restriktive Fassung war ein Dokumentationsfehler).
 - **Noch offen:** Echter ESP32-Build, Betrieb mit gleichzeitigem WLAN/BLE und die neue Laufbanddarstellung sind hardwareseitig zu testen; Lauftextgeschwindigkeiten weiterhin unkalibriert.
 
 ## v0.4.2.2-dev – Gemischte Programme, sichere Bibliotheksabhängigkeiten, Editorführung

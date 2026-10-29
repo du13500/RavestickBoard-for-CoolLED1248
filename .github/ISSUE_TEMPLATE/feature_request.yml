@@ -1,0 +1,25 @@
+name: Funktion vorschlagen
+description: Idee oder Erweiterung für RavestickBoard
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: "Bitte zuerst Roadmap und Themenspeicher durchsuchen, ob die Idee schon dokumentiert ist. 🍌"
+  - type: textarea
+    id: problem
+    attributes:
+      label: Was soll besser werden?
+      description: Beschreibe den bisherigen Ablauf oder das Problem.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Gewünschte Lösung
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Hardware, Speicher und Kompatibilität
+      description: Gibt es Risiken für BLE-Datenmenge, RAM, alte Bibliothekseinträge oder ein Offline-Webinterface?

@@ -120,6 +120,8 @@ Die vom LED-Board eingeblendete **Prozentanzeige erscheint bei jedem vollständi
 - **Programm:** Eine oder mehrere Seiten, die *idealerweise mit einem* Transfer auf der Tafel autonom ablaufen. **Noch nicht implementiert.**
 - **Playlist:** Mehrere Programme, deren Wechsel per ESP32/BLE erfolgen dürfen. **Der v0.2.0-Seitenplayer liefert dafür eine technische Grundlage, aber noch keine vollständige Programmbibliothek.**
 
+*Historischer Entwurfsstand: Die Abschnitte 5–8 beschreiben teilweise alte Versionen und sind als Entwicklungsarchiv zu lesen. Für v0.4.2.4 siehe die aktuelle Ergänzung am Ende der Datei und die Roadmap.*
+
 ## 5. Speicher und Diagnose
 
 - **Vorhanden:** NVS für die aktuellen Blockseiten; RAM-Ringpuffer für Diagnose (56 Einträge); Fehler-/Transferzähler seit Boot; Status und TXT-Bericht.
@@ -190,3 +192,16 @@ Siehe [`ROADMAP.md`](ROADMAP.md) und [`THEMENSPEICHER.md`](THEMENSPEICHER.md): e
 Ein Programm speichert im bislang reservierten `RBP2`-Byte `playback=0` (Originalmodus) oder `playback=1` (alles scrollend); vorhandene Datensätze bleiben gültig. Beim all-scroll-Gruppenaufbau werden bis zu 96 Teilsegmente nacheinander aus LittleFS ermittelt und innerhalb des 30-KiB-Budgets mit 16 leeren Pixelspalten getrennt. Einzelne Blockseiten bleiben 64 Spalten breit, getrennt wird nur an Segmentgrenzen. Die RGB-Daten entstehen in einem maximal 30-KiB großen temporären Heap-Puffer, anschließend werden wie bisher die 107-Byte-Protokollheader und drei RGB-Ebenen übertragen. Änderungen an BLE-Framing, Paketgröße, Board-Firmware und LittleFS-Format sind dafür nicht nötig.
 
 Ein bereits vollständig übertragenes Ein-Gruppen-Programm wiederholt die Tafel selbstständig. Bei mehreren Gruppen benötigt der ESP32 weiterhin neue Uploads samt sichtbarer Prozentanzeige. Lauftext-Zykluszeiten sind nicht hardwarekalibriert, weshalb die 5–180-Sekunden-Ersatzzeit bei notwendiger Teilung weiterhin ausdrücklich vorläufig ist.
+
+
+## v0.4.2.4-dev – aktueller Technikeintrag (28.10.2026)
+
+- **Alte Datenformate bleiben gültig:** `RBL1` Text, `RBB2` Block, `RBP2` Programme, `RBS2` Kurzwahlen. Die Wiedergabeart steckt im reservierten Byte des `RBP2`-Datensatzes, keine Migration der vorhandenen Partition. LittleFS und NVS werden nicht neu formatiert.
+- **Gemischtes Laufband:** Der vorangehende Abschnitt zu v0.4.2.3 dokumentiert den damaligen Vollpuffer als *historischen Stand*. Ab v0.4.2.4 wird die RGB-Matrix in **384-Byte-Tiles** berechnet (`rb43RenderMixedTile`, `rb43CopyMixedSlice`) und in den üblichen 107-Byte-Header/drei RGB-Bitplanes eingespeist. Die Segmentliste enthält maximal 96 Records und 16 Pixel Abstand pro benachbartem Inhalt; vollständige Einzeltexte und Blockseiten werden bei Gruppenteilung nicht zertrennt.
+- **Fehlerverhalten:** Scheitert ein Bildpaket an ausbleibender BLE-Notification, wird die Verbindung geschlossen und die komplette Gruppe maximal **einmal** neu gesendet. Nach einem weiteren Fehler stoppt das laufende Programm. Steuerkommandos (Helligkeit/Tempo/Modus/Ein/Aus) werden nicht blind wiederholt. Das ist implementiert, aber noch **nicht hardwaregetestet**.
+- **Zeitsteuerung:** Ein einzelnes vollständig übertragenes Pixelband bleibt ohne ESP32-Neu-Uploads autonom auf der Tafel. Die feste 20-s-Ersatzzeit bestimmt Gruppenwechsel nicht mehr. Blockseiten bei Tempo 60–90: `Sekunden≈Anzahl×0,0795×(100−Tempo)`; Lauftexte/geteilte Laufbänder: konservative, noch nicht hardwarekalibrierte Schätzung aus Breite und Geschwindigkeit. Übergang nicht garantiert bildgenau.
+- **Web:** Ein gemeinsames festes Tafelsteuer-Dock (eine sichtbare Bedienstelle) ersetzt die mehrfachen unteren Regler auf Bibliothek, Programme, Editor, Kurzwahl und Ambiente. Die temporär beibehaltenen unsichtbaren Eingabequellen des Editors dienen der Kompatibilität der vorhandenen JS-Handler, nicht einer zweiten Nutzersteuerung.
+- **BLE:** `GET /api/status` und `POST /api/mode` bleiben unverändert. `0x06` mit den bereits bestätigten acht Moduswerten wird bei jedem manuellen Icon-Tipp erneut gesendet; keine erzwungene Bildneuübertragung.
+- **Lizenz:** Eigener Code unter MIT; eingebaute Lucide-SVGs unter ISC, für einige Feather-abgeleitete Icons zusätzlich MIT. Vollständige Hinweise in `THIRD_PARTY_NOTICES.md`, ergänzender Verweis nach dem MIT-Lizenztext in `LICENSE`.
+
+**Offene Prüfung:** Kompilierung auf ESP32-C3, realer BLE-Mixed-Tile-Transfer, Timeout-/Retry-Verhalten, länger laufende geteilte Bänder und Speicher-Fragmentierung.

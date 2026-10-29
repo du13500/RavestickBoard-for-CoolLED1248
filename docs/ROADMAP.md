@@ -2,31 +2,42 @@
 
 **Lesart:** „Programmiert“ ist nicht dasselbe wie „auf CoolLEDX hardwarebestätigt“. Alte Entwicklungsentscheidungen sind im Changelog und in den Versionsberichten archiviert. Die folgenden Themen sind der aktuelle Plan.
 
-## Bereits bestätigt
+## Statusübersicht · 28.10.2026
 
-- ✅ v0.1.x: Eigenes ESP32-C3-WLAN, Webinterface und direkte CoolLEDX-BLE-Textübertragung.
-- ✅ v0.2.0 Korrektur 1: Mehrere NVS-Blockseiten, Einzelübertragung, Basis-Seitenplayer; bei jedem automatischen Wechsel noch kompletter Neu-Upload.
-- ✅ v0.3.x: Herstellerfonts und Pixelart, zusätzliche Inline-Symbole, Mini-Zeilen, Live-Steuerbefehle. Einzelne Pixel- und Abstandsfragen bleiben offen.
-- ✅ v0.4.0.x: Modus- und Ambiente-Steuerung, RAMTRACE, Streaming-Lauftext mit 384-Byte-Kacheln. Mehrfach große BLE-Übertragungen bestätigt, achtstündiger Stabilitätstest. Ein einmaliger 436-Byte-Heap-Tiefstwert bleibt ein Untersuchungsfall.
-- ✅ v0.4.1: LittleFS-Textbibliothek und sechs Kurzwahlen in ersten Nutzertests grundsätzlich erfolgreich. Umfangreiche Stromausfall-/Langzeittests fehlen weiterhin.
+**Bereits auf Hardware bestätigt** (nicht automatisch für v0.4.2.4 regressionsgetestet):
 
-## v0.4.2.3-dev · Aktueller Entwicklungsstand
+- ✅ BLE-Senden, WLAN-Webinterface, Originalfonts/Pixelart, Mini-Schriften, Farben, Blockseiten, Live-Brightness/Tempo/Modus und Diagnose-Download (v0.1–v0.4.2).
+- ✅ Bibliothek (LittleFS), sechs Kurzwahlen, sichere Aktualisierung vorhandener Einträge, Löschung mit referenziertem Programm, Reparatur des Programms und automatische Freigabe direkter Kurzwahlreferenzen (v0.4.2.2).
+- ✅ Reine Lauftext- und Blockprogramme mit nur einem Upload und autonomer Wiederholung; gemischter Originalprogramm-Wechsel funktioniert grundsätzlich (v0.4.2.2), aber noch nicht lückenlos synchron.
+- ✅ Blockseiten-Laufzeit bei Tempo 60/70/80/90 empirisch bestimmt, 4 Seiten bei Tempo 80 zuletzt **6,33 s** (v0.4.2.2).
+- ✅ Neues **„Alles als Laufband“** mit Texten, 4 Blockseiten, Farben und Symbolen auf der Tafel sichtbar (v0.4.2.3). Problemfälle bei geteilten Gruppen dokumentiert.
+- ✅ v0.4.2.3: Leere Kurzwahl öffnet Einrichtung; Lucide-Direktsteuerung und visueller Editor wurden im echten Browser geprüft. Beim Flashen half **115200 Baud** bei einem COM-Port-Fehler.
 
-- ✅ **Auf Hardware bestätigt (v0.4.2.2):** Gemischte Programmwechsel grundsätzlich möglich, reine Lauftext- und Blockfolgen autonom, Bibliotheksbearbeitung und -reparatur funktionieren. Aber Übergänge noch nicht exakt synchron.
-- 🛠️ **Alternative Laufbandwiedergabe:** Neu: Texte und Blockseiten in einem fortlaufenden scrollenden Bild, mit 16 Spalten Abstand. Hardwaredarstellung und Teilung an der Payloadgrenze noch nicht bestätigt.
-- 🛠️ **Blockzyklus-Kalibrierung:** Fünf reale Messungen stützen `T ≈ N × 0,0795 × (100−V)` Sekunden für V=60–90. Automatische Gruppenlaufzeit nur für Blöcke in diesem Bereich; außerhalb und bei Lauftexten Ersatzzeit 5–180 s. Kalibrierung der Pixelgeschwindigkeit von Lauftexten bleibt offen.
-- 🛠️ **Datenkonsistenz:** Löschen referenzierter Vorlagen, Kurzwahlen automatisch freigeben, unvollständige Programme anzeigen und Reparatur verlangen. Echte Stromausfall- und Mehrfachlöschtests offen.
-- 🛠️ **Editor/UX:** visuell eigener Bearbeitungsmodus und Aktualisieren derselben ID, direkte Bibliotheksrückkehr, Header/Preview-Fix, reduzierte Statusmeldungen.
-- 🔬 **Abnahme:** Arduino-ESP32-Kompilierung und Flash; gemischtes Programm TEXT → BAND → TEXT auf der echten LED-Tafel; automatischer 6-Seiten-Zyklus bei Tempo 80; Bibliothekseintrag löschen (auch wenn Programm/Kurzwahl ihn verwendet); Neustart und Backup-Kontrolle.
+**In v0.4.2.4-dev implementiert, Hardwaretest ausstehend:**
+
+- 🛠️ Tile-Streaming bei gemischten Laufbändern zur Reduktion des dynamischen Bildpufferbedarfs.
+- 🛠️ Maximal **ein** vollständiger Neuversuch nach BLE-Paketbestätigungsfehler bei Bildübertragungen.
+- 🛠️ Keine 20-s-Ersatzlaufzeit für geteilte Laufbänder; jetzt breite-/tempoabhängige **vorläufige** Schätzung. Lauftextkalibrierung weiter offen.
+- 🛠️ Gemeinsame kompakte Tafelsteuerung, kleinere Kurzwahlen, Preview-Icons Schnecke/Vogel/Hase, `bug` für Diagnose, Menü ohne Zusatzüberschrift.
+- 🛠️ Community-Dateien sowie synchronisierte Lizenz-/Drittanbieterhinweise.
+
+**Nächste Abnahmeschritte:**
+
+1. Firmware kompilieren und auf ESP32-C3 flashen, Altbestand nicht formatieren.
+2. Gemischtes kurzes Laufband einmalig übertragen, Pixel-/Farbtreue prüfen.
+3. Sehr großes Laufband (>30 KiB) teilen und mindestens **einen vollständigen Zyklus pro Gruppe** beobachten; keine vorzeitige Abschneidung tolerieren.
+4. Bei absichtlich provoziertem BLE-Abbruch korrekte Erkennung, genau einen Retry und nachvollziehbaren Fehlerzustand nach erneutem Fehlschlag prüfen.
+5. Alle Seiten bei 390 px Breite auf Scrollbarkeit, einheitliche Tafelsteuerung, Shortcut-Größen und unverdeckte Buttons prüfen.
+6. RAMTRACE nach großen Übertragungen, mehrere WLAN-Clients und Wiederholungen beobachten. Ohne Test nicht als langzeitstabil markieren.
 
 ## Offene Produktfragen
 
-- 🔬 **Lauftext-Zykluszeit:** Pixelbreite und Geschwindigkeit auf echter Tafel messen und eine zuverlässige Kurvenformel bestimmen. Bisher ist die 5–180-s-Gruppe ein bewusst dokumentierter Kompromiss.
+- 🔬 **Lauftext-Zykluszeit:** Pixelbreite und Geschwindigkeit auf echter Tafel messen und eine zuverlässige Kurvenformel bestimmen. Die alte 5–180-s-Ersatzgruppe wurde in v0.4.2.4 aus der Wiedergabe entfernt; ein genaues Lauftextzeitmodell fehlt weiterhin.
 - 🔬 **Prozentanzeige:** Nur notwendige Uploads beim Wechsel zwischen Lauftext- und Blockgruppen oder bei Überschreitung der sicheren Datenmenge; ein unsichtbares Vorladen ist nicht bestätigt und wird nicht vorausgesetzt.
 - 🔬 **Grenzen der Blockkalibrierung:** Messpunkte für Tempo unter 60 und über 90 und exakten Start nach Upload; keine Garantie auf präzise Bildwechsel ohne Tafel-Rückmeldesignal.
 - 🔬 **Datenbudget 30 KiB:** Vorsichtiger Softwarewert, keine bestätigte Hardwaregrenze. Technische Prüfung fortsetzen; Zähler im Webinterface bleibt sichtbar.
 
-## Nächste Schritte, nach Hardwareabnahme
+## Weitere Entwicklung nach Hardwareabnahme
 
 - 🔬 **BLE-Recovery:** Nach fehlender Paketbestätigung maximal einen kontrollierten vollständigen Neuversuch der ganzen Übertragung mit neuem Verbindungsaufbau. Ein in v0.4.0.3 beobachteter `MTU=0`-Reconnect war erfolgreich; ein automatischer Komplettretry existiert noch nicht.
 - 🔬 **Speichergrenzen:** Untersuchung des kurzzeitig gemessenen historischen Heap-Minimums bei mehreren WLAN-Clients, sichere Browser-HTTP-Statusabfragen während langen BLE-Übertragungen.
@@ -42,4 +53,4 @@
 - Keine Rechtebehauptung an Herstellerfonts/-grafiken; die gesonderten Lucide/Feather-Icons behalten ihre ISC-/MIT-Lizenzhinweise.
 - Kein automatisches Öffnen/Formatieren unbekannter LittleFS-Dateisysteme.
 
-Referenzen und externe Forschung stehen in [QUELLEN_UND_LIZENZEN.md](QUELLEN_UND_LIZENZEN.md), laufende Detailideen im [THEMENSPEICHER.md](THEMENSPEICHER.md) und die Hardwaretestliste in [TESTPLAN_v0.4.2.3.md](TESTPLAN_v0.4.2.3.md).
+Referenzen und externe Forschung stehen in [QUELLEN_UND_LIZENZEN.md](QUELLEN_UND_LIZENZEN.md), laufende Detailideen im [THEMENSPEICHER.md](THEMENSPEICHER.md) und die Hardwaretestliste in [TESTPLAN_v0.4.2.4.md](TESTPLAN_v0.4.2.4.md).

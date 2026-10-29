@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="#11141c" name="theme-color"/>
-<title>RavestickBoard · v0.4.2.3-dev</title>
+<title>RavestickBoard · v0.4.2.4-dev</title>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="RavestickBoard"/>
@@ -190,9 +190,49 @@ button[data-rb-only="1"] .rb-lucide{width:20px;height:20px}
 .rb-range-icon .rb-lucide{width:22px;height:22px;color:#e9f1ff}
 .v43-force-btn .rb-lucide{width:18px!important;height:18px!important}
 #view-library .library-actions button[data-rb-only="1"]{min-width:45px;flex:1 1 17%;min-height:38px}
+
+/* v0.4.2.4: one small persistent dock, layout adapted from the Paint mockups. */
+:root{--rb-dock-h:126px}
+body{padding-bottom:calc(var(--rb-dock-h) + 18px + env(safe-area-inset-bottom,0px))!important}
+body.home-active{padding-bottom:calc(var(--rb-dock-h) + 18px + env(safe-area-inset-bottom,0px))!important}
+.rb-dock{position:fixed;z-index:75;bottom:max(7px,env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:min(694px,calc(100vw - 24px));box-sizing:border-box;display:grid;gap:3px;border:1px solid #41526c;background:#1c2533f7;backdrop-filter:blur(14px);border-radius:12px;padding:8px 9px;box-shadow:0 7px 22px #0006}
+.rb-dock .pixel-range{min-height:27px}.rb-dock .pixel-range b{flex:0 0 51px}
+.rb-dock .rb-dock-actions{display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;padding-top:2px}
+.rb-dock-actions .v43-force-modes{margin:0}.rb-dock-actions .v43-force-grid{display:flex;flex-wrap:wrap;gap:5px}
+.rb-dock-actions button.v43-force-btn{width:34px;height:34px;min-height:34px;flex:0 0 34px}
+.rb-dock .rb-dock-edit{display:none}
+body[data-rb-view='home'] .rb-dock-edit{display:flex}
+body[data-rb-view='home'] .rb-dock-modes,body[data-rb-view='ambience'] .rb-dock-modes{display:none}
+body[data-rb-view='home'] .rb-dock-speed,body[data-rb-view='ambience'] .rb-dock-speed{display:none}
+body[data-rb-view='diagnostics'] .rb-dock,body[data-rb-view='settings'] .rb-dock{display:none}
+body[data-rb-view='diagnostics'],body[data-rb-view='settings']{padding-bottom:30px!important}
+.rb-legacy-controls{display:none!important}
+#view-editor .pixel-range{display:none!important}
+#view-editor .preview-tools{margin-top:10px}
+#view-editor .preview-tools button[data-rb-only='1']{height:34px;min-height:34px;width:42px;padding:6px}
+#view-editor .preview-tools button[data-rb-only='1'] .rb-lucide{width:20px;height:20px}
+#view-editor .preview-tools #previewCaption{display:none!important}
+#view-editor .preview-tools #previewSpeedHint{display:none!important}
+#view-editor .preview-sticky{z-index:15}
+.home-view{height:calc(100dvh - var(--rb-header-height) - 139px);min-height:275px}
+.home-controls{height:100%;gap:6px;padding:3px 0 0}
+.shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:8px}
+.shortcut{border-radius:13px;padding:8px;gap:3px}
+.shortcut-icon .rb-lucide{width:clamp(22px,3.8vh,30px);height:clamp(22px,3.8vh,30px)}
+#view-library .inner-panel,#view-programs .inner-panel{min-height:0}
+#view-library .library-list{max-height:42dvh}
+@media(max-width:420px){.rb-dock{padding:7px 6px;gap:1px}.rb-dock .pixel-range{gap:4px}.rb-dock .rb-range-icon{flex-basis:21px;width:21px}.rb-dock .rb-range-icon svg{width:19px;height:19px}.rb-dock .pixel-range b{flex-basis:48px;font-size:10px}.rb-dock-actions .v43-force-grid{gap:3px}.rb-dock-actions button.v43-force-btn{width:30px;height:30px;min-height:30px;flex-basis:30px}.rb-dock .rb-dock-actions{gap:4px}.shortcut{font-size:12px}}
+@media(max-height:650px){.home-view{min-height:240px}.shortcut-grid{gap:5px}.shortcut{padding:3px}}
+/* The bottom dock must not cover form actions or the library list. */
+#view-programs .inner-panel{padding-bottom:calc(170px + env(safe-area-inset-bottom,0px))!important}
+#view-editor{padding-bottom:170px}
+#view-library .inner-panel{height:calc(100dvh - 200px)!important;min-height:360px!important;overflow:hidden!important}
+#view-library .library-list{min-height:130px;max-height:none!important;flex:1 1 auto;overflow-y:auto}
+#view-ambience .inner-panel{min-height:calc(100dvh - 185px)!important;padding-bottom:12px}
+
 </style></head>
 <body><main id="appShell">
-<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button">🍌</button><div><h1>RavestickBoard <span class="version">v0.4.2.3-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
+<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button">🍌</button><div><h1>RavestickBoard <span class="version">v0.4.2.4-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
 
 
 
@@ -203,7 +243,7 @@ button[data-rb-only="1"] .rb-lucide{width:20px;height:20px}
 
 
 <div class="menu-backdrop hidden" id="mainMenu" role="presentation"><nav aria-label="Hauptnavigation" class="menu-panel">
-<div class="menu-title">🍌 Navigation</div>
+
 <button data-nav="home" type="button">⌂ <span>Kurzwahl</span></button>
 <button data-nav="editor" type="button">✎ <span>Texteditor</span></button>
 <button data-nav="library" type="button">▤ <span>Bibliothek</span></button>
@@ -222,10 +262,7 @@ button[data-rb-only="1"] .rb-lucide{width:20px;height:20px}
 <button class="shortcut" data-shortcut="5" type="button"><span class="shortcut-icon">✦</span><span>Kurzwahl 5</span><small>Noch nicht belegt</small></button>
 <button class="shortcut" data-shortcut="6" type="button"><span class="shortcut-icon">✦</span><span>Kurzwahl 6</span><small>Noch nicht belegt</small></button>
 </div>
-<div class="dashboard-settings">
-<div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" data-global="brightness" id="homeBrightness" max="100" min="1" type="range" value="75"/><b id="homeBrightnessValue">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div>
-<div class="home-actions"><button class="secondary" id="homePowerOff" type="button">○ Aus</button><button class="secondary" id="homePowerOn" type="button">◉ Ein</button><button aria-pressed="false" class="secondary" id="editShortcuts" type="button">✎ Bearbeiten</button></div>
-</div>
+
 </div>
 </section><section aria-label="Bibliothek" class="app-view inner-view hidden" id="view-library">
 <div class="panel inner-panel"><h2>Bibliothek</h2>
@@ -240,24 +277,18 @@ button[data-rb-only="1"] .rb-lucide{width:20px;height:20px}
 <div class="library-footer hidden"><label for="libSlot">Kurzwahl</label><select id="libSlot"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><button id="libAssign" type="button">Belegen</button><button id="libUnassign" type="button">Freigeben</button></div>
 <div class="library-footer settings-actions" id="v42BackupFooter"><button id="libExport" type="button">↓ Backup exportieren</button><label class="library-import" for="libImport">↑ Backup zusammenführen</label><input type="file" accept=".json,application/json" id="libImport" class="visually-hidden"/></div>
 </div>
-<div class="bottom-controls"><div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" data-global="brightness" id="libBrightness" max="100" min="1" type="range" value="75"/><b data-global-label="brightness">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div>
-<div class="pixel-range" role="group" aria-label="Geschwindigkeit"><canvas class="range-pict" data-pict="snail" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Geschwindigkeit" data-global="speed" id="libSpeed" max="100" min="1" type="range" value="80"/><b data-global-label="speed">80 / 100</b><canvas class="range-pict" data-pict="horse" aria-hidden="true" width="16" height="16"></canvas></div>
-<div class="v43-force-modes" aria-label="Anzeigeverhalten erzwingen"></div>
-</div></div></section><section aria-label="Programme" class="app-view inner-view hidden" id="view-programs">
+</div></section><section aria-label="Programme" class="app-view inner-view hidden" id="view-programs">
 <div class="panel inner-panel"><h2>Programme</h2>
 <p class="hint">Ein Programm kombiniert Bibliothekseinträge. Du entscheidest, ob Blockseiten stehen bleiben oder mit den Lauftexten als gemeinsames Laufband scrollen.</p>
 <div class="v42-panel"><div class="label">Gespeicherte Programme</div><div id="v42Programs" class="v42-list"></div>
 <div class="v42-row"><button id="v42NewProgram" class="secondary">＋ Neues Programm</button><button id="v42DeleteProgram" class="secondary">Löschen</button><button id="v42RunProgram" class="primary">▶ Starten</button><button id="v42StopProgram" class="secondary">■ Stoppen</button></div></div>
 <div class="v42-panel"><div class="label">Programm bearbeiten</div><label class="field">Name<input id="v42ProgramName" class="v42-name" maxlength="47" placeholder="Mein Festivalprogramm"></label>
 <label class="field">Wiedergabeart<select id="v43Playback" class="v42-name"><option value="0">Original: Blockseiten stehen, Lauftexte laufen</option><option value="1">Alles als Laufband (inklusive Blockmotive)</option></select></label><p class="v42-hint" id="v43PlaybackHelp">Standbilder bleiben stehen. Beim Wechsel zwischen den Anzeigearten überträgt der ESP32 die nächste Gruppe.</p>
-<label class="field">Ersatzlaufzeit für Gruppenwechsel (5–180 s)<input id="v42ProgramSeconds" type="number" min="5" max="180" value="20" class="v42-name"></label>
+<input id="v42ProgramSeconds" type="hidden" value="20"/>
 <div class="v42-row"><select id="v42StepChoose" aria-label="Bibliotheksinhalt auswählen"></select><button id="v42StepAdd">＋ Hinzufügen</button></div>
 <div id="v42ProgramSteps" class="v42-list"></div><p id="v42ProgramError" hidden></p>
-<button id="v42SaveProgram" class="primary">Programm speichern</button><p class="v42-hint">Originalmodus: Blockgruppen bei Tempo 60–90 hardwarekalibriert; Lauftexte noch mit Ersatzdauer. Laufbandmodus: ein Upload, soweit das Datenbudget reicht. Geteilte Laufbänder wechseln vorläufig zeitgesteuert.</p></div>
-<div class="bottom-controls"><div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" data-global="brightness" id="progBrightness" max="100" min="1" type="range" value="75"/><b data-global-label="brightness">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div>
-<div class="pixel-range" role="group" aria-label="Geschwindigkeit"><canvas class="range-pict" data-pict="snail" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Geschwindigkeit" data-global="speed" id="progSpeed" max="100" min="1" type="range" value="80"/><b data-global-label="speed">80 / 100</b><canvas class="range-pict" data-pict="horse" aria-hidden="true" width="16" height="16"></canvas></div>
-<div class="v43-force-modes" aria-label="Anzeigeverhalten erzwingen"></div>
-</div></div></section><section aria-label="Texteditor" class="app-view hidden" id="view-editor"><div class="editor-context" id="v42EditorContext"><div><strong id="v42EditorHeading">Neuen Inhalt erstellen</strong><small id="v42EditorSubtitle">Eigenständiger Entwurf</small></div><div class="v43-editor-actions"><button id="v43NewContent" type="button" class="secondary">＋ Neu</button><button id="v42ReturnLibrary" type="button" class="secondary">← Bibliothek</button></div></div><nav aria-label="Editor wählen" class="tabs"><button class="tab active" id="tabScroll" type="button">↔ Lauftext</button><button class="tab" id="tabPages" type="button">▣ Blockanzeige</button></nav><section class="panel preview-sticky"><div class="label">LED-Vorschau · 64 × 16 Punkte</div><canvas aria-label="Pixelgenaue Punktvorschau" height="192" id="matrix" width="768"></canvas><div class="preview-tools" id="previewTools"><button class="small-btn" id="previewRestart" type="button">⏮ Anfang</button><button class="small-btn active" id="previewToggle" type="button">⏸ Pause</button><button class="small-btn" id="previewSpeed" type="button">⏩ 1×</button><span class="tiny" id="previewCaption">Lauftextvorschau</span></div><p class="hint" id="previewSpeedHint">1×, 2× oder 4× verändert nur die Vorschau. Die Anzeige auf der Tafel behält ihre eigene Geschwindigkeit.</p></section><section class="panel" id="scrollEditor"><div class="label">Lauftext bearbeiten</div><label class="field" for="scrollText"><span class="hint">Text · Datenverbrauch wird live berechnet, kein Zeichenlimit</span></label><div class="picker-input"><input autocomplete="off" id="scrollText" spellcheck="false" type="text" value=""/><button aria-label="Symbol für Lauftext auswählen" class="symbol-open" data-symbol-target="scrollText" title="Symbole einfügen" type="button">♥</button></div><div class="undo-tools"><button id="v42ClearText" class="small-btn danger" type="button">Text leeren</button></div><div class="capacity-info"><div aria-live="off" class="tiny" id="scrollCount"></div><div aria-hidden="true" class="capacity-track"><div class="capacity-fill" id="capacityFill"></div></div></div><div class="field"><label for="scrollLayout">Schriftart</label><select id="scrollLayout"><option value="3">Original - Normal</option><option value="4">Original - Bold</option><option value="0">Engschrift</option><option value="2">Mini - Einzeilig</option><option value="1">Mini - Zweizeilig</option></select></div><div class="field"><label for="libTextMode">Modus dieses Textes</label><select id="libTextMode"><option value="2">Lauftext</option><option value="1">Standbild (max. 64 Pixel)</option></select></div><div class="field hidden" id="scrollSecondWrap"><label for="scrollLine2">Text · Zeile 2</label><div class="picker-input"><input autocomplete="off" id="scrollLine2" spellcheck="false" type="text"/><button class="symbol-open" data-symbol-target="scrollLine2" title="Symbole einfügen" type="button">♥</button></div></div><div class="label" id="scrollColorLabel">Farbe</div><div class="swatches" id="scrollColors"></div><div class="hidden" id="scrollSecondColors"><div class="label">Farbe · Zeile 2</div><div class="swatches" id="scrollColors2"></div></div><div class="pixel-range" role="group" aria-label="Geschwindigkeit"><canvas class="range-pict" data-pict="snail" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Geschwindigkeit" id="scrollSpeed" max="100" min="1" type="range" value="80"/><b id="speedLabel">80 / 100</b><canvas class="range-pict" data-pict="horse" aria-hidden="true" width="16" height="16"></canvas></div><p class="hint">Tempo-Anpassungen werden auch ohne erneuten Textupload gesendet. Die Skala ist noch nicht gegen die Hersteller-App kalibriert.</p><div class="actions"><button class="primary" id="sendScroll">Lauftext senden</button><button class="secondary" id="libSaveAs" type="button">＋ In Bibliothek</button><button class="secondary hidden" id="libSaveChanges" type="button">Änderungen speichern</button></div><div class="tiny muted" id="libEditorInfo" aria-live="polite">Ungespeicherter Entwurf – unabhängig von der Bibliothek.</div></section><section class="hidden" id="pagesEditor">
+<button id="v42SaveProgram" class="primary">Programm speichern</button><p class="v42-hint">Blockseiten sind bei Tempo 60–90 kalibriert. Geteilte Laufbänder verwenden vorläufig eine vorsichtige, noch nicht hardwarekalibrierte Zeitabschätzung.</p></div>
+</div></section><section aria-label="Texteditor" class="app-view hidden" id="view-editor"><div class="editor-context" id="v42EditorContext"><div><strong id="v42EditorHeading">Neuen Inhalt erstellen</strong><small id="v42EditorSubtitle">Eigenständiger Entwurf</small></div><div class="v43-editor-actions"><button id="v43NewContent" type="button" class="secondary">＋ Neu</button><button id="v42ReturnLibrary" type="button" class="secondary">← Bibliothek</button></div></div><nav aria-label="Editor wählen" class="tabs"><button class="tab active" id="tabScroll" type="button">↔ Lauftext</button><button class="tab" id="tabPages" type="button">▣ Blockanzeige</button></nav><section class="panel preview-sticky"><div class="label">LED-Vorschau · 64 × 16 Punkte</div><canvas aria-label="Pixelgenaue Punktvorschau" height="192" id="matrix" width="768"></canvas><div class="preview-tools" id="previewTools"><button class="small-btn" id="previewRestart" type="button">⏮ Anfang</button><button class="small-btn active" id="previewToggle" type="button">⏸ Pause</button><button class="small-btn" id="previewSpeed" type="button">⏩ 1×</button><span class="tiny hidden" id="previewCaption" aria-hidden="true"></span></div><p class="hint" id="previewSpeedHint">Die Geschwindigkeit der Vorschau beeinflusst die Tafel nicht.</p></section><section class="panel" id="scrollEditor"><div class="label">Lauftext bearbeiten</div><label class="field" for="scrollText"><span class="hint">Text · Datenverbrauch wird live berechnet, kein Zeichenlimit</span></label><div class="picker-input"><input autocomplete="off" id="scrollText" spellcheck="false" type="text" value=""/><button aria-label="Symbol für Lauftext auswählen" class="symbol-open" data-symbol-target="scrollText" title="Symbole einfügen" type="button">♥</button></div><div class="undo-tools"><button id="v42ClearText" class="small-btn danger" type="button">Text leeren</button></div><div class="capacity-info"><div aria-live="off" class="tiny" id="scrollCount"></div><div aria-hidden="true" class="capacity-track"><div class="capacity-fill" id="capacityFill"></div></div></div><div class="field"><label for="scrollLayout">Schriftart</label><select id="scrollLayout"><option value="3">Original - Normal</option><option value="4">Original - Bold</option><option value="0">Engschrift</option><option value="2">Mini - Einzeilig</option><option value="1">Mini - Zweizeilig</option></select></div><div class="field"><label for="libTextMode">Modus dieses Textes</label><select id="libTextMode"><option value="2">Lauftext</option><option value="1">Standbild (max. 64 Pixel)</option></select></div><div class="field hidden" id="scrollSecondWrap"><label for="scrollLine2">Text · Zeile 2</label><div class="picker-input"><input autocomplete="off" id="scrollLine2" spellcheck="false" type="text"/><button class="symbol-open" data-symbol-target="scrollLine2" title="Symbole einfügen" type="button">♥</button></div></div><div class="label" id="scrollColorLabel">Farbe</div><div class="swatches" id="scrollColors"></div><div class="hidden" id="scrollSecondColors"><div class="label">Farbe · Zeile 2</div><div class="swatches" id="scrollColors2"></div></div><div class="pixel-range" role="group" aria-label="Geschwindigkeit"><canvas class="range-pict" data-pict="snail" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Geschwindigkeit" id="scrollSpeed" max="100" min="1" type="range" value="80"/><b id="speedLabel">80 / 100</b><canvas class="range-pict" data-pict="horse" aria-hidden="true" width="16" height="16"></canvas></div><div class="actions"><button class="primary" id="sendScroll">Lauftext senden</button><button class="secondary" id="libSaveAs" type="button">＋ In Bibliothek</button><button class="secondary hidden" id="libSaveChanges" type="button">Änderungen speichern</button></div><div class="tiny muted" id="libEditorInfo" aria-live="polite">Ungespeicherter Entwurf – unabhängig von der Bibliothek.</div></section><section class="hidden" id="pagesEditor">
 <section class="panel"><div class="label">Blockanzeige · eigene Seiten</div><div aria-label="Seitenübersicht" id="pageRail"></div><div class="page-tools"><button class="small-btn" id="pageAdd">＋ Neue Seite</button><button class="small-btn" id="pageCopy">⧉ Duplizieren</button><button class="small-btn" id="pageLeft">← Verschieben</button><button class="small-btn" id="pageRight">→ Verschieben</button><button class="small-btn danger" id="pageDelete">Löschen</button><button class="small-btn" id="v42NewBlock">Alles löschen</button></div><p class="hint">Jede Seite ist unabhängig. Kein automatisches Abschneiden und kein erzwungener Umbruch. Maximal 25 Seiten.</p></section>
 <section class="panel"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div class="label" id="pageTitle">Seite 1 bearbeiten</div><span class="save-indicator" id="dirty"></span></div>
 <div class="page-form">
@@ -275,14 +306,14 @@ button[data-rb-only="1"] .rb-lucide{width:20px;height:20px}
 <p class="hint">Die Seiten bleiben im RAM-Editor, bis du die gesamte Blockfolge ausdrücklich in der Bibliothek speicherst. „Diese Seite anzeigen“ sendet nur die ausgewählte Seite.</p>
 </section>
 
-</section><section class="panel"><div class="label">Tafelsteuerung</div>
+</section><section class="panel rb-legacy-controls"><div class="label">Tafelsteuerung</div>
 <div class="power-control"><span><b>LED-Anzeige</b><small id="powerState">Status nach Neustart unbekannt</small></span><div aria-label="Anzeige ein- oder ausschalten" role="group"><button class="small-btn" id="powerOff" type="button">Aus</button><button class="small-btn" id="powerOn" type="button">Ein</button></div></div>
 <p class="hint">Nur das LED-Display, nicht den ESP32 ausschalten. Der zuletzt erfolgreich gesendete BLE-Befehl wird angezeigt; ein Zustandssensor ist nicht vorhanden.</p>
-<div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" id="brightness" max="100" min="1" type="range" value="75"/><b id="brightLabel">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div><div class="v43-force-modes" aria-label="Anzeigeverhalten erzwingen"></div></section><p class="tiny">WLAN: CoolLED1248 · http://192.168.4.1 · USB-Firmwareupdates, kein OTA.<br/>Entwürfe bleiben im RAM; Bibliothekseinträge werden in LittleFS gespeichert.</p></section><section aria-label="Ambiente" class="app-view inner-view hidden" id="view-ambience">
+<div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" id="brightness" max="100" min="1" type="range" value="75"/><b id="brightLabel">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div></section></section><section aria-label="Ambiente" class="app-view inner-view hidden" id="view-ambience">
 <div class="panel inner-panel"><h2>Ambiente</h2><p class="hint">Eine Farbe antippen, um die gesamte 64×16-Tafel mit dieser Farbe zu füllen. Die aktuelle Textanzeige wird dadurch ersetzt.</p>
 <div aria-label="LED-Farben" class="ambience-colors" id="ambienceColors"></div>
-<div class="bottom-controls"><div class="pixel-range" role="group" aria-label="Helligkeit"><canvas class="range-pict" data-pict="bulb-small" aria-hidden="true" width="16" height="16"></canvas><input aria-label="Helligkeit" data-global="brightness" id="ambBrightness" max="100" min="1" type="range" value="75"/><b data-global-label="brightness">75 %</b><canvas class="range-pict" data-pict="bulb-large" aria-hidden="true" width="16" height="16"></canvas></div></div>
-</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload">Aktualisieren</button><button class="primary" id="diagCopy">📋 Log kopieren</button><a class="secondary" download="RavestickBoard_Diagnose_v0.4.2.3-dev.txt" href="/api/diagnostics.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">TXT herunterladen</a><a class="secondary" download="RavestickBoard_RAM_v0.4.2.3-dev.txt" href="/api/ram.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
+
+</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload">Aktualisieren</button><button class="primary" id="diagCopy">📋 Log kopieren</button><a class="secondary" download="RavestickBoard_Diagnose_v0.4.2.4-dev.txt" href="/api/diagnostics.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">TXT herunterladen</a><a class="secondary" download="RavestickBoard_RAM_v0.4.2.4-dev.txt" href="/api/ram.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
 <div class="panel"><h2>Einstellungen</h2>
 <div class="settings-section" id="v42SettingsBackup">
 <div class="label">▤ Bibliothek &amp; Datensicherung</div>
@@ -292,8 +323,13 @@ button[data-rb-only="1"] .rb-lucide{width:20px;height:20px}
 <div class="settings-section"><div class="label">⌁ LED-Tafel</div>
 <div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><strong>CoolLEDX</strong><div class="tiny muted">Fest konfiguriertes Gerät</div></div><span class="tiny muted">Aktiv</span></div>
 </div>
-<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.2.3-dev</p></div>
-</section><div class="v42-dialog hidden" id="v42ShortcutDialog" role="dialog" aria-modal="true" aria-label="Kurzwahl belegen"><div class="v42-sheet">
+<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.2.4-dev</p></div>
+</section><aside id="rbDock" class="rb-dock" aria-label="Tafelsteuerung">
+ <div class="pixel-range" role="group" aria-label="Globale Helligkeit"><span class="rb-range-icon" data-rb-icon="sunset" aria-hidden="true"></span><input aria-label="Helligkeit" data-global="brightness" id="dockBrightness" min="1" max="100" type="range" value="75"/><b data-global-label="brightness">75 %</b><span class="rb-range-icon" data-rb-icon="sunrise" aria-hidden="true"></span></div>
+ <div class="pixel-range rb-dock-speed" role="group" aria-label="Globale Geschwindigkeit"><span class="rb-range-icon" data-rb-icon="snail" aria-hidden="true"></span><input aria-label="Geschwindigkeit" data-global="speed" id="dockSpeed" min="1" max="100" type="range" value="80"/><b data-global-label="speed">80 / 100</b><span class="rb-range-icon" data-rb-icon="rabbit" aria-hidden="true"></span></div>
+ <div class="rb-dock-actions"><button id="homePowerOff" class="v43-force-btn" type="button" data-rb-only="1" data-rb-icon="eye-closed" title="Tafel aus" aria-label="Tafel aus"></button><button id="homePowerOn" class="v43-force-btn" type="button" data-rb-only="1" data-rb-icon="eye" title="Tafel ein" aria-label="Tafel ein"></button><span class="rb-dock-modes v43-force-modes" aria-label="Anzeigeverhalten erzwingen"></span><button id="editShortcuts" class="v43-force-btn rb-dock-edit" type="button" aria-pressed="false" data-rb-only="1" data-rb-icon="pencil" title="Kurzwahlen bearbeiten" aria-label="Kurzwahlen bearbeiten"></button></div>
+</aside>
+<div class="v42-dialog hidden" id="v42ShortcutDialog" role="dialog" aria-modal="true" aria-label="Kurzwahl belegen"><div class="v42-sheet">
 <h2 id="v42ShortcutTitle">Kurzwahl belegen</h2><label class="field">Quelle<select id="v42ShortcutType"><option value="0">Quelle auswählen</option><option value="1">Bibliothek</option><option value="2">Programme</option><option value="3">Ambiente</option><option value="4" disabled>Animationen (zukünftig)</option></select></label>
 <label class="field" id="v42ShortcutTargetWrap">Inhalt<select id="v42ShortcutTarget"></select></label>
 <label class="field">Beschriftung<input class="v42-name" id="v42ShortcutLabel" maxlength="47" placeholder="Meine Kurzwahl"></label><small id="v42ShortcutBytes" class="v42-hint">0 / 47 UTF-8-Bytes</small>
@@ -337,7 +373,7 @@ function hexColor(n){return COLORS.find(c=>c[1]===Number(n))?.[2]||'#ffffff';}
 function esc(s){return String(s).replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
 function samplePage(){return {line1:'',line2:'',layout:0,align:1,color1:6,color2:7,duration:7};}
 function makeSwatches(root,selected,onChange){root.replaceChildren();for(const [name,code,hex] of COLORS){const b=document.createElement('button');b.type='button';b.className='swatch'+(Number(selected)===code?' selected':'');b.style.background=hex;b.setAttribute('aria-label',name);b.title=name;b.dataset.color=code;b.addEventListener('click',()=>onChange(code));root.append(b);}}
-function setTab(next){tab=next;try{localStorage.setItem('rb03-tab',tab);}catch(e){}$('tabScroll').classList.toggle('active',next==='scroll');$('tabPages').classList.toggle('active',next==='pages');$('scrollEditor').classList.toggle('hidden',next!=='scroll');$('pagesEditor').classList.toggle('hidden',next!=='pages');$('previewTools').classList.toggle('hidden',next==='pages');$('previewSpeedHint').classList.toggle('hidden',next==='pages');$('previewCaption').textContent=next==='scroll'?'Lauftextvorschau':'';restartPreview();draw();}
+function setTab(next){tab=next;try{localStorage.setItem('rb03-tab',tab);}catch(e){}$('tabScroll').classList.toggle('active',next==='scroll');$('tabPages').classList.toggle('active',next==='pages');$('scrollEditor').classList.toggle('hidden',next!=='scroll');$('pagesEditor').classList.toggle('hidden',next!=='pages');$('previewTools').classList.toggle('hidden',next==='pages');$('previewSpeedHint').classList.toggle('hidden',next==='pages');$('previewCaption').textContent='';restartPreview();draw();}
 $('tabScroll').onclick=()=>setTab('scroll');$('tabPages').onclick=()=>setTab('pages');
 function drawDots(context,pitch){context.fillStyle='#080b10';context.fillRect(0,0,W*pitch,H*pitch);for(let x=0;x<W;x++)for(let y=0;y<H;y++){context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.27,0,Math.PI*2);context.fillStyle='#28303a';context.fill();}}
 function drawLine(context,line,color,align,yTop,scale,pitch,leftOverride=null,style=0){const chars=codepoints(line).map(c=>displayCode(c,style)),width=linePixels(line,style);if(style===2)align=1;let x0=leftOverride!==null?leftOverride:align===0?0:align===2?W-width:Math.floor((W-width)/2);function led(x,y,n){if(x<0||x>=W||y<0||y>=H)return;context.fillStyle=hexColor(n);context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.34,0,Math.PI*2);context.fill();}for(const c of chars){const icon=iconFor(c);if(icon){const b=bounds[icon.id];for(let y=0;y<16;y++)for(let x=b.min;x<=b.max;x++){const clr=spritePixel(icon.id,x,y);if(clr)led(x0+x-b.min,y,icon.color||clr);}}else if(style===3||style===4){const g=(style===3?originalFonts.normal:originalFonts.bold)[c.codePointAt(0)];if(g)for(let y=0;y<16;y++)for(let x=0;x<g.width;x++)if(g.rows[y]&(1<<(g.width-1-x)))led(x0+x,y,color);}else{const rows=glyph(c);for(let ry=0;ry<7;ry++)for(let rx=0;rx<5;rx++){if(!(rows[ry]&(1<<(4-rx))))continue;for(let dy=0;dy<scale;dy++)led(x0+rx,yTop+ry*scale+dy,color);}}x0+=tokenWidth(c,style)+tokenGap(c);}}
@@ -345,7 +381,13 @@ function drawPage(context,p,pitch){drawDots(context,pitch);if(!fontReady||!p)ret
 function draw(){if(tab==='pages')drawPage(ctx,pages[selected],PITCH);else{drawDots(ctx,PITCH);if(fontReady){const st=Number($('scrollLayout').value);drawLine(ctx,$('scrollText').value,scrollColor,0,st===0?1:st===2?4:0,st===0?2:1,PITCH,previewX,st);if(st===1)drawLine(ctx,$('scrollLine2').value,scrollColor2,0,8,1,PITCH,previewX,st);}}}
 function restartPreview(){previewClock=0;previewX=$('libTextMode').value==='1'?0:W;previewPage=selected;draw();}
 function tick(now){if(!lastTick)lastTick=now;const dt=Math.min(90,now-lastTick);lastTick=now;if(previewPlaying&&fontReady){if(tab==='scroll'){if($('libTextMode').value==='1'){previewX=0;}else{previewX-=dt/1000*(4+Number($('scrollSpeed').value)*.26)*previewRate;if(previewX<-Math.max(linePixels($('scrollText').value,Number($('scrollLayout').value)),Number($('scrollLayout').value)===1?linePixels($('scrollLine2').value,1):0)-8)previewX=W;}draw();}}requestAnimationFrame(tick);}
-$('previewRestart').onclick=restartPreview;$('previewToggle').onclick=()=>{previewPlaying=!previewPlaying;$('previewToggle').textContent=previewPlaying?'⏸ Pause':'▶ Weiter';};$('previewSpeed').onclick=()=>{previewRate=previewRate===1?2:previewRate===2?4:1;$('previewSpeed').textContent='⏩ '+previewRate+'×';};
+function rb44UpdatePreviewIcons(){
+ const p=$('previewToggle'),r=$('previewSpeed');
+ p.dataset.rbIcon=previewPlaying?'pause':'play';p.title=previewPlaying?'Pause':'Weiter';p.setAttribute('aria-label',p.title);
+ r.dataset.rbIcon=previewRate===1?'snail':previewRate===2?'bird':'rabbit';r.title=previewRate+'× Vorschaugeschwindigkeit';r.setAttribute('aria-label',r.title);
+ rb43PaintIcons();
+}
+$('previewRestart').onclick=restartPreview;$('previewToggle').onclick=()=>{previewPlaying=!previewPlaying;rb44UpdatePreviewIcons();};$('previewSpeed').onclick=()=>{previewRate=previewRate===1?2:previewRate===2?4:1;rb44UpdatePreviewIcons();};
 function validatePage(p){const style=Number(p.layout),n1=codepoints(p.line1).length,n2=codepoints(p.line2).length,bytes=new TextEncoder();if(!p.line1.trim()&&(style!==1||!p.line2.trim()))return ''; if(n1>MAX_LINE||(style===1&&n2>MAX_LINE))return `Pro Zeile sind maximal ${MAX_LINE} Unicode-Zeichen möglich.`;if(bytes.encode(p.line1).length>47||bytes.encode(p.line2).length>47)return 'Maximal 47 UTF-8-Bytes pro Feld. Emojis benötigen mehrere Bytes.';const w1=linePixels(p.line1,style),w2=style===1?linePixels(p.line2,style):0;if(w1>64||w2>64)return `Inhalt zu breit (${Math.max(w1,w2)} von 64 LED-Spalten). Bitte kürzen oder andere Schrift wählen.`;return '';}
 function updateWarning(){if(tab!=='pages'||!pages.length)return;const msg=validatePage(pages[selected]);$('pageWarning').textContent=msg;$('pageWarning').classList.toggle('hidden',!msg);}
 function renderRail(){const rail=$('pageRail');rail.replaceChildren();pages.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='page-card'+(i===selected?' selected':'');const head=document.createElement('div');head.className='page-card-top';const strong=document.createElement('strong');strong.textContent='Seite '+(i+1);head.append(strong);const cn=document.createElement('canvas');cn.width=192;cn.height=48;const g=cn.getContext('2d');drawPage(g,p,3);b.append(head,cn);b.onclick=()=>selectPage(i);rail.append(b);});}
@@ -477,7 +519,7 @@ $('mainMenu').addEventListener('click',e=>{if(e.target===$('mainMenu'))showMenu(
 document.addEventListener('keydown',e=>{if(e.key==='Escape')showMenu(false);});
 function navigate(view){
  if(!$("view-"+view))return;
- activeView=view;document.body.classList.toggle('home-active',view==='home');document.querySelectorAll('.app-view').forEach(el=>el.classList.toggle('hidden',el.id!=='view-'+view));
+ activeView=view;document.body.classList.toggle('home-active',view==='home');document.body.dataset.rbView=view;document.querySelectorAll('.app-view').forEach(el=>el.classList.toggle('hidden',el.id!=='view-'+view));
  document.querySelectorAll('[data-nav]').forEach(b=>{b.classList.toggle('current',b.dataset.nav===view);});
  showMenu(false);window.scrollTo({top:0,behavior:'instant'});
  if(view==='diagnostics')refreshDiagnostics();
@@ -488,7 +530,7 @@ document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()
 $('editShortcuts').addEventListener('click',()=>{shortcutsEditing=!shortcutsEditing;$('editShortcuts').setAttribute('aria-pressed',String(shortcutsEditing));$('editShortcuts').classList.toggle('is-active',shortcutsEditing);document.querySelectorAll('.shortcut').forEach(b=>b.classList.toggle('editing',shortcutsEditing));notify(shortcutsEditing?'Kurzwahl antippen, um Quelle und Beschriftung zu wählen.':'Bearbeitungsmodus beendet.');});
 document.querySelectorAll('.shortcut').forEach(b=>b.addEventListener('click',async()=>{const slot=Number(b.dataset.shortcut);if(shortcutsEditing||!v42Shortcuts[slot-1]?.type){await v42OpenShortcut(slot);return;}try{const j=await api('/api/shortcuts/run',{slot});notify(j.message);}catch(e){notify('Kurzwahl: '+e.message);}}));
 
-// v0.4.2.3-dev · Stored text library. The ESP32 is the source of truth, not
+// v0.4.2.4-dev · Stored text library. The ESP32 is the source of truth, not
 // localStorage; draft/editor, stored record and current LED display are separate.
 let libraryItems=[],libraryShortcuts=[0,0,0,0,0,0],librarySelected=0,libraryEditorId=0,libraryReady=false;
 let libraryCurrentRecord=null,libraryDragId=0;
@@ -614,7 +656,7 @@ function syncGlobalControls(kind,value){
  if(kind==='brightness')$('brightLabel').textContent=val+' %';else $('speedLabel').textContent=val+' / 100';
  document.querySelectorAll('[data-global="'+kind+'"]').forEach(el=>el.value=val);
  document.querySelectorAll('[data-global-label="'+kind+'"]').forEach(el=>el.textContent=val+(kind==='brightness'?' %':' / 100'));
- if(kind==='brightness')$('homeBrightnessValue').textContent=val+' %';
+ if(kind==='brightness' && $('homeBrightnessValue'))$('homeBrightnessValue').textContent=val+' %';
 }
 document.querySelectorAll('[data-global]').forEach(el=>{
  el.addEventListener('pointerdown',()=>{globalSliderEditing=true;});
@@ -770,7 +812,7 @@ $('v42ReloadMenu').onclick=()=>{if((dirty||blockDraftDirty)&&!confirm('Webinterf
 async function v42Backup(){const items=[];for(const row of libraryItems){if(row.corrupt)throw Error('Beschädigter Bibliothekseintrag '+row.id);
  const r=await api('/api/library/get?id='+row.id);if(r.kind==='block'){r.pages=(await api('/api/block/get?id='+row.id)).pages;}items.push(r);}
  const collections=[];for(const p of v42ProgramItems)collections.push(await api('/api/collections/get?id='+p.id));
- return {format:'RavestickBoard-library',schema:2,firmware:'0.4.2.3-dev',created:new Date().toISOString(),items,collections,shortcuts:v42Shortcuts};}
+ return {format:'RavestickBoard-library',schema:2,firmware:'0.4.2.4-dev',created:new Date().toISOString(),items,collections,shortcuts:v42Shortcuts};}
 $('libExport').onclick=async()=>{try{const backup=await v42Backup();const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);
  const a=document.createElement('a');a.href=url;a.download='RavestickBoard_Backup_v0423_'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);notify('Vollständiges Backup erstellt.');}
  catch(e){notify('Backup: '+e.message);}};
@@ -883,6 +925,8 @@ const RB43_LUCIDE={
 'fast-forward':'<path d="M12 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 12 18z"/><path d="M2 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 2 18z"/>',
 'bluetooth':'<path d="m7 7 10 10-5 5V2l5 5L7 17"/>',
 'star-plus':'<path d="M11.013 18.582 6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16l2.309-4.679a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904L20 11.5"/><path d="M15 18h6"/><path d="M18 15v6"/>',
+'bird':'<path d="M16 7h.01"/><path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20"/><path d="m20 7 2 .5-2 .5"/><path d="M10 18v3"/><path d="M14 17.75V21"/><path d="M7 18a6 6 0 0 0 3.84-10.61"/>',
+'bug':'<path d="M12 20v-9"/><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z"/><path d="M14.12 3.88 16 2"/><path d="M21 21a4 4 0 0 0-3.81-4"/><path d="M21 5a4 4 0 0 1-3.55 3.97"/><path d="M22 13h-4"/><path d="M3 21a4 4 0 0 1 3.81-4"/><path d="M3 5a4 4 0 0 0 3.55 3.97"/><path d="M6 13H2"/><path d="m8 2 1.88 1.88"/><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13"/>',
 'star':'<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>',
 'star-check':'<path d="m19.06 12.501 2.78-2.707a.53.53 0 0 0-.294-.905l-5.166-.755a2.1 2.1 0 0 1-1.595-1.16l-2.31-4.68a.53.53 0 0 0-.95.001L9.216 6.974a2.1 2.1 0 0 1-1.597 1.16l-5.165.755a.53.53 0 0 0-.294.906l3.736 3.637a2.1 2.1 0 0 1 .611 1.879l-.88 5.139a.53.53 0 0 0 .769.56l4.617-2.428.027-.014"/><path d="m15 18 2 2 4-4"/>'
 };
@@ -897,17 +941,17 @@ function rb43PaintIcons(){document.querySelectorAll('[data-rb-icon]').forEach(no
  node.insertBefore(svg,node.firstChild);node.dataset.rbPainted=name;
  });}
 function rb43StaticIcons(){
- const menu=['star','pencil-sparkles','library','list-video','spray-can','activity','wrench','refresh-cw'];
+ const menu=['star','pencil-sparkles','library','list-video','spray-can','bug','wrench','refresh-cw'];
  document.querySelectorAll('#mainMenu [data-nav],#v42ReloadMenu').forEach((b,i)=>{if(menu[i])b.dataset.rbIcon=menu[i];});
- const buttons={bananaMenu:'banana',homePowerOff:'eye-closed',homePowerOn:'eye',editShortcuts:'pencil',libOpen:'pencil',libSend:'plane-takeoff',libDuplicate:'copy',libRename:'pencil-line',libDelete:'trash',v42SearchToggle:'binoculars',libRefresh:'refresh-cw',libExport:'database-arrow-down',v42NewProgram:'plus',v42DeleteProgram:'trash',v42RunProgram:'plane-takeoff',v42StopProgram:'monitor-x',v42StepAdd:'plus',v42SaveProgram:'save',v42ReturnLibrary:'arrow-left',v43NewContent:'plus',tabScroll:'line-height',tabPages:'letter-spacing',previewRestart:'skip-back',previewToggle:'pause',previewSpeed:'fast-forward',v42ClearText:'eraser',sendScroll:'plane-takeoff',libSaveAs:'plus',libSaveChanges:'save',v42SaveBlock:'folder-plus',v42UpdateBlock:'save',v42SendDraftBand:'plane-takeoff',v42ClearPage:'eraser',v42NewBlock:'plus',pageAdd:'plus',pageCopy:'copy',pageLeft:'arrow-left',pageRight:'arrow-right',pageDelete:'trash',pageShow:'plane-takeoff',diagCopy:'clipboard-copy',diagReload:'database-backup'};
- const only=new Set(['libOpen','libSend','libDuplicate','libRename','libDelete','v42SearchToggle','libRefresh']);
+ const buttons={bananaMenu:'banana',homePowerOff:'eye-closed',homePowerOn:'eye',editShortcuts:'pencil',libOpen:'pencil',libSend:'plane-takeoff',libDuplicate:'copy',libRename:'pencil-line',libDelete:'trash',v42SearchToggle:'binoculars',libRefresh:'refresh-cw',libExport:'database-arrow-down',v42NewProgram:'plus',v42DeleteProgram:'trash',v42RunProgram:'plane-takeoff',v42StopProgram:'monitor-x',v42StepAdd:'plus',v42SaveProgram:'save',v42ReturnLibrary:'arrow-left',v43NewContent:'plus',tabScroll:'line-height',tabPages:'letter-spacing',previewRestart:'skip-back',previewToggle:'pause',previewSpeed:'snail',v42ClearText:'eraser',sendScroll:'plane-takeoff',libSaveAs:'plus',libSaveChanges:'save',v42SaveBlock:'folder-plus',v42UpdateBlock:'save',v42SendDraftBand:'plane-takeoff',v42ClearPage:'eraser',v42NewBlock:'plus',pageAdd:'plus',pageCopy:'copy',pageLeft:'arrow-left',pageRight:'arrow-right',pageDelete:'trash',pageShow:'plane-takeoff',diagCopy:'clipboard-copy',diagReload:'database-backup'};
+ const only=new Set(['libOpen','libSend','libDuplicate','libRename','libDelete','v42SearchToggle','libRefresh','previewRestart','previewToggle','previewSpeed']);
  for(const [id,icon] of Object.entries(buttons)){const b=document.getElementById(id);if(!b)continue;b.dataset.rbIcon=icon;
   if(only.has(id)){b.dataset.rbOnly='1';b.title=b.textContent.trim()||id;b.setAttribute('aria-label',b.title);}
  }
  document.querySelectorAll('.range-pict').forEach(old=>{const name=({'bulb-small':'sunset','bulb-large':'sunrise',snail:'snail',horse:'rabbit'})[old.dataset.pict];if(!name)return;
  const replacement=document.createElement('span');replacement.className='range-pict rb-range-icon';replacement.dataset.rbIcon=name;replacement.dataset.rbOnly='1';replacement.setAttribute('aria-hidden','true');old.replaceWith(replacement);});
  document.querySelectorAll('[aria-label^="Symbol für"]').forEach(b=>{b.dataset.rbIcon='heart-plus';b.dataset.rbOnly='1';});
- rb43PaintIcons();
+ rb43PaintIcons();rb44UpdatePreviewIcons();
  // Dynamic list rows and shortcut status changes retain actual icon geometry.
  new MutationObserver(()=>rb43PaintIcons()).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['data-rb-icon']});
 }

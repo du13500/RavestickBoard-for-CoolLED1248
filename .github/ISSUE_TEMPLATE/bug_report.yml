@@ -1,0 +1,39 @@
+name: Fehler melden
+description: Bericht über einen reproduzierbaren Fehler im RavestickBoard
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Bitte keine privaten Daten, Passwörter oder BLE-Adressen posten. Für Sicherheitslücken die SECURITY.md beachten."
+  - type: input
+    id: firmware
+    attributes:
+      label: Firmwareversion
+      placeholder: v0.4.2.4-dev
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: Hardware / Browser
+      placeholder: ESP32-C3 Super Mini, CoolLEDX 64×16, Safari iOS
+  - type: textarea
+    id: steps
+    attributes:
+      label: Schritte zum Reproduzieren
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartetes und tatsächliches Verhalten
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnose / Teststand
+      description: Falls nötig gekürzte Diagnose (ohne persönliche Daten); bitte lokale Tests von Hardwaretests unterscheiden.
