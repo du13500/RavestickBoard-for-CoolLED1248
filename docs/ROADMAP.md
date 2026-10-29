@@ -2,7 +2,11 @@
 
 **Lesart:** „Programmiert“ ist nicht dasselbe wie „auf CoolLEDX hardwarebestätigt“. Alte Entwicklungsentscheidungen sind im Changelog und in den Versionsberichten archiviert. Die folgenden Themen sind der aktuelle Plan.
 
-## Statusübersicht · 28.10.2026
+## Statusübersicht · 29.10.2026
+
+**Hardware-Ergebnisse v0.4.2.4 (29.10.2026):** Kompilierung/Boot, Bestandserhalt und kurzes gemischtes Laufband mit 16 Leer-Pixelspalten bestätigt. Lange geteilte Laufbänder, RAMTRACE und BLE-Recovery noch offen. Die schwebende Steuerleiste war im Praxistest hinderlich; v0.4.2.4.1 legt sie in den Seitenfluss. Kurzwahl-Icons und sichere Löschung der Programm-`.bak` sind im Hotfix implementiert, aber noch nicht hardwareabgenommen.
+
+**Review-Aufgaben:** F-06 (`.bak` beim Löschen entfernen) in v0.4.2.4.1 implementiert. F-01–F-05, F-07–F-12 und Aufräumbefunde S-01–S-06 bleiben als unabhängige Prüfpunkte bestehen (Datenschema, HTTP/BLE, ACK-Status, echte Verhaltenstests, Refactoring und Doku-Konsolidierung).
 
 **Bereits auf Hardware bestätigt** (nicht automatisch für v0.4.2.4 regressionsgetestet):
 
@@ -39,7 +43,7 @@
 
 ## Weitere Entwicklung nach Hardwareabnahme
 
-- 🔬 **BLE-Recovery:** Nach fehlender Paketbestätigung maximal einen kontrollierten vollständigen Neuversuch der ganzen Übertragung mit neuem Verbindungsaufbau. Ein in v0.4.0.3 beobachteter `MTU=0`-Reconnect war erfolgreich; ein automatischer Komplettretry existiert noch nicht.
+- 🔬 **BLE-Recovery:** Nach fehlender Paketbestätigung maximal einen kontrollierten vollständigen Neuversuch der ganzen Übertragung mit neuem Verbindungsaufbau. Ein in v0.4.0.3 beobachteter `MTU=0`-Reconnect war erfolgreich; ein automatischer Komplettretry ist in v0.4.2.4 implementiert, aber noch nicht hardwarebestätigt.
 - 🔬 **Speichergrenzen:** Untersuchung des kurzzeitig gemessenen historischen Heap-Minimums bei mehreren WLAN-Clients, sichere Browser-HTTP-Statusabfragen während langen BLE-Übertragungen.
 - 🔬 **Bibliothekskapazität:** Der v0.4.2-Index hat zunächst 192 Slots und prüft Flashreserve. Langfristig variable Datensatzlängen, echte kapazitätsabhängige Indexstruktur und Stromausfalltests.
 - 🔬 **Animationen v0.4.3 (Vorschlag):** isolierter, nur seriell angesteuerter Test des Opcode `0x04` mit vorhandenen sieben Ambiente-Farben als Frames. Danach optional GIF-Konvertierung; das Python-RGB444/LZSS-Programmformat ist nicht ohne Hardwaretest als kompatibel anzunehmen.

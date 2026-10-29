@@ -403,3 +403,11 @@ Die bestehenden v0.2.0-NVS-Seiten werden im v0.3.0-Entwurf nicht automatisch gel
 - **Offen/Fehler v0.3.1:** iOS-Symbolpalette zu schmal und unbedienbar; Dialog schließt nach jedem Symbol und Tastatur springt auf; Lauftext-Schriftwahl fehlt; Demo-Feldwerte „Grüße“ und „UMARMUNG“ unerwünscht; Vorschau langfristig verkleinern; Undo/Redo erst für künftige individuelle Formatierung wirklich wertvoll; automatischer Blockseiten-Player stoppt nach BLE-Verbindungsfehler.
 - **v0.3.2 Kandidat:** mobile Palette mit Mehrfacheinfügung, fünf einheitliche Fontnamen, Mini Zweizeilig auch im Lauftext, keine neuen Demotexte, experimentelle 600-Zeichen-Grenze mit rotem/fettem Zähler bei Überschreitung. Technisch kritisch: BLE-Header weiterhin nur 80 Format-Slots; längere Übertragung ohne bestätigte Protokollunterstützung.
 - **Repository-Pflege:** ältere Dokumente vor Löschen auf historische Informationen prüfen; `RELEASE_NOTES.txt`, `TEST_HINWEIS.txt`, `UPDATE_ANLEITUNG.txt`, `ENTWICKLUNGSSTAND_v0.3.0.md` und `docs/VEROEFFENTLICHUNGS_AUDIT_2026-10-23.md` sind Archivkandidaten, nicht automatisch löschen.
+
+
+## Test- und Designnachtrag 29.10.2026 (v0.4.2.4.1-dev)
+
+- **Hardwarebestätigt in v0.4.2.4:** Boot/Datenbestand; kurzes Text-Block-Text-Laufband; korrekte Farben/Reihenfolge/16-Pixel-Abstände. Tests zu >30 KiB, BLE-Retry und Langzeit-RAM bleiben offen.
+- **UI-Korrektur:** Tafelsteuerung normal am Seitenende; nicht fixiert, nicht über dem Inhalt. Alle bisherigen Funktionen bleiben erhalten.
+- **Kurzwahl:** Icon-Aktionen `trash`, `undo-dot`, `star-check`; Bearbeitungszustand `pencil`/`pencil-off` ohne Modus-Toasts.
+- **Review F-06:** `.bak` beim bewussten Löschen eines Programms mitentfernen; übrige F-/S-Befunde nicht als erledigt markieren.

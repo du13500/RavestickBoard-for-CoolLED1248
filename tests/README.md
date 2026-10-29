@@ -7,3 +7,5 @@ python tools/sync_web.py
 ```
 
 Die Browser-Tests arbeiten mit simulierten ESP32-HTTP-Antworten. Sie **ersetzen keine Arduino-Kompilierung oder Hardwaretests**. Die eigentliche neue BLE-Wiederholung, das Streaming und die Zeitsteuerung müssen gemäß `docs/TESTPLAN_v0.4.2.4.md` auf der CoolLEDX geprüft werden.
+
+Für den UI-Hotfix: `python tests/browser_v04241_smoke.py` (selbständiger Offline-Browser-Mock, prüft die tatsächliche Position und Kurzwahl-Dialogzustände). Alte Renderer-Vergleiche haben den neuen gemischten Streamingpfad nicht vollständig abgedeckt.

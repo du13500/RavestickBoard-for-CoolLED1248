@@ -1,3 +1,11 @@
+## v0.4.2.4.1-dev – 29.10.2026 · Bedienungs-Hotfix und überprüfter Hardwarestand
+
+- **Hardware v0.4.2.4 bestätigt:** Sketch kompiliert, Boot ohne Panic, Bibliothek/Kurzwahlen erhalten; kleines gemischtes Laufband mit einem Upload und korrekten Farben/Reihenfolge; 16 leere Pixelspalten zwischen Einträgen. Die Langzeit-, Retry- und >30-KiB-Prüfungen bleiben ausdrücklich offen; Original-Mischprogramm in dieser Runde nicht reproduzierbar.
+- **Tafelsteuerung:** Ein einzelner gemeinsamer Abschnitt bleibt funktional erhalten, jedoch nicht mehr `position:fixed`: als normale Box nach dem jeweiligen Seiteninhalt. Dokument scrollt; keine Überlagerung von Speicherbuttons, Listen oder Kurzwahlen. Home 2×3 in kompakten Reihen.
+- **Kurzwahlen:** Einrichtungsdialog mit ausschließlich Icon-Aktionen (`trash`, `undo-dot`, `star-check`), verständlichen `title`-/`aria-label`-Attributen. Bearbeitungsmodus wechselt zwischen `pencil` und `pencil-off`, ohne überflüssige Toasts.
+- **Speicherkonsistenz:** `v042DeleteCollection()` entfernt beim bewussten Löschen auch `.bak` (Review F-06), die bestehende Rückfalllogik für **nicht gelöschte** Programme bleibt unangetastet.
+- **Grenzen:** Keine Änderung der laufenden BLE-/Streamingzeitsteuerung; keine neue ABI oder Datenmigration; Arduino-Build und ESP32-Hardwaretest v0.4.2.4.1 weiterhin ausstehend. Review-IDs F-01–F-12 / S-01–S-06 werden separat verfolgt.
+
 ## v0.4.2.4-dev – 28.10.2026 (Implementierung, Hardwaretest offen)
 
 - **Befund aus v0.4.2.3 auf echter CoolLEDX:** Kurzes gemischtes Scrollband funktioniert; bei größerem, aufgeteiltem Band schnitt die alte 20-s-Gruppenzeit ab. Der letzte BLE-Upload brach bei Paket 70/106 ohne Bestätigung ab. Kein nachgewiesener RAM-Panic (RAMTRACE Heap-Minimum 17 KB, später 31 KB frei).

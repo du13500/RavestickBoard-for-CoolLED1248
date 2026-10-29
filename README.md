@@ -4,7 +4,7 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.4--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.4.1--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
@@ -15,7 +15,15 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 
 Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` des **ESP32-C3 Super Mini**. Das lokale Webinterface unter **http://192.168.4.1** überträgt die Darstellung via Bluetooth Low Energy (FFF0/FFF1) an die **CoolLEDX-Tafel**. Die LED-Tafel benötigt keine modifizierte Herstellerfirmware und kann einmal hochgeladene Inhalte autonom wiederholen. Die Bedienoberfläche läuft ohne Internetzugang; USB bleibt der einzige Firmware-Updateweg, **kein OTA**.
 
-## Aktuell: v0.4.2.4-dev
+## Aktuell: v0.4.2.4.1-dev
+
+**Hardwaretest vom 29.10.2026, Basis v0.4.2.4-dev:** Firmware kompiliert und startet ohne Panic; LittleFS-Bibliothek und sechs Kurzwahlen erhalten. Ein kleines Laufband (Lauftext → 4 Blockseiten → Lauftext) mit Originalfarben und Reihenfolge funktioniert als ein Upload; auch die 16 echten Leer-Pixelspalten wurden bestätigt. **Noch offen:** geteilte Laufbänder über 30 KiB, Langzeit-RAMTRACE, ACK-/Retry-Test, die weiteren UI- und Backupregressionen. Der normale gemischte Programmablauf mit stehenden Blockseiten war in dieser Runde nicht reproduzierbar; das ist weder ein Bestehen noch ein belegter Fehler.
+
+**Hotfix v0.4.2.4.1-dev:** Die globale Tafelsteuerung liegt wieder als normaler Abschnitt am *Ende des Seiteninhalts*. Sie schwebt nicht über Kurzwahlen, Bibliothek oder Editoren; zum Erreichen wird bei Bedarf gescrollt. Der Kurzwahl-Einrichtungsdialog hat drei kompakte reine Lucide-Aktionen `trash` / `undo-dot` / `star-check`. Im Bearbeitungsmodus wechselt das Icon zu `pencil-off`, beim Verlassen zu `pencil`, ohne Meldung. Die Löschroutine für Programme entfernt jetzt auch die mögliche `.bak`-Rückfallkopie, damit ein bewusst gelöschtes Programm nicht unbeabsichtigt zurückkehrt (Review F-06).
+
+**Der Streaming- und BLE-Kern wurde für diesen UI-Hotfix bewusst nicht umgebaut.** Die offenen Punkte aus unseren beiden Claude-Reviews (F-01–F-12, S-01–S-06) bleiben als technische Arbeitsliste erhalten; insbesondere ACK-Prüfung, Webserver während BLE, Laufzeitkalibrierung und echte Byte-Verhaltenstests sind weiterhin offen. Arduino-Kompilierung und Hardwaretest **dieser** Version stehen aus.
+
+### Vorgängerversion v0.4.2.4-dev
 
 **Unsere Hardwaretests vom 28.10.2026:** Die v0.4.2.3 wurde erfolgreich auf dem ESP32-C3 kompiliert und geflasht. Lauftexte, Symbole, verschiedenfarbige Schriften und Blockseiten werden im Modus **„Alles als Laufband“** korrekt verkettet und angezeigt. Die Tafel scrollt ein passendes, vollständiges Band nach einem Upload autonom. Größere Laufbänder wurden in mehrere Gruppen zerlegt; die alte **20-Sekunden-Ersatzdauer** schnitt Inhalte vorzeitig ab. Bei einem späteren Upload wurde **Paket 70/106 nicht bestätigt** und die Tafel blieb im Hersteller-Fehlerbildschirm. Der ESP32-Heap war dabei knapp, aber ein RAM-Absturz wurde nicht nachgewiesen. Siehe [Testbefund](docs/TESTBEFUNDE_v0.4.2.3.md).
 
@@ -28,16 +36,16 @@ Für **v0.4.2.4-dev** haben wir gezielt nachgebessert:
 - **Menü und Editor:** Menüüberschrift „Navigation“ entfällt, Diagnose verwendet Lucide `bug`. Technische WLAN-/Speicherhinweise werden nicht mehr im Editor angezeigt, sondern bleiben in Diagnose/Dokumentation.
 - **Repository:** Roadmap und Themenspeicher wurden mit den bestätigten Tests abgeglichen. Neue Community-Dateien (`CONTRIBUTING.md`, `SECURITY.md`, Issue-/PR-Vorlagen, Verhaltenskodex) erleichtern Rückmeldungen. Unser Quellcode bleibt unter **MIT**; die getrennten Lucide/Feather-Rechte stehen in `THIRD_PARTY_NOTICES.md` und sind in `LICENSE` referenziert.
 
-**Wichtig:** v0.4.2.4-dev ist hier noch **nicht auf der echten Tafel abgenommen**; lokale Browser-/Quelltests ersetzen weder Arduino-Kompilierung noch Hardware-, RAM- und BLE-Tests. Speichergrößen und Runtime-Timing für geteilte Gruppen müssen wir erneut prüfen.
+**Wichtig:** Die neue v0.4.2.4.1-dev wurde noch **nicht auf der echten Tafel abgenommen**; lokale Browser-/Quelltests ersetzen weder Arduino-Kompilierung noch Hardware-, RAM- und BLE-Tests. Speichergrößen und Runtime-Timing für geteilte Gruppen müssen wir erneut prüfen.
 
 ## Installation und Datensicherheit
 
 1. Vorab ein JSON-Backup aus der aktuell laufenden **v0.4.2.3-dev** erstellen und lokal aufbewahren. Die bisherige Firmware als Rückfallversion sichern.
-2. `firmware/RavestickBoard_v0_4_2_4/RavestickBoard_v0_4_2_4.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h` (insgesamt **sechs Dateien**).
+2. `firmware/RavestickBoard_v0_4_2_4_1/RavestickBoard_v0_4_2_4_1.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h` (insgesamt **sechs Dateien**).
 3. Arduino IDE: **ESP32C3 Dev Module**, Espressif **3.3.12**, **USB CDC On Boot: Enabled**, **No OTA (2MB APP/2MB SPIFFS)**. Bestehendes Partitionsschema **nicht ändern**, **Erase All Flash deaktiviert** lassen.
 4. Nach dem Flashen mit WLAN `CoolLED1248` verbinden, `http://192.168.4.1` aufrufen. Bibliothek nicht neu formatieren. Testplan schrittweise abarbeiten. Falls das Homescreen-Icon nicht übernommen wird, die Verknüpfung über Safari erneut hinzufügen.
 
-Siehe [ausführliche Installation](docs/INSTALLATION_v0.4.2.4.md), [Testplan](docs/TESTPLAN_v0.4.2.4.md), [Bibliotheksformat](docs/BIBLIOTHEK_v0.4.2.md), [Changelog](CHANGELOG.md), [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md).
+Siehe [ausführliche Installation](docs/INSTALLATION_v0.4.2.4.1.md), [Testplan](docs/TESTPLAN_v0.4.2.4.1.md), [Bibliotheksformat](docs/BIBLIOTHEK_v0.4.2.md), [Changelog](CHANGELOG.md), [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md).
 
 ## Mitmachen und Sicherheit
 
