@@ -84,3 +84,10 @@ Siehe [Vergleichstest](VERGLEICHSTEST_v0.4.2.4.2.md). Historischer Status der vo
 - Kein automatisches Öffnen/Formatieren unbekannter LittleFS-Dateisysteme.
 
 Referenzen und externe Forschung stehen in [QUELLEN_UND_LIZENZEN.md](QUELLEN_UND_LIZENZEN.md), laufende Detailideen im [THEMENSPEICHER.md](THEMENSPEICHER.md) und die Hardwaretestliste in [TESTPLAN_v0.4.2.4.md](TESTPLAN_v0.4.2.4.md).
+
+## Release-Überlegung für v1.0 (30.10.2026)
+
+- Erst die kritischen Heap-Minima unter WLAN-/HTTP-/BLE-Last beheben und am Gerät verifizieren.
+- Für Release-Builds 20-ms-RAMTRACE und ausführliches HTTPTRACE entfernen bzw. über ein separates Entwickler-Build verfügbar lassen.
+- Einen kompakten Fehlerbericht mit Firmwareversion, WLAN-/BLE-Status, Resetgrund und letzten Fehlern behalten.
+- Programmverwaltung optisch/inhaltlich erst nach den noch ausstehenden Praxishinweisen überarbeiten.

@@ -1,4 +1,4 @@
-> **Aktueller Entwicklungskandidat: v0.4.3-dev (30.10.2026).** UI-Konsolidierung, offline Lucide-App-Icon in Menüfarbe und vereinheitlichte Speichern-Aktionen. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md). Hardware-/Heap-Abnahme steht noch aus.
+> **Aktueller Entwicklungskandidat: v0.4.3.1-dev (30.10.2026).** Speicherärmere Diagnose, gezieltere HTTP-Fehlerzuordnung sowie UI-Korrekturen auf Basis von v0.4.3. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md). Hardware-/Heap-Abnahme steht noch aus.
 
 <p align="center"><img src="docs/assets/board-gif.gif" alt="CoolLEDX mit LED-Motiven" /></p>
 <p align="center"><img src="docs/assets/totem.jpg" width="420" alt="RavestickBoard Festival-Totem mit Neonbanane" /></p>
@@ -6,7 +6,7 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.3--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.4.3.1--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
@@ -17,11 +17,18 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 
 Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` des **ESP32-C3 Super Mini**. Das lokale Webinterface unter **http://192.168.4.1** überträgt die Darstellung via Bluetooth Low Energy (FFF0/FFF1) an die **CoolLEDX-Tafel**. Die LED-Tafel benötigt keine modifizierte Herstellerfirmware und kann einmal hochgeladene Inhalte autonom wiederholen. Die Bedienoberfläche läuft ohne Internetzugang; USB bleibt der einzige Firmware-Updateweg, **kein OTA**.
 
-## Aktuell: v0.4.3-dev – UI-Konsolidierung
+## Aktuell: v0.4.3.1-dev – Diagnoseentlastung und UI-Feinschliff
+
+- **Diagnose:** Statusübersicht fordert nur kompaktes JSON an. Der vollständige TXT-Bericht entsteht ausschließlich bei Download bzw. Kopieren, speichersparend in kleinen HTTP-Stücken statt als 11-KB-String.
+- **HTTPTRACE:** Speichert zusätzlich worst-case-Pfade (längste Anfrage, Heap-Minimum, HTTP-Zeitpunkt eines System-Min-Abfalls) auch über das 32-Anfragen-Fenster hinaus. Ein außerhalb von Handlern beobachteter Tiefstwert bleibt ausdrücklich *nicht zugeordnet*.
+- **UI:** Ambiente wieder einspaltig, Blockseiten-Werkzeuge mit klaren deaktivierten Zuständen, originale Lucide-SVGs, gleichmäßige Senden-/Speichern-Abstände.
+- **Wichtig:** Keine belegte Behebung des kritischen historischen Heap-Tiefstwerts; v0.4.3.1 ist ein Hardware-Testkandidat, keine stabile Freigabe.
+
+## Vorher: v0.4.3-dev – UI-Konsolidierung
 
 - **App-Symbol:** Die gleiche hellgrauweiße Lucide-Banane wie auf der Menütaste, auf deren dunklem Hintergrund, als Offline-iPhone-Icon und Browserfavicon. Die alte Emoji-Banane wird dort nicht mehr verwendet.
 - **Lauftext:** Nur der Lauftextmodus wird neu erzeugt. Zwei große Aktionen „Lauftext senden“ und „Speichern“. Bei vorhandenen Bibliothekseinträgen bietet Speichern eine Auswahl zwischen Aktualisieren und neuer Variante.
-- **Blockanzeige:** Neue Seiten verwenden standardmäßig **Original - Normal**. Drei Ausrichtungs-Icons und kompakte Seitenwerkzeuge mit Radierer; bei einer einzigen Seite steht `trash-off`, „Alles löschen“ ist erst bei mindestens zwei Seiten sichtbar und rot hervorgehoben. Große Aktionen: „Diese Seite senden“, „Alle Seiten senden“, „Speichern“.
+- **Blockanzeige:** Neue Seiten verwenden standardmäßig **Original - Normal**. Drei Ausrichtungs-Icons und kompakte Seitenwerkzeuge mit Radierer; bei einer einzigen Seite steht `trash-off`, „Alles löschen“ ist bei einer Seite grau und deaktiviert, ab zwei Seiten rot hervorgehoben. Große Aktionen: „Diese Seite senden“, „Alle Seiten senden“, „Speichern“.
 - **Bibliothek und Dialoge:** Tooltips ohne alte Symbolzeichen; Umbenennen mit `text-cursor-input`, Duplizieren-Dialog mit passenden Icon-Aktionen. Keine Favoriten, Suche oder manuelle Aktualisieren-Taste.
 - **Ambiente und Tafelsteuerung:** Farbkacheln nutzen die Bildschirmhöhe. Im gemeinsamen Steuerbereich verwendet Standbild das `octagon`-Symbol. Die acht Kurzwahlen bleiben erhalten.
 - **Editorführung:** „Zur Bibliothek“ nur bei geöffneter Bibliotheksvorlage. „Neu“ bleibt verfügbar; Änderungen werden nicht ohne Bestätigung verworfen.
@@ -32,9 +39,9 @@ Beim Bearbeiten eines vorhandenen Bibliothekseintrags wählt man nach **Speicher
 
 Bearbeitungen werden auf dem jeweiligen Gerät direkt in der Bibliothek angezeigt. Hat ein anderes Smartphone Änderungen vorgenommen, aktualisiert **Menü → Webinterface neu laden** die Ansicht; gleichzeitige Bearbeitung desselben Eintrags kann vorherige Änderungen überschreiben.
 
-**Sketch:** `firmware/RavestickBoard_v0_4_3/RavestickBoard_v0_4_3.ino`. Die sechs zugehörigen Dateien im gemeinsamen Ordner belassen. `python tools/sync_web.py` erzeugt den gzip-Webheader nach HTML-Änderungen.
+**Sketch:** `firmware/RavestickBoard_v0_4_3_1/RavestickBoard_v0_4_3_1.ino`. Die sechs zugehörigen Dateien im gemeinsamen Ordner belassen. `python tools/sync_web.py` erzeugt den gzip-Webheader nach HTML-Änderungen.
 
-**Teststand:** JavaScript-Syntax, Browser-Simulationen mit fünf Displaygrößen, Editor-Speicherpfade und Icon-Struktur geprüft. **Kein vollständiger Arduino-Compile, keine Hardware-Abnahme und kein nachgewiesener Heap-Fix.**
+**Teststand:** JavaScript-Syntax, Browser-Simulationen auf drei Smartphonegrößen, Versionierung und gzip-/ETag-Konsistenz geprüft. **Kein vollständiger Arduino-Compile, keine Hardware-Abnahme und kein nachgewiesener Heap-Fix.**
 
 Frühere Versionen, einschließlich v0.4.2.5.4-dev, sind vollständig in [`CHANGELOG.md`](CHANGELOG.md) und den bisherigen Release-Notes dokumentiert.
 

@@ -16,3 +16,7 @@ Der Browser-Test erfordert Playwright und Chromium; Arduino-Boardpaket und reale
 `python tests/browser_8_shortcuts.py`: responsives Layout mit acht Kurzwahlen und Reglern.
 
 **Nicht enthalten:** Arduino-Compile oder ESP32-Hardwarelasttest.
+
+## v0.4.3.1-dev (30.10.2026)
+
+`python tests/test_0431.py` prüft die JavaScript-Syntax, HTML/gzip-/ETag-Konsistenz, die korrigierte Versionskennung, den entkoppelten Diagnose-TXT-Download und die interaktive Darstellung in drei Chromium-Mobilgrößen. Der Stream-Puffer wurde außerdem separat mit einem Host-C++-Test kompiliert. Dies ersetzt **keinen Arduino-Gesamtcompile** und keinen Heap-/BLE-Test auf dem ESP32.

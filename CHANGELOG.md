@@ -1,5 +1,17 @@
 # RavestickBoard · Versionsgeschichte / Changelog
 
+## v0.4.3.1-dev – Diagnoseentlastung, HTTP-Eingrenzung, UI-Korrekturen (30.10.2026)
+- **Firmwareversion:** Zentrale Versionskennung von fälschlich `0.4.2.5.1-dev` auf `0.4.3.1-dev` korrigiert. Diagnosedateinamen und Diagnose-JSON folgen wieder dem tatsächlichen Sketch.
+- **Diagnose-Speicher:** Große `String.reserve(11000)`- und `reserve(5000)`-Puffer entfernt. Diagnosebericht und JSON-Ausgabe werden in kleinen Blöcken als HTTP-Antwort gestreamt; der Ereignisring wird ohne große Zwischentextkopie ausgegeben. Die TXT-Datei wird erst bei Download oder Kopieren erzeugt.
+- **Diagnose-Tab:** Beim Wechsel zur Ansicht genau eine kompakte JSON-Anfrage statt parallelem JSON- und TXT-Abruf. Mehrfachanfragen per `toggle` entfernt; erneutes Aktualisieren bleibt über die vorhandene Taste möglich.
+- **HTTPTRACE:** Bei Ringüberschreibung bleiben die längste Anfrage, die Anfrage mit dem niedrigsten gemessenen Heap und der schwerste beobachtete System-Min-Abfall inklusive Requestpfad erhalten. Separate Beobachtung eines Min-Abfalls außerhalb eines HTTP-Handlers, damit nicht jeder Tiefstwert pauschal HTTP zugeschrieben wird. Keine Queryparameter, Textinhalte oder Passwörter in Logs.
+- **Kleinere APIs:** Statusantwort mit begrenztem `snprintf`-Puffer statt umfangreicher `String`-Verkettungen; `respond()` vermeidet die mehrfache String-Kettenbildung.
+- **Ambiente:** Sieben Farben wieder **einspaltig**, von oben nach unten Rot, Gelb, Grün, Cyan, Blau, Magenta, Weiß; verfügbaren Platz weiterhin ausnutzen.
+- **Blockeditor:** Nachfrage „Seite # leeren?“; bei einer Seite `trash-off` und „Alles löschen“ deaktiviert und grau, ab zwei Seiten aktiviert. Icon für „Alles löschen“ jetzt originales Lucide `flame-kindling`. Drei Senden-/Speichern-Tasten in einem gemeinsamen Raster mit gleichem Abstand.
+- **Bibliothek:** Umbenennen verwendet nun die unveränderten SVG-Pfade von Lucide `text-cursor-input` statt der fehlerhaften Nachzeichnung.
+- **Nicht geändert:** BLE-Protokoll, LittleFS-/NVS-Schema, gespeicherte Bibliothek, Programme, acht Kurzwahlen und Firmwarepartition. Größere Neugestaltung der Programme-Ansicht steht aus.
+- **Prüfstand:** JavaScript-Syntax, Kompression/ETag und simulierte Browserabläufe auf drei Smartphonegrößen erfolgreich. **Nicht** mit Arduino/ESP32 kompiliert, **nicht** auf realer Hardware getestet. Historisches Heap-Minimum von 224 B ist noch nicht erklärt oder nachweislich behoben.
+
 ## v0.4.3-dev – Konsolidierung der Bedienoberfläche (30.10.2026)
 - Neues iOS-App-Icon und Favicon: originale Lucide-Banane der Menütaste, gleiche hellgrauweiße Strichfarbe (#f3f5fa) und dunkler Tastengrund (#303744), offline aus PROGMEM.
 - Lauftexteditor: überflüssige eigene Standbild-Option entfernt; einheitlicher Vollbreiten-Senden-/Speichernbereich, neue Speichern-Auswahl „Änderungen speichern“ / „Als neuen Eintrag speichern“ für Bibliothekstexte.
