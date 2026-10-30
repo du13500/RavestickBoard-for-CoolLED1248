@@ -4,7 +4,7 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.5--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.5.1--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
@@ -15,7 +15,13 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 
 Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` des **ESP32-C3 Super Mini**. Das lokale Webinterface unter **http://192.168.4.1** überträgt die Darstellung via Bluetooth Low Energy (FFF0/FFF1) an die **CoolLEDX-Tafel**. Die LED-Tafel benötigt keine modifizierte Herstellerfirmware und kann einmal hochgeladene Inhalte autonom wiederholen. Die Bedienoberfläche läuft ohne Internetzugang; USB bleibt der einzige Firmware-Updateweg, **kein OTA**.
 
-## Aktuell: v0.4.2.5-dev – HTTP-/RAM-Stabilisierung
+## Aktuell: v0.4.2.5.1-dev – UI-Hotfix auf Basis von v0.4.2.5
+
+**Korrekturen nach iPhone-Hardwaretest vom 30.10.2026:** Sieben defekte `<span>`-Starttags im Hauptmenü repariert (sichtbares `span>`). Sechs Kurzwahl-Icons und das Neu-laden-Icon liegen vollständig als SVG im Start-HTML, die Startseiten-Ansicht ist schon beim ersten HTML-Render als `home` markiert (keine zusätzlich eingeblendete Geschwindigkeitszeile). Ein kleines Ladebild verdeckt die Kurzwahl-Platzhalter bis zum Abschluss der ersten API-Initialisierung; auch bei Initialisierungsfehlern wird die Oberfläche freigegeben. **Wichtig:** Das ist ein UI-Hotfix; das kritische Heap-Minimum bleibt unabhängig davon ungeklärt.
+
+**Sketch:** `firmware/RavestickBoard_v0_4_2_5_1/RavestickBoard_v0_4_2_5_1.ino`. Erzeugung des gzip-Headers: `python tools/sync_web.py`. Keine Änderungen am BLE-Protokoll, LittleFS-Inhalt oder Partitionsschema.
+
+## Vorversion: v0.4.2.5-dev – HTTP-/RAM-Stabilisierung
 
 **Neue Firmware:** `firmware/RavestickBoard_v0_4_2_5/RavestickBoard_v0_4_2_5.ino` (alle sechs Sketch-Dateien zusammenlassen). Grundlage ist Build B mit gzip/ETag/304 und `/api/http.txt`. Die JSON-Antworten der Bibliothek und Programmübersicht werden in gebündelten, begrenzten Sendestücken ausgegeben. Die Lucide-Icons stehen schon im HTML, statt sichtbar von alten Symbolen umgebaut zu werden. Das LittleFS-Bibliotheksformat und das BLE-Übertragungsprotokoll wurden nicht geändert.
 

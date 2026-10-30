@@ -1,0 +1,3 @@
+v0.4.2.5.1-dev – UI-Fix: Menü-Tags, vorgerenderte Kurzwahl-Icons,
+Home-Dock vor erstem JavaScript-Render, Laden ohne sichtbares Stufen-Layout.
+Keine BLE-/Speicher- oder Datenformatänderungen. Test auf ESP32-C3 erforderlich.

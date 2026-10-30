@@ -1,3 +1,10 @@
+## v0.4.2.5.1-dev – 30.10.2026 · UI-Hotfix (Hardwaretest ausstehend)
+
+- **MENÜ-01:** Sieben versehentlich verstümmelte `<span>`-Starttags nach inline-SVG im Hauptmenü repariert. Ursache: fehlerhafte HTML-Transformation in v0.4.2.5-dev. Hauptmenütexte standen als `span>Kurzwahl` usw. im Browser.
+- **UI-01:** Statische Kurzwahl-/Reload-SVGs jetzt schon im HTML. Initiales `data-rb-view=home` verhindert den kurzzeitig sichtbaren zweiten Geschwindigkeitsregler. Startansicht wird erst sichtbar, nachdem die erste Dateninitialisierung abgeschlossen ist; bei Initialisierungsfehlern wird sie trotzdem freigegeben.
+- **Unverändert:** v0.4.2.5-HTTP-/gzip-/ETag-/JSON-Puffer-Optimierungen, BLE, LittleFS, Programme, NVS und Partitionierung.
+- **Tests:** HTML/JS- und Renderregressionen offline; **vollständiger Arduino-Build, iPhone-Test und RAM-/BLE-Stabilität nicht verifiziert**. Die beobachteten historischen Free-Heap-Tiefstwerte sind weiterhin offen.
+
 ## v0.4.2.5-dev – 29.10.2026 · HTTP-/UI-Stabilisierung (Hardware-Abnahme offen)
 
 - **Basis:** v0.4.2.4.2-dev-B, reproduzierbar gzip-komprimierte Webseite, inhaltsbasierter ETag und HTTP-304; 20-ms-HTTP/RAM-Diagnose bleibt aktiv, damit neue Tests direkt vergleichbar sind.
