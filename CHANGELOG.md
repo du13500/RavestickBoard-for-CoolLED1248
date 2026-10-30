@@ -1,3 +1,5 @@
+> **v0.4.3.1-dev · Korrektur 1 (30.10.2026):** Arduino-Compile-Fehler durch automatischen Prototyp fuer `rbAppendJsonText(RbDiagnosticStream&)` korrigiert. Die JSON-Escaping-Funktion ist nun eine Klassenmethode. Vollstaendiger Arduino-Compile auf Zielumgebung steht noch aus.
+
 # RavestickBoard · Versionsgeschichte / Changelog
 
 ## v0.4.3.1-dev – Diagnoseentlastung, HTTP-Eingrenzung, UI-Korrekturen (30.10.2026)

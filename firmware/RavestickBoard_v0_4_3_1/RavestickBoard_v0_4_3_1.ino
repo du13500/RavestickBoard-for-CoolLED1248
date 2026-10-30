@@ -740,6 +740,18 @@ public:
   RbDiagnosticStream& operator+=(const String& item) { append(item); return *this; }
   RbDiagnosticStream& operator+=(const char* item) { append(String(item)); return *this; }
   RbDiagnosticStream& operator+=(char item) { buffer += item; if (buffer.length() >= 448) flush(); return *this; }
+  // Defined inside the class so Arduino's .ino auto-prototyper cannot move
+  // a declaration referring to RbDiagnosticStream above its definition.
+  void appendJsonEscaped(const char *str) {
+    if (!str) return;
+    for (const unsigned char *p = (const unsigned char *)str; *p; ++p) {
+      if (*p == '"' || *p == '\\') { *this += '\\'; *this += (char)*p; }
+      else if (*p == '\n') *this += "\\n";
+      else if (*p == '\r') *this += "\\r";
+      else if (*p == '\t') *this += "\\t";
+      else if (*p >= 0x20) *this += (char)*p;
+    }
+  }
   void flush() { if (buffer.length()) { web.sendContent(buffer); buffer = ""; } }
 };
 
@@ -837,18 +849,6 @@ void diagnosticReportStream() {
 }
 
 
-// Emit escaped JSON string contents without creating a second multi-kilobyte String.
-static void rbAppendJsonText(RbDiagnosticStream &out, const char *str) {
-  if (!str) return;
-  for (const unsigned char *p = (const unsigned char *)str; *p; ++p) {
-    if (*p == '\"' || *p == '\\') { out += '\\'; out += (char)*p; }
-    else if (*p == '\n') out += "\\n";
-    else if (*p == '\r') out += "\\r";
-    else if (*p == '\t') out += "\\t";
-    else if (*p >= 0x20) out += (char)*p;
-  }
-}
-
 void onRamTraceDownload() {
   ramTraceMark(RT_WEB_BEGIN);
   web.sendHeader("Cache-Control", "no-store");
@@ -935,9 +935,9 @@ void onDiagnosticsJson() {
   for (uint8_t i=0; i<recentCount; ++i) {
     const DiagnosticEvent &e = eventRing[(recentStart+i) % EVENT_CAPACITY];
     json += String(e.atMs); json += " ms | ";
-    rbAppendJsonText(json, e.category);
+    json.appendJsonEscaped(e.category);
     json += " | ";
-    rbAppendJsonText(json, e.details);
+    json.appendJsonEscaped(e.details);
     json += "\\n";
   }
   json += '\"';
