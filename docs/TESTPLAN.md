@@ -1,9 +1,3 @@
-# Aktueller Testplan v0.4.2-dev
-
-Die priorisierten Tests für dieses Update stehen in [TESTPLAN_v0.4.2.md](TESTPLAN_v0.4.2.md). Der folgende Inhalt ist die historische Testliste früherer Firmwareversionen.
-
----
-
 ## Ergänzung v0.3.5
 
 

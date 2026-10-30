@@ -1,3 +1,9 @@
+## 29.10.2026 – Stability / UI-01
+
+- v0.4.2.5-dev Bündelung von JSON-API-HTTP-Chunks und statische SVG-Icons bereits im HTML.
+- A/B-Erkenntnis: gzip und HTTP 304 funktionieren, kritischer systemweiter Heap-Tiefstand bleibt in B sogar bei einem Client nachgewiesen. Ursachenklärung offen.
+- Für nächste Versionen: Adam Schulz/OpenSign, Opcode 0x04, Fehlerbestätigungen – noch keine Codeübernahme.
+
 # Aktueller Themenstatus · v0.4.2.4.2-dev-A/B (29.10.2026)
 
 ## Hardwarebestätigt unter v0.4.2.4.1-dev

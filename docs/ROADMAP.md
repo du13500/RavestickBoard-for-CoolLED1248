@@ -1,3 +1,9 @@
+## Als Nächstes nach v0.4.2.5-dev (Hardwarestatus offen)
+
+- Speicher-Hardening: Extremwerte unter 1 KiB in WLAN- und HTTP-Testläufen, weiter eingrenzen; keine voreilige Entwarnung.
+- API-/UI-Optimierung v0.4.2.5 am ESP32 verifizieren; keine neue Datenmigration.
+- Danach: BLE-ACK-Decoding und native Opcode-0x04-Animationen nach Adam Schulz / OpenSign untersuchen (MIT-Attribution bei späterer Codeübernahme).
+
 # RavestickBoard Roadmap
 
 ## Aktuell · 29.10.2026 – v0.4.2.4.2-dev-A/B

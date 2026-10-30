@@ -1,16 +1,3 @@
-# Diagnosestatus v0.4.2.1-dev
-
-## v0.4.2.2: Programm- und Statusdiagnose
-
-Der Programm-Timer wird jetzt tatsächlich zyklisch ausgeführt. Nach erfolgreicher Gruppensendung wird `PROGRAM Gruppe Block/Text Dauer=... ms` ins Diagnoseprotokoll eingetragen, bei fehlenden IDs werden Programmläufe verweigert. Das Browserstatus-Polling zeigt einzelne Fehler während BLE-Uploads nicht als Offline-Alarm; ein dezenter Warnstatus erscheint erst nach mehreren erfolglosen Abfragen über mehr als 30 Sekunden und verschwindet nach erfolgreicher Antwort. Bei echten Problemen bleiben die Diagnose-Downloads unter **Diagnose** relevant.
-
-Bei Hardwaretest bitte zusätzlich zu den angezeigten Seiten die Zeiten von `TX_END`, `JOB_END` und nachfolgendem `PROGRAM`-Wechsel dokumentieren. Die erste sichtbare Seite beginnt nicht zwingend exakt am `JOB_END`-Zeitpunkt.
-
-
-Der umfangreiche RAMTRACE und die BLE-Auftragsdiagnose aus v0.4.0.3/v0.4.1 sind weiter enthalten. Der Nutzer hat die erfolgreiche Blockband-Übertragung und die Anzeigemodi auf CoolLEDX bestätigt. Ein `Stack protection fault` in `loopTask` beim Speichern von Blockfolgen wurde durch den seriellen Mitschnitt nachgewiesen. V0.4.2.1 ersetzt große Stackkopien durch einen 128-Byte-Dateiprüfpuffer; Nachtest auf dem ESP32 noch offen. BLE-Timeout-Recovery bleibt Zukunftsthema. Nach Hardwaretests bitte Diagnose und RAM-Protokoll exportieren. Frühere Messwerte gelten für frühere Firmwares.
-
----
-
 # RavestickBoard · Diagnose und Fehlerprotokoll
 
 **Fortgeschrieben 25.10.2026 · v0.3.3 hardwaregetestet; Modus-Testversion v0.3.4 noch ungetestet.**

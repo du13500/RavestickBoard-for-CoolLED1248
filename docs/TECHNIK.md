@@ -1,20 +1,3 @@
-# Technikstand v0.4.2.1-dev (aktueller Testkandidat)
-
-## v0.4.2.2: Programm-Timer, Anzeigegruppen und Flash-Abhängigkeiten
-
-`v042Tick()` wird in `loop()` nach `web.handleClient()` geprüft. Nach jedem erfolgreichen Gruppen-Upload legt `v042AfterJob()` für gemischte Programme den nächsten Umschaltzeitpunkt fest. Bei **einer** homogenen Gruppe bleibt die Tafel in ihrer autonomen Endlosschleife; der ESP32 schickt keine periodischen neuen Bilder. Für zusammenhängende Blöcke wird bei Geschwindigkeit 60–90 die empirische Laufzeit aus Seitenzahl und Tempo verwendet, sonst für die Gruppe ein Fallback von 5–180 Sekunden. Lauftextgruppen verwenden bis zu einer separaten Kalibrierung ebenfalls den Fallback. Das Tempo bleibt während aktiver gemischter Wiedergabe unverändert.
-
-`RBP2`-Dateien enthalten weiterhin die ursprüngliche Liste von Bibliotheks-IDs; bei Löschung einer ID wird **die Programmdatei nicht verändert**. `rb42ReadCollection()` validiert die Struktur, fehlende IDs werden im Listen-/Detail-JSON gezählt, und nur `rb42QueueStep()`/Start lehnen unvollständige Programme ab. Direkte Kurzwahlen auf gelöschte Bibliotheks-IDs werden einschließlich Beschriftung zurückgesetzt; `libraryMeta.shortcuts` wird ebenfalls aktualisiert. Ein gerade spielendes betroffenes Programm wird angehalten. Die Wiedergabe von `0x06`/`0x07` und BLE-Bitmapdaten ist unverändert.
-
-Webserver und BLE befinden sich weiterhin in einer Hauptschleife; deshalb können Statusabfragen während längerer Uploads verzögert sein. Die Browser-UI blendet auf einzelne Timeouts keine Offline-Meldung mehr ein und protokolliert Verbindungsprobleme nur bei anhaltenden Fehlschlägen. **Dies ist kein asynchroner HTTP-Server** und keine garantierte Verbindungsüberwachung.
-
-
-**Neu: Der Blockeditor ist ab v0.4.2.1 nur RAM-Arbeitsfläche; nur explizites Bibliotheksspeichern schreibt LittleFS. Die bisherigen NVS-Daten werden nicht gelesen, geändert oder gelöscht. Blockfolgen/Programme werden vor dem Dateiaustausch mit 128-Byte-Puffer verifiziert; die frühere große Kopie verursachte einen Stackschutz-Absturz beim Speichern.**
-
-**Die nachfolgenden v0.2/v0.3-Abschnitte sind historische Architektur- und Testnotizen.** Das aktuelle Design steht in [BIBLIOTHEK_v0.4.2.md](BIBLIOTHEK_v0.4.2.md). Aktuell gelten: bis zu 25 Arbeitsseiten; LittleFS Textdateien RBL1, Blockbegleitdaten RBB2, Programme RBP2, Kurzwahlen RBS2; alter RBM1-Journalindex wird weiterhin gelesen. Pixelbänder verwenden ein 384-Byte-RGB-Kachelverfahren bei größeren Transfers und bleiben innerhalb des konservativen 30-KiB-Datenlimits. BLE-Sendebefehle bleiben `0x02` sowie `0x06` für den Modus, `0x07` für Tempo und `0x08` für Helligkeit. Die Pixelband-Übertragung und acht Anzeigemodi sind durch den Nutzer auf der CoolLEDX hardwarebestätigt. Die Speicherfehlerkorrektur der v0.4.2.1 ist dagegen noch nicht auf Hardware gegengeprüft.
-
----
-
 ## Ergänzung v0.3.5
 
 ### v0.3.5 – zusätzliche Steuer- und Symbolcodes
@@ -89,7 +72,7 @@ Nach der ersten v0.2.0-Kompilierungsfehlermeldung (`'function' does not name a t
   | `0x08` | Laser | offen |
 
   **Nicht verwechseln:** Die Moduswerte `0x04`, `0x06` und `0x08` sind Parameter des Befehls `0x06`, keine selbstständigen Opcodes. Der separate **Opcode `0x04` für gespeicherte Animationen** ist hiervon unabhängig. Ein Moduswechsel bestätigt noch keinen autonomen Szenenwechsel/keine Unterstützung einer bestimmten Animation.
-- **`0x04` gespeicherte Animation** bleibt Forschungsgegenstand, an unserer Tafel noch nicht hardwarebestätigt und nicht als eigenständiges Animationsprogramm implementiert.
+- **`0x04` gespeicherte Animation**: OpenSign meldet autonome Animationen auf **einem anderen Referenzboard** (ca. 30 KiB bzw. 80 Frames). **Nicht in unserer v0.2.0-Firmware implementiert, auf unserer Hardware ungetestet.**
 
 ### Verbindungskonflikte und Uploadverhalten
 
@@ -119,8 +102,6 @@ Die vom LED-Board eingeblendete **Prozentanzeige erscheint bei jedem vollständi
 - **Seite:** Individuell gestaltetes Bild/Objekt.
 - **Programm:** Eine oder mehrere Seiten, die *idealerweise mit einem* Transfer auf der Tafel autonom ablaufen. **Noch nicht implementiert.**
 - **Playlist:** Mehrere Programme, deren Wechsel per ESP32/BLE erfolgen dürfen. **Der v0.2.0-Seitenplayer liefert dafür eine technische Grundlage, aber noch keine vollständige Programmbibliothek.**
-
-*Historischer Entwurfsstand: Die Abschnitte 5–8 beschreiben teilweise alte Versionen und sind als Entwicklungsarchiv zu lesen. Für v0.4.2.4 siehe die aktuelle Ergänzung am Ende der Datei und die Roadmap.*
 
 ## 5. Speicher und Diagnose
 
@@ -185,23 +166,3 @@ Siehe [`ROADMAP.md`](ROADMAP.md) und [`THEMENSPEICHER.md`](THEMENSPEICHER.md): e
 **Layoutcodes (Speicherschema unverändert):** `0=Engschrift`, `1=Mini Zweizeilig`, `2=Mini Einzeilig`, `3=Standard`, `4=Standard Bold`. Für zweizeiligen Lauftext werden die beiden 7-Pixel-Zeilen auf eine gemeinsame Breite gerendert und synchron horizontal bewegt. Gleiche Farbe, keine neue Blockseitenstruktur.
 
 **Webinterface:** v0.3.1 hatte im HTML des Symbol-Overlays einen fehlenden schließenden `</div>`-Tag. Dadurch wurden Status und Diagnose als weitere Flex-Kinder im Overlay angeordnet, was den schmalen, unlesbaren Dialog sowie überlagernde Statusfelder erklärt. In v0.3.2 ist die Hierarchie korrigiert und mit einem emulierten 375-Pixel-Mobilviewport auf eine 351-Pixel-Dialogbreite geprüft. Dies ist ein Browser-Smoketest, noch kein Test in mobilem Safari. Der Browserentwurf bleibt auf dem Endgerät in `localStorage`, NVS-Blockseiten auf dem ESP32.
-
-
-## v0.4.2.3: gemeinsames horizontales Programm-Laufband
-
-Ein Programm speichert im bislang reservierten `RBP2`-Byte `playback=0` (Originalmodus) oder `playback=1` (alles scrollend); vorhandene Datensätze bleiben gültig. Beim all-scroll-Gruppenaufbau werden bis zu 96 Teilsegmente nacheinander aus LittleFS ermittelt und innerhalb des 30-KiB-Budgets mit 16 leeren Pixelspalten getrennt. Einzelne Blockseiten bleiben 64 Spalten breit, getrennt wird nur an Segmentgrenzen. Die RGB-Daten entstehen in einem maximal 30-KiB großen temporären Heap-Puffer, anschließend werden wie bisher die 107-Byte-Protokollheader und drei RGB-Ebenen übertragen. Änderungen an BLE-Framing, Paketgröße, Board-Firmware und LittleFS-Format sind dafür nicht nötig.
-
-Ein bereits vollständig übertragenes Ein-Gruppen-Programm wiederholt die Tafel selbstständig. Bei mehreren Gruppen benötigt der ESP32 weiterhin neue Uploads samt sichtbarer Prozentanzeige. Lauftext-Zykluszeiten sind nicht hardwarekalibriert, weshalb die 5–180-Sekunden-Ersatzzeit bei notwendiger Teilung weiterhin ausdrücklich vorläufig ist.
-
-
-## v0.4.2.4-dev – aktueller Technikeintrag (28.10.2026)
-
-- **Alte Datenformate bleiben gültig:** `RBL1` Text, `RBB2` Block, `RBP2` Programme, `RBS2` Kurzwahlen. Die Wiedergabeart steckt im reservierten Byte des `RBP2`-Datensatzes, keine Migration der vorhandenen Partition. LittleFS und NVS werden nicht neu formatiert.
-- **Gemischtes Laufband:** Der vorangehende Abschnitt zu v0.4.2.3 dokumentiert den damaligen Vollpuffer als *historischen Stand*. Ab v0.4.2.4 wird die RGB-Matrix in **384-Byte-Tiles** berechnet (`rb43RenderMixedTile`, `rb43CopyMixedSlice`) und in den üblichen 107-Byte-Header/drei RGB-Bitplanes eingespeist. Die Segmentliste enthält maximal 96 Records und 16 Pixel Abstand pro benachbartem Inhalt; vollständige Einzeltexte und Blockseiten werden bei Gruppenteilung nicht zertrennt.
-- **Fehlerverhalten:** Scheitert ein Bildpaket an ausbleibender BLE-Notification, wird die Verbindung geschlossen und die komplette Gruppe maximal **einmal** neu gesendet. Nach einem weiteren Fehler stoppt das laufende Programm. Steuerkommandos (Helligkeit/Tempo/Modus/Ein/Aus) werden nicht blind wiederholt. Das ist implementiert, aber noch **nicht hardwaregetestet**.
-- **Zeitsteuerung:** Ein einzelnes vollständig übertragenes Pixelband bleibt ohne ESP32-Neu-Uploads autonom auf der Tafel. Die feste 20-s-Ersatzzeit bestimmt Gruppenwechsel nicht mehr. Blockseiten bei Tempo 60–90: `Sekunden≈Anzahl×0,0795×(100−Tempo)`; Lauftexte/geteilte Laufbänder: konservative, noch nicht hardwarekalibrierte Schätzung aus Breite und Geschwindigkeit. Übergang nicht garantiert bildgenau.
-- **Web:** Ein gemeinsames festes Tafelsteuer-Dock (eine sichtbare Bedienstelle) ersetzt die mehrfachen unteren Regler auf Bibliothek, Programme, Editor, Kurzwahl und Ambiente. Die temporär beibehaltenen unsichtbaren Eingabequellen des Editors dienen der Kompatibilität der vorhandenen JS-Handler, nicht einer zweiten Nutzersteuerung.
-- **BLE:** `GET /api/status` und `POST /api/mode` bleiben unverändert. `0x06` mit den bereits bestätigten acht Moduswerten wird bei jedem manuellen Icon-Tipp erneut gesendet; keine erzwungene Bildneuübertragung.
-- **Lizenz:** Eigener Code unter MIT; eingebaute Lucide-SVGs unter ISC, für einige Feather-abgeleitete Icons zusätzlich MIT. Vollständige Hinweise in `THIRD_PARTY_NOTICES.md`, ergänzender Verweis nach dem MIT-Lizenztext in `LICENSE`.
-
-**Offene Prüfung:** Kompilierung auf ESP32-C3, realer BLE-Mixed-Tile-Transfer, Timeout-/Retry-Verhalten, länger laufende geteilte Bänder und Speicher-Fragmentierung.

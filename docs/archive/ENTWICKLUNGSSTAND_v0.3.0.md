@@ -1,5 +1,3 @@
-> Historische Archivrevision. Aktuelle Lizenz: MIT für eigenen Code, Rechte fremder Werke gesondert. Siehe `docs/QUELLEN_UND_LIZENZEN.md`.
-
 # RavestickBoard v0.3.0-dev · Entwicklungspaket (24.10.2026)
 
 **Status:** Quelltext- und Browser-Testkandidat. **Nicht** mit der Arduino IDE / `esp32` 3.3.12 gebaut und **nicht** auf ESP32-C3 oder CoolLEDX getestet. Letzter funktionierender Hardwarestand ist v0.2.0 Korrektur 1. Die vorhandene v0.2.0 bleibt als Rückfallversion enthalten.
@@ -47,3 +45,4 @@ Die Original-JSON-Dateien bleiben im separaten CoolLED1248-Archiv; die benötigt
 
 Die Rekonstruktionen der 24 Herstellersymbole bleiben ausdrücklich als **CoolLED1248-Originalsymbole** gekennzeichnet. Eigenmotive erhalten die Kennzeichnung **RavestickBoard-Eigensymbole**. Einzelheiten siehe `docs/QUELLEN_UND_LIZENZEN.md`. Eine Quellenangabe allein ersetzt eine gegebenenfalls erforderliche Nutzungserlaubnis nicht. Die eigene `LICENSE` beansprucht keine zusätzlichen Rechte an fremden Originalgestaltungen.
 
+OpenSign-Autor Adam Schulz wurde am 23.10.2026 **per E-Mail** angeschrieben. Eine Antwort bzw. Lizenzfreigabe ist noch nicht bestätigt. Kein OpenSign-Quellcode übernommen.

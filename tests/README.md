@@ -1,11 +1,5 @@
-# Tests für v0.4.2.4-dev
+# Offline-Tests
 
-```bash
-python tests/source_invariants_v0424.py
-python tests/browser_v0424_smoke.py
-python tools/sync_web.py
-```
+Aktuell: `python tests/test_build_425.py`. Der Test validiert Firmwareversion, Datenformat-Konstanten, gzip-/ETag-Generator, Prä-Rendering der statischen Lucide-Icons, JavaScript-Syntax und einen kompilierten C++-Stub für den 1024-Byte-JSON-Puffer.
 
-Die Browser-Tests arbeiten mit simulierten ESP32-HTTP-Antworten. Sie **ersetzen keine Arduino-Kompilierung oder Hardwaretests**. Die eigentliche neue BLE-Wiederholung, das Streaming und die Zeitsteuerung müssen gemäß `docs/TESTPLAN_v0.4.2.4.md` auf der CoolLEDX geprüft werden.
-
-Für den UI-Hotfix: `python tests/browser_v04241_smoke.py` (selbständiger Offline-Browser-Mock, prüft die tatsächliche Position und Kurzwahl-Dialogzustände). Alte Renderer-Vergleiche haben den neuen gemischten Streamingpfad nicht vollständig abgedeckt.
+Diese Prüfungen sind **kein vollständiger Arduino-Build**, kein Test der ESP32-WebServer-API zur Laufzeit und kein Nachweis der Heap- oder BLE-Stabilität. Historische Testprotokolle unter docs/ bleiben Referenzen.

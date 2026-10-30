@@ -1,3 +1,12 @@
+## v0.4.2.5-dev – 29.10.2026 · HTTP-/UI-Stabilisierung (Hardware-Abnahme offen)
+
+- **Basis:** v0.4.2.4.2-dev-B, reproduzierbar gzip-komprimierte Webseite, inhaltsbasierter ETag und HTTP-304; 20-ms-HTTP/RAM-Diagnose bleibt aktiv, damit neue Tests direkt vergleichbar sind.
+- **Erkenntnis:** A/B-Test auf ESP32-C3 zeigte kritische historische Heap-Tiefstwerte bis 592 B bei B – bereits bei einem verbundenen WLAN-Client. gzip verbessert Transferdauer/304, **löst den extremen Heap-Tiefstwert nicht nachweislich**. Wir markieren das ausdrücklich nicht als gelöst. Keine BLE-Uploads während dieser Messungen.
+- **API:** `/api/library` und `/api/collections` senden Listen-JSON mit einem auf 1024 B begrenzten Sammelpuffer statt vielen Mini-HTTP-Sendungen. Schemas, Reihenfolge, fehlende/defekte Datensätze und gespeicherte LittleFS-Binärformate bleiben unverändert; schnelleres und RAM-schonenderes Verhalten ist noch am Gerät zu messen.
+- **UI-01:** Statische Menü-, Steuerungs- und Regler-Icons als fertige Lucide-SVG direkt im HTML statt sichtbarem Fallback-Symbol und spätem SVG-Austausch. Dynamische Icons weiterhin per JS. Alte Canvas-Malroutine überspringt nun nicht-Canvas-Elemente.
+- **Lizenz:** `LICENSE` wieder reiner Standard-MIT-Text, Lucide/Feather-Material bleibt separat in `THIRD_PARTY_NOTICES.md` und README ausgewiesen. Adam Schulz/OpenSign als Community-Protokollquelle gewürdigt; **kein Code aus seinem Repo in dieser Version kopiert**.
+- **Grenze:** Keine Arduino-IDE/Hardwarekompilierung in der Entwicklungsumgebung; kein belegter Heap-Fix. Mehrere WLAN-Clients und BLE weiterhin später unter realer Last testen.
+
 ## v0.4.2.4.2-dev-A/B – 29.10.2026 · Kontrollierte HTTP-/RAM-Messung
 
 - **Build A:** Unveränderte, unkomprimierte Webseitenauslieferung wie v0.4.2.4.1-dev; neue HTTP-/RAM-Messung für alle registrierten Routen und unbekannte 404-Pfade. `/api/http.txt` exportiert die letzten 32 Anfragen, Zeit, WLAN-Clientzahl, 20-ms-Speicherminima und historische System-Minima vor/nach der Anfrage. Identische Instrumentierung in Build B.
