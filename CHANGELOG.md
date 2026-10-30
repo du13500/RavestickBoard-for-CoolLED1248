@@ -1,3 +1,14 @@
+# RavestickBoard · Versionsgeschichte / Changelog
+
+## v0.4.3-dev – Konsolidierung der Bedienoberfläche (30.10.2026)
+- Neues iOS-App-Icon und Favicon: originale Lucide-Banane der Menütaste, gleiche hellgrauweiße Strichfarbe (#f3f5fa) und dunkler Tastengrund (#303744), offline aus PROGMEM.
+- Lauftexteditor: überflüssige eigene Standbild-Option entfernt; einheitlicher Vollbreiten-Senden-/Speichernbereich, neue Speichern-Auswahl „Änderungen speichern“ / „Als neuen Eintrag speichern“ für Bibliothekstexte.
+- Blockeditor: Standardschrift Original - Normal für neue Seiten; Dreier-Icongruppe für Ausrichtung; ikonbasierte Seitenwerkzeuge inkl. Radierer, trash-off bei Einzelseite, shredder/Alles löschen erst ab zwei Seiten; dreiteilige Vollbreiten-Senden-/Speichernaktionen.
+- Bibliothek: vereinheitlichte Tooltips ohne alte Unicode-Zeichen; Umbenennen mit text-cursor-input; Name-/Duplizieren-Dialog wie bei Kurzwahl mit Lucide-Icons.
+- Globale Tafelsteuerung: Standbild-Icon „octagon“. Ambiente: Raster füllt die verfügbare Höhe aus.
+- Editor: Bibliothek-Rückweg nur bei Bearbeitung einer Bibliotheksvorlage eingeblendet. Bereits vorhandene BLE- und LittleFS-/NVS-Formate bleiben unverändert.
+- ESP32-Compile, Hardware-/Heap-Tests stehen weiterhin aus. Alte Standbildvorlagen bleiben im Speicher; Wiedergabe über Programme kann sie weiterhin verwenden, der Lauftexteditor legt keine neuen an.
+
 ## v0.4.2.5.4-dev – Vorlagen im Editor auch als neuen Eintrag speichern (30.10.2026)
 - **Lauftexte und Blockfolgen:** Bibliothekseintrag im Editor bearbeiten und zwischen „Änderungen speichern“ (bestehenden Eintrag überschreiben) und „Als neuen Eintrag speichern“ (neue ID, neues Namensfeld, Original unverändert) wählen.
 - Nach erfolgreichem „Als neuen Eintrag speichern“ bearbeitet der Editor die neue Kopie. Original, bereits vergebene Kurzwahlen und Programmschritte bleiben auf der ursprünglichen ID.
@@ -11,14 +22,14 @@
 - Bestehende interne `refreshLibrary()`-Aufrufe für alle Datenänderungen, Navigation und Initialisierung ausdrücklich erhalten.
 - Gespeicherte Inhalte, acht Kurzwahlen, Programme, BLE und Partitionslayout unverändert; Speicherproblem weiter offen.
 
-## v0.4.2.5.2-dev – Acht Kurzwahlen, Favoriten aus Bibliothek entfernt
+## v0.4.2.5.2-dev – Acht Kurzwahlen, Favoriten aus Bibliothek entfernt (30.10.2026)
 - RBS3-Kurzwahlliste mit 8 Slots (neue Belegung); altes 6-Slot-Format bleibt unberührt.
-- Startseite mit 4×2 flexiblem Raster und Helligkeits-/Geschwindigkeitssteuerung.
+- Startseite mit 2 Spalten × 4 Reihen und flexiblem Raster und Helligkeits-/Geschwindigkeitssteuerung.
 - Ladescreen mit lokalem Lucide-Bananen-SVG.
 - Mini-ß/ẞ: einen unteren Pixel entfernt.
 - UI-Änderungen; Heap-Stabilität separat weiterhin offen.
 
-## v0.4.2.5.2-dev – 30.10.2026 · UI-Hotfix (Hardwaretest ausstehend)
+## v0.4.2.5.1-dev – 30.10.2026 · UI-Hotfix (Hardwaretest ausstehend)
 
 - **MENÜ-01:** Sieben versehentlich verstümmelte `<span>`-Starttags nach inline-SVG im Hauptmenü repariert. Ursache: fehlerhafte HTML-Transformation in v0.4.2.5-dev. Hauptmenütexte standen als `span>Kurzwahl` usw. im Browser.
 - **UI-01:** Statische Kurzwahl-/Reload-SVGs jetzt schon im HTML. Initiales `data-rb-view=home` verhindert den kurzzeitig sichtbaren zweiten Geschwindigkeitsregler. Startansicht wird erst sichtbar, nachdem die erste Dateninitialisierung abgeschlossen ist; bei Initialisierungsfehlern wird sie trotzdem freigegeben.
@@ -57,7 +68,7 @@
 - **Web:** Ein gemeinsames, kompaktes Tafelsteuer-Dock am unteren Rand; kleinere Kurzwahlkacheln (2×3), unveränderte direkte Kurzwahl-Einrichtung, acht BLE-Icon-Tasten. Preview nur mit Lucide (Anfang/Play/Pause/Schnecke/Vogel/Hase). Diagnose-Icon `bug`, Menüüberschrift weg, Editor-Fußinfo entfernt, Gruppensekunden-Eingabe entfernt. Mobile Anordnung an Paint-Skizzen orientiert.
 - **Repository:** README, Roadmap, Themenspeicher und Testpläne auf Hardwarebefunde abgeglichen; Community-Unterlagen und Templates hinzugefügt. Unsere MIT-Lizenz ist unverändert, Drittanbieterrechte Lucide ISC/Feather MIT einschließlich `LICENSE`-Hinweis bleiben erhalten. Generische KI-„Nutzer“-Formulierungen werden vermieden; Entwicklung als gemeinsame Arbeit mit ChatGPT/Claude transparent benannt.
 
-# Changelog
+## Ältere Versionsprotokolle
 
 ## v0.4.2.3-dev – Alles als Laufband, Lucide und Bibliothekskomfort
 

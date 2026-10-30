@@ -1,4 +1,4 @@
-> Aktueller Testbuild: **v0.4.2.5.4-dev**. Bibliothekseinträge (Lauftext und Blockfolge) können nach der Bearbeitung **aktualisiert oder als neue Variante gespeichert** werden. Details in `RELEASE_NOTES_v0.4.2.5.4.txt`.
+> **Aktueller Entwicklungskandidat: v0.4.3-dev (30.10.2026).** UI-Konsolidierung, offline Lucide-App-Icon in Menüfarbe und vereinheitlichte Speichern-Aktionen. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md). Hardware-/Heap-Abnahme steht noch aus.
 
 <p align="center"><img src="docs/assets/board-gif.gif" alt="CoolLEDX mit LED-Motiven" /></p>
 <p align="center"><img src="docs/assets/totem.jpg" width="420" alt="RavestickBoard Festival-Totem mit Neonbanane" /></p>
@@ -6,7 +6,7 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.5.4--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.4.3--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
@@ -17,30 +17,26 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 
 Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` des **ESP32-C3 Super Mini**. Das lokale Webinterface unter **http://192.168.4.1** überträgt die Darstellung via Bluetooth Low Energy (FFF0/FFF1) an die **CoolLEDX-Tafel**. Die LED-Tafel benötigt keine modifizierte Herstellerfirmware und kann einmal hochgeladene Inhalte autonom wiederholen. Die Bedienoberfläche läuft ohne Internetzugang; USB bleibt der einzige Firmware-Updateweg, **kein OTA**.
 
-## Aktuell: v0.4.2.5.4-dev – Bearbeiten und neue Varianten anlegen
+## Aktuell: v0.4.3-dev – UI-Konsolidierung
 
-### Editor: Vorlage aktualisieren oder als neue Variante sichern (v0.4.2.5.4-dev)
+- **App-Symbol:** Die gleiche hellgrauweiße Lucide-Banane wie auf der Menütaste, auf deren dunklem Hintergrund, als Offline-iPhone-Icon und Browserfavicon. Die alte Emoji-Banane wird dort nicht mehr verwendet.
+- **Lauftext:** Nur der Lauftextmodus wird neu erzeugt. Zwei große Aktionen „Lauftext senden“ und „Speichern“. Bei vorhandenen Bibliothekseinträgen bietet Speichern eine Auswahl zwischen Aktualisieren und neuer Variante.
+- **Blockanzeige:** Neue Seiten verwenden standardmäßig **Original - Normal**. Drei Ausrichtungs-Icons und kompakte Seitenwerkzeuge mit Radierer; bei einer einzigen Seite steht `trash-off`, „Alles löschen“ ist erst bei mindestens zwei Seiten sichtbar und rot hervorgehoben. Große Aktionen: „Diese Seite senden“, „Alle Seiten senden“, „Speichern“.
+- **Bibliothek und Dialoge:** Tooltips ohne alte Symbolzeichen; Umbenennen mit `text-cursor-input`, Duplizieren-Dialog mit passenden Icon-Aktionen. Keine Favoriten, Suche oder manuelle Aktualisieren-Taste.
+- **Ambiente und Tafelsteuerung:** Farbkacheln nutzen die Bildschirmhöhe. Im gemeinsamen Steuerbereich verwendet Standbild das `octagon`-Symbol. Die acht Kurzwahlen bleiben erhalten.
+- **Editorführung:** „Zur Bibliothek“ nur bei geöffneter Bibliotheksvorlage. „Neu“ bleibt verfügbar; Änderungen werden nicht ohne Bestätigung verworfen.
 
-Einen Lauftext oder eine Blockfolge in der **Bibliothek** auswählen und zum **Texteditor** öffnen. **Änderungen speichern** bzw. **Blockfolge aktualisieren** ändert den geöffneten Eintrag. **Als neuen Eintrag speichern** fragt nach einem neuen Namen und erzeugt eine zusätzliche Vorlage mit neuer ID; die ursprüngliche bleibt einschließlich Verknüpfungen in Kurzwahlen/Programmen erhalten. Danach ist die neue Vorlage im Editor aktiv.
+### Speichern und Mehrgerätebetrieb
 
-**Mehrere Telefone:** Die Bibliothek aktualisiert sich auf dem Gerät, auf dem bearbeitet wurde, automatisch. Ändert ein anderes Telefon Einträge, kann man über **Menü → Webinterface neu laden** die Ansicht aktualisieren. Bearbeiten beide denselben Eintrag, kann die letzte Speicherung frühere Änderungen überschreiben.
+Beim Bearbeiten eines vorhandenen Bibliothekseintrags wählt man nach **Speichern**, ob er **aktualisiert** oder als **neuer Eintrag** mit eigener ID gesichert wird. Die Vorlage und darauf verweisende Kurzwahlen und Programme bleiben bei der zweiten Option unverändert.
 
+Bearbeitungen werden auf dem jeweiligen Gerät direkt in der Bibliothek angezeigt. Hat ein anderes Smartphone Änderungen vorgenommen, aktualisiert **Menü → Webinterface neu laden** die Ansicht; gleichzeitige Bearbeitung desselben Eintrags kann vorherige Änderungen überschreiben.
 
-**Sketch:** `firmware/RavestickBoard_v0_4_2_5_4/RavestickBoard_v0_4_2_5_4.ino` mit den fünf Headern im selben Ordner. WebUI bei Änderungen mit `python tools/sync_web.py` erzeugen. Arduino-Compile und ESP32-Hardwaretest dieser Version stehen noch aus.
+**Sketch:** `firmware/RavestickBoard_v0_4_3/RavestickBoard_v0_4_3.ino`. Die sechs zugehörigen Dateien im gemeinsamen Ordner belassen. `python tools/sync_web.py` erzeugt den gzip-Webheader nach HTML-Änderungen.
 
-### Vorversion v0.4.2.5.3-dev – Bibliotheksoberfläche vereinfacht
+**Teststand:** JavaScript-Syntax, Browser-Simulationen mit fünf Displaygrößen, Editor-Speicherpfade und Icon-Struktur geprüft. **Kein vollständiger Arduino-Compile, keine Hardware-Abnahme und kein nachgewiesener Heap-Fix.**
 
-Die reine Titelsuche sowie der manuelle Bibliotheks-Neuladen-Knopf wurden inklusive CSS, Eventhandlern und Filtercode entfernt. Speichern, Umbenennen, Duplizieren, Löschen, Sortieren und Navigation aktualisieren die Bibliothek weiterhin automatisch. Die ESP32-API `/api/library`, das Speicherformat, BLE und die acht Kurzwahlen bleiben unverändert.
-
-**Damals verwendeter Sketch:** `firmware/RavestickBoard_v0_4_2_5_3/RavestickBoard_v0_4_2_5_3.ino` mit den fünf zugehörigen Headern; WebUI wird per `python tools/sync_web.py` synchronisiert. Hardwaretest und Heap-Stabilität bleiben offen.
-
-### Vorversion v0.4.2.5.2-dev
-
-## Aktuell: v0.4.2.5.2-dev – UI-Hotfix auf Basis von v0.4.2.5
-
-**Korrekturen nach iPhone-Hardwaretest vom 30.10.2026:** Sieben defekte `<span>`-Starttags im Hauptmenü repariert (sichtbares `span>`). Sechs Kurzwahl-Icons und das Neu-laden-Icon liegen vollständig als SVG im Start-HTML, die Startseiten-Ansicht ist schon beim ersten HTML-Render als `home` markiert (keine zusätzlich eingeblendete Geschwindigkeitszeile). Ein kleines Ladebild verdeckt die Kurzwahl-Platzhalter bis zum Abschluss der ersten API-Initialisierung; auch bei Initialisierungsfehlern wird die Oberfläche freigegeben. **Wichtig:** Das ist ein UI-Hotfix; das kritische Heap-Minimum bleibt unabhängig davon ungeklärt.
-
-**Sketch:** `firmware/RavestickBoard_v0_4_2_5_2/RavestickBoard_v0_4_2_5_2.ino`. Erzeugung des gzip-Headers: `python tools/sync_web.py`. Keine Änderungen am BLE-Protokoll, LittleFS-Inhalt oder Partitionsschema.
+Frühere Versionen, einschließlich v0.4.2.5.4-dev, sind vollständig in [`CHANGELOG.md`](CHANGELOG.md) und den bisherigen Release-Notes dokumentiert.
 
 ## Vorversion: v0.4.2.5-dev – HTTP-/RAM-Stabilisierung
 
@@ -62,7 +58,7 @@ A ergänzt unsere bewährte v0.4.2.4.1-dev ausschließlich um dieselbe HTTP-/RAM
 
 **Neuer Mess-Export:** `http://192.168.4.1/api/http.txt` protokolliert HTTP-Pfade (inklusive unbekannter 404-Pfade), Status, WLAN-Clientzahl, Laufzeit, Heap- und Maxblockwerte vor/nach der Anfrage, den niedrigsten in 20-ms-Schritten beobachteten Wert während der Anfrage und das historische System-Minimum vor/nach der Anfrage. Queryparameter, Textinhalte, Passwörter und BLE-Adressen werden nicht exportiert. Ältere Exporte `/api/ram.txt` und `/api/diagnostics.txt` funktionieren weiterhin.
 
-**Testablauf und Grenzen:** [docs/VERGLEICHSTEST_v0.4.2.4.2.md](docs/VERGLEICHSTEST_v0.4.2.4.2.md). Historische A/B-Sketches waren `v0_4_2_4_2_A` und `v0_4_2_4_2_B`. Das Tool `python tools/sync_web.py` erzeugt inzwischen den Header des aktuellen v0.4.2.5-Builds. Das alte Build-B-HTML umfasste nach gzip 44.911 B gegenüber 157.222 B Rohdaten. Die neue HTML-Fassung hat durch vorgerenderte SVGs einen anderen Umfang.
+**Testablauf und Grenzen:** [docs/VERGLEICHSTEST_v0.4.2.4.2.md](docs/VERGLEICHSTEST_v0.4.2.4.2.md). Historische A/B-Sketches waren `v0_4_2_4_2_A` und `v0_4_2_4_2_B`. Das Tool `python tools/sync_web.py` erzeugt inzwischen den Header des aktuellen v0.4.3-Builds. Das alte Build-B-HTML umfasste nach gzip 44.911 B gegenüber 157.222 B Rohdaten. Die neue HTML-Fassung hat durch vorgerenderte SVGs einen anderen Umfang.
 
 ### Historisch: v0.4.2.4.1-dev
 
@@ -90,11 +86,11 @@ Für **v0.4.2.4-dev** haben wir gezielt nachgebessert:
 ## Installation und Datensicherheit
 
 1. Vorab ein JSON-Backup aus der aktuell laufenden Firmware erstellen und lokal aufbewahren. Die bisherige Firmware als Rückfallversion sichern.
-2. `firmware/RavestickBoard_v0_4_2_5_4/RavestickBoard_v0_4_2_5_4.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h` (insgesamt **sechs Dateien**).
+2. `firmware/RavestickBoard_v0_4_3/RavestickBoard_v0_4_3.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h` (insgesamt **sechs Dateien**).
 3. Arduino IDE: **ESP32C3 Dev Module**, Espressif **3.3.12**, **USB CDC On Boot: Enabled**, **No OTA (2MB APP/2MB SPIFFS)**. Bestehendes Partitionsschema **nicht ändern**, **Erase All Flash deaktiviert** lassen.
 4. Nach dem Flashen mit WLAN `CoolLED1248` verbinden, `http://192.168.4.1` aufrufen. Bibliothek nicht neu formatieren. Testplan schrittweise abarbeiten. Falls das Homescreen-Icon nicht übernommen wird, die Verknüpfung über Safari erneut hinzufügen.
 
-Siehe [aktuelle Update-Hinweise](UPDATE_HINWEISE_v0.4.2.5.txt) oder [vorherige ausführliche Installation](docs/INSTALLATION_v0.4.2.4.1.md), [Testplan](docs/TESTPLAN_v0.4.2.4.1.md), [Bibliotheksformat](docs/BIBLIOTHEK_v0.4.1.md), [Changelog](CHANGELOG.md), [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md).
+Siehe [aktuelle Update-Hinweise](UPDATE_HINWEISE_v0.4.3.txt) oder [vorherige ausführliche Installation](docs/INSTALLATION_v0.4.2.4.1.md), [Testplan](docs/TESTPLAN_v0.4.2.4.1.md), [Bibliotheksformat](docs/BIBLIOTHEK_v0.4.1.md), [Changelog](CHANGELOG.md), [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md).
 
 ## Mitmachen und Sicherheit
 
