@@ -1,3 +1,16 @@
+## v0.4.2.5.4-dev – Vorlagen im Editor auch als neuen Eintrag speichern (30.10.2026)
+- **Lauftexte und Blockfolgen:** Bibliothekseintrag im Editor bearbeiten und zwischen „Änderungen speichern“ (bestehenden Eintrag überschreiben) und „Als neuen Eintrag speichern“ (neue ID, neues Namensfeld, Original unverändert) wählen.
+- Nach erfolgreichem „Als neuen Eintrag speichern“ bearbeitet der Editor die neue Kopie. Original, bereits vergebene Kurzwahlen und Programmschritte bleiben auf der ursprünglichen ID.
+- **Fehler behoben:** Wechsel der Lauftext-Schriftart entfernt nicht mehr die Bindung zum geöffneten Bibliothekseintrag und setzt nicht länger unbeabsichtigt den Änderungs-Snapshot zurück.
+- Nur Web-UI/Version/Dokumentation geändert; LittleFS-/NVS-Formate, BLE und Partitionierung unverändert. ESP32-Hardware-, Arduino-Compile- und Heap-Abnahmetests offen.
+
+## v0.4.2.5.3-dev – Bibliothekssuche und manuelle Aktualisierung entfernt (30.10.2026)
+- Fernglas, Suchfeld und manuelle Aktualisieren-Schaltfläche aus der Bibliothek entfernt.
+- Sämtliche dazugehörigen DOM-IDs, Eventhandler, Titel-Filterlogik, Filter-CSS und exklusives Fernglas-SVG gestrichen, statt nur die Buttons auszublenden.
+- Ungefilterte Bibliotheksliste; Sortierpfeile funktionieren ohne Suchzustand.
+- Bestehende interne `refreshLibrary()`-Aufrufe für alle Datenänderungen, Navigation und Initialisierung ausdrücklich erhalten.
+- Gespeicherte Inhalte, acht Kurzwahlen, Programme, BLE und Partitionslayout unverändert; Speicherproblem weiter offen.
+
 ## v0.4.2.5.2-dev – Acht Kurzwahlen, Favoriten aus Bibliothek entfernt
 - RBS3-Kurzwahlliste mit 8 Slots (neue Belegung); altes 6-Slot-Format bleibt unberührt.
 - Startseite mit 4×2 flexiblem Raster und Helligkeits-/Geschwindigkeitssteuerung.

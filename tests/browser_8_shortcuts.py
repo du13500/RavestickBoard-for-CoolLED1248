@@ -52,6 +52,7 @@ with sync_playwright() as p:
           assert page.locator('#libList [data-rb-icon="star-plus"]').count()==0
           assert page.locator('#libList [data-rb-icon="star-check"]').count()==0
           assert page.locator('#libList .library-row').count()==2
+          assert page.locator('#v42SearchToggle,#libSearchWrap,#libSearch,#libRefresh').count()==0
           page.screenshot(path='/mnt/data/rb4252_library.png',full_page=True)
         print('viewport',w,h,'layout',dim,'errors',len(errors))
         context.close()

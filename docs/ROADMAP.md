@@ -1,3 +1,5 @@
+> Stand v0.4.2.5.3-dev: Suche und manuellen Reload aus Bibliothek entfernt; acht Kurzwahlen bleiben. Kritische Heap-Minima weiter offen.
+
 > Stand v0.4.2.5.2-dev: Acht Kurzwahlen, adaptive Startseite und Lucide-Bootscreen implementiert, Hardwareprüfung offen. **Heap-Stabilität weiterhin offen.**
 
 ## Als Nächstes nach v0.4.2.5-dev (Hardwarestatus offen)

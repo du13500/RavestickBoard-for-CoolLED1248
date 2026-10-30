@@ -1,4 +1,4 @@
-> Aktueller Testbuild: **v0.4.2.5.2-dev**. Acht neu belegbare Kurzwahlen, adaptives Raster und Tempo auf Startseite. `RELEASE_NOTES_v0.4.2.5.2.txt` lesen.
+> Aktueller Testbuild: **v0.4.2.5.4-dev**. Bibliothekseinträge (Lauftext und Blockfolge) können nach der Bearbeitung **aktualisiert oder als neue Variante gespeichert** werden. Details in `RELEASE_NOTES_v0.4.2.5.4.txt`.
 
 <p align="center"><img src="docs/assets/board-gif.gif" alt="CoolLEDX mit LED-Motiven" /></p>
 <p align="center"><img src="docs/assets/totem.jpg" width="420" alt="RavestickBoard Festival-Totem mit Neonbanane" /></p>
@@ -6,7 +6,7 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.5.1--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.4.2.5.4--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
@@ -16,6 +16,25 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 ## Was ist RavestickBoard?
 
 Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` des **ESP32-C3 Super Mini**. Das lokale Webinterface unter **http://192.168.4.1** überträgt die Darstellung via Bluetooth Low Energy (FFF0/FFF1) an die **CoolLEDX-Tafel**. Die LED-Tafel benötigt keine modifizierte Herstellerfirmware und kann einmal hochgeladene Inhalte autonom wiederholen. Die Bedienoberfläche läuft ohne Internetzugang; USB bleibt der einzige Firmware-Updateweg, **kein OTA**.
+
+## Aktuell: v0.4.2.5.4-dev – Bearbeiten und neue Varianten anlegen
+
+### Editor: Vorlage aktualisieren oder als neue Variante sichern (v0.4.2.5.4-dev)
+
+Einen Lauftext oder eine Blockfolge in der **Bibliothek** auswählen und zum **Texteditor** öffnen. **Änderungen speichern** bzw. **Blockfolge aktualisieren** ändert den geöffneten Eintrag. **Als neuen Eintrag speichern** fragt nach einem neuen Namen und erzeugt eine zusätzliche Vorlage mit neuer ID; die ursprüngliche bleibt einschließlich Verknüpfungen in Kurzwahlen/Programmen erhalten. Danach ist die neue Vorlage im Editor aktiv.
+
+**Mehrere Telefone:** Die Bibliothek aktualisiert sich auf dem Gerät, auf dem bearbeitet wurde, automatisch. Ändert ein anderes Telefon Einträge, kann man über **Menü → Webinterface neu laden** die Ansicht aktualisieren. Bearbeiten beide denselben Eintrag, kann die letzte Speicherung frühere Änderungen überschreiben.
+
+
+**Sketch:** `firmware/RavestickBoard_v0_4_2_5_4/RavestickBoard_v0_4_2_5_4.ino` mit den fünf Headern im selben Ordner. WebUI bei Änderungen mit `python tools/sync_web.py` erzeugen. Arduino-Compile und ESP32-Hardwaretest dieser Version stehen noch aus.
+
+### Vorversion v0.4.2.5.3-dev – Bibliotheksoberfläche vereinfacht
+
+Die reine Titelsuche sowie der manuelle Bibliotheks-Neuladen-Knopf wurden inklusive CSS, Eventhandlern und Filtercode entfernt. Speichern, Umbenennen, Duplizieren, Löschen, Sortieren und Navigation aktualisieren die Bibliothek weiterhin automatisch. Die ESP32-API `/api/library`, das Speicherformat, BLE und die acht Kurzwahlen bleiben unverändert.
+
+**Damals verwendeter Sketch:** `firmware/RavestickBoard_v0_4_2_5_3/RavestickBoard_v0_4_2_5_3.ino` mit den fünf zugehörigen Headern; WebUI wird per `python tools/sync_web.py` synchronisiert. Hardwaretest und Heap-Stabilität bleiben offen.
+
+### Vorversion v0.4.2.5.2-dev
 
 ## Aktuell: v0.4.2.5.2-dev – UI-Hotfix auf Basis von v0.4.2.5
 
@@ -71,7 +90,7 @@ Für **v0.4.2.4-dev** haben wir gezielt nachgebessert:
 ## Installation und Datensicherheit
 
 1. Vorab ein JSON-Backup aus der aktuell laufenden Firmware erstellen und lokal aufbewahren. Die bisherige Firmware als Rückfallversion sichern.
-2. `firmware/RavestickBoard_v0_4_2_5/RavestickBoard_v0_4_2_5.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h` (insgesamt **sechs Dateien**).
+2. `firmware/RavestickBoard_v0_4_2_5_4/RavestickBoard_v0_4_2_5_4.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h` (insgesamt **sechs Dateien**).
 3. Arduino IDE: **ESP32C3 Dev Module**, Espressif **3.3.12**, **USB CDC On Boot: Enabled**, **No OTA (2MB APP/2MB SPIFFS)**. Bestehendes Partitionsschema **nicht ändern**, **Erase All Flash deaktiviert** lassen.
 4. Nach dem Flashen mit WLAN `CoolLED1248` verbinden, `http://192.168.4.1` aufrufen. Bibliothek nicht neu formatieren. Testplan schrittweise abarbeiten. Falls das Homescreen-Icon nicht übernommen wird, die Verknüpfung über Safari erneut hinzufügen.
 
