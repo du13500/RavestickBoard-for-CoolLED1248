@@ -1,3 +1,5 @@
+> Stand v0.4.3.2-dev: Programme-Ansicht im Bibliotheksstil (nur UI). Als Nächstes: Heap-Messreihen A–D (ein/zwei Clients, mit/ohne Diagnose-Tab, mit BLE-Übertragung) gegen die neuen HTTPTRACE-Worst-Cases auswerten; danach BLE-Bestätigungen auswerten (F-03).
+
 > Stand v0.4.2.5.3-dev: Suche und manuellen Reload aus Bibliothek entfernt; acht Kurzwahlen bleiben. Kritische Heap-Minima weiter offen.
 
 > Stand v0.4.2.5.2-dev: Acht Kurzwahlen, adaptive Startseite und Lucide-Bootscreen implementiert, Hardwareprüfung offen. **Heap-Stabilität weiterhin offen.**

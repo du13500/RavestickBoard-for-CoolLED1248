@@ -20,3 +20,11 @@ Der Browser-Test erfordert Playwright und Chromium; Arduino-Boardpaket und reale
 ## v0.4.3.1-dev (30.10.2026)
 
 `python tests/test_0431.py` prüft die JavaScript-Syntax, HTML/gzip-/ETag-Konsistenz, die korrigierte Versionskennung, den entkoppelten Diagnose-TXT-Download und die interaktive Darstellung in drei Chromium-Mobilgrößen. Der Stream-Puffer wurde außerdem separat mit einem Host-C++-Test kompiliert. Dies ersetzt **keinen Arduino-Gesamtcompile** und keinen Heap-/BLE-Test auf dem ESP32.
+
+## v0.4.3.2-dev (30.10.2026)
+
+`python tests/test_0432.py [Screenshot-Ordner]`: Browser-Test der Programme-Ansicht gegen eine simulierte API auf 360/390/430 px (Liste, Auswahl, Bearbeiten, Abbrechen/Verwerfen, Speichern, Neu, Löschen, defektes Programm, Werkzeugleiste einzeilig, kein horizontaler Überlauf). Benötigt Playwright und Chromium.
+
+`python tests/test_build_0432.py`: Version, gzip/ETag, JavaScript-Syntax, Diagnose-Verträge und Mobilgrößen (Nachfolger von `test_0431.py`).
+
+Hinweis: `tests/test_browser_save_as_4254.py` schlägt bereits gegen v0.4.3.1 fehl (Speichern-Auswahl wurde in v0.4.3 umgebaut) und ist nicht angepasst. Weiterhin gilt: kein Arduino-Compile, kein Hardware- oder Heap-Test.

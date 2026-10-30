@@ -34,8 +34,9 @@ Kurzüberblick über alle Versionen von RavestickBoard for CoolLED1248. Ausführ
 | v0.4.2.5.3-dev | 30.10.2026 | Bibliothekssuche und manuelle Aktualisierung entfernt | |
 | v0.4.2.5.4-dev | 30.10.2026 | Bibliothekseinträge im Editor überschreiben oder als neuen Eintrag speichern, Schriftwechsel-Fehler behoben | |
 | v0.4.3-dev | 30.10.2026 | UI-Konsolidierung: Speichern, Blockwerkzeuge, Lucide-App-Icon und bildschirmfüllendes Ambiente | Diagnosedateien zeigten wegen veralteter zentraler Konstante noch v0.4.2.5.1-dev; historisches Heap-Minimum 224 B |
-| v0.4.3.1-dev (Korrektur 1) | 30.10.2026 | Diagnoseausgabe streamen, Doppelaufrufe vermeiden, HTTPTRACE-Worst-Cases inkl. Pfad, Statusantwort optimieren, Ambiente wieder einspaltig, Blockwerkzeuge/Icon korrigieren | Kandidat; Hardware- und Heap-Test offen |
+| v0.4.3.1-dev (Korrektur 1) | 30.10.2026 | Diagnoseausgabe streamen, Doppelaufrufe vermeiden, HTTPTRACE-Worst-Cases inkl. Pfad, Statusantwort optimieren, Ambiente wieder einspaltig, Blockwerkzeuge/Icon korrigieren | Läuft auf dem ESP32-C3, Übertragungen erfolgten; Heap-Messreihen offen |
+| v0.4.3.2-dev | 30.10.2026 | Programme im Bibliotheksstil: Icon-Leiste, Zeilenliste, eigene Bearbeitungsansicht (nur Weboberfläche) | Kandidat; Arduino-Compile, iPhone- und Heap-Test offen |
 
-**Offene Punkte (Stand v0.4.3.1-dev):** Heap-Tiefstwerte unter Last, Arduino-Gesamtcompile und Hardwaretest der Versionen ab v0.4.2.5, Langzeit- und ACK-/Retry-Tests, Laufbänder über 30 KiB.
+**Offene Punkte (Stand v0.4.3.2-dev):** Heap-Tiefstwerte unter Last, Arduino-Gesamtcompile und Hardwaretest der Versionen ab v0.4.2.5, Langzeit- und ACK-/Retry-Tests, Laufbänder über 30 KiB.
 
 Korrektur 1 (30.10.2026): Arduino-Prototyp-Fehler mit `RbDiagnosticStream` beseitigt. Hardware-Compile steht noch aus.

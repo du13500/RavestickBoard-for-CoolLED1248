@@ -2,6 +2,16 @@
 
 # RavestickBoard · Versionsgeschichte / Changelog
 
+## v0.4.3.2-dev – Programme im Bibliotheksstil (30.10.2026)
+- **Programmliste wie die Bibliothek:** Icon-Leiste (neu, bearbeiten, starten, stoppen, löschen), Zeilen mit Name und Untertitel („5 Einträge · Original“ / „Gemeinsames Laufband“), gelber Rand für die Auswahl. Programme mit fehlenden Einträgen sind rot markiert („1 Eintrag fehlt“); Starten ist dafür gesperrt.
+- **Eigene Bearbeitungsansicht:** Stift oder „+“ öffnen sie, der Pfeil oben links führt zurück. Name, Wiedergabeart (Kurznamen „Original (Blockseiten stehen)“ / „Alles als Laufband“), Schritte, Auswahl zum Hinzufügen und „Programm speichern“. Die Schrittliste scrollt nicht mehr in sich, die Seite scrollt.
+- **Schritte als Bibliothekszeilen:** mit Typ-Untertitel („Lauftext“, „Blockfolge · 4 Seiten“), Pfeilen und Entfernen-Symbol. Fehlende Einträge lassen sich weiterhin über „Ersetzen durch …“ reparieren.
+- **Ablauf:** Speichern kehrt zur Liste zurück. „Zurück“ fragt bei ungespeicherten Änderungen nach und lädt sonst den gespeicherten Stand neu. Nach dem Löschen ist nichts ausgewählt.
+- **Firmware:** nur `FW_VERSION` = `0.4.3.2-dev` und der Serial-Banner (nutzt jetzt `FW_VERSION`). Keine Änderung an BLE, API, LittleFS-/NVS-Formaten oder Speicherlogik. Die eingebettete Webseite wächst um rund 0,9 KB gzip (50.398 → 51.264 Byte).
+- **Geändert in der Weboberfläche:** `view-programs` (Markup, CSS, `v42ShowPrograms`, `v42RenderProgramSteps`, neue Hilfsfunktionen `v43Prog*`). Alle bisherigen Element-IDs und API-Aufrufe der Programme bleiben bestehen.
+- **Prüfstand:** `tests/test_0432.py` (Browser mit simulierter API auf 360/390/430 px: Liste, Auswahl, Bearbeiten, Abbrechen/Verwerfen, Speichern, Neu, Löschen, defektes Programm, Werkzeugleiste einzeilig, kein horizontaler Überlauf) und `tests/test_build_0432.py` (Version, gzip/ETag, JavaScript-Syntax, Diagnose-Verträge) laufen durch. `browser_8_shortcuts` und `browser_hotfix_smoke` laufen durch. `tests/test_browser_save_as_4254.py` schlägt bereits gegen den unveränderten Stand v0.4.3.1 fehl (veralteter Test zur Speichern-Auswahl) und wurde nicht angefasst. **Kein Arduino-Compile dieses Standes, keine Prüfung der neuen Ansicht auf iPhone/ESP32, Heap-Frage weiter offen.**
+- **Auf dem iPhone zu prüfen:** Werkzeugleiste einzeilig, Tippziele, Zurück-Rückfrage, Speichern → Liste, Starten/Stoppen eines Programms, Reparatur eines defekten Programms, Bearbeiten mit zwei Geräten.
+
 ## v0.4.3.1-dev – Diagnoseentlastung, HTTP-Eingrenzung, UI-Korrekturen (30.10.2026)
 - **Firmwareversion:** Zentrale Versionskennung von fälschlich `0.4.2.5.1-dev` auf `0.4.3.1-dev` korrigiert. Diagnosedateinamen und Diagnose-JSON folgen wieder dem tatsächlichen Sketch.
 - **Diagnose-Speicher:** Große `String.reserve(11000)`- und `reserve(5000)`-Puffer entfernt. Diagnosebericht und JSON-Ausgabe werden in kleinen Blöcken als HTTP-Antwort gestreamt; der Ereignisring wird ohne große Zwischentextkopie ausgegeben. Die TXT-Datei wird erst bei Download oder Kopieren erzeugt.
@@ -12,7 +22,7 @@
 - **Blockeditor:** Nachfrage „Seite # leeren?“; bei einer Seite `trash-off` und „Alles löschen“ deaktiviert und grau, ab zwei Seiten aktiviert. Icon für „Alles löschen“ jetzt originales Lucide `flame-kindling`. Drei Senden-/Speichern-Tasten in einem gemeinsamen Raster mit gleichem Abstand.
 - **Bibliothek:** Umbenennen verwendet nun die unveränderten SVG-Pfade von Lucide `text-cursor-input` statt der fehlerhaften Nachzeichnung.
 - **Nicht geändert:** BLE-Protokoll, LittleFS-/NVS-Schema, gespeicherte Bibliothek, Programme, acht Kurzwahlen und Firmwarepartition. Größere Neugestaltung der Programme-Ansicht steht aus.
-- **Prüfstand:** JavaScript-Syntax, Kompression/ETag und simulierte Browserabläufe auf drei Smartphonegrößen erfolgreich. **Nicht** mit Arduino/ESP32 kompiliert, **nicht** auf realer Hardware getestet. Historisches Heap-Minimum von 224 B ist noch nicht erklärt oder nachweislich behoben.
+- **Prüfstand:** JavaScript-Syntax, Kompression/ETag und simulierte Browserabläufe auf drei Smartphonegrößen erfolgreich. Nachtrag (30.10., Rückmeldung des Entwicklers): kompiliert, läuft auf dem ESP32-C3, BLE-Übertragungen erfolgten; die Heap-Messreihen stehen aus. Historisches Heap-Minimum von 224 B ist noch nicht erklärt oder nachweislich behoben.
 
 ## v0.4.3-dev – Konsolidierung der Bedienoberfläche (30.10.2026)
 - Neues iOS-App-Icon und Favicon: originale Lucide-Banane der Menütaste, gleiche hellgrauweiße Strichfarbe (#f3f5fa) und dunkler Tastengrund (#303744), offline aus PROGMEM.
