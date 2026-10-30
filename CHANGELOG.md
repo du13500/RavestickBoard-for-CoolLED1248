@@ -1,4 +1,11 @@
-## v0.4.2.5.1-dev – 30.10.2026 · UI-Hotfix (Hardwaretest ausstehend)
+## v0.4.2.5.2-dev – Acht Kurzwahlen, Favoriten aus Bibliothek entfernt
+- RBS3-Kurzwahlliste mit 8 Slots (neue Belegung); altes 6-Slot-Format bleibt unberührt.
+- Startseite mit 4×2 flexiblem Raster und Helligkeits-/Geschwindigkeitssteuerung.
+- Ladescreen mit lokalem Lucide-Bananen-SVG.
+- Mini-ß/ẞ: einen unteren Pixel entfernt.
+- UI-Änderungen; Heap-Stabilität separat weiterhin offen.
+
+## v0.4.2.5.2-dev – 30.10.2026 · UI-Hotfix (Hardwaretest ausstehend)
 
 - **MENÜ-01:** Sieben versehentlich verstümmelte `<span>`-Starttags nach inline-SVG im Hauptmenü repariert. Ursache: fehlerhafte HTML-Transformation in v0.4.2.5-dev. Hauptmenütexte standen als `span>Kurzwahl` usw. im Browser.
 - **UI-01:** Statische Kurzwahl-/Reload-SVGs jetzt schon im HTML. Initiales `data-rb-view=home` verhindert den kurzzeitig sichtbaren zweiten Geschwindigkeitsregler. Startansicht wird erst sichtbar, nachdem die erste Dateninitialisierung abgeschlossen ist; bei Initialisierungsfehlern wird sie trotzdem freigegeben.

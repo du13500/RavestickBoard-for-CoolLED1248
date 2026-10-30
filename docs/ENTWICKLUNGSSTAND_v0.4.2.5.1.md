@@ -1,4 +1,4 @@
-# Entwicklungsstand v0.4.2.5.1-dev · 30.10.2026
+# Entwicklungsstand v0.4.2.5.2-dev · 30.10.2026
 
 Nach Benutzer-Hardwaretest von v0.4.2.5-dev wurden zwei UI-Fehler bestätigt:
 7 defekte `<span>` im Menü infolge fehlerhafter SVG-Inline-Transformation;

@@ -1,3 +1,5 @@
+> v0.4.2.5.2-dev: Bibliotheksfavoriten-Oberfläche entfernt; acht neu belegbare Kurzwahlen und Startseitentempo umgesetzt. Nicht mehr als offene UI-Forderung führen; Hardware-Abnahme und RAM-Problematik bleiben offen.
+
 ## 29.10.2026 – Stability / UI-01
 
 - v0.4.2.5-dev Bündelung von JSON-API-HTTP-Chunks und statische SVG-Icons bereits im HTML.

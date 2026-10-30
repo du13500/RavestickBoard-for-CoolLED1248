@@ -1,3 +1,5 @@
+> Aktueller Testbuild: **v0.4.2.5.2-dev**. Acht neu belegbare Kurzwahlen, adaptives Raster und Tempo auf Startseite. `RELEASE_NOTES_v0.4.2.5.2.txt` lesen.
+
 <p align="center"><img src="docs/assets/board-gif.gif" alt="CoolLEDX mit LED-Motiven" /></p>
 <p align="center"><img src="docs/assets/totem.jpg" width="420" alt="RavestickBoard Festival-Totem mit Neonbanane" /></p>
 <h1 align="center">🍌 RavestickBoard for CoolLEDX / CoolLED1248</h1>
@@ -15,11 +17,11 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 
 Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` des **ESP32-C3 Super Mini**. Das lokale Webinterface unter **http://192.168.4.1** überträgt die Darstellung via Bluetooth Low Energy (FFF0/FFF1) an die **CoolLEDX-Tafel**. Die LED-Tafel benötigt keine modifizierte Herstellerfirmware und kann einmal hochgeladene Inhalte autonom wiederholen. Die Bedienoberfläche läuft ohne Internetzugang; USB bleibt der einzige Firmware-Updateweg, **kein OTA**.
 
-## Aktuell: v0.4.2.5.1-dev – UI-Hotfix auf Basis von v0.4.2.5
+## Aktuell: v0.4.2.5.2-dev – UI-Hotfix auf Basis von v0.4.2.5
 
 **Korrekturen nach iPhone-Hardwaretest vom 30.10.2026:** Sieben defekte `<span>`-Starttags im Hauptmenü repariert (sichtbares `span>`). Sechs Kurzwahl-Icons und das Neu-laden-Icon liegen vollständig als SVG im Start-HTML, die Startseiten-Ansicht ist schon beim ersten HTML-Render als `home` markiert (keine zusätzlich eingeblendete Geschwindigkeitszeile). Ein kleines Ladebild verdeckt die Kurzwahl-Platzhalter bis zum Abschluss der ersten API-Initialisierung; auch bei Initialisierungsfehlern wird die Oberfläche freigegeben. **Wichtig:** Das ist ein UI-Hotfix; das kritische Heap-Minimum bleibt unabhängig davon ungeklärt.
 
-**Sketch:** `firmware/RavestickBoard_v0_4_2_5_1/RavestickBoard_v0_4_2_5_1.ino`. Erzeugung des gzip-Headers: `python tools/sync_web.py`. Keine Änderungen am BLE-Protokoll, LittleFS-Inhalt oder Partitionsschema.
+**Sketch:** `firmware/RavestickBoard_v0_4_2_5_2/RavestickBoard_v0_4_2_5_2.ino`. Erzeugung des gzip-Headers: `python tools/sync_web.py`. Keine Änderungen am BLE-Protokoll, LittleFS-Inhalt oder Partitionsschema.
 
 ## Vorversion: v0.4.2.5-dev – HTTP-/RAM-Stabilisierung
 

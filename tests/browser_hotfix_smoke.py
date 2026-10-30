@@ -9,7 +9,7 @@ responses={
  '/api/font':{}, '/api/program':pages,
  '/api/library':{'ready':True,'items':[],'shortcuts':[0,0,0,0,0,0],'used':0,'total':2097152},
  '/api/collections':{'items':[]},
- '/api/shortcuts':{'items':[{'type':0} for _ in range(6)]},
+ '/api/shortcuts':{'items':[{'type':0} for _ in range(8)]},
  '/api/status':{'ok':True},
 }
 with sync_playwright() as p:
@@ -37,9 +37,9 @@ with sync_playwright() as p:
     assert page.locator('#appShell').is_hidden(), 'App must not flash partial state'
     page.wait_for_function("!document.documentElement.classList.contains('rb-booting')",timeout=10000)
     page.screenshot(path='/mnt/data/rb4251_browser_home.png',full_page=True)
-    assert page.locator('#shortcutGrid .shortcut-icon svg.rb-lucide').count()==6
-    assert page.locator('#shortcutGrid .shortcut').count()==6
-    assert page.locator('.rb-dock-speed').is_hidden(), 'Speed slider must be hidden in home from first paint'
+    assert page.locator('#shortcutGrid .shortcut-icon svg.rb-lucide').count()==8
+    assert page.locator('#shortcutGrid .shortcut').count()==8
+    assert page.locator('.rb-dock-speed').is_visible(), 'Speed slider must be visible on home from first paint'
     assert page.locator('.rb-dock .pixel-range').count()==2
     assert page.locator('#rbBootScreen').is_hidden()
     page.locator('#bananaMenu').click()
@@ -54,8 +54,8 @@ with sync_playwright() as p:
     page.locator('#bananaMenu').click()
     page.locator('#mainMenu button[data-nav="home"]').click()
     assert page.locator('#view-home').is_visible()
-    assert page.locator('.rb-dock-speed').is_hidden()
+    assert page.locator('.rb-dock-speed').is_visible()
     page.screenshot(path='/mnt/data/rb4251_browser_menu.png',full_page=True)
-    print('HEADLESS BROWSER PASS: 7 correctly labeled navigation buttons; 6 first-paint shortcut icons; no home-speed row; splash removed.')
+    print('HEADLESS BROWSER PASS: 7 correctly labeled navigation buttons; 8 first-paint shortcut icons; home speed row; splash removed.')
     print('Uncaught JS errors:',errs[:10])
     browser.close()

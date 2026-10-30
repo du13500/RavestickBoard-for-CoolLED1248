@@ -1,3 +1,5 @@
+> Stand v0.4.2.5.2-dev: Acht Kurzwahlen, adaptive Startseite und Lucide-Bootscreen implementiert, Hardwareprüfung offen. **Heap-Stabilität weiterhin offen.**
+
 ## Als Nächstes nach v0.4.2.5-dev (Hardwarestatus offen)
 
 - Speicher-Hardening: Extremwerte unter 1 KiB in WLAN- und HTTP-Testläufen, weiter eingrenzen; keine voreilige Entwarnung.
