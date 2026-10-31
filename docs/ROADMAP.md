@@ -1,4 +1,7 @@
-> Stand v0.4.3.2-dev: Programme-Ansicht im Bibliotheksstil (nur UI). Als Nächstes: Heap-Messreihen A–D (ein/zwei Clients, mit/ohne Diagnose-Tab, mit BLE-Übertragung) gegen die neuen HTTPTRACE-Worst-Cases auswerten; danach BLE-Bestätigungen auswerten (F-03).
+> Stand v0.4.3.3-dev: Der ESP32 hing nach einem Tafel-„ERROR“ im Blockband-Upload (BLE-Bibliothek wartet ohne Zeitlimit). Als Nächstes: Hänger nachstellen, Absturzspur `[VORLAUF]` auslesen, die betroffene Wartestelle gezielt absichern (z. B. BLE-Schritte mit Zeitlimit oder in eigenem Task). Danach die Messreihen unten.
+Messreihen: Messreihen A–C auf 0.4.3.2 liegen vor (Einbruch beim Beitritt des zweiten Clients bis 192 B; Diagnose-Handler konstant ~300 ms). Als Nächstes: Lauf A, C und D (BLE-Übertragung mit einem und zwei Clients) auf v0.4.3.3 mit RAM-Export und seriellem Log nach Reset; danach entscheiden über schnellere Bibliotheksliste (Kopfzeilen statt voller Einträge, Frage der defekten Einträge) und verzögerten BLE-Start; danach BLE-Bestätigungen auswerten (F-03). Einsatzfall: mehrere Bediener, also zwei Clients müssen stabil laufen.
+
+> Stand v0.4.3.2-dev: Programme-Ansicht im Bibliotheksstil (nur UI).
 
 > Stand v0.4.2.5.3-dev: Suche und manuellen Reload aus Bibliothek entfernt; acht Kurzwahlen bleiben. Kritische Heap-Minima weiter offen.
 

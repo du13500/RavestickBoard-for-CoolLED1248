@@ -1,4 +1,4 @@
-> **Aktueller Entwicklungskandidat: v0.4.3.2-dev (30.10.2026).** Programme im Stil der Bibliothek mit eigener Bearbeitungsansicht (nur Weboberfläche) auf Basis von v0.4.3.1. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md). Hardware-/Heap-Abnahme steht noch aus.
+> **Aktueller Entwicklungskandidat: v0.4.3.3-dev (30.10.2026).** RAM-Messung, Hang-Wächter und Absturzspur auf Basis von v0.4.3.2. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md). Hardware-/Heap-Abnahme steht noch aus.
 
 <p align="center"><img src="docs/assets/board-gif.gif" alt="CoolLEDX mit LED-Motiven" /></p>
 <p align="center"><img src="docs/assets/totem.jpg" width="420" alt="RavestickBoard Festival-Totem mit Neonbanane" /></p>
@@ -6,7 +6,7 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.3.2--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.4.3.3--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
@@ -17,11 +17,18 @@ Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprüngliche
 
 Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` des **ESP32-C3 Super Mini**. Das lokale Webinterface unter **http://192.168.4.1** überträgt die Darstellung via Bluetooth Low Energy (FFF0/FFF1) an die **CoolLEDX-Tafel**. Die LED-Tafel benötigt keine modifizierte Herstellerfirmware und kann einmal hochgeladene Inhalte autonom wiederholen. Die Bedienoberfläche läuft ohne Internetzugang; USB bleibt der einzige Firmware-Updateweg, **kein OTA**.
 
-## Aktuell: v0.4.3.2-dev – Programme im Bibliotheksstil
+## Aktuell: v0.4.3.3-dev – RAM-Messung, Hang-Wächter und Absturzspur
+
+- **Hintergrund:** Bei einem Blockband-Upload zeigte die Tafel „ERROR“, und der ESP32 antwortete danach nicht mehr. Die BLE-Bibliothek des Cores wartet an mehreren Stellen ohne Zeitlimit; bricht die Gegenstelle ab, kann die Hauptschleife stehen bleiben (plausible, noch nicht bewiesene Erklärung).
+- **Neu:** Ein Wächter startet das Board nach 25 s ohne Lebenszeichen neu. Eine Absturzspur im RTC-Speicher nennt beim nächsten Start die Phase, in der es stand (Serial `[VORLAUF]`, Diagnose, RAM-Export). Die Spur überlebt Reset, nicht das Ausstecken.
+- **RAM-Messung:** Messreihen auf v0.4.3.2 zeigten einen Einbruch des Heap-Minimums beim Beitritt eines (zweiten) WLAN-Clients (mit einem Client etwa 16 KB, mit zwei Clients einmal 192 B). Neu: getrennte `[RAM]`-Werte beim Start (BLE, NVS, LittleFS, Programme, WLAN-AP), WLAN-Ereignisse mit Zeitstempel im RAM-Export, Sketch-Größe nur einmal beim Start (vermutete Ursache der ca. 300 ms langen Diagnose-Aufrufe). Schalter im Sketch `RB_AP_MAX_CLIENTS` und `RB_LAZY_BLE_INIT`, beide im Standard aus.
+- **Weboberfläche unverändert** außer der Versionskennung. Hardware-Messkandidat, kein nachgewiesener Fix.
+
+## Vorher: v0.4.3.2-dev – Programme im Bibliotheksstil
 
 - **Programmliste:** Gleiche Bauweise wie die Bibliothek: Icon-Leiste (neu, bearbeiten, starten, stoppen, löschen) und Zeilen mit Untertitel (Anzahl Einträge, Wiedergabeart). Defekte Programme sind rot markiert.
 - **Bearbeiten:** Eigene Ansicht mit Zurück-Pfeil. Schritte erscheinen als Bibliothekszeilen mit Typ („Lauftext“, „Blockfolge · 4 Seiten“). Speichern führt zur Liste zurück, bei ungespeicherten Änderungen fragt „Zurück“ nach.
-- **Firmware unverändert:** Nur Versionskennung und Weboberfläche. Der Heap-Befund bleibt offen; v0.4.3.2 ist ein Hardware-Testkandidat.
+- **Firmware unverändert:** Nur Versionskennung und Weboberfläche. Läuft nach Rückmeldung auf dem ESP32-C3, die Ansicht wurde freigegeben.
 
 ## Vorher: v0.4.3.1-dev – Diagnoseentlastung und UI-Feinschliff
 
@@ -45,9 +52,9 @@ Beim Bearbeiten eines vorhandenen Bibliothekseintrags wählt man nach **Speicher
 
 Bearbeitungen werden auf dem jeweiligen Gerät direkt in der Bibliothek angezeigt. Hat ein anderes Smartphone Änderungen vorgenommen, aktualisiert **Menü → Webinterface neu laden** die Ansicht; gleichzeitige Bearbeitung desselben Eintrags kann vorherige Änderungen überschreiben.
 
-**Sketch:** `firmware/RavestickBoard_v0_4_3_2/RavestickBoard_v0_4_3_2.ino`. Die sechs zugehörigen Dateien im gemeinsamen Ordner belassen. `python tools/sync_web.py` erzeugt den gzip-Webheader nach HTML-Änderungen.
+**Sketch:** `firmware/RavestickBoard_v0_4_3_3/RavestickBoard_v0_4_3_3.ino`. Die sechs zugehörigen Dateien im gemeinsamen Ordner belassen. `python tools/sync_web.py` erzeugt den gzip-Webheader nach HTML-Änderungen.
 
-**Teststand v0.4.3.2:** JavaScript-Syntax, Browser-Simulationen der Programme-Ansicht auf drei Smartphonegrößen, Versionierung und gzip-/ETag-Konsistenz geprüft. **Kein Arduino-Compile dieses Standes, keine Hardware-Abnahme der neuen Ansicht und kein nachgewiesener Heap-Fix.** v0.4.3.1 läuft nach Rückmeldung auf dem ESP32-C3; Heap-Messreihen stehen aus.
+**Teststand v0.4.3.3:** JavaScript-Syntax, Browser-Simulation der Programme-Ansicht, Versionierung, gzip-/ETag-Konsistenz und Firmware-Invarianten geprüft; Wächter- und Spurcode mit Stubs auf Syntax geprüft, Auslöseverhalten simuliert. **Kein Arduino-Gesamtcompile dieses Standes, keine Hardwareprüfung, kein nachgewiesener Heap-Fix.** v0.4.3.2 läuft nach Rückmeldung auf dem ESP32-C3; die Heap-Messreihen A–C liegen vor (siehe Changelog).
 
 Frühere Versionen, einschließlich v0.4.2.5.4-dev, sind vollständig in [`CHANGELOG.md`](CHANGELOG.md) und den bisherigen Release-Notes dokumentiert.
 
