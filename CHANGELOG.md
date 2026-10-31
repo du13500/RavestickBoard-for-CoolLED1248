@@ -2,6 +2,17 @@
 
 # RavestickBoard · Versionsgeschichte / Changelog
 
+## v0.4.3.4-dev – Geräte vor dem Wächter-Neustart abmelden, Test-Auslöser (31.10.2026)
+
+- **Anlass:** Der Hang-Wächter aus 0.4.3.3 hat im Hardwaretest funktioniert (Lauf B: Hänger in `ble_connect`, Neustart nach 25 s, Spur `[VORLAUF]` lesbar). Danach war die Weboberfläche aber nicht erreichbar, obwohl das Handy „WLAN verbunden“ zeigte; im Serial-Log fehlte `Station verbunden`. Der Hänger selbst ließ sich im Wiederholungslauf nicht erneut auslösen (22 min, 103 Aufträge, 94 BLE-Verbindungen, 0 Hänger, 0 Write-Fehler, Heap im Leerlauf stabil bei ca. 40 KB, System-Minimum 13.504 B einmalig beim ersten Seitenaufbau).
+- **Vermutung (nicht bewiesen):** `abort()` startet hart neu, ohne die Geräte am Access Point abzumelden. Das Handy hält die alte Verbindung für gültig, der neue AP kennt es nicht.
+- **Neu:** Vor `abort()` sendet der Wächter `esp_wifi_deauth_sta(0)` (alle Geräte abmelden) und wartet 250 ms. Die Spur im RTC-Speicher erhält dafür ein Flag; beim nächsten Start steht in Serial, Diagnose und Absturzspur „Geräte vorher abgemeldet“ bzw. „NICHT abgemeldet“. Schalter `RB_DEAUTH_BEFORE_RESTART` (Standard 1).
+- **Test-Auslöser (nur Entwicklungsbuild):** `http://192.168.4.1/api/test/hang` (mit `?deauth=0` ohne Abmelden, zum Vergleich). Die Seite antwortet, `loop()` bleibt nach etwa 2 s absichtlich stehen, der Wächter startet nach 25 s neu. So lässt sich der Wiederanlauf prüfen, ohne auf einen zufälligen BLE-Hänger zu warten. Schalter `RB_TEST_HANG` (hier Standard 1; für eine Freigabe auf 0 setzen, weil jeder Client im WLAN das Gerät damit anhalten könnte). Kein Knopf in der Oberfläche.
+- **Diagnose/JSON:** neue Zeilen „Abmelden vor Waechter-Neustart“ und „Test-Ausloeser /api/test/hang“; JSON-Felder `hangDeauth`, `testHang`. Puffer für die Absturzspur von 150 auf 200 Byte vergrößert.
+- **Geändert:** nur Sketch (neuer Block hinter `rbBeat`, Wächter im 20-ms-Timer, Test-Handler vor `onHttpTraceDownload`, Route in `setup()`, Prüfung in `loop()`, Diagnose-/JSON-Ausgabe) und Versionskennung der Weboberfläche. BLE-Protokoll, API und Speicherformate unverändert.
+- **Prüfstand:** `tests/test_build_0434.py` und `tests/test_0434.py` laufen durch; Wächter-, Abmelde- und Test-Handler-Code wurde in einem Host-Stubtest (g++) auf Syntax und Ablauf geprüft (Abmeldung vor Abbruch, Flag, Spurtext, Test-Handler mit und ohne `deauth=0`). **Kein Arduino-Gesamtcompile, keine Hardwareprüfung.** Ob `esp_wifi_deauth_sta(0)` aus dem Timer-Task unter Arduino-ESP32 3.3.x wie erwartet funktioniert, zeigt erst der Test.
+- **Messplan:** siehe README (Test 1: Wiederanlauf mit und ohne Abmelden, Test 2: zwei Geräte gleichzeitig).
+
 ## v0.4.3.3-dev – RAM-Messung, Hang-Wächter und Absturzspur (30.10.2026)
 
 - **Anlass:** In einer Sitzung auf v0.4.3.2 (15 min, ein bis zwei Clients, 21 BLE-Aufträge in Ordnung) zeigte die Tafel bei einem Blockband-Upload während der %-Anzeige „ERROR“, fiel auf den Herstellerscreen zurück, und der ESP32 antwortete nicht mehr (kein Web, keine Serial-Ausgabe, kein Neustart). Das Serial-Log endete in diesem Auftrag kurz nach „Verbindung hergestellt“; der RAM-Verlauf davor war unauffällig (ca. 39,9 KB frei, größter Block 29,7 KB).
@@ -17,6 +28,7 @@
 - **Nebenwirkung:** Hängt der BLE-Stack, startet das Board nach etwa 25 s selbst neu und ist dann wieder erreichbar. Die Tafel bleibt eventuell im eigenen Fehlerzustand und muss gegebenenfalls aus- und eingeschaltet werden.
 - **Geändert:** nur der Sketch (neue Blöcke vor `ramStageLabel` und nach `bleClient`, Hooks in `ramTraceMark`, Timer, HTTP-Anfang/-Ende, BLE-Pfad, `sendPacket`, `loop`, `setup`, Diagnose-/RAM-Export). Weboberfläche nur Versionskennung; BLE-Protokoll, API und Speicherformate unverändert.
 - **Prüfstand:** `tests/test_build_0433.py` und `tests/test_0433.py` laufen durch; Wächter- und Spurcode wurde mit Stubs auf Syntax geprüft und das Auslöseverhalten simuliert (kein Abbruch bei 20 s, Abbruch bei 31 s). **Kein Arduino-Gesamtcompile, keine Hardwareprüfung.**
+- **Nachtrag (31.10.2026, Hardwaretest):** Start-Aufteilung gemessen (Start 195.152 B frei → BLE-Init −72,9 KB → LittleFS −2,5 KB → WLAN-AP −57,4 KB → 62.248 B frei); Diagnose-Handler jetzt ca. 28 ms statt 300 ms. Lauf B: Hänger in `ble_connect` (18. Verbindung), Wächter-Neustart nach 25 s, danach Web nicht erreichbar (siehe 0.4.3.4). Wiederholungslauf: kein Hänger in 94 Verbindungen.
 - **Messplan:** (1) Fehler nachstellen (mehrere Blockband-Uploads kurz nacheinander) und beim Hänger abwarten: Nach etwa 25 s sollte das Board neu starten und `[VORLAUF]` die Phase nennen, an der es stand. (2) Danach Messreihen A, C und D wie in v0.4.3.3 beschrieben, mit RAM-Datei, HTTP-Datei, Diagnose und seriellem Log. (3) Je nach Phase gezielt gegen die unbegrenzte Wartestelle absichern.
 
 ## v0.4.3.2-dev – Programme im Bibliotheksstil (30.10.2026)
