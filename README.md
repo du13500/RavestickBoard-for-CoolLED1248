@@ -1,129 +1,77 @@
-> **Aktueller Entwicklungskandidat: v0.4.4.0-dev (31.10.2026).** Lauftext-Editor „Zeichen gestalten“: Farbe und Schrift pro Zeichen, einheitliche Sendefarbe, größere Regler. Baut auf v0.4.3.4 (Wächter/Wiederanlauf) auf. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md). Hardware-/Heap-Abnahme steht aus.
-
 <p align="center"><img src="docs/assets/board-gif.gif" alt="CoolLEDX mit LED-Motiven" /></p>
 <p align="center"><img src="docs/assets/totem.jpg" width="420" alt="RavestickBoard Festival-Totem mit Neonbanane" /></p>
 <h1 align="center">🍌 RavestickBoard for CoolLEDX / CoolLED1248</h1>
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.4.0--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.4.4.2--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
 <img alt="Mission" src="https://img.shields.io/badge/mission-hugs%20and%20love-ff69b4">
 </p>
 
+> **Aktueller Entwicklungskandidat: v0.4.4.2-dev (2.11.2026).** Zeichen-Editor für Lauftexte (Farbe und Schrift pro Zeichen), sortierbare Programme, größeres Eingabefeld; jetzt mit schlankem Startbildschirm-Bedienfeld und sofortigem Sortieren. Hardware-/Heap-Abnahme steht aus. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md), Kurzüberblick: [`VERSIONSGESCHICHTE.md`](VERSIONSGESCHICHTE.md).
+
 ## Was ist RavestickBoard?
 
 Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` des **ESP32-C3 Super Mini**. Das lokale Webinterface unter **http://192.168.4.1** überträgt die Darstellung via Bluetooth Low Energy (FFF0/FFF1) an die **CoolLEDX-Tafel**. Die LED-Tafel benötigt keine modifizierte Herstellerfirmware und kann einmal hochgeladene Inhalte autonom wiederholen. Die Bedienoberfläche läuft ohne Internetzugang; USB bleibt der einzige Firmware-Updateweg, **kein OTA**.
 
-## Aktuell: v0.4.4.0-dev – Zeichen gestalten
+**Was die Oberfläche kann:**
 
-- **Lauftext-Editor:** Neues Fenster „Zeichen gestalten“. Zeichen einzeln antippen oder wischen, dann Farbe und Schrift (Normal, Fett, Engschrift, Mini) für die Auswahl setzen; „Farbwechsel“ färbt reihum pro Zeichen oder pro Wort. Zweizeilig Mini: Farbe pro Zeichen, Schrift fest.
-- **Technik:** Die Gestaltung reist als unsichtbare Steuerzeichen im Text (U+0090..U+009C). Die Firmware wertet sie beim Zeichnen aus, daher wirken sie auch in Bibliothek, Programmen und Gruppen. Alte Einträge ohne Marken bleiben unverändert.
-- **Oberfläche:** Alle Senden-Knöpfe in einheitlichem Mint, Regler unten etwas größer.
-- **Offen:** Zeicheneditor für Blockseiten (folgt), Arduino-Compile und Hardwaretest. Der Test-Auslöser aus 0.4.3.4 ist weiter aktiv (`RB_TEST_HANG` = 1).
+- **Kurzwahl:** acht frei belegbare Kacheln (Bibliothekseinträge, Programme, Ambiente) für den schnellen Zugriff auf der Veranstaltung.
+- **Lauftext:** Original-Schriften (Normal, Fett), Engschrift und Mini (ein- oder zweizeilig), 24 Herstellersymbole plus eigene Motive, Live-Vorschau und Datenbudget. Farbe und Schrift lassen sich pro Zeichen gestalten.
+- **Blockseiten:** feste Seiten mit Ausrichtung und Anzeigedauer, als Blockfolge sendbar.
+- **Bibliothek und Programme:** Einträge speichern, benennen, duplizieren, sortieren; Programme spielen Einträge nacheinander ab (Original oder als gemeinsames Laufband).
+- **Tafelsteuerung:** Helligkeit, Tempo und Anzeige ein/aus stehen unten auf jeder Seite; die Tasten zum Erzwingen eines Anzeigeverhaltens auf allen Seiten außer der Kurzwahl, wo nur Linkslauf, Standbild und der Stift zum Bearbeiten bleiben.
+- **Diagnose:** RAM-Messung, HTTP-Spur, Absturzspur nach Hänger, Export als Textdatei.
 
-## Vorher: v0.4.3.4-dev – Wiederanlauf nach Wächter-Neustart prüfen
+## Aktuell: v0.4.4.2-dev – Zeichen-Editor, Programme sortieren, flüssigere Oberfläche
 
-- **Hintergrund:** Der Wächter aus 0.4.3.3 hat einen echten BLE-Hänger erkannt und das Board neu gestartet. Danach ging die Weboberfläche nicht, obwohl das Handy WLAN anzeigte. Der Hänger selbst ist selten (94 Verbindungen am Stück ohne Fehler).
-- **Neu:** Vor dem Neustart meldet der Wächter alle Geräte am Access Point ab (Vermutung, noch nicht bewiesen: sonst merkt das Handy den Neustart nicht). Ein **Test-Auslöser** (`/api/test/hang`, nur Entwicklungsbuild) hält das Board absichtlich an, damit sich der Wiederanlauf gezielt prüfen lässt.
-- **Weboberfläche unverändert** außer der Versionskennung. Hardware-Messkandidat, kein nachgewiesener Fix.
+- **Zeichen gestalten (seit 0.4.4.0):** Im Lauftext-Editor öffnet die Palettentaste ein Fenster. Zeichen einzeln antippen oder per Wischen auswählen, dann Farbe und Schrift (Normal, Fett, Engschrift, Mini) für die Auswahl setzen. „Farbwechsel“ färbt reihum pro Zeichen oder pro Wort. Bei Zweizeilig Mini gehen Farben pro Zeichen und Zeile.
+- **Neu in 0.4.4.2** (Rückmeldung aus dem Test von 0.4.4.1, nur Weboberfläche, Firmware unverändert):
+  - **Startbildschirm:** Das untere Bedienfeld zeigt nur noch *an, aus*, *Linkslauf* (Chevron links), *Standbild/Blocktext* (Achteck) und *Bearbeiten* (Stift), mit etwas Platz zwischen den Gruppen. Alle anderen Seiten behalten die volle Steuerung.
+  - **Sortieren sofort:** In Bibliothek und Programmen springt der Eintrag beim Tippen auf den Pfeil sofort an die neue Stelle; die Befehle gehen der Reihe nach im Hintergrund an den ESP32. Nur bei einem Fehler wird die Liste vom ESP32 neu geholt.
+  - **Weniger Last auf dem ESP32:** Seitenwechsel holen Bibliothek und Programme nur noch neu, wenn die Daten älter als 60 s sind (sonst Anzeige aus dem Speicher). Beim Start erscheint die Oberfläche zuerst, die Listen laden danach im Hintergrund. Die Statusabfrage pausiert, solange der ESP32 mit einer Anfrage beschäftigt ist oder der Tab im Hintergrund liegt.
+- **Neu in 0.4.4.1:**
+  - **Wischen entmarkiert:** Beginnt der Wisch auf einem markierten Zeichen, entmarkiert er alles, was er überstreicht; sonst markiert er.
+  - **Schrift direkt wählen:** Die vier Schriften sind einzeln antippbar, der große Durchschalter entfällt.
+  - **Rückgängig und Wiederherstellen** (nur Icons, neben „Text leeren“) für den ganzen Lauftext-Editor: Text, Zeichenstile und Zeilenfarben, mehrstufig. Der Knopf „Stil rückgängig“ entfällt.
+  - **Größeres Eingabefeld (nur Lauftext):** wächst mit dem Text mit und lässt sich am Griff darunter nach unten größer ziehen (Doppelklick auf den Griff stellt wieder auf automatisch; auf dem iPhone noch ungeprüft). Die Eingabetaste schließt die Tastatur, statt einen Umbruch einzufügen.
+  - **Programme sortieren:** Pfeile hoch/runter wie in der Bibliothek. Die Reihenfolge liegt auf dem ESP32 und gilt für alle Geräte (neue Firmware-Route `/api/collections/move`, Datei `/rb-lib/porder.bin`).
+  - **Startbildschirm:** zeigt wieder dieselbe Tafelsteuerung wie alle anderen Seiten, inklusive der Tasten zum Erzwingen eines Anzeigeverhaltens und dem Stift für die Kurzwahlen.
+- **Technik:** Die Gestaltung reist als unsichtbare Steuerzeichen im Text (U+0090..U+009C, Format in [`docs/TECHNIK.md`](docs/TECHNIK.md)). Die Firmware wertet sie beim Zeichnen aus, daher wirken sie auch in Bibliothek, Programmen und Gruppen. Einträge ohne Marken bleiben unverändert gültig; ältere Firmware kennt die Marken nicht (Darstellung dort ungeprüft).
+- **Entwicklungsschalter:** `RB_TEST_HANG` steht in diesem Stand noch auf 1 (Test-Auslöser `/api/test/hang` für den Wiederanlauftest). Für eine Freigabe auf 0 setzen.
+- **Bekannt:** Die Bibliotheksliste braucht auf dem ESP32 etwa 0,9 s, weil jeder Eintrag vollständig gelesen und geprüft wird; währenddessen bedient der Webserver nichts anderes. Eine Firmware-Beschleunigung ist offen. Der seltene BLE-Hänger (Diagnose: Phase `ble_regNotify`, Wächter-Neustart) und der niedrige Heap-Tiefstwert bleiben ungelöst.
+- **Noch offen:** Zeichen-Editor für Blockseiten, Arduino-Compile und Hardwaretest, Wiederanlauf- und Zwei-Geräte-Test (siehe [`docs/ROADMAP.md`](docs/ROADMAP.md)).
 
-## Vorher: v0.4.3.3-dev – RAM-Messung, Hang-Wächter und Absturzspur
+## Kurz zurückgeblickt
 
-- **Hintergrund:** Bei einem Blockband-Upload zeigte die Tafel „ERROR“, und der ESP32 antwortete danach nicht mehr. Die BLE-Bibliothek des Cores wartet an mehreren Stellen ohne Zeitlimit; bricht die Gegenstelle ab, kann die Hauptschleife stehen bleiben (plausible, noch nicht bewiesene Erklärung).
-- **Neu:** Ein Wächter startet das Board nach 25 s ohne Lebenszeichen neu. Eine Absturzspur im RTC-Speicher nennt beim nächsten Start die Phase, in der es stand (Serial `[VORLAUF]`, Diagnose, RAM-Export). Die Spur überlebt Reset, nicht das Ausstecken.
-- **RAM-Messung:** Messreihen auf v0.4.3.2 zeigten einen Einbruch des Heap-Minimums beim Beitritt eines (zweiten) WLAN-Clients (mit einem Client etwa 16 KB, mit zwei Clients einmal 192 B). Neu: getrennte `[RAM]`-Werte beim Start (BLE, NVS, LittleFS, Programme, WLAN-AP), WLAN-Ereignisse mit Zeitstempel im RAM-Export, Sketch-Größe nur einmal beim Start (vermutete Ursache der ca. 300 ms langen Diagnose-Aufrufe). Schalter im Sketch `RB_AP_MAX_CLIENTS` und `RB_LAZY_BLE_INIT`, beide im Standard aus.
-- **Weboberfläche unverändert** außer der Versionskennung. Hardware-Messkandidat, kein nachgewiesener Fix.
+- **v0.4.4.1-dev:** Feinschliff des Zeichen-Editors, Rückgängig/Wiederherstellen, sortierbare Programme, wachsendes Eingabefeld.
+- **v0.4.4.0-dev:** Erstfassung von „Zeichen gestalten“, einheitliche Sendefarbe (Mint) auf allen Senden-Knöpfen, etwas größere Regler.
+- **v0.4.3.x-dev (Stabilitätsarbeit):** Nach einem Tafel-„ERROR“ im Blockband-Upload hing der ESP32 (die BLE-Bibliothek des Cores wartet an mehreren Stellen ohne Zeitlimit). Seitdem gibt es einen **Wächter**, der das Board nach 25 s ohne Lebenszeichen neu startet, eine **Absturzspur** im RTC-Speicher (Serial `[VORLAUF]`, Diagnose) und eine getrennte **RAM-Messung** beim Start. Der Wächter hat einen echten Hänger erkannt; danach war die Weboberfläche zunächst nicht erreichbar. Deshalb meldet der Wächter vor dem Neustart alle WLAN-Geräte ab (Vermutung, noch nicht bewiesen), und ein Test-Auslöser erlaubt es, den Wiederanlauf gezielt zu prüfen. Messreihen zeigten einen Einbruch des Heap-Minimums beim Beitritt eines zweiten WLAN-Clients (bis 192 B). Der Hänger selbst ist selten (94 Verbindungen am Stück ohne Fehler). **Keine belegte Behebung, nur Messkandidaten.**
+- **v0.4.3-dev (UI-Konsolidierung):** Lauftext-Editor mit „Lauftext senden“ und „Speichern“ (Aktualisieren oder neue Variante), Blockanzeige mit Original-Normal als Standard und Seitenwerkzeugen, Programme im Bibliotheksstil mit eigener Bearbeitungsansicht, Lucide-Icons, App-Symbol und Favicon, Diagnose ohne Dauerlast (kompaktes JSON, TXT-Bericht nur auf Abruf).
+- **v0.4.2.x-dev (HTTP- und RAM-Stabilisierung):** Weboberfläche per gzip, ETag und 304 ausgeliefert, JSON-Antworten in begrenzten Stücken, Lauftext-Gruppen mit kleinem 384-Byte-Tile-Puffer statt vollem 30-KiB-Bildpuffer, einmalige Wiederholung einer nicht bestätigten Gruppe nach BLE-Neuverbindung, Programme als Laufband mit vorsichtiger Laufzeitschätzung, gemeinsame untere Tafelsteuerung, acht Kurzwahlen, Bibliothek im LittleFS. Hardwaretests vom 28./29.10.2026 bestätigten Lauftexte, Symbole, Farben und kleine Laufbänder; ein späterer Upload scheiterte bei Paket 70/106 ([Testbefund](docs/TESTBEFUNDE_v0.4.2.3.md)). **Der historische Heap-Tiefstwert (zeitweise 592 Byte, auch mit nur einem Client) ist weiter nicht eindeutig geklärt.** Die A/B-Messungen dazu stehen in [`docs/VERGLEICHSTEST_v0.4.2.4.2.md`](docs/VERGLEICHSTEST_v0.4.2.4.2.md).
 
-## Vorher: v0.4.3.2-dev – Programme im Bibliotheksstil
-
-- **Programmliste:** Gleiche Bauweise wie die Bibliothek: Icon-Leiste (neu, bearbeiten, starten, stoppen, löschen) und Zeilen mit Untertitel (Anzahl Einträge, Wiedergabeart). Defekte Programme sind rot markiert.
-- **Bearbeiten:** Eigene Ansicht mit Zurück-Pfeil. Schritte erscheinen als Bibliothekszeilen mit Typ („Lauftext“, „Blockfolge · 4 Seiten“). Speichern führt zur Liste zurück, bei ungespeicherten Änderungen fragt „Zurück“ nach.
-- **Firmware unverändert:** Nur Versionskennung und Weboberfläche. Läuft nach Rückmeldung auf dem ESP32-C3, die Ansicht wurde freigegeben.
-
-## Vorher: v0.4.3.1-dev – Diagnoseentlastung und UI-Feinschliff
-
-- **Diagnose:** Statusübersicht fordert nur kompaktes JSON an. Der vollständige TXT-Bericht entsteht ausschließlich bei Download bzw. Kopieren, speichersparend in kleinen HTTP-Stücken statt als 11-KB-String.
-- **HTTPTRACE:** Speichert zusätzlich worst-case-Pfade (längste Anfrage, Heap-Minimum, HTTP-Zeitpunkt eines System-Min-Abfalls) auch über das 32-Anfragen-Fenster hinaus. Ein außerhalb von Handlern beobachteter Tiefstwert bleibt ausdrücklich *nicht zugeordnet*.
-- **UI:** Ambiente wieder einspaltig, Blockseiten-Werkzeuge mit klaren deaktivierten Zuständen, originale Lucide-SVGs, gleichmäßige Senden-/Speichern-Abstände.
-- **Wichtig:** Keine belegte Behebung des kritischen historischen Heap-Tiefstwerts; v0.4.3.1 ist ein Hardware-Testkandidat, keine stabile Freigabe.
-
-## Vorher: v0.4.3-dev – UI-Konsolidierung
-
-- **App-Symbol:** Die gleiche hellgrauweiße Lucide-Banane wie auf der Menütaste, auf deren dunklem Hintergrund, als Offline-iPhone-Icon und Browserfavicon. Die alte Emoji-Banane wird dort nicht mehr verwendet.
-- **Lauftext:** Nur der Lauftextmodus wird neu erzeugt. Zwei große Aktionen „Lauftext senden“ und „Speichern“. Bei vorhandenen Bibliothekseinträgen bietet Speichern eine Auswahl zwischen Aktualisieren und neuer Variante.
-- **Blockanzeige:** Neue Seiten verwenden standardmäßig **Original - Normal**. Drei Ausrichtungs-Icons und kompakte Seitenwerkzeuge mit Radierer; bei einer einzigen Seite steht `trash-off`, „Alles löschen“ ist bei einer Seite grau und deaktiviert, ab zwei Seiten rot hervorgehoben. Große Aktionen: „Diese Seite senden“, „Alle Seiten senden“, „Speichern“.
-- **Bibliothek und Dialoge:** Tooltips ohne alte Symbolzeichen; Umbenennen mit `text-cursor-input`, Duplizieren-Dialog mit passenden Icon-Aktionen. Keine Favoriten, Suche oder manuelle Aktualisieren-Taste.
-- **Ambiente und Tafelsteuerung:** Farbkacheln nutzen die Bildschirmhöhe. Im gemeinsamen Steuerbereich verwendet Standbild das `octagon`-Symbol. Die acht Kurzwahlen bleiben erhalten.
-- **Editorführung:** „Zur Bibliothek“ nur bei geöffneter Bibliotheksvorlage. „Neu“ bleibt verfügbar; Änderungen werden nicht ohne Bestätigung verworfen.
+Die vollständige Geschichte steht in [`CHANGELOG.md`](CHANGELOG.md).
 
 ### Speichern und Mehrgerätebetrieb
 
 Beim Bearbeiten eines vorhandenen Bibliothekseintrags wählt man nach **Speichern**, ob er **aktualisiert** oder als **neuer Eintrag** mit eigener ID gesichert wird. Die Vorlage und darauf verweisende Kurzwahlen und Programme bleiben bei der zweiten Option unverändert.
 
-Bearbeitungen werden auf dem jeweiligen Gerät direkt in der Bibliothek angezeigt. Hat ein anderes Smartphone Änderungen vorgenommen, aktualisiert **Menü → Webinterface neu laden** die Ansicht; gleichzeitige Bearbeitung desselben Eintrags kann vorherige Änderungen überschreiben.
-
-**Sketch:** `firmware/RavestickBoard_v0_4_4_0/RavestickBoard_v0_4_4_0.ino`. Die sechs zugehörigen Dateien im gemeinsamen Ordner belassen. `python tools/sync_web.py` erzeugt den gzip-Webheader nach HTML-Änderungen.
-
-**Teststand v0.4.4.0:** JavaScript-Syntax, Browser-Test des Editors (Playwright, drei Mobilgrößen), Versionierung, gzip-/ETag-Konsistenz und Firmware-Invarianten geprüft; die Firmware-Zeichenfunktionen wurden im Host-Build kompiliert und pixelweise mit der Browser-Vorschau verglichen. **Kein Arduino-Gesamtcompile dieses Standes, keine Hardwareprüfung auf ESP32-C3 und Tafel.**
-
-Frühere Versionen, einschließlich v0.4.2.5.4-dev, sind vollständig in [`CHANGELOG.md`](CHANGELOG.md) und den bisherigen Release-Notes dokumentiert.
-
-## Vorversion: v0.4.2.5-dev – HTTP-/RAM-Stabilisierung
-
-**Neue Firmware:** `firmware/RavestickBoard_v0_4_2_5/RavestickBoard_v0_4_2_5.ino` (alle sechs Sketch-Dateien zusammenlassen). Grundlage ist Build B mit gzip/ETag/304 und `/api/http.txt`. Die JSON-Antworten der Bibliothek und Programmübersicht werden in gebündelten, begrenzten Sendestücken ausgegeben. Die Lucide-Icons stehen schon im HTML, statt sichtbar von alten Symbolen umgebaut zu werden. Das LittleFS-Bibliotheksformat und das BLE-Übertragungsprotokoll wurden nicht geändert.
-
-**Noch nicht gelöst:** In den echten A/B-Messungen sank `ESP.getMinFreeHeap()` teilweise auf **592 Byte**, auch mit nur einem WLAN-Client. Die neue Version ist ein **gezielter Optimierungsversuch**, keine als stabil bestätigte Freigabe. Der ursprüngliche Tiefstwert kann aus WLAN-/Netzwerkkomponenten kommen; die Ursache ist noch nicht eindeutig geklärt. Test unter Last und BLE-Abnahme stehen aus. Die neue Diagnose bleibt zur Ursachenklärung erhalten.
-
-**Lizenz/Danksagung:** Eigener Quellcode unter MIT (reine `LICENSE`), eingebettete Lucide/Feather-Icons laut `THIRD_PARTY_NOTICES.md`. Besonderer Dank an **Adam Schulz**, [OpenSign](https://github.com/schulzad/coolled-sign-controller), für den freundlichen Austausch und die technischen Hinweise zu nativer Animation (`0x04`) und BLE-Bestätigungen. Diese Erkenntnisse stehen für eine spätere Version auf der Roadmap; hier wurde **kein OpenSign-Code übernommen**.
-
-**Installation/Test:** siehe `UPDATE_HINWEISE_v0.4.2.5.txt`. Nach dem Flashen zunächst normal die Webseite öffnen, Bibliothek/Kurzwahlen überprüfen, dann einen kurzen WLAN-/HTTP-Test mit `/api/http.txt` durchführen. Kein Speichervorgang oder Partitionswechsel erforderlich.
-
-### Vorherige A/B-Messungen (v0.4.2.4.2)
-
-
-**A und B sind absichtlich zwei eigenständige Versuchsfirmwares, keine aufeinanderfolgenden Upgrades.**
-A ergänzt unsere bewährte v0.4.2.4.1-dev ausschließlich um dieselbe HTTP-/RAM-Protokollierung, die auch in B enthalten ist. Die Startseite bleibt bei A unkomprimiert und mit `Cache-Control: no-store`. B verwendet für **dieselbe HTML-Quelle** gzip-Stufe 9, ETag und optional `304 Not Modified`. Die Geräteversion unterscheidet `-A` und `-B` auch in den Logdateinamen. Für die Messung wird jeweils ein Sketch geflasht, nicht beide.
-
-**Teststatus:** Weder A noch B ist lokal mit Arduino kompiliert oder auf dem ESP32-C3 getestet worden. Unsere zuvor bestätigten Hardwaretests gelten für v0.4.2.4.1-dev und dürfen nicht auf die beiden Testbuilds übertragen werden. Die 20-ms-Stichproben können sehr kurze Speicherpeaks übersehen und verändern selbst die RAM-Grundlast geringfügig. Der historische `ESP.getMinFreeHeap()`-Wert wird erst durch ESP32-Neustart zurückgesetzt.
-
-**Neuer Mess-Export:** `http://192.168.4.1/api/http.txt` protokolliert HTTP-Pfade (inklusive unbekannter 404-Pfade), Status, WLAN-Clientzahl, Laufzeit, Heap- und Maxblockwerte vor/nach der Anfrage, den niedrigsten in 20-ms-Schritten beobachteten Wert während der Anfrage und das historische System-Minimum vor/nach der Anfrage. Queryparameter, Textinhalte, Passwörter und BLE-Adressen werden nicht exportiert. Ältere Exporte `/api/ram.txt` und `/api/diagnostics.txt` funktionieren weiterhin.
-
-**Testablauf und Grenzen:** [docs/VERGLEICHSTEST_v0.4.2.4.2.md](docs/VERGLEICHSTEST_v0.4.2.4.2.md). Historische A/B-Sketches waren `v0_4_2_4_2_A` und `v0_4_2_4_2_B`. Das Tool `python tools/sync_web.py` erzeugt inzwischen den Header des aktuellen v0.4.3-Builds. Das alte Build-B-HTML umfasste nach gzip 44.911 B gegenüber 157.222 B Rohdaten. Die neue HTML-Fassung hat durch vorgerenderte SVGs einen anderen Umfang.
-
-### Historisch: v0.4.2.4.1-dev
-
-**Hardwaretest vom 29.10.2026, Basis v0.4.2.4-dev:** Firmware kompiliert und startet ohne Panic; LittleFS-Bibliothek und sechs Kurzwahlen erhalten. Ein kleines Laufband (Lauftext → 4 Blockseiten → Lauftext) mit Originalfarben und Reihenfolge funktioniert als ein Upload; auch die 16 echten Leer-Pixelspalten wurden bestätigt. **Noch offen:** geteilte Laufbänder über 30 KiB, Langzeit-RAMTRACE, ACK-/Retry-Test, die weiteren UI- und Backupregressionen. Der normale gemischte Programmablauf mit stehenden Blockseiten war in dieser Runde nicht reproduzierbar; das ist weder ein Bestehen noch ein belegter Fehler.
-
-**Hotfix v0.4.2.4.1-dev:** Die globale Tafelsteuerung liegt wieder als normaler Abschnitt am *Ende des Seiteninhalts*. Sie schwebt nicht über Kurzwahlen, Bibliothek oder Editoren; zum Erreichen wird bei Bedarf gescrollt. Der Kurzwahl-Einrichtungsdialog hat drei kompakte reine Lucide-Aktionen `trash` / `undo-dot` / `star-check`. Im Bearbeitungsmodus wechselt das Icon zu `pencil-off`, beim Verlassen zu `pencil`, ohne Meldung. Die Löschroutine für Programme entfernt jetzt auch die mögliche `.bak`-Rückfallkopie, damit ein bewusst gelöschtes Programm nicht unbeabsichtigt zurückkehrt (Review F-06).
-
-**Der Streaming- und BLE-Kern wurde für den damaligen UI-Hotfix bewusst nicht umgebaut.** Die offenen Punkte aus unseren beiden Claude-Reviews (F-01–F-12, S-01–S-06) bleiben als technische Arbeitsliste erhalten; insbesondere ACK-Prüfung, Webserver während BLE, Laufzeitkalibrierung und echte Byte-Verhaltenstests sind weiterhin offen. Arduino-Kompilierung und Hardwaretest **dieser** Version stehen aus.
-
-### Vorgängerversion v0.4.2.4-dev
-
-**Unsere Hardwaretests vom 28.10.2026:** Die v0.4.2.3 wurde erfolgreich auf dem ESP32-C3 kompiliert und geflasht. Lauftexte, Symbole, verschiedenfarbige Schriften und Blockseiten werden im Modus **„Alles als Laufband“** korrekt verkettet und angezeigt. Die Tafel scrollt ein passendes, vollständiges Band nach einem Upload autonom. Größere Laufbänder wurden in mehrere Gruppen zerlegt; die alte **20-Sekunden-Ersatzdauer** schnitt Inhalte vorzeitig ab. Bei einem späteren Upload wurde **Paket 70/106 nicht bestätigt** und die Tafel blieb im Hersteller-Fehlerbildschirm. Der ESP32-Heap war dabei knapp, aber ein RAM-Absturz wurde nicht nachgewiesen. Siehe [Testbefund](docs/TESTBEFUNDE_v0.4.2.3.md).
-
-Für **v0.4.2.4-dev** haben wir gezielt nachgebessert:
-
-- **Stabilität:** Auch gemischte Laufbänder verwenden beim Senden einen kleinen **384-Byte-Tile-Puffer**, keinen vollständigen 30-KiB-Bildpuffer. Nach einer nicht bestätigten Bildpaketübertragung wird die ganze Gruppe höchstens einmal nach BLE-Neuverbindung neu gesendet. Scheitert auch der Versuch, stoppt der Programmablauf mit Fehlerstatus.
-- **Zeitsteuerung:** Die alte einstellbare Gruppendauer (5–180 s) entfällt aus dem Programmeditor und bestimmt die Wiedergabe nicht länger. Die Hardwareformel für Blockseiten bei Tempo 60–90 bleibt bestehen. Geteilte Laufbänder erhalten eine **vorsichtige Schätzung** aus Spaltenzahl und Tempo. Das ist noch keine kalibrierte Laufzeit und kann bewusst zu längeren Wiederholungen führen – vollständige Wiedergabe hat Vorrang vor einem vorzeitigen Gruppenwechsel.
-- **Bedienung:** Eine gemeinsame, am unteren Rand angeheftete Tafelsteuerung statt mehrfacher Regler. Sie folgt in Größe und Anordnung unseren MS-Paint-Mockups; Kurzwahlkacheln sind kompakter. Acht Lucide-Direkttasten senden bei **jedem** Antippen den BLE-Befehl erneut, ohne vermeintlich aktiven Modus.
-- **LED-Vorschau:** Kleine Lucide-Buttons ohne Textbeschriftung: Anfang, Play/Pause, Vorschaugeschwindigkeit **Schnecke (1×) → Vogel (2×) → Hase (4×)**. Die dynamisch wechselnden Icons bleiben erhalten, die unnötige Beschriftung „Lauftextvorschau“ entfällt.
-- **Menü und Editor:** Menüüberschrift „Navigation“ entfällt, Diagnose verwendet Lucide `bug`. Technische WLAN-/Speicherhinweise werden nicht mehr im Editor angezeigt, sondern bleiben in Diagnose/Dokumentation.
-- **Repository:** Roadmap und Themenspeicher wurden mit den bestätigten Tests abgeglichen. Neue Community-Dateien (`CONTRIBUTING.md`, `SECURITY.md`, Issue-/PR-Vorlagen, Verhaltenskodex) erleichtern Rückmeldungen. Unser Quellcode bleibt unter **MIT**; die getrennten Lucide/Feather-Rechte stehen in `THIRD_PARTY_NOTICES.md` und sind in `LICENSE` referenziert.
-
-**Wichtig:** Die damalige v0.4.2.4.1-dev wurde noch **nicht auf der echten Tafel abgenommen**; lokale Browser-/Quelltests ersetzen weder Arduino-Kompilierung noch Hardware-, RAM- und BLE-Tests. Speichergrößen und Runtime-Timing für geteilte Gruppen müssen wir erneut prüfen.
+Bearbeitungen werden auf dem jeweiligen Gerät direkt in der Bibliothek angezeigt. Hat ein anderes Smartphone Änderungen vorgenommen, aktualisiert **Menü → Webinterface neu laden** die Ansicht (Bibliothek und Programme werden beim Seitenwechsel außerdem im Hintergrund aufgefrischt, wenn sie älter als 60 s sind); gleichzeitige Bearbeitung desselben Eintrags kann vorherige Änderungen überschreiben. Die Programmreihenfolge liegt auf dem ESP32 und ist damit für alle Geräte gleich.
 
 ## Installation und Datensicherheit
 
 1. Vorab ein JSON-Backup aus der aktuell laufenden Firmware erstellen und lokal aufbewahren. Die bisherige Firmware als Rückfallversion sichern.
-2. `firmware/RavestickBoard_v0_4_3/RavestickBoard_v0_4_3.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h` (insgesamt **sechs Dateien**).
+2. `firmware/RavestickBoard_v0_4_4_2/RavestickBoard_v0_4_4_2.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h`.
 3. Arduino IDE: **ESP32C3 Dev Module**, Espressif **3.3.12**, **USB CDC On Boot: Enabled**, **No OTA (2MB APP/2MB SPIFFS)**. Bestehendes Partitionsschema **nicht ändern**, **Erase All Flash deaktiviert** lassen.
-4. Nach dem Flashen mit WLAN `CoolLED1248` verbinden, `http://192.168.4.1` aufrufen. Bibliothek nicht neu formatieren. Testplan schrittweise abarbeiten. Falls das Homescreen-Icon nicht übernommen wird, die Verknüpfung über Safari erneut hinzufügen.
+4. Nach dem Flashen mit WLAN `CoolLED1248` verbinden, `http://192.168.4.1` aufrufen. Bibliothek nicht neu formatieren; das Bibliotheksformat ist unverändert. Falls das Homescreen-Icon nicht übernommen wird, die Verknüpfung über Safari erneut hinzufügen.
+5. Nach Änderungen an `web/index.html`: `python tools/sync_web.py` erzeugt den gzip-Webheader neu.
 
-Siehe [aktuelle Update-Hinweise](UPDATE_HINWEISE_v0.4.3.txt) oder [vorherige ausführliche Installation](docs/INSTALLATION_v0.4.2.4.1.md), [Testplan](docs/TESTPLAN_v0.4.2.4.1.md), [Bibliotheksformat](docs/BIBLIOTHEK_v0.4.1.md), [Changelog](CHANGELOG.md), [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md).
+Weiterführend: [Bibliotheksformat](docs/BIBLIOTHEK_v0.4.1.md), [letzte ausführliche Installationsanleitung](docs/INSTALLATION_v0.4.2.4.1.md), [Testplan](docs/TESTPLAN_v0.4.2.4.1.md), [Changelog](CHANGELOG.md), [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md).
+
+**Teststand v0.4.4.2:** JavaScript-Syntax, Browser-Test der Oberfläche (inkl. sofortigem Sortieren mit absichtlich langsamem Mock-ESP und Fehlerfall) (Playwright/Chromium, mehrere Mobilgrößen), Versionierung, gzip-/ETag-Konsistenz und Firmware-Invarianten geprüft. Die Firmware-Zeichenfunktionen und die neue Programm-Reihenfolge wurden im Host-Build (g++) mit dem echten Sketch-Code kompiliert und getestet; die Zeichnung wurde pixelweise mit der Browser-Vorschau verglichen. **Kein Arduino-Gesamtcompile dieses Standes und keine Hardwareprüfung auf ESP32-C3 und Tafel.** Details: [`tests/README.md`](tests/README.md).
 
 ## Mitmachen und Sicherheit
 
@@ -133,9 +81,11 @@ Siehe [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [CODE_OF_C
 
 Wir entwickeln RavestickBoard gemeinsam: Wir entwerfen, programmieren, dokumentieren und testen die Software im engen Austausch. Die realen ESP32-/CoolLEDX-Hardwaretests führen wir vor Ort durch; dabei unterstützen KI-gestützte Werkzeuge wie **ChatGPT und Claude** die Konzeption, Fehlersuche, Implementierung und Dokumentation. Wir unterscheiden ausdrücklich zwischen lokal geprüftem Code und hardwarebestätigten Funktionen.
 
-## Entwicklung und Quellen
+## Entwicklung, Quellen und Lizenz
 
 RavestickBoard ist eine eigenständige C++-/HTML-/JavaScript-Implementierung. Die beiden aktuellen Referenzen für zukünftige Animationsforschung sind [jean-santos/coolled1248-rs](https://github.com/jean-santos/coolled1248-rs) und [zackmcmurrin-dev/coolledux-linux-uploader](https://github.com/zackmcmurrin-dev/coolledux-linux-uploader). Ergänzend dokumentieren wir den früh untersuchten [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) und [ohtaras/led](https://github.com/ohtaras/led). Die technischen Protokollfakten wurden für unsere Firmware eigenständig umgesetzt. Ob eine Datenformatvariante des anderen Panels auf unserer eigenen CoolLEDX funktioniert, ist separat zu prüfen.
+
+**Danksagung:** Besonderer Dank an **Adam Schulz**, [OpenSign](https://github.com/schulzad/coolled-sign-controller), für den freundlichen Austausch und die technischen Hinweise zu nativer Animation (`0x04`) und BLE-Bestätigungen. Diese Erkenntnisse stehen für eine spätere Version auf der Roadmap; hier wurde **kein OpenSign-Code übernommen**.
 
 **Lizenz und Drittmaterialien:** Unser selbst entwickelter RavestickBoard-Code steht unter der **[MIT-Lizenz](LICENSE)** (Copyright © 2026 du13500). Die Lizenz erlaubt ausdrücklich auch kommerzielle Nutzung, Bearbeitung und Weitergabe unter ihren Bedingungen. Das Projekt wird derzeit als privates Hobbyprojekt entwickelt; das schränkt die MIT-Rechte nicht ein. Eingebettete **Lucide-Icons** stehen unter ISC, ausgewählte von Feather abgeleitete Icons zusätzlich unter MIT. Ihre erforderlichen Copyright- und Lizenzhinweise stehen in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Fremde Originalmotive, Marken und sonstige Drittmaterialien werden durch unsere MIT-Lizenz nicht automatisch mitlizenziert.
 

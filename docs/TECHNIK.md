@@ -11,6 +11,14 @@ Farbe und Schrift pro Zeichen reisen als C1-Steuerzeichen im UTF-8-Text (je 2 By
 
 Eine Marke gilt für die folgenden Zeichen derselben Zeile bis zur nächsten Marke. Bei Zweizeilig Mini werden Schriftmarken ignoriert, Farbmarken gelten. Zuordnung Schrift → Layout: [3, 4, 0, 2]. Die Oberkante richtet sich bei abweichender Schrift nach dem Layout der Marke (Layout 0 → 1, Layout 2 → 4, sonst 0). Symbole behalten ihre Eigenfarben. `measureText`, `drawInlineUtf8` und `drawInlineUtf8Window` teilen sich `styleApply` und `drawToken`; Streaming-Kacheln tragen den Zustand über Chunk-Grenzen. `decodeText` (Blockseiten) überspringt die Marken. Beim Verketten von Programmeinträgen steht zwischen den Texten `\xC2\x90\xC2\x9C`. Das Bibliotheksfeld fasst 1600 Byte einschließlich Marken. Ohne Marken ist die Ausgabe pixelgleich zu 0.4.3.4.
 
+### Nachtrag v0.4.4.2: Anfragen und Sortieren in der Weboberfläche
+
+Der Arduino-`WebServer` arbeitet Anfragen nacheinander ab. Gemessen mit 0.4.4.1: `/api/library` ≈ 940 ms (liest und prüft jeden Eintrag vollständig), `/api/collections` ≈ 300 ms. Die Weboberfläche vermeidet deshalb Anfragen: Listen tragen einen Zeitstempel (`rbFresh`), Seitenwechsel holen sie nur nach 60 s neu; `api()` zählt laufende Anfragen (`rbBusy`) und die Statusabfrage pausiert bis zu 6 s lang, solange eine andere läuft; Sortieren ordnet lokal um und stellt die Befehle in eine Kette (`rbQueueMove`), damit sie in Klickreihenfolge beim ESP32 ankommen. Listenabrufe warten auf die Kette und verwerfen ihr Ergebnis, wenn inzwischen neue Sortierbefehle anstehen. Nach einem Fehler wird die Liste einmal abgeglichen (abgekoppelt von der Kette, sonst wartet der Abgleich auf sich selbst).
+
+### Nachtrag v0.4.4.1: Reihenfolge der Programme
+
+`POST /api/collections/move` mit `id` (Programm-ID) und `to` (neue Position ab 0) verschiebt ein Programm in der Liste. Die Reihenfolge liegt in `/rb-lib/porder.bin` (je Programm ein Byte mit der ID, höchstens 24 Byte). `GET /api/collections` liefert zuerst die Programme in gespeicherter Reihenfolge, danach alle übrigen aufsteigend nach ID. Fehlende, doppelte oder ungültige IDs in der Datei werden ignoriert; ohne Datei gilt aufsteigende ID. Programmdateien (`p<id>.bin`) und Bibliotheksformat bleiben unverändert. Fehler: 400 bei ungültiger ID oder Position, 500 bei Schreibfehler. Die Datei ist nicht Teil des JSON-Backups.
+
 ## Ergänzung v0.3.5
 
 ### v0.3.5 – zusätzliche Steuer- und Symbolcodes
