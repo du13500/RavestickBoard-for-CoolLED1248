@@ -1,3 +1,16 @@
+## Technischer Nachtrag v0.4.4.0 (31.10.2026): Stilmarken im Text
+
+Farbe und Schrift pro Zeichen reisen als C1-Steuerzeichen im UTF-8-Text (je 2 Byte, Breite 0):
+
+| Code | Bedeutung |
+|---|---|
+| U+0090 | Zeilenfarbe (Grundfarbe der Zeile) |
+| U+0091..U+0097 | Farbe 1..7 |
+| U+0098..U+009B | Schrift Original Normal / Fett / Engschrift / Mini (einzeilig) |
+| U+009C | Schrift der Zeile (Grundlayout) |
+
+Eine Marke gilt für die folgenden Zeichen derselben Zeile bis zur nächsten Marke. Bei Zweizeilig Mini werden Schriftmarken ignoriert, Farbmarken gelten. Zuordnung Schrift → Layout: [3, 4, 0, 2]. Die Oberkante richtet sich bei abweichender Schrift nach dem Layout der Marke (Layout 0 → 1, Layout 2 → 4, sonst 0). Symbole behalten ihre Eigenfarben. `measureText`, `drawInlineUtf8` und `drawInlineUtf8Window` teilen sich `styleApply` und `drawToken`; Streaming-Kacheln tragen den Zustand über Chunk-Grenzen. `decodeText` (Blockseiten) überspringt die Marken. Beim Verketten von Programmeinträgen steht zwischen den Texten `\xC2\x90\xC2\x9C`. Das Bibliotheksfeld fasst 1600 Byte einschließlich Marken. Ohne Marken ist die Ausgabe pixelgleich zu 0.4.3.4.
+
 ## Ergänzung v0.3.5
 
 ### v0.3.5 – zusätzliche Steuer- und Symbolcodes

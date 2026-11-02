@@ -1,3 +1,5 @@
+> Stand v0.4.4.0-dev: Lauftext-Editor „Zeichen gestalten“ gebaut (Hardwaretest offen). Als Nächstes: Zeicheneditor für Blockseiten (Frage der 64-Pixel-Prüfung in `renderBlockPage` bei Überlagerungen klären), dann Aufräumen der Bedienung. Die Tests zu v0.4.3.4 (Wiederanlauf, zwei Geräte) stehen weiter aus; NimBLE bleibt zurückgestellt.
+
 > Stand v0.4.3.4-dev: Wiederanlauf nach Wächter-Neustart gezielt prüfen (Test-Auslöser `/api/test/hang`, mit/ohne Abmelden der Geräte); danach Lauf mit zwei Geräten gleichzeitig. NimBLE-Umstieg zurückgestellt, bis der Zwei-Geräte-Lauf zeigt, ob der Speicher wirklich knapp wird. Der BLE-Hänger selbst ist selten und nicht reproduzierbar (94 Verbindungen ohne Hänger).
 
 > Stand v0.4.3.3-dev: Der ESP32 hing nach einem Tafel-„ERROR“ im Blockband-Upload (BLE-Bibliothek wartet ohne Zeitlimit). Als Nächstes: Hänger nachstellen, Absturzspur `[VORLAUF]` auslesen, die betroffene Wartestelle gezielt absichern (z. B. BLE-Schritte mit Zeitlimit oder in eigenem Task). Danach die Messreihen unten.

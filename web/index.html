@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="#11141c" name="theme-color"/>
-<title>RavestickBoard · v0.4.3.4-dev</title>
+<title>RavestickBoard · v0.4.4.0-dev</title>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/><link rel="icon" type="image/png" href="/favicon.ico"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="RavestickBoard"/>
@@ -316,9 +316,88 @@ body.home-active #rbDock{flex:0 0 auto;margin:8px auto 0!important}
 #view-programs #v43ProgEditPane .v42-row{margin-top:8px}
 #view-programs #v42SaveProgram{margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px}
 #view-programs #v42ProgramSteps{max-height:none;overflow:visible}
+/* ===== v0.4.4.0 ===== */
+:root{--rb-send:#3ddc97;--rb-send-ink:#0d1712}
+/* Senden überall gleich: eigene Farbe, die sonst nirgends vorkommt */
+#sendScroll,#libSend,#v42SendDraftBand,#v42RunProgram,#pageShow,#rbzSend{background:var(--rb-send)!important;color:var(--rb-send-ink)!important}
+/* Regler unten: etwas größer, etwas mehr Abstand */
+.rb-dock{gap:6px!important;padding:9px 11px 8px!important}
+.rb-dock .pixel-range{min-height:34px!important;gap:8px!important}
+.rb-dock .rb-range-icon{flex:0 0 22px!important;width:22px!important}
+.rb-dock .rb-range-icon svg{width:20px!important;height:20px!important}
+.rb-dock .pixel-range b{flex:0 0 52px!important;font-size:12px!important}
+.rb-dock .pixel-range input[type=range]{height:30px!important;-webkit-appearance:none;appearance:none;background:transparent;margin:0}
+.rb-dock .pixel-range input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:#3a475b}
+.rb-dock .pixel-range input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;margin-top:-10px;border-radius:50%;background:#ffd45c;border:3px solid #1c2533;box-shadow:0 0 0 1px #ffd45c}
+.rb-dock .pixel-range input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:#3a475b}
+.rb-dock .pixel-range input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#ffd45c;border:3px solid #1c2533}
+/* Palettenknopf neben den Farben */
+#scrollColors{grid-template-columns:repeat(8,minmax(0,1fr))}
+.swatch-more{width:clamp(26px,7.5vw,39px);height:clamp(26px,7.5vw,39px);padding:0;border-radius:50%;border:3px solid #303948;background:#343e50;color:#f6f7fb;display:inline-flex;align-items:center;justify-content:center;justify-self:center}
+.swatch-more svg{width:62%;height:62%;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* Fenster „Zeichen gestalten“ */
+.rbz{position:fixed;inset:0;z-index:120;background:#04070cb8;display:flex;align-items:flex-end;justify-content:center}
+.rbz.hidden{display:none}
+.rbz-sheet{position:relative;width:min(100%,560px);height:calc(100dvh - 56px);background:#1d222e;border-top:1px solid #485566;border-radius:22px 22px 0 0;display:flex;flex-direction:column;overflow:hidden;color:#f3f5fa}
+.rbz-sheet *{box-sizing:border-box}
+.rbz-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 15px 14px;display:flex;flex-direction:column;gap:12px}
+.rbz-grab{width:44px;height:5px;border-radius:3px;background:#485566;align-self:center;flex:none}
+.rbz-head{display:flex;align-items:center;justify-content:space-between}
+.rbz-head strong{font-size:18px}
+.rbz-sheet button{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.rbz-sheet svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.rbz-sheet button:disabled{opacity:.45;cursor:not-allowed}
+.rbz-ibtn{padding:9px 11px}
+#rbzMatrix{display:block;width:100%;height:auto;border-radius:8px;flex:none}
+.rbz-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px;border-radius:12px;background:#11141c;border:1px solid #353e50}
+.rbz-seg button{background:transparent;color:#bbc6d5;font-size:14px;padding:12px 8px}
+.rbz-seg button.on{background:#ffd35c;color:#111820}
+.rbz-count{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.rbz-count>span{color:#b2bed0;font-size:14px}
+.rbz-tools{display:flex;gap:6px}
+.rbz-line-label{margin:4px 0 6px}
+#rbzGrids{display:flex;flex-direction:column}
+.rbz-tiles{display:grid;grid-template-columns:repeat(auto-fill,38px);gap:7px;justify-content:center;touch-action:pan-y}
+.rbz-tiles.compact{grid-template-columns:repeat(auto-fill,34px);gap:5px;justify-content:start}
+#rbzGrids.swipe .rbz-tiles{touch-action:none;-webkit-user-select:none;user-select:none}
+.rbz-tile{width:38px;height:48px;padding:0;border-radius:9px;background:#262d3a;border:2px solid transparent;font-size:23px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace;color:#f3f5fa;overflow:hidden}
+.rbz-tiles.compact .rbz-tile{width:34px;height:44px;border-radius:8px;font-size:20px}
+.rbz-tile.sel{border-color:#ffd45c;background:#2d3544}
+.rbz-tile.fett{font-weight:900;font-size:26px}
+.rbz-tile.eng span{display:inline-block;transform:scale(.6,1.18)}
+.rbz-tile.mini{font-size:13px}
+.rbz-icon{height:24px;width:auto;max-width:30px;image-rendering:pixelated}
+.rbz-sw{position:relative;width:36px;height:36px;padding:0;border-radius:50%;border:3px solid #303948;justify-self:center}
+.rbz-sw.on{border-color:#fff}
+.rbz-sw .bd{position:absolute;right:-7px;top:-9px;width:19px;height:19px;border-radius:50%;background:#ffd45c;color:#111820;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #1d222e}
+.rbz-swatches{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.rbz-block{display:flex;flex-direction:column;gap:10px}
+.rbz-sheet .label{margin:0}
+.rbz-note{color:#b2bed0;font-size:13px;line-height:1.4}
+.rbz-box{background:#11141c;border:1px solid #485566;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.rbz-wide{justify-content:space-between;padding:13px 14px;background:#343e50;color:#f6f7fb;width:100%}
+.rbz-wide>span{display:inline-flex;align-items:center;gap:10px}
+.rbz-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.rbz-chips .chip{background:#11141c;border:1px solid #353e50;color:#bbc6d5;font-size:12px;padding:9px 4px;border-radius:9px;text-align:center}
+.rbz-chips .chip.on{background:#ffd35c;border-color:#ffd35c;color:#111820}
+.rbz-flowhead{display:flex;align-items:center;justify-content:space-between;background:transparent;color:#f3f5fa;padding:0;width:100%;font-weight:750}
+.rbz-flowhead>span{display:inline-flex;align-items:center;gap:10px}
+.rbz-flowdots{display:flex;align-items:center;flex-wrap:wrap;gap:6px;color:#b2bed0;min-height:24px}
+.rbz-flowdots .dot{width:20px;height:20px;border-radius:50%;flex:none}
+.rbz-flowdots .mini-ico{width:16px;height:16px}
+.rbz-flowdots .note{font-size:13px;margin-left:4px}
+.rbz-flowseg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px;border-radius:12px;background:#1d222e;border:1px solid #353e50}
+.rbz-flowseg button{background:transparent;color:#bbc6d5;font-size:14px;padding:11px 8px}
+.rbz-flowseg button.on{background:#ffd35c;color:#111820}
+.rbz-apply{background:#ffd45c;color:#111821;font-size:16px;padding:14px 11px}
+.rbz-foot{flex:none;display:flex;gap:8px;padding:10px 15px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid #2a3342;background:#1d222e}
+.rbz-foot button{font-size:16px;padding:14px 11px}
+.rbz-foot .rbz-done{flex:2;background:#343e50;color:#f6f7fb}
+.rbz-foot #rbzSend{flex:3}
+body.rbz-open #status.toast{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 </style></head>
 <body class="home-active" data-rb-view="home"><div id="rbBootScreen" class="rb-initial-loading" role="status" aria-live="polite"><span class="rb-boot-mark" aria-hidden="true"><svg aria-hidden="true" class="rb-lucide" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"></path><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"></path></svg></span><span>RavestickBoard wird geladen …</span></div><main id="appShell">
-<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.4.3.4-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
+<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.4.4.0-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
 
 
 
@@ -380,7 +459,7 @@ body.home-active #rbDock{flex:0 0 auto;margin:8px auto 0!important}
 <div class="v42-row"><select id="v42StepChoose" aria-label="Bibliotheksinhalt auswählen"></select><button id="v42StepAdd" type="button" data-rb-icon="plus" data-rb-only="1" title="Eintrag hinzufügen" aria-label="Eintrag hinzufügen"></button></div>
 <p id="v42ProgramError" hidden></p>
 <button id="v42SaveProgram" type="button" class="primary" data-rb-icon="save">Programm speichern</button><p class="v42-hint">Blockseiten sind bei Tempo 60–90 kalibriert. Geteilte Laufbänder verwenden vorläufig eine vorsichtige, noch nicht hardwarekalibrierte Zeitabschätzung.</p>
-</div></section><section aria-label="Texteditor" class="app-view hidden" id="view-editor"><div class="editor-context" id="v42EditorContext"><div><strong id="v42EditorHeading">Neuen Inhalt erstellen</strong><small id="v42EditorSubtitle">Eigenständiger Entwurf</small></div><div class="v43-editor-actions"><button id="v43NewContent" type="button" class="secondary" data-rb-icon="plus" data-rb-painted="plus"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Neu</button><button id="v42ReturnLibrary" type="button" class="secondary hidden" data-rb-icon="arrow-left" data-rb-painted="arrow-left"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Bibliothek</button></div></div><nav aria-label="Editor wählen" class="tabs"><button class="tab active" id="tabScroll" type="button" data-rb-icon="line-height" data-rb-painted="line-height"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14H9"/><path d="M21 21H3"/><path d="M21 3H3"/><path d="m8 16 3.453-7.648a.6.6 0 011.094.001L16 16"/></svg>Lauftext</button><button class="tab" id="tabPages" type="button" data-rb-icon="letter-spacing" data-rb-painted="letter-spacing"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14H9"/><path d="M21 3v18"/><path d="M3 3v18"/><path d="m8 16 3.453-7.648a.6.6 0 011.094.001L16 16"/></svg>Blockanzeige</button></nav><section class="panel preview-sticky"><div class="label">LED-Vorschau · 64 × 16 Punkte</div><canvas aria-label="Pixelgenaue Punktvorschau" height="192" id="matrix" width="768"></canvas><div class="preview-tools" id="previewTools"><button class="small-btn" id="previewRestart" type="button" data-rb-icon="skip-back" data-rb-painted="skip-back" title="Vorschau von vorn" aria-label="Vorschau von vorn" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.971 4.285A2 2 0 0 1 21 6v12a2 2 0 0 1-3.029 1.715l-9.997-5.998a2 2 0 0 1-.003-3.432z"/><path d="M3 20V4"/></svg></button><button class="small-btn active" id="previewToggle" type="button" data-rb-icon="pause" data-rb-painted="pause" title="Vorschau pausieren" aria-label="Vorschau pausieren" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="3" width="5" height="18" rx="1"/><rect x="5" y="3" width="5" height="18" rx="1"/></svg></button><button class="small-btn" id="previewSpeed" type="button" data-rb-icon="snail" data-rb-painted="snail" title="Vorschautempo 1×" aria-label="Vorschautempo 1×" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg></button><span class="tiny hidden" id="previewCaption" aria-hidden="true"></span></div><p class="hint" id="previewSpeedHint">Die Geschwindigkeit der Vorschau beeinflusst die Tafel nicht.</p></section><section class="panel" id="scrollEditor"><div class="label">Lauftext bearbeiten</div><label class="field" for="scrollText"><span class="hint">Text · Datenverbrauch wird live berechnet, kein Zeichenlimit</span></label><div class="picker-input"><input autocomplete="off" id="scrollText" spellcheck="false" type="text" value=""/><button aria-label="Symbol für Lauftext auswählen" class="symbol-open" data-symbol-target="scrollText" title="Symbole einfügen" type="button" data-rb-icon="heart-plus" data-rb-painted="heart-plus" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.479 19.374-.971.939a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5a5.2 5.2 0 0 1-.219 1.49"/><path d="M15 15h6"/><path d="M18 12v6"/></svg></button></div><div class="undo-tools"><button id="v42ClearText" class="small-btn danger" type="button" data-rb-icon="eraser" data-rb-painted="eraser"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/></svg>Text leeren</button></div><div class="capacity-info"><div aria-live="off" class="tiny" id="scrollCount"></div><div aria-hidden="true" class="capacity-track"><div class="capacity-fill" id="capacityFill"></div></div></div><div class="field"><label for="scrollLayout">Schriftart</label><select id="scrollLayout"><option value="3">Original - Normal</option><option value="4">Original - Bold</option><option value="0">Engschrift</option><option value="2">Mini - Einzeilig</option><option value="1">Mini - Zweizeilig</option></select></div><div class="field hidden" id="scrollSecondWrap"><label for="scrollLine2">Text · Zeile 2</label><div class="picker-input"><input autocomplete="off" id="scrollLine2" spellcheck="false" type="text"/><button class="symbol-open" data-symbol-target="scrollLine2" title="Symbole einfügen" type="button" data-rb-icon="heart-plus" data-rb-painted="heart-plus" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.479 19.374-.971.939a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5a5.2 5.2 0 0 1-.219 1.49"/><path d="M15 15h6"/><path d="M18 12v6"/></svg></button></div></div><div class="label" id="scrollColorLabel">Farbe</div><div class="swatches" id="scrollColors"></div><div class="hidden" id="scrollSecondColors"><div class="label">Farbe · Zeile 2</div><div class="swatches" id="scrollColors2"></div></div><div class="pixel-range" role="group" aria-label="Geschwindigkeit"><span class="range-pict rb-range-icon" data-rb-icon="snail" data-rb-painted="snail" aria-hidden="true"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg></span><input aria-label="Geschwindigkeit" id="scrollSpeed" max="100" min="1" type="range" value="80"/><b id="speedLabel">80 / 100</b><span class="range-pict rb-range-icon" data-rb-icon="rabbit" data-rb-painted="rabbit" aria-hidden="true"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 16a3 3 0 0 1 2.24 5"/><path d="M18 12h.01"/><path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/><path d="M20 8.54V4a2 2 0 1 0-4 0v3"/><path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/></svg></span></div><div class="actions editor-submit-actions"><button class="primary" id="sendScroll" data-rb-icon="plane-takeoff" data-rb-painted="plane-takeoff"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55a2 2 0 0 1 1.8 0l.17.1a2 2 0 0 0 1.8 0L8 12 5 6l.9-.45a2 2 0 0 1 2.09.2l4.02 3a2 2 0 0 0 2.1.2l4.19-2.06a2.41 2.41 0 0 1 1.73-.17L21 7a1.4 1.4 0 0 1 .87 1.99l-.38.76c-.23.46-.6.84-1.07 1.08L7.58 17.2a2 2 0 0 1-1.22.18Z"/></svg>Lauftext senden</button><button class="secondary" id="libSaveAs" type="button" data-rb-icon="save" data-rb-painted="save"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>Speichern</button><button class="secondary hidden" id="libSaveChanges" type="button" data-rb-icon="save" data-rb-painted="save"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>Änderungen speichern</button></div><div class="tiny muted" id="libEditorInfo" aria-live="polite">Ungespeicherter Entwurf – unabhängig von der Bibliothek.</div></section><section class="hidden" id="pagesEditor">
+</div></section><section aria-label="Texteditor" class="app-view hidden" id="view-editor"><div class="editor-context" id="v42EditorContext"><div><strong id="v42EditorHeading">Neuen Inhalt erstellen</strong><small id="v42EditorSubtitle">Eigenständiger Entwurf</small></div><div class="v43-editor-actions"><button id="v43NewContent" type="button" class="secondary" data-rb-icon="plus" data-rb-painted="plus"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Neu</button><button id="v42ReturnLibrary" type="button" class="secondary hidden" data-rb-icon="arrow-left" data-rb-painted="arrow-left"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Bibliothek</button></div></div><nav aria-label="Editor wählen" class="tabs"><button class="tab active" id="tabScroll" type="button" data-rb-icon="line-height" data-rb-painted="line-height"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14H9"/><path d="M21 21H3"/><path d="M21 3H3"/><path d="m8 16 3.453-7.648a.6.6 0 011.094.001L16 16"/></svg>Lauftext</button><button class="tab" id="tabPages" type="button" data-rb-icon="letter-spacing" data-rb-painted="letter-spacing"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14H9"/><path d="M21 3v18"/><path d="M3 3v18"/><path d="m8 16 3.453-7.648a.6.6 0 011.094.001L16 16"/></svg>Blockanzeige</button></nav><section class="panel preview-sticky"><div class="label">LED-Vorschau · 64 × 16 Punkte</div><canvas aria-label="Pixelgenaue Punktvorschau" height="192" id="matrix" width="768"></canvas><div class="preview-tools" id="previewTools"><button class="small-btn" id="previewRestart" type="button" data-rb-icon="skip-back" data-rb-painted="skip-back" title="Vorschau von vorn" aria-label="Vorschau von vorn" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.971 4.285A2 2 0 0 1 21 6v12a2 2 0 0 1-3.029 1.715l-9.997-5.998a2 2 0 0 1-.003-3.432z"/><path d="M3 20V4"/></svg></button><button class="small-btn active" id="previewToggle" type="button" data-rb-icon="pause" data-rb-painted="pause" title="Vorschau pausieren" aria-label="Vorschau pausieren" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="3" width="5" height="18" rx="1"/><rect x="5" y="3" width="5" height="18" rx="1"/></svg></button><button class="small-btn" id="previewSpeed" type="button" data-rb-icon="snail" data-rb-painted="snail" title="Vorschautempo 1×" aria-label="Vorschautempo 1×" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg></button><span class="tiny hidden" id="previewCaption" aria-hidden="true"></span></div><p class="hint" id="previewSpeedHint">Die Geschwindigkeit der Vorschau beeinflusst die Tafel nicht.</p></section><section class="panel" id="scrollEditor"><div class="label">Lauftext bearbeiten</div><label class="field" for="scrollText"><span class="hint">Text · Datenverbrauch wird live berechnet, kein Zeichenlimit</span></label><div class="picker-input"><input autocomplete="off" id="scrollText" spellcheck="false" type="text" value=""/><button aria-label="Symbol für Lauftext auswählen" class="symbol-open" data-symbol-target="scrollText" title="Symbole einfügen" type="button" data-rb-icon="heart-plus" data-rb-painted="heart-plus" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.479 19.374-.971.939a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5a5.2 5.2 0 0 1-.219 1.49"/><path d="M15 15h6"/><path d="M18 12v6"/></svg></button></div><div class="undo-tools"><button id="v42ClearText" class="small-btn danger" type="button" data-rb-icon="eraser" data-rb-painted="eraser"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/></svg>Text leeren</button><button id="rbStyleUndo" class="small-btn hidden" type="button" aria-label="Zeichenstil rückgängig"><svg class="rb-lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>Stil rückgängig</button></div><div class="capacity-info"><div aria-live="off" class="tiny" id="scrollCount"></div><div aria-hidden="true" class="capacity-track"><div class="capacity-fill" id="capacityFill"></div></div></div><div class="field"><label for="scrollLayout">Schriftart</label><select id="scrollLayout"><option value="3">Original - Normal</option><option value="4">Original - Bold</option><option value="0">Engschrift</option><option value="2">Mini - Einzeilig</option><option value="1">Mini - Zweizeilig</option></select></div><div class="field hidden" id="scrollSecondWrap"><label for="scrollLine2">Text · Zeile 2</label><div class="picker-input"><input autocomplete="off" id="scrollLine2" spellcheck="false" type="text"/><button class="symbol-open" data-symbol-target="scrollLine2" title="Symbole einfügen" type="button" data-rb-icon="heart-plus" data-rb-painted="heart-plus" data-rb-only="1"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.479 19.374-.971.939a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5a5.2 5.2 0 0 1-.219 1.49"/><path d="M15 15h6"/><path d="M18 12v6"/></svg></button></div></div><div class="label" id="scrollColorLabel">Farbe</div><div class="swatches" id="scrollColors"></div><div class="hidden" id="scrollSecondColors"><div class="label">Farbe · Zeile 2</div><div class="swatches" id="scrollColors2"></div></div><div class="pixel-range" role="group" aria-label="Geschwindigkeit"><span class="range-pict rb-range-icon" data-rb-icon="snail" data-rb-painted="snail" aria-hidden="true"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg></span><input aria-label="Geschwindigkeit" id="scrollSpeed" max="100" min="1" type="range" value="80"/><b id="speedLabel">80 / 100</b><span class="range-pict rb-range-icon" data-rb-icon="rabbit" data-rb-painted="rabbit" aria-hidden="true"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 16a3 3 0 0 1 2.24 5"/><path d="M18 12h.01"/><path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/><path d="M20 8.54V4a2 2 0 1 0-4 0v3"/><path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/></svg></span></div><div class="actions editor-submit-actions"><button class="primary" id="sendScroll" data-rb-icon="plane-takeoff" data-rb-painted="plane-takeoff"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55a2 2 0 0 1 1.8 0l.17.1a2 2 0 0 0 1.8 0L8 12 5 6l.9-.45a2 2 0 0 1 2.09.2l4.02 3a2 2 0 0 0 2.1.2l4.19-2.06a2.41 2.41 0 0 1 1.73-.17L21 7a1.4 1.4 0 0 1 .87 1.99l-.38.76c-.23.46-.6.84-1.07 1.08L7.58 17.2a2 2 0 0 1-1.22.18Z"/></svg>Lauftext senden</button><button class="secondary" id="libSaveAs" type="button" data-rb-icon="save" data-rb-painted="save"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>Speichern</button><button class="secondary hidden" id="libSaveChanges" type="button" data-rb-icon="save" data-rb-painted="save"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>Änderungen speichern</button></div><div class="tiny muted" id="libEditorInfo" aria-live="polite">Ungespeicherter Entwurf – unabhängig von der Bibliothek.</div></section><section class="hidden" id="pagesEditor">
 <section class="panel"><div class="label">Blockanzeige · eigene Seiten</div><div aria-label="Seitenübersicht" id="pageRail"></div><div class="page-tools"><button class="small-btn" id="pageAdd" data-rb-icon="plus" data-rb-painted="plus" title="Neue Seite" aria-label="Neue Seite"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button><button class="small-btn" id="pageCopy" data-rb-icon="copy" data-rb-painted="copy" title="Seite duplizieren" aria-label="Seite duplizieren"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button><button class="small-btn" id="pageLeft" data-rb-icon="arrow-left" data-rb-painted="arrow-left" title="Seite nach links verschieben" aria-label="Seite nach links verschieben"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg></button><button class="small-btn" id="pageRight" data-rb-icon="arrow-right" data-rb-painted="arrow-right" title="Seite nach rechts verschieben" aria-label="Seite nach rechts verschieben"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button><button class="secondary" id="v42ClearPage" data-rb-icon="eraser" data-rb-painted="eraser" title="Seite leeren" aria-label="Seite leeren"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21"/><path d="m5.082 11.09 8.828 8.828"/></svg></button><button class="small-btn danger" id="pageDelete" data-rb-icon="trash" data-rb-painted="trash" title="Seite löschen" aria-label="Seite löschen"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button><button class="small-btn danger" id="v42NewBlock" data-rb-icon="flame-kindling" data-rb-painted="flame-kindling" title="Alles löschen" aria-label="Alles löschen"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c1 3 2.5 3.5 3.5 4.5A5 5 0 0 1 17 10a5 5 0 1 1-10 0c0-.3 0-.6.1-.9a2 2 0 1 0 3.3-2C8 4.5 11 2 12 2Z"/><path d="m5 22 14-4"/><path d="m5 18 14 4"/></svg></button></div><p class="hint">Jede Seite ist unabhängig. Kein automatisches Abschneiden und kein erzwungener Umbruch. Maximal 25 Seiten.</p></section>
 <section class="panel"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div class="label" id="pageTitle">Seite 1 bearbeiten</div><span class="save-indicator" id="dirty"></span></div>
 <div class="page-form">
@@ -404,7 +483,7 @@ body.home-active #rbDock{flex:0 0 auto;margin:8px auto 0!important}
 <div class="panel inner-panel"><h2>Ambiente</h2><p class="hint">Eine Farbe antippen, um die gesamte 64×16-Tafel mit dieser Farbe zu füllen. Die aktuelle Textanzeige wird dadurch ersetzt.</p>
 <div aria-label="LED-Farben" class="ambience-colors" id="ambienceColors"></div>
 
-</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary" download="RavestickBoard_Diagnose_v0.4.3.4-dev.txt" href="/api/diagnostics.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">TXT herunterladen</a><a class="secondary" download="RavestickBoard_RAM_v0.4.3.4-dev.txt" href="/api/ram.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
+</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary" download="RavestickBoard_Diagnose_v0.4.4.0-dev.txt" href="/api/diagnostics.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">TXT herunterladen</a><a class="secondary" download="RavestickBoard_RAM_v0.4.4.0-dev.txt" href="/api/ram.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
 <div class="panel"><h2>Einstellungen</h2>
 <div class="settings-section" id="v42SettingsBackup">
 <div class="label">▤ Bibliothek &amp; Datensicherung</div>
@@ -414,12 +493,53 @@ body.home-active #rbDock{flex:0 0 auto;margin:8px auto 0!important}
 <div class="settings-section"><div class="label">⌁ LED-Tafel</div>
 <div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><strong>CoolLEDX</strong><div class="tiny muted">Fest konfiguriertes Gerät</div></div><span class="tiny muted">Aktiv</span></div>
 </div>
-<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.3.4-dev</p></div>
+<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.4.0-dev</p></div>
 </section><aside id="rbDock" class="rb-dock" aria-label="Tafelsteuerung">
  <div class="pixel-range" role="group" aria-label="Globale Helligkeit"><span class="rb-range-icon" data-rb-icon="sunset" aria-hidden="true" data-rb-painted="sunset"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10V2"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m16 6-4 4-4-4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span><input aria-label="Helligkeit" data-global="brightness" id="dockBrightness" min="1" max="100" type="range" value="75"/><b data-global-label="brightness">75 %</b><span class="rb-range-icon" data-rb-icon="sunrise" aria-hidden="true" data-rb-painted="sunrise"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span></div>
  <div class="pixel-range rb-dock-speed" role="group" aria-label="Globale Geschwindigkeit"><span class="rb-range-icon" data-rb-icon="snail" aria-hidden="true" data-rb-painted="snail"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg></span><input aria-label="Geschwindigkeit" data-global="speed" id="dockSpeed" min="1" max="100" type="range" value="80"/><b data-global-label="speed">80 / 100</b><span class="rb-range-icon" data-rb-icon="rabbit" aria-hidden="true" data-rb-painted="rabbit"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 16a3 3 0 0 1 2.24 5"/><path d="M18 12h.01"/><path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/><path d="M20 8.54V4a2 2 0 1 0-4 0v3"/><path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/></svg></span></div>
  <div class="rb-dock-actions"><button id="homePowerOff" class="v43-force-btn" type="button" data-rb-only="1" data-rb-icon="eye-closed" title="Tafel aus" aria-label="Tafel aus" data-rb-painted="eye-closed"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-.722-3.25"/><path d="M2 8a10.645 10.645 0 0 0 20 0"/><path d="m20 15-1.726-2.05"/><path d="m4 15 1.726-2.05"/><path d="m9 18 .722-3.25"/></svg></button><button id="homePowerOn" class="v43-force-btn" type="button" data-rb-only="1" data-rb-icon="eye" title="Tafel ein" aria-label="Tafel ein" data-rb-painted="eye"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></button><span class="rb-dock-modes v43-force-modes" aria-label="Anzeigeverhalten erzwingen"></span><button id="editShortcuts" class="v43-force-btn rb-dock-edit" type="button" aria-pressed="false" data-rb-only="1" data-rb-icon="pencil" title="Kurzwahlen bearbeiten" aria-label="Kurzwahlen bearbeiten" data-rb-painted="pencil"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></button></div>
 </aside>
+<div class="rbz hidden" id="rbz" role="dialog" aria-modal="true" aria-labelledby="rbzTitle">
+<div class="rbz-sheet">
+<div class="rbz-scroll" id="rbzScroll">
+<div class="rbz-grab" aria-hidden="true"></div>
+<div class="rbz-head"><strong id="rbzTitle">Zeichen gestalten</strong><button class="secondary rbz-ibtn" id="rbzClose" type="button" aria-label="Fenster schließen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+<canvas id="rbzMatrix" width="768" height="192" role="img" aria-label="LED-Vorschau"></canvas>
+<div class="rbz-seg" id="rbzSeg" role="group" aria-label="Auswahlart">
+<button type="button" id="rbzModeSingle" class="on" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 14a8 8 0 0 1-8 8"/><path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/><path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>Einzeln</button>
+<button type="button" id="rbzModeSwipe" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 10 3 3"/><path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z"/><path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031"/></svg>Wischen</button>
+</div>
+<div class="rbz-count"><span id="rbzCount" aria-live="polite">0 von 0 gewählt</span>
+<div class="rbz-tools">
+<button class="secondary rbz-ibtn" id="rbzAll" type="button" aria-label="Alle auswählen" title="Alle auswählen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg></button>
+<button class="secondary rbz-ibtn" id="rbzNone" type="button" aria-label="Auswahl aufheben" title="Auswahl aufheben"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 12H3"/><path d="M16 6H3"/><path d="M16 18H3"/><path d="m19 10-4 4"/><path d="m15 10 4 4"/></svg></button>
+<button class="secondary rbz-ibtn" id="rbzUndo" type="button" aria-label="Rückgängig" title="Rückgängig" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg></button>
+</div></div>
+<div id="rbzGrids"></div>
+<div class="rbz-block" id="rbzColorBlock"><span class="label">Farbe für die Auswahl</span><div class="rbz-swatches" id="rbzColors"></div><span class="rbz-note">Herzen tauschen auf das Herz in der gewählten Farbe. Andere Symbole bleiben unverändert.</span></div>
+<div class="rbz-box" id="rbzFontBox">
+<button class="rbz-wide" id="rbzFont" type="button"><span><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" x2="15" y1="20" y2="20"/><line x1="12" x2="12" y1="4" y2="20"/></svg><b id="rbzFontLabel">Schrift · Original Normal</b></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+<div class="rbz-chips" id="rbzChips" aria-label="Reihenfolge beim Tippen"><span class="chip">Normal</span><span class="chip">Fett</span><span class="chip">Engschrift</span><span class="chip">Mini</span></div>
+<span class="rbz-note" id="rbzFontHint"></span>
+</div>
+<div class="rbz-box" id="rbzFlowBox">
+<button class="rbz-flowhead" id="rbzFlowHead" type="button" aria-expanded="false" aria-controls="rbzFlowBody"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 17a10 10 0 0 0-20 0"/><path d="M6 17a6 6 0 0 1 12 0"/><path d="M10 17a2 2 0 0 1 4 0"/></svg>Farbwechsel</span><svg viewBox="0 0 24 24" aria-hidden="true" id="rbzFlowChevron"><path d="m6 9 6 6 6-6"/></svg></button>
+<div class="rbz-block hidden" id="rbzFlowBody">
+<span class="label">Farben in der Reihenfolge antippen</span>
+<div class="rbz-swatches" id="rbzFlowColors"></div>
+<div class="rbz-flowdots" id="rbzFlowDots"></div>
+<div class="rbz-flowseg" role="group" aria-label="Wechsel"><button type="button" id="rbzFlowChar" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><path d="m6 16 6-12 6 12"/><path d="M8 12h8"/></svg>Pro Zeichen</button><button type="button" id="rbzFlowWord"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="3"/><path d="M10 9v6"/><circle cx="17" cy="12" r="3"/><path d="M14 7v8"/><path d="M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1"/></svg>Pro Wort</button></div>
+<button class="rbz-apply" id="rbzFlowApply" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span id="rbzFlowApplyText">Anwenden</span></button>
+</div>
+</div>
+</div>
+<div class="rbz-foot">
+<button class="rbz-done" id="rbzDone" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Fertig</button>
+<button id="rbzSend" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55a2 2 0 0 1 1.8 0l.17.1a2 2 0 0 0 1.8 0L8 12 5 6l.9-.45a2 2 0 0 1 2.09.2l4.02 3a2 2 0 0 0 2.1.2l4.19-2.06a2.41 2.41 0 0 1 1.73-.17L21 7a1.4 1.4 0 0 1 .87 1.99l-.38.76c-.23.46-.6.84-1.07 1.08L7.58 17.2a2 2 0 0 1-1.22.18Z"/></svg>Senden</button>
+</div>
+</div>
+</div>
+
 <div class="v42-dialog hidden" id="v42ShortcutDialog" role="dialog" aria-modal="true" aria-label="Kurzwahl belegen"><div class="v42-sheet">
 <h2 id="v42ShortcutTitle">Kurzwahl belegen</h2><label class="field">Quelle<select id="v42ShortcutType"><option value="0">Quelle auswählen</option><option value="1">Bibliothek</option><option value="2">Programme</option><option value="3">Ambiente</option><option value="4" disabled>Animationen (zukünftig)</option></select></label>
 <label class="field" id="v42ShortcutTargetWrap">Inhalt<select id="v42ShortcutTarget"></select></label>
@@ -469,9 +589,9 @@ $('tabScroll').onclick=()=>setTab('scroll');$('tabPages').onclick=()=>setTab('pa
 function drawDots(context,pitch){context.fillStyle='#080b10';context.fillRect(0,0,W*pitch,H*pitch);for(let x=0;x<W;x++)for(let y=0;y<H;y++){context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.27,0,Math.PI*2);context.fillStyle='#28303a';context.fill();}}
 function drawLine(context,line,color,align,yTop,scale,pitch,leftOverride=null,style=0){const chars=codepoints(line).map(c=>displayCode(c,style)),width=linePixels(line,style);if(style===2)align=1;let x0=leftOverride!==null?leftOverride:align===0?0:align===2?W-width:Math.floor((W-width)/2);function led(x,y,n){if(x<0||x>=W||y<0||y>=H)return;context.fillStyle=hexColor(n);context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.34,0,Math.PI*2);context.fill();}for(const c of chars){const icon=iconFor(c);if(icon){const b=bounds[icon.id];for(let y=0;y<16;y++)for(let x=b.min;x<=b.max;x++){const clr=spritePixel(icon.id,x,y);if(clr)led(x0+x-b.min,y,icon.color||clr);}}else if(style===3||style===4){const g=(style===3?originalFonts.normal:originalFonts.bold)[c.codePointAt(0)];if(g)for(let y=0;y<16;y++)for(let x=0;x<g.width;x++)if(g.rows[y]&(1<<(g.width-1-x)))led(x0+x,y,color);}else{const rows=glyph(c);for(let ry=0;ry<7;ry++)for(let rx=0;rx<5;rx++){if(!(rows[ry]&(1<<(4-rx))))continue;for(let dy=0;dy<scale;dy++)led(x0+rx,yTop+ry*scale+dy,color);}}x0+=tokenWidth(c,style)+tokenGap(c);}}
 function drawPage(context,p,pitch){drawDots(context,pitch);if(!fontReady||!p)return;const style=Number(p.layout);drawLine(context,p.line1,p.color1,Number(p.align),style===0?1:style===2?4:0,style===0?2:1,pitch,null,style);if(style===1)drawLine(context,p.line2,p.color2,Number(p.align),8,1,pitch,null,style);}
-function draw(){if(tab==='pages')drawPage(ctx,pages[selected],PITCH);else{drawDots(ctx,PITCH);if(fontReady){const st=Number($('scrollLayout').value);drawLine(ctx,$('scrollText').value,scrollColor,0,st===0?1:st===2?4:0,st===0?2:1,PITCH,previewX,st);if(st===1)drawLine(ctx,$('scrollLine2').value,scrollColor2,0,8,1,PITCH,previewX,st);}}}
+function draw(){if(tab==='pages')drawPage(ctx,pages[selected],PITCH);else{drawDots(ctx,PITCH);if(fontReady){const st=Number($('scrollLayout').value);rbDrawStyled(ctx,'a',PITCH,previewX);if(st===1)rbDrawStyled(ctx,'b',PITCH,previewX);}}}
 function restartPreview(){previewClock=0;previewX=W;previewPage=selected;draw();}
-function tick(now){if(!lastTick)lastTick=now;const dt=Math.min(90,now-lastTick);lastTick=now;if(previewPlaying&&fontReady){if(tab==='scroll'){{previewX-=dt/1000*(4+Number($('scrollSpeed').value)*.26)*previewRate;if(previewX<-Math.max(linePixels($('scrollText').value,Number($('scrollLayout').value)),Number($('scrollLayout').value)===1?linePixels($('scrollLine2').value,1):0)-8)previewX=W;}draw();}}requestAnimationFrame(tick);}
+function tick(now){if(!lastTick)lastTick=now;const dt=Math.min(90,now-lastTick);lastTick=now;if(previewPlaying&&fontReady){if(tab==='scroll'){{previewX-=dt/1000*(4+Number($('scrollSpeed').value)*.26)*previewRate;if(previewX<-Math.max(rbLineWidth('a'),Number($('scrollLayout').value)===1?rbLineWidth('b'):0)-8)previewX=W;}draw();}}requestAnimationFrame(tick);}
 function rb44UpdatePreviewIcons(){
  const p=$('previewToggle'),r=$('previewSpeed');
  p.dataset.rbIcon=previewPlaying?'pause':'play';p.title=previewPlaying?'Pause':'Weiter';p.setAttribute('aria-label',p.title);
@@ -518,11 +638,11 @@ $('pageRight').onclick=async()=>{if(selected>=pages.length-1)return;const old=se
 $('pageDelete').onclick=async()=>{if(pages.length<=1){notify('Mindestens eine Seite bleibt erhalten.');return;}if(!confirm('Seite '+(selected+1)+' wirklich löschen?'))return;dirty=false;try{await api('/api/program/delete',{index:selected});blockDraftDirty=true;selected=Math.min(selected,pages.length-2);await refreshPages();notify('Seite gelöscht.');}catch(e){notify('Löschen fehlgeschlagen: '+e.message);}};
 
 $('pageShow').onclick=async()=>{if(!(await saveCurrent()))return;try{const j=await api('/api/program/show',{index:selected});notify(j.message);}catch(e){notify(e.message);}};
-function makeScrollSwatches(){makeSwatches($('scrollColors'),scrollColor,c=>{scrollColor=c;makeScrollSwatches();draw();});makeSwatches($('scrollColors2'),scrollColor2,c=>{scrollColor2=c;makeScrollSwatches();draw();});}makeScrollSwatches();
-function scrollCapacity(){const layout=Number($('scrollLayout').value),t1=$('scrollText').value,t2=layout===1?$('scrollLine2').value:'';const chars=codepoints(t1).length+codepoints(t2).length;const cols=Math.max(W,linePixels(t1,layout),layout===1?linePixels(t2,1):0);const bytes=IMAGE_HEADER_BYTES+BYTES_PER_COLUMN*cols;return {chars,cols,bytes,exceeded:bytes>MAX_IMAGE_BYTES};}
+function makeScrollSwatches(){makeSwatches($('scrollColors'),scrollColor,c=>rbGlobalColor('a',c));makeSwatches($('scrollColors2'),scrollColor2,c=>rbGlobalColor('b',c));rbAddPaletteButton();}makeScrollSwatches();
+function scrollCapacity(){const layout=Number($('scrollLayout').value),t1=$('scrollText').value,t2=layout===1?$('scrollLine2').value:'';const chars=codepoints(t1).length+codepoints(t2).length;const cols=Math.max(W,rbLineWidth('a'),layout===1?rbLineWidth('b'):0);const bytes=IMAGE_HEADER_BYTES+BYTES_PER_COLUMN*cols;return {chars,cols,bytes,exceeded:bytes>MAX_IMAGE_BYTES};}
 function updateScrollCapacity(){const m=scrollCapacity();$('scrollCount').textContent=m.chars.toLocaleString('de-DE')+' Zeichen · '+m.cols.toLocaleString('de-DE')+' Spalten · '+m.bytes.toLocaleString('de-DE')+' / '+MAX_IMAGE_BYTES.toLocaleString('de-DE')+' Bytes ('+Math.round(100*m.bytes/MAX_IMAGE_BYTES)+' %)';$('scrollCount').classList.toggle('over-limit',m.exceeded);$('capacityFill').style.width=Math.min(100,100*m.bytes/MAX_IMAGE_BYTES)+'%';$('capacityFill').classList.toggle('over-limit',m.exceeded);$('sendScroll').disabled=m.exceeded;return m;}
-$('scrollText').oninput=()=>{try{localStorage.setItem('rb03-scroll-draft',$('scrollText').value);}catch(e){}updateScrollCapacity();restartPreview();};
-$('scrollLayout').onchange=()=>{const mini=Number($('scrollLayout').value)===1;$('scrollSecondWrap').classList.toggle('hidden',!mini);$('scrollSecondColors').classList.toggle('hidden',!mini);$('scrollColorLabel').textContent=mini?'Farbe · Zeile 1':'Farbe';$('scrollText').dispatchEvent(new Event('input'));restartPreview();};$('scrollLine2').oninput=()=>{try{localStorage.setItem('rb032-scroll-line2',$('scrollLine2').value);}catch(e){}$('scrollText').dispatchEvent(new Event('input'));restartPreview();};
+$('scrollText').oninput=()=>{if(rbSync('a'))rbUndoSnap=null;try{localStorage.setItem('rb03-scroll-draft',$('scrollText').value);}catch(e){}rbSaveDraftStyle();rbUpdateUndoButtons();updateScrollCapacity();restartPreview();};
+$('scrollLayout').onchange=()=>{rbGlobalFontReset();const mini=Number($('scrollLayout').value)===1;$('scrollSecondWrap').classList.toggle('hidden',!mini);$('scrollSecondColors').classList.toggle('hidden',!mini);$('scrollColorLabel').textContent=mini?'Farbe · Zeile 1':'Farbe';$('scrollText').dispatchEvent(new Event('input'));restartPreview();};$('scrollLine2').oninput=()=>{if(rbSync('b'))rbUndoSnap=null;try{localStorage.setItem('rb032-scroll-line2',$('scrollLine2').value);}catch(e){}$('scrollText').dispatchEvent(new Event('input'));restartPreview();};
 $('scrollSpeed').oninput=()=>{$('speedLabel').textContent=$('scrollSpeed').value+' / 100';syncGlobalControls('speed',$('scrollSpeed').value);queueLive('speed',{speed:$('scrollSpeed').value});};
 $('brightness').oninput=()=>{$('brightLabel').textContent=$('brightness').value+' %';$('v42SettingsBackup').appendChild($('v42BackupFooter'));
 syncGlobalControls('brightness',$('brightness').value);queueLive('brightness',{brightness:$('brightness').value});};
@@ -578,7 +698,7 @@ async function pumpLive(){if(livePumpRunning)return;livePumpRunning=true;try{whi
 function showPowerState(known,on){$('powerState').textContent=known?'Letzter Befehl: '+(on?'Ein':'Aus'):'Status nach Neustart unbekannt';$('powerOn').classList.toggle('active',known&&on);$('powerOff').classList.toggle('active',known&&!on);}
 $('powerOn').addEventListener('click',()=>{showPowerState(false,true);$('powerState').textContent='Ein-Befehl wird gesendet …';queueLive('power',{state:'on'});});
 $('powerOff').addEventListener('click',()=>{showPowerState(false,false);$('powerState').textContent='Aus-Befehl wird gesendet …';queueLive('power',{state:'off'});});
-$('sendScroll').onclick=async()=>{const value=$('scrollText').value,second=$('scrollLine2').value,layout=Number($('scrollLayout').value);if((!value.trim()&&(layout!==1||!second.trim()))||scrollCapacity().exceeded){return;}try{const j=await api('/api/text',{text:value,line2:layout===1?second:'',layout,color:scrollColor,color2:layout===1?scrollColor2:scrollColor,brightness:$('brightness').value,mode:'scroll',speed:$('scrollSpeed').value});notify(j.message);}catch(e){notify('Fehler: '+e.message);}};
+$('sendScroll').onclick=async()=>{const value=$('scrollText').value,second=$('scrollLine2').value,layout=Number($('scrollLayout').value);if((!value.trim()&&(layout!==1||!second.trim()))||scrollCapacity().exceeded){return;}try{const j=await api('/api/text',{text:rbEncode('a'),line2:layout===1?rbEncode('b'):'',layout,color:scrollColor,color2:layout===1?scrollColor2:scrollColor,brightness:$('brightness').value,mode:'scroll',speed:$('scrollSpeed').value});notify(j.message);}catch(e){notify('Fehler: '+e.message);}};
 let rbPollFailures=0,rbPollFailureStarted=0,rbPollPending=false;
 async function poll(){
  if(rbPollPending)return;
@@ -719,22 +839,22 @@ async function refreshLibrary(){
 }
 $('libInit').onclick=async()=>{if(!confirm('LittleFS-Dateisystem für die Textbibliothek erstmals einrichten? Nur die Dateisystempartition wird formatiert. Die bisherigen NVS-Blockseiten bleiben erhalten. NICHT ausführen, wenn auf dieser Partition bereits andere Dateien liegen.'))return;try{const j=await api('/api/library/init',{confirm:'INIT_LIBRARY_FS'});notify(j.message);await refreshLibrary();}catch(e){notify('Einrichtung: '+e.message);}};
 async function libraryMove(id,dir){const index=libraryItems.findIndex(x=>x.id===id);const to=index+dir;if(index<0||to<0||to>=libraryItems.length)return;try{await api('/api/library/move',{id,to});librarySelected=id;await refreshLibrary();}catch(e){notify(e.message);}}
-function libraryReadEditor(){const layout=Number($('scrollLayout').value);return {name:'',text:$('scrollText').value,line2:layout===1?$('scrollLine2').value:'',layout,color1:scrollColor,color2:scrollColor2,mode:2,favorite:0};}
+function libraryReadEditor(){const layout=Number($('scrollLayout').value);return {name:'',text:rbEncode('a'),line2:layout===1?rbEncode('b'):'',layout,color1:scrollColor,color2:scrollColor2,mode:2,favorite:0};}
 function libraryEditorIndicator(){const r=libraryItems.find(x=>x.id===libraryEditorId);$('libEditorInfo').textContent=r?'Bibliothekseintrag „'+r.name+'“ geöffnet · Aktualisieren überschreibt ihn; „Als neuen Eintrag speichern“ behält das Original.':'Ungespeicherter Entwurf – unabhängig von der Bibliothek.';v42EditorMode(v42EditorOrigin);}
 async function libraryOpenEditor(id){const data=await api('/api/library/get?id='+id);if(data.kind==='block'){if(blockDraftDirty&&!confirm('Ungespeicherte Blockfolge durch die Bibliotheksvorlage ersetzen?'))return;libraryEditorId=0;libraryCurrentRecord=null;libraryEditorIndicator();await api('/api/block/load',{id});v42BlockEditorId=id;await refreshPages();blockDraftDirty=false;setTab('pages');navigate('editor');v42BlockEditorLabel();v42BlockSnapshot=JSON.stringify(pages);v42EditorMode('library');return;}libraryEditorId=data.id;libraryCurrentRecord=data;
- $('scrollText').value=data.text;$('scrollLine2').value=data.line2||'';$('scrollLayout').value=String(data.layout);
- scrollColor=Number(data.color1);scrollColor2=Number(data.color2);makeScrollSwatches();$('scrollLayout').dispatchEvent(new Event('change'));$('scrollText').dispatchEvent(new Event('input'));libraryEditorIndicator();
+ const rbDecA=rbDecode(data.text,Number(data.layout)),rbDecB=rbDecode(data.line2||'',Number(data.layout));$('scrollText').value=rbDecA.text;$('scrollLine2').value=rbDecB.text;$('scrollLayout').value=String(data.layout);
+ scrollColor=Number(data.color1);scrollColor2=Number(data.color2);makeScrollSwatches();$('scrollLayout').dispatchEvent(new Event('change'));$('scrollText').dispatchEvent(new Event('input'));rbApplyDecoded('a',rbDecA);rbApplyDecoded('b',rbDecB);rbUndoSnap=null;rbSaveDraftStyle();rbUpdateUndoButtons();updateScrollCapacity();draw();libraryEditorIndicator();
  setTab('scroll');navigate('editor');v42EditorSnapshot=v42TextSnapshot();v42EditorMode('library');}
 $('libOpen').onclick=async()=>{if(!librarySelectedItem())return;try{await libraryOpenEditor(librarySelected);}catch(e){notify(e.message);}};
 $('libSend').onclick=async()=>{if(!librarySelectedItem())return;try{const item=librarySelectedItem();const j=await api(item.kind==='block'?'/api/block/send':'/api/library/send',{id:librarySelected});notify(j.message);}catch(e){notify(e.message);}};
-const v43SaveScrollNew=async()=>{const item=libraryReadEditor();
+const v43SaveScrollNew=async()=>{const item=libraryReadEditor();if(rbUtf8Len(item.text)>RB_LIB_TEXT_MAX||rbUtf8Len(item.line2)>RB_LIB_TEXT_MAX){notify('Fehler: Text mit Zeichenstilen ist zu lang für die Bibliothek ('+Math.max(rbUtf8Len(item.text),rbUtf8Len(item.line2))+' von '+RB_LIB_TEXT_MAX+' Byte). Bitte kürzen oder weniger Farb-/Schriftwechsel verwenden.');return;}
  const fromLibrary=v42EditorOrigin==='library'&&!!libraryEditorId;
  const sourceName=libraryCurrentRecord?.name||libraryItems.find(r=>r.id===libraryEditorId)?.name;
- const suggested=fromLibrary?sourceName+' (Variante)':item.text.slice(0,35)||'Neuer Text';
+ const suggested=fromLibrary?sourceName+' (Variante)':rbPlain(item.text).slice(0,35)||'Neuer Text';
  const name=await v42NamePrompt(fromLibrary?'Als neuen Bibliothekseintrag speichern':'Name für die neue Bibliotheksvorlage',suggested);
  if(name===null)return;
  try{const j=await api('/api/library/save',{...item,name:name.trim()});libraryEditorId=j.id;await refreshLibrary();librarySelected=j.id;libraryCurrentRecord={...item,name,id:j.id};libraryEditorIndicator();v42EditorSnapshot=v42TextSnapshot();v42EditorMode('library');notify(fromLibrary?'Neue Textvariante gespeichert. Original unverändert.':'Text in der ESP32-Bibliothek gespeichert.');}catch(e){notify('Speichern: '+e.message);}};
-const v43SaveScrollUpdate=async()=>{if(!libraryEditorId)return;const item=libraryReadEditor(),saved=libraryItems.find(x=>x.id===libraryEditorId);if(!saved)return;try{const name=libraryCurrentRecord?.name||saved.name;await api('/api/library/save',{...item,id:libraryEditorId,name,favorite:libraryCurrentRecord?.favorite?1:0,mode:item.mode});libraryCurrentRecord={...item,name,id:libraryEditorId};await refreshLibrary();v42EditorSnapshot=v42TextSnapshot();libraryEditorIndicator();notify('Bibliothekstext aktualisiert.');}catch(e){notify('Speichern: '+e.message);}};
+const v43SaveScrollUpdate=async()=>{if(!libraryEditorId)return;const item=libraryReadEditor(),saved=libraryItems.find(x=>x.id===libraryEditorId);if(!saved)return;if(rbUtf8Len(item.text)>RB_LIB_TEXT_MAX||rbUtf8Len(item.line2)>RB_LIB_TEXT_MAX){notify('Fehler: Text mit Zeichenstilen ist zu lang für die Bibliothek ('+Math.max(rbUtf8Len(item.text),rbUtf8Len(item.line2))+' von '+RB_LIB_TEXT_MAX+' Byte). Bitte kürzen oder weniger Farb-/Schriftwechsel verwenden.');return;}try{const name=libraryCurrentRecord?.name||saved.name;await api('/api/library/save',{...item,id:libraryEditorId,name,favorite:libraryCurrentRecord?.favorite?1:0,mode:item.mode});libraryCurrentRecord={...item,name,id:libraryEditorId};await refreshLibrary();v42EditorSnapshot=v42TextSnapshot();libraryEditorIndicator();notify('Bibliothekstext aktualisiert.');}catch(e){notify('Speichern: '+e.message);}};
 $('libDuplicate').onclick=async()=>{const selected=librarySelectedItem();if(!selected)return;const name=await v42NamePrompt('Name der Kopie',selected.name+' (Kopie)');if(name===null)return;try{const data=await api('/api/library/get?id='+selected.id);const j=selected.kind==='block'?await v42DuplicateBlock(selected.id,name.trim()):await api('/api/library/save',{...libraryRecordPayload(data),name:name.trim()});librarySelected=j.id;await refreshLibrary();notify('Vorlage dupliziert.');}catch(e){notify('Duplizieren: '+e.message);}};
 $('libRename').onclick=async()=>{const selected=librarySelectedItem();if(!selected)return;const name=await v42NamePrompt('Neuer Name',selected.name);if(name===null||name.trim()===selected.name)return;try{const data=await api('/api/library/get?id='+selected.id);await api(selected.kind==='block'?'/api/block/meta':'/api/library/save',selected.kind==='block'?{id:selected.id,name:name.trim()}:{...libraryRecordPayload(data),id:selected.id,name:name.trim()});if(libraryEditorId===selected.id&&libraryCurrentRecord)libraryCurrentRecord.name=name.trim();await refreshLibrary();libraryEditorIndicator();notify('Vorlage umbenannt.');}catch(e){notify(e.message);}};
 $('libDelete').onclick=async()=>{const selected=librarySelectedItem();if(!selected)return;const uses=(v42ProgramItems||[]).filter(p=>(p.ids||[]).includes(selected.id)).map(p=>p.name);
@@ -1116,5 +1236,445 @@ function rb43StaticIcons(){
  new MutationObserver(()=>rb43PaintIcons()).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['data-rb-icon']});
 }
 
-async function init(){try{rb43StaticIcons();parseAssets();buildSymbolPicker();try{const draft=localStorage.getItem('rb03-scroll-draft');if(draft!==null)$('scrollText').value=draft;try{$('scrollLine2').value=localStorage.getItem('rb032-scroll-line2')||'';}catch(e){}if(editHistory.scrollText)editHistory.scrollText.current=$('scrollText').value;}catch(e){}const r=await fetch('/api/font',{cache:'no-store'});if(!r.ok)throw Error('Schrift nicht erreichbar');font=await r.json();fontReady=true;await refreshPages();await refreshLibrary();await v42RefreshPrograms();await v42RefreshShortcuts();try{if(localStorage.getItem('rb03-tab')==='pages')setTab('pages');}catch(e){}$('scrollText').dispatchEvent(new Event('input'));restartPreview();}catch(e){notify('Fehler beim Start: '+e.message);}finally{document.documentElement.classList.remove('rb-booting');}poll();requestAnimationFrame(tick);}init();
+
+/* ===== v0.4.4.0: Zeichen gestalten – Farbe und Schrift pro Zeichen =====
+   Modell: je Zeile ein Feld mit Farbe (0 = Zeilenfarbe, 1..7) und Schrift (-1 = Zeilenschrift, 0..3) pro Zeichen.
+   Transport: beim Senden/Speichern werden Stilmarken (U+0090..U+009C, siehe Firmware) in den Text geschrieben,
+   beim Öffnen aus der Bibliothek wieder in Felder zerlegt. Text ohne Marken (alle bisherigen Einträge) bleibt gültig. */
+const RBS={a:{chars:[],c:[],f:[]},b:{chars:[],c:[],f:[]}};
+const RB_FONT_NAMES=['Original Normal','Original Fett','Engschrift','Mini'];
+const RB_FONT_SHORT=['Normal','Fett','Engschrift','Mini'];
+const RB_FONT_LAYOUT=[3,4,0,2];
+const RB_LAYOUT_FONT={3:0,4:1,0:2,2:3};
+const RB_HEART_EMOJI=[['❤️',4],['💛',6],['💚',2],['🩵',3],['💙',1],['💜',5],['🤍',7]];
+const RB_LIB_TEXT_MAX=1599;
+const rbInput=k=>$(k==='a'?'scrollText':'scrollLine2');
+const rbBaseLayout=()=>Number($('scrollLayout').value);
+const rbBaseColor=k=>k==='a'?scrollColor:scrollColor2;
+const rbBaseFont=()=>{const l=rbBaseLayout();return l===1?-1:RB_LAYOUT_FONT[l];};
+const rbTop=l=>l===0?1:l===2?4:0;
+const rbIsIcon=ch=>!!iconFor(ch);
+const rbIsHeart=ch=>HEART_COLORS.has(ch.codePointAt(0));
+const rbPlain=s=>String(s||'').replace(/[\u0090-\u009c]/g,'');
+const rbUtf8Len=s=>new TextEncoder().encode(String(s||'')).length;
+const rbLines=()=>rbBaseLayout()===1?['a','b']:['a'];
+
+/* Zeichen-Spannen: gleiche Aufteilung wie codepoints(), aber mit Positionen im Eingabetext. */
+function rbSpans(s){
+  const out=[];let off=0;
+  for(const c of Array.from(s||'')){
+    const len=c.length;
+    if(c==='︎'||c==='️'){
+      const last=out[out.length-1];
+      if(last){if(c==='︎'){if(last.ch==='🍌')last.ch='';else if(last.ch==='🛸')last.ch='';}last.end=off+len;}
+      off+=len;continue;
+    }
+    out.push({ch:c,start:off,end:off+len});off+=len;
+  }
+  return out;
+}
+
+/* Felder mit dem Eingabetext abgleichen (Tippen, Einfügen, Löschen, Symbole). Neue Zeichen erben den Stil links. */
+function rbSync(k){
+  const input=rbInput(k),st=RBS[k];
+  let v=input.value;
+  if(/[\u0080-\u009f]/.test(v)){const caret=input.selectionStart||0;v=v.replace(/[\u0080-\u009f]/g,'');input.value=v;try{input.setSelectionRange(Math.min(caret,v.length),Math.min(caret,v.length));}catch(e){}}
+  const nc=codepoints(v),oc=st.chars,n=nc.length,o=oc.length;
+  if(n===o&&nc.every((x,i)=>x===oc[i]))return false;
+  let caretCp=null;
+  try{if(input.selectionStart!=null)caretCp=codepoints(v.slice(0,input.selectionStart)).length;}catch(e){}
+  let s=-1;
+  if(caretCp!==null){const t=n-caretCp;if(t>=0&&t<=o){let ok=true;for(let j=0;j<t;j++)if(oc[o-1-j]!==nc[n-1-j]){ok=false;break;}if(ok)s=t;}}
+  if(s<0){s=0;while(s<o&&s<n&&oc[o-1-s]===nc[n-1-s])s++;}
+  let p=0;const maxp=Math.min(o,n)-s;
+  while(p<maxp&&oc[p]===nc[p])p++;
+  const ins=n-p-s;
+  const inhC=p>0?st.c[p-1]:(s>0?st.c[o-s]:0),inhF=p>0?st.f[p-1]:(s>0?st.f[o-s]:-1);
+  st.c=st.c.slice(0,p).concat(Array(ins).fill(inhC||0),st.c.slice(o-s));
+  st.f=st.f.slice(0,p).concat(Array(ins).fill(inhF===undefined?-1:inhF),st.f.slice(o-s));
+  st.chars=nc;
+  return true;
+}
+
+function rbSaveDraftStyle(){try{localStorage.setItem('rb440-style',JSON.stringify({a:{c:RBS.a.c,f:RBS.a.f},b:{c:RBS.b.c,f:RBS.b.f}}));}catch(e){}}
+function rbRestoreDraft(){
+  for(const k of ['a','b']){const ch=codepoints(rbInput(k).value);RBS[k].chars=ch;RBS[k].c=Array(ch.length).fill(0);RBS[k].f=Array(ch.length).fill(-1);}
+  try{
+    const d=JSON.parse(localStorage.getItem('rb440-style')||'null');
+    if(d)for(const k of ['a','b']){
+      const x=d[k],len=RBS[k].chars.length;
+      if(x&&Array.isArray(x.c)&&Array.isArray(x.f)&&x.c.length===len&&x.f.length===len&&x.c.every(n=>Number.isInteger(n)&&n>=0&&n<=7)&&x.f.every(n=>Number.isInteger(n)&&n>=-1&&n<=3)){RBS[k].c=x.c;RBS[k].f=x.f;}
+    }
+  }catch(e){}
+}
+
+/* ---- Transport: Felder <-> Text mit Stilmarken ---- */
+function rbEncode(k){
+  const s=rbInput(k).value,spans=rbSpans(s),st=RBS[k],base=rbBaseColor(k),twoLine=rbBaseLayout()===1;
+  let col=base,fnt=-1,out='';
+  for(let i=0;i<spans.length;i++){
+    const sp=spans[i],icon=rbIsIcon(sp.ch),space=sp.ch===' ';let m='';
+    if(!icon&&!space){const w=st.c[i]||base;if(w!==col){m+=String.fromCharCode(w===base?0x90:0x90+w);col=w;}}
+    if(!twoLine&&!icon){const f=st.f[i]>=0?st.f[i]:-1;if(f!==fnt){m+=String.fromCharCode(f<0?0x9C:0x98+f);fnt=f;}}
+    out+=m+s.slice(sp.start,sp.end);
+  }
+  return out;
+}
+function rbDecode(enc,layout){
+  let col=0,fnt=-1,text='';const c=[],f=[];
+  for(const ch of Array.from(enc||'')){
+    const cp=ch.codePointAt(0);
+    if(cp>=0x90&&cp<=0x9c){if(cp===0x90)col=0;else if(cp<=0x97)col=cp-0x90;else if(cp<=0x9b)fnt=layout===1?-1:cp-0x98;else fnt=-1;continue;}
+    text+=ch;
+    if(ch==='︎'||ch==='️')continue;
+    c.push(col);f.push(fnt);
+  }
+  return {text,c,f};
+}
+function rbApplyDecoded(k,dec){
+  const st=RBS[k];st.chars=codepoints(rbInput(k).value);
+  if(dec.c.length===st.chars.length){st.c=dec.c.slice();st.f=dec.f.slice();}
+  else{st.c=Array(st.chars.length).fill(0);st.f=Array(st.chars.length).fill(-1);}
+}
+
+/* ---- Zeichen, Breite und Zeichnen mit Stil ---- */
+function rbTokens(k){
+  const st=RBS[k],base=rbBaseColor(k),bl=rbBaseLayout();
+  return codepoints(rbInput(k).value).map((ch,i)=>{
+    const f=bl===1?-1:(st.f[i]===undefined?-1:st.f[i]);
+    return {ch,color:st.c[i]||base,layout:f>=0?RB_FONT_LAYOUT[f]:bl};
+  });
+}
+function rbTokenX(tokens){
+  let x=0;const xs=[];
+  tokens.forEach((t,i)=>{xs.push(x);const d=displayCode(t.ch,t.layout);x+=tokenWidth(d,t.layout)+(i+1<tokens.length?tokenGap(d):0);});
+  return {xs,width:x};
+}
+const rbLineWidth=k=>rbTokenX(rbTokens(k)).width;
+
+function rbDrawStyled(context,k,pitch,left){
+  const tokens=rbTokens(k),bl=rbBaseLayout();
+  const topBase=bl===1?(k==='a'?0:8):rbTop(bl);
+  let x0=left;
+  function led(x,y,n){if(x<0||x>=W||y<0||y>=H)return;context.fillStyle=hexColor(n);context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.34,0,Math.PI*2);context.fill();}
+  tokens.forEach((t,i)=>{
+    const L=t.layout,d=displayCode(t.ch,L),icon=iconFor(d);
+    if(icon){const b=bounds[icon.id];for(let y=0;y<16;y++)for(let x=b.min;x<=b.max;x++){const clr=spritePixel(icon.id,x,y);if(clr)led(x0+x-b.min,y,icon.color||clr);}}
+    else if(L===3||L===4){const g=(L===3?originalFonts.normal:originalFonts.bold)[d.codePointAt(0)];if(g)for(let y=0;y<16;y++)for(let x=0;x<g.width;x++)if(g.rows[y]&(1<<(g.width-1-x)))led(x0+x,y,t.color);}
+    else{const rows=glyph(d),scale=L===0?2:1,top=L===bl?topBase:rbTop(L);for(let ry=0;ry<7;ry++)for(let rx=0;rx<5;rx++){if(!(rows[ry]&(1<<(4-rx))))continue;for(let dy=0;dy<scale;dy++)led(x0+rx,top+ry*scale+dy,t.color);}}
+    x0+=tokenWidth(d,L)+tokenGap(d);
+  });
+}
+
+/* ---- Rückgängig (ein Schritt) ---- */
+let rbUndoSnap=null;
+function rbUpdateUndoButtons(){
+  const on=!!rbUndoSnap;
+  $('rbStyleUndo').classList.toggle('hidden',!on);
+  if($('rbzUndo'))$('rbzUndo').disabled=!on;
+}
+function rbSnapshot(){
+  rbUndoSnap={t:[$('scrollText').value,$('scrollLine2').value],a:{c:RBS.a.c.slice(),f:RBS.a.f.slice()},b:{c:RBS.b.c.slice(),f:RBS.b.f.slice()},sc:scrollColor,sc2:scrollColor2};
+  rbUpdateUndoButtons();
+}
+function rbUndo(){
+  const s=rbUndoSnap;if(!s)return;rbUndoSnap=null;
+  $('scrollText').value=s.t[0];$('scrollLine2').value=s.t[1];
+  for(const k of ['a','b']){RBS[k].chars=codepoints(rbInput(k).value);RBS[k].c=s[k].c;RBS[k].f=s[k].f;}
+  scrollColor=s.sc;scrollColor2=s.sc2;makeScrollSwatches();
+  rbAfterChange();
+}
+function rbAfterChange(){
+  rbSaveDraftStyle();updateScrollCapacity();draw();rbUpdateUndoButtons();
+  if(rbz.open)rbzRefresh();
+}
+function rbHasOverrides(k){return RBS[k].c.some(Boolean)||RBS[k].f.some(x=>x>=0);}
+
+/* ---- Hauptansicht: Palettenknopf, globale Farbe, globale Schrift ---- */
+function rbAddPaletteButton(){
+  const root=$('scrollColors');if(!root)return;
+  const palette='<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>';
+
+  const b=document.createElement('button');b.type='button';b.id='rbzOpen';b.className='swatch-more';
+  b.setAttribute('aria-label','Zeichen gestalten: Farbe und Schrift pro Zeichen');b.title='Zeichen gestalten';
+  b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+palette+'</svg>';
+  b.addEventListener('click',rbzOpen);root.append(b);
+}
+function rbGlobalColor(k,code){
+  if(RBS[k].c.some(Boolean))rbSnapshot();
+  RBS[k].c.fill(0);
+  if(k==='a')scrollColor=code;else scrollColor2=code;
+  makeScrollSwatches();rbSaveDraftStyle();updateScrollCapacity();draw();
+}
+function rbGlobalFontReset(){
+  if(RBS.a.f.some(x=>x>=0)||RBS.b.f.some(x=>x>=0))rbSnapshot();
+  RBS.a.f.fill(-1);RBS.b.f.fill(-1);rbSaveDraftStyle();
+}
+
+/* ---- Fenster „Zeichen gestalten“ ---- */
+const rbz={open:false,mode:'single',sel:{a:new Set(),b:new Set()},tiles:{a:[],b:[]},flow:[],flowMode:'char',flowOpen:false,drag:null,opener:null};
+try{if(localStorage.getItem('rb440-selmode')==='swipe')rbz.mode='swipe';}catch(e){}
+const rbzTokensAll=()=>rbLines().map(k=>({k,tokens:rbTokens(k)}));
+function rbzSelectedList(){const out=[];for(const k of rbLines())[...rbz.sel[k]].filter(i=>i<RBS[k].chars.length).sort((x,y)=>x-y).forEach(i=>out.push({k,i}));return out;}
+function rbzIconCanvas(icon){
+  const b=bounds[icon.id],c=document.createElement('canvas');c.width=b.max-b.min+1;c.height=16;c.className='rbz-icon';
+  const g=c.getContext('2d');
+  for(let y=0;y<16;y++)for(let x=b.min;x<=b.max;x++){const n=spritePixel(icon.id,x,y);if(n){g.fillStyle=hexColor(icon.color||n);g.fillRect(x-b.min,y,1,1);}}
+  return c;
+}
+function rbzMakeTile(k,i,t){
+  const bl=rbBaseLayout(),b=document.createElement('button');
+  b.type='button';b.className='rbz-tile';b.dataset.line=k;b.dataset.i=String(i);
+  const icon=iconFor(t.ch);
+  if(icon){b.classList.add('icon');b.append(rbzIconCanvas(icon));b.setAttribute('aria-label','Symbol '+t.ch);}
+  else if(t.ch===' '){b.classList.add('space');b.setAttribute('aria-label','Leerzeichen'+(bl===1?'':', '+RB_FONT_NAMES[RB_LAYOUT_FONT[t.layout]]));}
+  else{
+    const sp=document.createElement('span');sp.textContent=displayCode(t.ch,t.layout);b.append(sp);b.style.color=hexColor(t.color);
+    b.setAttribute('aria-label',t.ch+(bl===1?'':', '+RB_FONT_NAMES[RB_LAYOUT_FONT[t.layout]]));
+    if(bl!==1){if(t.layout===4)b.classList.add('fett');else if(t.layout===0)b.classList.add('eng');else if(t.layout===2)b.classList.add('mini');}
+  }
+  return b;
+}
+function rbzBuildGrids(){
+  const root=$('rbzGrids'),two=rbBaseLayout()===1;
+  root.replaceChildren();rbz.tiles={a:[],b:[]};
+  for(const k of rbLines()){
+    if(two){const l=document.createElement('span');l.className='label rbz-line-label';l.textContent=k==='a'?'Zeile 1':'Zeile 2';root.append(l);}
+    const grid=document.createElement('div');grid.className='rbz-tiles'+(two?' compact':'');grid.dataset.line=k;
+    const tokens=rbTokens(k);
+    if(!tokens.length){const e=document.createElement('p');e.className='tiny';e.textContent='Kein Text in dieser Zeile.';grid.append(e);}
+    tokens.forEach((t,i)=>{const el=rbzMakeTile(k,i,t);grid.append(el);rbz.tiles[k][i]=el;});
+    root.append(grid);
+  }
+  root.classList.toggle('swipe',rbz.mode==='swipe');
+}
+function rbzCommon(list,pick){
+  let v;
+  for(const e of list){const x=pick(e);if(x===undefined)continue;if(v===undefined)v=x;else if(v!==x)return null;}
+  return v===undefined?undefined:v;
+}
+function rbzPaint(){
+  let n=0,total=0;
+  for(const k of rbLines()){
+    total+=RBS[k].chars.length;n+=rbz.sel[k].size;
+    (rbz.tiles[k]||[]).forEach((el,i)=>{const on=rbz.sel[k].has(i);el.classList.toggle('sel',on);el.setAttribute('aria-pressed',on?'true':'false');});
+  }
+  $('rbzCount').textContent=n+' von '+total+' gewählt'+(rbz.mode==='swipe'?' · Scrollen im Raster aus':'');
+  const sel=rbzSelectedList(),tok={a:rbTokens('a'),b:rbTokens('b')};
+  const of=e=>tok[e.k][e.i];
+  // Farbe der Auswahl (nur Zeichen, die eine Farbe tragen: weder Leerzeichen noch Symbole)
+  const colored=sel.filter(e=>{const t=of(e);return t&&t.ch!==' '&&!rbIsIcon(t.ch);});
+  const common=rbzCommon(colored,e=>of(e).color);
+  document.querySelectorAll('#rbzColors .rbz-sw').forEach(b=>{b.classList.toggle('on',common!==null&&common!==undefined&&Number(b.dataset.color)===common);b.disabled=!sel.length;});
+  // Schrift der Auswahl
+  const bl=rbBaseLayout(),fontBtn=$('rbzFont'),chips=document.querySelectorAll('#rbzChips .chip');
+  const fontSel=sel.filter(e=>{const t=of(e);return t&&!rbIsIcon(t.ch);});
+  const fcommon=bl===1?undefined:rbzCommon(fontSel,e=>RB_LAYOUT_FONT[of(e).layout]);
+  let label;
+  if(bl===1)label='Mini zweizeilig';
+  else if(fcommon===null)label='Gemischt';
+  else if(fcommon===undefined)label=RB_FONT_NAMES[RB_LAYOUT_FONT[bl]];
+  else label=RB_FONT_NAMES[fcommon];
+  $('rbzFontLabel').textContent='Schrift · '+label;
+  fontBtn.disabled=bl===1||!fontSel.length;
+  chips.forEach((c,i)=>c.classList.toggle('on',bl!==1&&fcommon===i));
+  $('rbzChips').classList.toggle('hidden',bl===1);
+  $('rbzFontHint').textContent=bl===1?'Bei Zweizeilig Mini ist die Schrift fest. Farben gehen pro Zeichen und pro Zeile.':'Jeder Tipp schaltet die gewählten Zeichen weiter und beginnt nach Mini wieder bei Normal. Alle Zeichen stehen senkrecht mittig. Mini zeigt nur Großbuchstaben.';
+  // Farbwechsel
+  rbzPaintFlow(sel.length);
+  $('rbzUndo').disabled=!rbUndoSnap;
+  rbzDrawPreview();
+}
+function rbzPaintFlow(selCount){
+  const root=$('rbzFlowColors');
+  root.querySelectorAll('.rbz-sw').forEach(b=>{
+    const code=Number(b.dataset.color),pos=rbz.flow.indexOf(code);
+    b.classList.toggle('on',pos>=0);b.querySelector('.bd')?.remove();
+    if(pos>=0){const s=document.createElement('span');s.className='bd';s.textContent=String(pos+1);b.append(s);}
+    b.setAttribute('aria-label',COLORS.find(c=>c[1]===code)[0]+(pos>=0?', Platz '+(pos+1):''));
+  });
+  const dots=$('rbzFlowDots');dots.replaceChildren();
+  if(!rbz.flow.length){const t=document.createElement('span');t.className='tiny';t.textContent='Farben in der gewünschten Reihenfolge antippen.';dots.append(t);}
+  else{
+    rbz.flow.forEach((code,i)=>{
+      const d=document.createElement('span');d.className='dot';d.style.background=hexColor(code);dots.append(d);
+      dots.insertAdjacentHTML('beforeend',i+1<rbz.flow.length?RB_SVG_NEXT:RB_SVG_REPEAT);
+    });
+    const t=document.createElement('span');t.className='note';t.textContent=rbz.flowMode==='char'?'Leerzeichen zählen nicht mit':'Jedes Wort bekommt die nächste Farbe';dots.append(t);
+  }
+  const words=rbz.flowMode==='word';
+  $('rbzFlowApplyText').textContent=words?'Auf '+rbzWordCount()+' '+(rbzWordCount()===1?'Wort':'Wörter')+' anwenden':'Auf '+selCount+' '+(selCount===1?'Zeichen':'Zeichen')+' anwenden';
+  $('rbzFlowApply').disabled=!rbz.flow.length||!selCount;
+  $('rbzFlowChar').classList.toggle('on',!words);$('rbzFlowWord').classList.toggle('on',words);
+  $('rbzFlowBox').classList.toggle('open',rbz.flowOpen);
+  $('rbzFlowBody').classList.toggle('hidden',!rbz.flowOpen);
+  $('rbzFlowHead').setAttribute('aria-expanded',rbz.flowOpen?'true':'false');
+  $('rbzFlowChevron').innerHTML=rbz.flowOpen?'<path d="m18 15-6-6-6 6"/>':'<path d="m6 9 6 6 6-6"/>';
+  for(const id of ['rbzSeg','rbzColorBlock','rbzFontBox'])$(id).classList.toggle('hidden',rbz.flowOpen);
+}
+const RB_SVG_NEXT='<svg viewBox="0 0 24 24" aria-hidden="true" class="mini-ico"><path d="m9 18 6-6-6-6"/></svg>';
+const RB_SVG_REPEAT='<svg viewBox="0 0 24 24" aria-hidden="true" class="mini-ico"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>';
+
+function rbzWordMap(tokens){
+  const map=[];let w=-1,inWord=false;
+  tokens.forEach((t,i)=>{if(t.ch===' '){inWord=false;map[i]=-1;}else{if(!inWord){w++;inWord=true;}map[i]=w;}});
+  return map;
+}
+function rbzWordCount(){
+  let n=0;
+  for(const k of rbLines()){const map=rbzWordMap(rbTokens(k)),seen=new Set();for(const i of rbz.sel[k])if(map[i]>=0)seen.add(map[i]);n+=seen.size;}
+  return n;
+}
+function rbzDrawPreview(){
+  const c=$('rbzMatrix');if(!c)return;
+  const g=c.getContext('2d');drawDots(g,PITCH);if(!fontReady)return;
+  const bl=rbBaseLayout(),lines=rbLines(),info={};
+  let maxW=0,minStart=null;
+  for(const k of lines){
+    const tx=rbTokenX(rbTokens(k));info[k]=tx;maxW=Math.max(maxW,tx.width);
+    for(const i of rbz.sel[k])if(tx.xs[i]!==undefined&&(minStart===null||tx.xs[i]<minStart))minStart=tx.xs[i];
+  }
+  const vx=maxW>W&&minStart!==null?Math.max(0,Math.min(maxW-W,minStart-6)):0;
+  for(const k of lines){
+    const left=bl===1?-vx:(info[k].width<=W?Math.floor((W-info[k].width)/2):-vx);
+    rbDrawStyled(g,k,PITCH,left);
+  }
+}
+function rbzRefresh(){
+  // Auswahl auf vorhandene Zeichen begrenzen, Raster neu aufbauen, alles neu zeichnen.
+  for(const k of ['a','b'])for(const i of [...rbz.sel[k]])if(i>=RBS[k].chars.length)rbz.sel[k].delete(i);
+  rbzBuildGrids();rbzPaint();
+}
+function rbzOpen(){
+  if(!rbInput('a').value.trim()&&!(rbBaseLayout()===1&&rbInput('b').value.trim())){notify('Erst Text eingeben, dann Zeichen gestalten.');return;}
+  rbz.opener=document.activeElement;rbz.open=true;
+  rbz.sel={a:new Set(),b:new Set()};rbz.flowOpen=false;rbz.drag=null;
+  $('rbz').classList.remove('hidden');document.body.style.overflow='hidden';document.body.classList.add('rbz-open');
+  $('rbzScroll').scrollTop=0;
+  rbzRefresh();$('rbzClose').focus();
+}
+function rbzClose(){
+  if(!rbz.open)return;
+  rbz.open=false;$('rbz').classList.add('hidden');document.body.style.overflow='';document.body.classList.remove('rbz-open');
+  updateScrollCapacity();draw();
+  try{(rbz.opener&&rbz.opener.isConnected?rbz.opener:$('rbzOpen')).focus();}catch(e){}
+}
+function rbzSetMode(mode){
+  rbz.mode=mode;rbz.drag=null;try{localStorage.setItem('rb440-selmode',mode);}catch(e){}
+  $('rbzModeSingle').classList.toggle('on',mode==='single');$('rbzModeSwipe').classList.toggle('on',mode==='swipe');
+  $('rbzModeSingle').setAttribute('aria-pressed',mode==='single'?'true':'false');$('rbzModeSwipe').setAttribute('aria-pressed',mode==='swipe'?'true':'false');
+  $('rbzGrids').classList.toggle('swipe',mode==='swipe');rbzPaint();
+}
+function rbzToggle(k,i){const s=rbz.sel[k];if(s.has(i))s.delete(i);else s.add(i);rbzPaint();}
+
+/* Farbe auf eine Liste von Zeichen anwenden; Herzen werden gegen das Herz in der Farbe getauscht. */
+function rbSwapHearts(k,list){
+  const input=rbInput(k),spans=rbSpans(input.value);let v=input.value;
+  for(const [i,code] of list.slice().sort((x,y)=>y[0]-x[0])){
+    const sp=spans[i];if(!sp)continue;
+    const em=RB_HEART_EMOJI.find(h=>h[1]===code)[0];
+    v=v.slice(0,sp.start)+em+v.slice(sp.end);
+  }
+  input.value=v;RBS[k].chars=codepoints(v);
+}
+function rbzColorize(list,pick){
+  const swaps={a:[],b:[]};
+  list.forEach((e,n)=>{
+    const ch=RBS[e.k].chars[e.i],code=pick(e,n);
+    if(code==null||ch===undefined)return;
+    RBS[e.k].c[e.i]=code;
+    if(rbIsHeart(ch))swaps[e.k].push([e.i,code]);
+  });
+  for(const k of ['a','b'])if(swaps[k].length)rbSwapHearts(k,swaps[k]);
+}
+function rbzApplyColor(code){
+  const sel=rbzSelectedList();if(!sel.length)return;
+  rbSnapshot();rbzColorize(sel,()=>code);rbAfterChange();
+}
+function rbzCycleFont(){
+  if(rbBaseLayout()===1)return;
+  const sel=rbzSelectedList(),tok={a:rbTokens('a'),b:rbTokens('b')};
+  const list=sel.filter(e=>!rbIsIcon(tok[e.k][e.i].ch));if(!list.length)return;
+  const cur=rbzCommon(list,e=>RB_LAYOUT_FONT[tok[e.k][e.i].layout]);
+  const next=(cur===null||cur===undefined)?0:(cur+1)%4,base=rbBaseFont();
+  rbSnapshot();
+  for(const e of list)RBS[e.k].f[e.i]=next===base?-1:next;
+  rbAfterChange();
+}
+function rbzApplyFlow(){
+  const sel=rbzSelectedList();if(!sel.length||!rbz.flow.length)return;
+  const flow=rbz.flow,tok={a:rbTokens('a'),b:rbTokens('b')};
+  rbSnapshot();
+  const entries=[];
+  for(const k of rbLines()){
+    const mine=sel.filter(e=>e.k===k);
+    if(rbz.flowMode==='char'){
+      let n=0;
+      for(const e of mine){if(tok[k][e.i].ch===' ')continue;entries.push({k,i:e.i,code:flow[n%flow.length]});n++;}
+    }else{
+      const map=rbzWordMap(tok[k]),rank=new Map();
+      for(const e of mine){const w=map[e.i];if(w<0)continue;if(!rank.has(w))rank.set(w,rank.size);entries.push({k,i:e.i,code:flow[rank.get(w)%flow.length]});}
+    }
+  }
+  rbzColorize(entries,e=>e.code);
+  rbAfterChange();
+}
+
+/* ---- Fenster verdrahten ---- */
+(function rbzWire(){
+  const grids=$('rbzGrids');
+  $('rbzClose').addEventListener('click',rbzClose);$('rbzDone').addEventListener('click',rbzClose);
+  $('rbz').addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();rbzClose();}});
+  $('rbzSend').addEventListener('click',()=>{$('sendScroll').click();});
+  $('rbzModeSingle').addEventListener('click',()=>rbzSetMode('single'));
+  $('rbzModeSwipe').addEventListener('click',()=>rbzSetMode('swipe'));
+  $('rbzAll').addEventListener('click',()=>{for(const k of rbLines()){rbz.sel[k]=new Set(RBS[k].chars.map((_,i)=>i));}rbzPaint();});
+  $('rbzNone').addEventListener('click',()=>{rbz.sel={a:new Set(),b:new Set()};rbzPaint();});
+  $('rbzUndo').addEventListener('click',rbUndo);
+  $('rbStyleUndo').addEventListener('click',rbUndo);
+  $('rbzFont').addEventListener('click',rbzCycleFont);
+  $('rbzFlowHead').addEventListener('click',()=>{rbz.flowOpen=!rbz.flowOpen;rbzPaint();});
+  $('rbzFlowChar').addEventListener('click',()=>{rbz.flowMode='char';rbzPaint();});
+  $('rbzFlowWord').addEventListener('click',()=>{rbz.flowMode='word';rbzPaint();});
+  $('rbzFlowApply').addEventListener('click',rbzApplyFlow);
+  for(const [name,code,hex] of COLORS){
+    for(const [rootId,handler] of [['rbzColors',()=>rbzApplyColor(code)],['rbzFlowColors',()=>{const p=rbz.flow.indexOf(code);if(p>=0)rbz.flow.splice(p,1);else rbz.flow.push(code);rbzPaint();}]]){
+      const b=document.createElement('button');b.type='button';b.className='rbz-sw';b.style.background=hex;b.dataset.color=String(code);b.setAttribute('aria-label',name);b.title=name;
+      b.addEventListener('click',handler);$(rootId).append(b);
+    }
+  }
+  // Einzeln: Tippen schaltet um. Wischen: Fingerbahn markiert zusätzlich, Tippen schaltet um.
+  grids.addEventListener('click',e=>{
+    const t=e.target.closest('.rbz-tile');if(!t)return;
+    if(rbz.mode==='swipe'&&e.detail!==0)return;   // Zeigereingabe läuft über pointerdown/up
+    rbzToggle(t.dataset.line,Number(t.dataset.i));
+  });
+  grids.addEventListener('pointerdown',e=>{
+    if(rbz.mode!=='swipe')return;
+    const t=e.target.closest('.rbz-tile');if(!t)return;
+    e.preventDefault();
+    try{grids.setPointerCapture(e.pointerId);}catch(err){}
+    rbz.drag={k:t.dataset.line,start:Number(t.dataset.i),last:Number(t.dataset.i),moved:false,pid:e.pointerId};
+  });
+  grids.addEventListener('pointermove',e=>{
+    const d=rbz.drag;if(!d||e.pointerId!==d.pid)return;
+    const el=document.elementFromPoint(e.clientX,e.clientY),t=el&&el.closest?el.closest('.rbz-tile'):null;
+    if(!t||t.dataset.line!==d.k)return;
+    const i=Number(t.dataset.i);if(i===d.last)return;
+    if(!d.moved){d.moved=true;rbz.sel[d.k].add(d.start);}
+    const a=Math.min(i,d.last),b=Math.max(i,d.last);
+    for(let j=a;j<=b;j++)rbz.sel[d.k].add(j);
+    d.last=i;rbzPaint();
+  });
+  const end=e=>{
+    const d=rbz.drag;if(!d||e.pointerId!==d.pid)return;
+    rbz.drag=null;
+    try{grids.releasePointerCapture(e.pointerId);}catch(err){}
+    if(!d.moved&&e.type==='pointerup')rbzToggle(d.k,d.start);
+  };
+  grids.addEventListener('pointerup',end);grids.addEventListener('pointercancel',end);
+  rbzSetMode(rbz.mode);
+})();
+
+async function init(){try{rb43StaticIcons();parseAssets();buildSymbolPicker();try{const draft=localStorage.getItem('rb03-scroll-draft');if(draft!==null)$('scrollText').value=draft;try{$('scrollLine2').value=localStorage.getItem('rb032-scroll-line2')||'';}catch(e){}rbRestoreDraft();if(editHistory.scrollText)editHistory.scrollText.current=$('scrollText').value;}catch(e){}const r=await fetch('/api/font',{cache:'no-store'});if(!r.ok)throw Error('Schrift nicht erreichbar');font=await r.json();fontReady=true;await refreshPages();await refreshLibrary();await v42RefreshPrograms();await v42RefreshShortcuts();try{if(localStorage.getItem('rb03-tab')==='pages')setTab('pages');}catch(e){}$('scrollText').dispatchEvent(new Event('input'));restartPreview();}catch(e){notify('Fehler beim Start: '+e.message);}finally{document.documentElement.classList.remove('rb-booting');}poll();requestAnimationFrame(tick);}init();
 </script></body></html>

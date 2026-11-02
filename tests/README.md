@@ -21,6 +21,10 @@ Der Browser-Test erfordert Playwright und Chromium; Arduino-Boardpaket und reale
 
 `python tests/test_0431.py` prüft die JavaScript-Syntax, HTML/gzip-/ETag-Konsistenz, die korrigierte Versionskennung, den entkoppelten Diagnose-TXT-Download und die interaktive Darstellung in drei Chromium-Mobilgrößen. Der Stream-Puffer wurde außerdem separat mit einem Host-C++-Test kompiliert. Dies ersetzt **keinen Arduino-Gesamtcompile** und keinen Heap-/BLE-Test auf dem ESP32.
 
+## v0.4.4.0-dev (31.10.2026)
+
+`python tests/test_build_0440.py`: wie `test_build_0434.py`, zusätzlich Invarianten zum Stilformat (Marken U+0090..U+009C in Firmware und Weboberfläche, Programm-Verkettung, `decodeText`, Bibliotheksgrenze). `python tests/test_browser_0440.py [Screenshot-Ordner]`: Playwright-Test des Editors Ende-zu-Ende (Einzeln, Wischen, Farbe, Schrift, Farbwechsel, Herzen, Rückgängig, Senden-Nutzlast, Bibliothek hin und zurück, alte Einträge, zweizeilig, Entwurf, Längenhinweis, Mobilgrößen 375/390/430 px). `python tests/test_render_parity_0440.py`: baut die echten Zeichenfunktionen des Sketches mit Stubs als Host-Programm (`tests/host/build.py`), vergleicht Klartext mit der Ausgabe von 0.4.3.4 (`golden_plain_0434.txt`), prüft Stilfälle und vergleicht Firmware und Browser pixelweise. Benötigt Playwright, Chromium und g++. Ersetzt **keinen Arduino-Gesamtcompile** und keinen Test auf dem ESP32. Ältere Testdateien beziehen sich auf ihre alten Ordner.
+
 ## v0.4.3.4-dev (31.10.2026)
 
 `python tests/test_build_0434.py`: wie `test_build_0433.py`, zusätzlich Invarianten zum Abmelden vor dem Wächter-Neustart (`esp_wifi_deauth_sta(0)` vor `abort()`, Spur vor Abmeldung, Flag in Spurtext), zum Test-Auslöser (Route, Blockade in `loop()`, Parameter `deauth`) und dazu, dass die Weboberfläche keinen Knopf dafür enthält. `python tests/test_0434.py [Screenshot-Ordner]`: Browser-Test der Programme-Ansicht (unverändert, nur Version). Der Wächter-/Abmeldecode wurde zusätzlich in einem einmaligen Host-Stubtest (g++) auf Ablauf geprüft; dieser Test liegt nicht im Repository. Kein Ersatz für Arduino-Compile und Hardwaretest.

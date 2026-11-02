@@ -38,7 +38,8 @@ Kurzüberblick über alle Versionen von RavestickBoard for CoolLED1248. Ausführ
 | v0.4.3.2-dev | 30.10.2026 | Programme im Bibliotheksstil: Icon-Leiste, Zeilenliste, eigene Bearbeitungsansicht (nur Weboberfläche) | Kompiliert, läuft auf dem ESP32-C3, Ansicht freigegeben; Heap-Reihen A–C: Einbruch beim Beitritt eines zweiten Clients (192 B), Lauf D offen |
 | v0.4.3.3-dev | 30.10.2026 | RAM-Messung (Start-Aufteilung, WLAN-Ereignisse, Sketch-Größe einmal, Schalter für Client-Limit und verzögerten BLE-Start, Standard aus), Hang-Wächter (Neustart nach 25 s ohne Lebenszeichen) und Absturzspur im RTC-Speicher; Anlass: ESP32 hing nach Tafel-„ERROR“ bei Blockband-Upload | Kandidat; Arduino-Compile und Hardwareprüfung offen |
 | v0.4.3.4-dev | 31.10.2026 | Wächter meldet vor dem Neustart alle WLAN-Geräte ab; Test-Auslöser `/api/test/hang` für den Wiederanlauf (nur Entwicklungsbuild); Absturzspur nennt, ob abgemeldet wurde | Kandidat; Arduino-Compile und Hardwareprüfung offen |
+| v0.4.4.0-dev | 31.10.2026 | Lauftext-Editor „Zeichen gestalten“ (Farbe und Schrift pro Zeichen, Farbwechsel, zweizeilig Mini), Steuerzeichen U+0090..U+009C im Text, einheitliche Sendefarbe, größere Regler | Kandidat; Arduino-Compile und Hardwareprüfung offen |
 
-**Offene Punkte (Stand v0.4.3.4-dev):** Heap-Tiefstwerte unter Last, Arduino-Gesamtcompile und Hardwaretest der Versionen ab v0.4.2.5, Langzeit- und ACK-/Retry-Tests, Laufbänder über 30 KiB.
+**Offene Punkte (Stand v0.4.4.0-dev):** Hardwaretest des Zeichen-Editors, Zeicheneditor für Blockseiten, Wiederanlauf- und Zwei-Geräte-Test (v0.4.3.4), Heap-Tiefstwerte unter Last, Arduino-Gesamtcompile und Hardwaretest der Versionen ab v0.4.2.5, Langzeit- und ACK-/Retry-Tests, Laufbänder über 30 KiB.
 
 Korrektur 1 (30.10.2026): Arduino-Prototyp-Fehler mit `RbDiagnosticStream` beseitigt. Hardware-Compile steht noch aus.
