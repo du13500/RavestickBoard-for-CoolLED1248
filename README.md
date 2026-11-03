@@ -4,14 +4,14 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.5.1--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.5.0.0--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
 <img alt="Mission" src="https://img.shields.io/badge/mission-hugs%20and%20love-ff69b4">
 </p>
 
-> **Aktueller Entwicklungskandidat: v0.4.5.1-dev (3.11.2026).** Vor jedem neuen Verbindungsaufbau prüft die Firmware per kurzem Scan, ob die Tafel überhaupt zu hören ist (behebt den Hänger bei ausgeschalteter Tafel, Hardwaretest steht aus); kleines Bluetooth-Zeichen im Seitenkopf. Darunter unverändert 0.4.5.0: Zeichen-Editor für Lauftexte mit Wischen nach Richtung und Doppeltipp-Wort, Kurzwahl-Dialog mit Quellen-Schaltflächen, höchstens zwei WLAN-Geräte. Hardware-/Heap-Abnahme steht aus. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md), Kurzüberblick: [`VERSIONSGESCHICHTE.md`](VERSIONSGESCHICHTE.md).
+> **Aktueller Entwicklungskandidat: v0.5.0.0-dev (3.11.2026).** Tafelverwaltung in den Einstellungen: Die Adresse der LED-Tafel steckt nicht mehr in der Firmware. „Meine Tafel“ wird per Bluetooth-Suche gefunden und im ESP32 gespeichert, eine fremde Tafel lässt sich vorübergehend nutzen („Zurück zu meiner Tafel“ ohne neue Suche). **Nach dem Flashen muss Meine Tafel einmal eingerichtet werden.** Dazu: Palettentaste der Blockanzeige in der Farbzeile, Zoom auf dem iPhone gesperrt, Programme- und Bibliotheksansicht ohne Scrollen bis zum Bedienfeld. Darunter unverändert 0.4.6.0 (Zeichen-Editor für Blockseiten, Bluetooth-Zeichen bei Übertragung; Hardwaretest bestanden, mit einem Verbindungshänger, den der Wächter behoben hat) und 0.4.5.1 (Vor-Scan). Hardware-/Heap-Abnahme von 0.5.0.0 steht aus. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md), Kurzüberblick: [`VERSIONSGESCHICHTE.md`](VERSIONSGESCHICHTE.md).
 
 ## Was ist RavestickBoard?
 
@@ -21,12 +21,24 @@ Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` de
 
 - **Kurzwahl:** acht frei belegbare Kacheln (Bibliothekseinträge, Programme, Ambiente) für den schnellen Zugriff auf der Veranstaltung.
 - **Lauftext:** Original-Schriften (Normal, Fett), Engschrift und Mini (ein- oder zweizeilig), 24 Herstellersymbole plus eigene Motive, Live-Vorschau und Datenbudget. Farbe und Schrift lassen sich pro Zeichen gestalten.
-- **Blockseiten:** feste Seiten mit Ausrichtung und Anzeigedauer, als Blockfolge sendbar.
+- **Tafelverwaltung (Einstellungen):** Tafeln suchen (Trefferliste mit Signalstärke), „Meine Tafel“ im ESP32 speichern, eine fremde Tafel vorübergehend nutzen und per Knopf zurückwechseln. Die Kopfzeile zeigt „Meine Tafel“, „Fremde Tafel“ oder „Keine Tafel“.
+- **Blockseiten:** feste Seiten mit Ausrichtung und Anzeigedauer, als Blockfolge sendbar. Farbe und Schrift lassen sich auch hier pro Zeichen gestalten.
 - **Bibliothek und Programme:** Einträge speichern, benennen, duplizieren, sortieren; Programme spielen Einträge nacheinander ab (Original oder als gemeinsames Laufband).
 - **Tafelsteuerung:** Helligkeit, Tempo und Anzeige an/aus stehen unten auf jeder Seite; die Tasten zum Erzwingen eines Anzeigeverhaltens auf allen Seiten außer der Kurzwahl, wo nur Linkslauf, Standbild und der Stift zum Bearbeiten bleiben.
 - **Diagnose:** RAM-Messung, HTTP-Spur, Absturzspur nach Hänger, Export als Textdatei.
 
-## Aktuell: v0.4.5.1-dev – Vor-Scan der Tafel, Bluetooth-Zeichen (aufbauend auf 0.4.5.0: Zeichen-Fenster, Kurzwahl-Dialog, zwei WLAN-Geräte)
+## Aktuell: v0.5.0.0-dev – Tafelverwaltung (aufbauend auf 0.4.6.0: Zeichen-Editor für Blockseiten)
+
+- **Neu in 0.5.0.0:**
+  - **Meine Tafel im ESP32 statt im Code:** Es wird keine Tafeladresse mehr mitgeliefert. Beim ersten Start (und nach dem Update von 0.4.x) ist keine Tafel eingerichtet; Senden meldet „Keine Tafel eingerichtet“. Unter **Einstellungen → LED-Tafel** auf „Tafel suchen“ tippen (dauert etwa 4 s, die Oberfläche antwortet währenddessen nicht), in der Trefferliste „Als meine Tafel speichern“ wählen. Die Tafel bleibt auch nach einem Neustart erhalten (NVS, Namespace `rbsign`). Speichern ersetzt die bisherige Tafel; dafür ist ein zweiter Tipp nötig, Löschen ist nicht vorgesehen.
+  - **Fremde Tafel:** „Jetzt nutzen“ schaltet vorübergehend auf eine andere Tafel (zum Beispiel zur Vorführung bei einer anderen Crew), gespeichert wird nichts. „Zurück zu meiner Tafel“ wechselt ohne neue Suche zurück; nach einem Neustart des ESP32 ist wieder Meine Tafel aktiv. Es wird immer nur an eine Tafel gesendet.
+  - **Trefferliste:** Tafeln zuerst (Name enthält „cool“, wirbt mit dem Dienst FFF0 oder ist Meine Tafel), danach nach Signalstärke, mit den Lucide-Symbolen `signal` (≥ −60 dBm), `signal-high`, `signal-medium`, `signal-low` und `signal-zero` (< −90 dBm); `antenna` für die Suche. „Alle Bluetooth-Geräte zeigen“ blendet zusätzlich fremde Geräte ein, falls die Tafel ihren Namen nicht mitsendet.
+  - **Anzeige:** Neben dem Bluetooth-Zeichen im Seitenkopf steht „Meine Tafel“, „Fremde Tafel“ (gelb) oder „Keine Tafel“ (rot); Antippen führt zu den Einstellungen.
+  - **Kleinigkeiten (Rückmeldung zu 0.4.6.0):** Die Palettentaste der Blockanzeige steht in derselben Zeile wie die Farben. Zoom ist gesperrt (Viewport, `touch-action: manipulation`, Spreizgesten unterdrückt, Eingabefelder mit 16 px). Die Listen von Programmen und Bibliothek enden oberhalb des Bedienfelds, die Seite scrollt nicht mehr bis dorthin.
+- **Neu in 0.4.6.0:**
+  - **Zeichen gestalten auch für Blockseiten:** In der Blockanzeige öffnet die Palettentaste unter „Farbe · Zeile 1“ dasselbe Fenster wie beim Lauftext. Zeichen markieren, Farbe und Schrift setzen; Rückgängig/Wiederherstellen gelten im Fenster (je Seite, beim Seitenwechsel beginnt der Verlauf neu). „Senden“ im Fenster zeigt die Seite auf der Tafel. Bei Mini zweizeilig gelten Farben pro Zeichen und Zeile, Schriftwechsel nicht. Was über 64 Pixel hinausragt, ist wie bisher nicht erlaubt; die Seite meldet die Breite.
+  - **Firmware:** Die Seitendarstellung versteht die Stilmarken (gleiche Zeichen- und Messregeln wie beim Lauftext). Seiten ohne Marken werden unverändert gezeichnet (am Rechner Pixel für Pixel gegen den alten Weg geprüft). **Jede Marke belegt 2 der 47 Bytes pro Zeile**; bei sehr vielen Wechseln meldet der Editor, dass die Zeile zu lang ist.
+  - **Bluetooth-Zeichen:** Nach dem Annehmen eines Auftrags zeigt es zuerst „sucht“ (`bluetooth-searching`); schweigt der ESP danach länger als 3,5 s (Vor-Scan höchstens 3 s), wird `bluetooth-connected` gezeigt, bis die erste Antwort den echten Zustand liefert. Das ist ein Schluss aus dem Schweigen, keine Messung.
 
 - **Zeichen gestalten (seit 0.4.4.0):** Im Lauftext-Editor öffnet die Palettentaste ein Fenster. Zeichen einzeln antippen oder per Wischen auswählen, dann Farbe und Schrift (Normal, Fett, Engschrift, Mini) für die Auswahl setzen. „Farbwechsel“ färbt reihum pro Zeichen oder pro Wort. Bei Zweizeilig Mini gehen Farben pro Zeichen und Zeile.
 - **Neu in 0.4.5.1** (Auswertung des Serial-Monitors von 0.4.5.0):
@@ -76,12 +88,16 @@ Bearbeitungen werden auf dem jeweiligen Gerät direkt in der Bibliothek angezeig
 ## Installation und Datensicherheit
 
 1. Vorab ein JSON-Backup aus der aktuell laufenden Firmware erstellen und lokal aufbewahren. Die bisherige Firmware als Rückfallversion sichern.
-2. `firmware/RavestickBoard_v0_4_5_1/RavestickBoard_v0_4_5_1.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h`.
+2. `firmware/RavestickBoard_v0_5_0_0/RavestickBoard_v0_5_0_0.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h`.
 3. Arduino IDE: **ESP32C3 Dev Module**, Espressif **3.3.12**, **USB CDC On Boot: Enabled**, **No OTA (2MB APP/2MB SPIFFS)**. Bestehendes Partitionsschema **nicht ändern**, **Erase All Flash deaktiviert** lassen.
 4. Nach dem Flashen mit WLAN `CoolLED1248` verbinden, `http://192.168.4.1` aufrufen. Bibliothek nicht neu formatieren; das Bibliotheksformat ist unverändert. Falls das Homescreen-Icon nicht übernommen wird, die Verknüpfung über Safari erneut hinzufügen.
 5. Nach Änderungen an `web/index.html`: `python tools/sync_web.py` erzeugt den gzip-Webheader neu.
 
 Weiterführend: [Bibliotheksformat](docs/BIBLIOTHEK_v0.4.1.md), [letzte ausführliche Installationsanleitung](docs/INSTALLATION_v0.4.2.4.1.md), [Testplan](docs/TESTPLAN_v0.4.2.4.1.md), [Changelog](CHANGELOG.md), [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md).
+
+**Teststand v0.5.0.0:** zusätzlich: Logik der Tafelverwaltung mit dem echten Sketch-Code gegen Attrappen der BLE-Klassen (Adresse prüfen, Namen säubern, Treffer sammeln, sortieren, auf zwölf Einträge begrenzen), Browser-Test der Einstellungen (Suche, Signalsymbole, Speichern mit zweitem Tipp beim Ersetzen, fremde Tafel, Zurück ohne neue Suche, Kopfzeilen-Anzeige), der Zoom-Sperre, der Palettentaste und der Listenhöhen sowie ein Test, dass keine Tafeladresse mehr im Code steht. **Nicht geprüft:** Arduino-Gesamtcompile mit den neuen Aufrufen (`haveName`, `getName`, `haveServiceUUID`, `isAdvertisingService`, aktiver Scan), die echte Suche und alle Tafelwechsel an der Hardware, das Verhalten der Zoom-Sperre auf dem iPhone, die Pfade der sechs neuen Lucide-Symbole (aus dem Gedächtnis).
+
+**Teststand v0.4.6.0:** zusätzlich zu den unten genannten Prüfungen: Seitendarstellung der Firmware am Rechner mit dem echten Sketch-Code (Seiten ohne Marken = alter Weg in 378 Fällen, Seiten mit Farb- und Schriftmarken gegen die Browser-Vorschau pixelgenau in 15 Fällen, Breitenmessung identisch), Browser-Test des Zeichen-Fensters für Blockseiten (Markieren, Farbe, Rückgängig/Wiederherstellen, Rundlauf, Prüfung der Breite und der 47 Bytes) und des Bluetooth-Zeichens während einer simulierten Übertragung. **Nicht geprüft:** Arduino-Gesamtcompile, Hardwaretest, Übertragung gestylter Seiten an die echte Tafel.
 
 **Teststand v0.4.5.1:** zusätzlich zu den unten genannten Prüfungen: Entscheidungslogik des Vor-Scans mit dem echten Sketch-Code gegen Attrappen der BLE-Klassen (Treffer, nur fremde Geräte, nichts gehört) und Browser-Test des Bluetooth-Zeichens. Die echte BLE-Bibliothek des Arduino-Core ist hier nicht verfügbar; Signaturen von `BLEScan`/`BLEAdvertisedDeviceCallbacks` sind nicht gegen Core 3.3.x kompiliert.
 

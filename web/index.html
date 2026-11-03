@@ -4,9 +4,9 @@
 <html lang="de" class="rb-booting">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport"/>
 <meta content="#11141c" name="theme-color"/>
-<title>RavestickBoard · v0.4.5.1-dev</title>
+<title>RavestickBoard · v0.5.0.0-dev</title>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/><link rel="icon" type="image/png" href="/favicon.ico"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="RavestickBoard"/>
@@ -223,7 +223,7 @@ body[data-rb-view='diagnostics'],body[data-rb-view='settings']{padding-bottom:30
 /* The bottom dock must not cover form actions or the library list. */
 #view-programs .inner-panel{padding-bottom:calc(170px + env(safe-area-inset-bottom,0px))!important}
 #view-editor{padding-bottom:170px}
-#view-library .inner-panel{height:calc(100dvh - 200px)!important;min-height:360px!important;overflow:hidden!important}
+#view-library .inner-panel{height:calc(100dvh - 255px)!important;min-height:360px!important;overflow:hidden!important}   /* v0.5.0.0: Platz fürs Bedienfeld unten (vorher 200px: Seite scrollte) */
 #view-library .library-list{min-height:130px;max-height:none!important;flex:1 1 auto;overflow-y:auto}
 #view-ambience .inner-panel{min-height:calc(100dvh - 185px)!important;padding-bottom:12px}
 
@@ -443,9 +443,40 @@ body[data-rb-view='home'] .rb-dock-modes .v43-force-btn:not([data-mode='scroll']
 .rb-ble[data-state=bad]{color:#ffb86b}
 @keyframes rbBlePulse{50%{opacity:.35}}
 @media(prefers-reduced-motion:reduce){.rb-ble[data-state=busy]{animation:none}}
+/* ===== v0.5.0.0 ===== */
+*,*::before,*::after{touch-action:manipulation}   /* kein Doppeltipp-Zoom (iOS); gezielte Regeln (pan-y, none) sind spezifischer und gewinnen */
+input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokussieren kleiner Felder */
+#pageColors1{grid-template-columns:repeat(8,minmax(0,1fr))}   /* Palettentaste in derselben Zeile wie beim Lauftext */
+#view-programs #v43ProgListPane:not(.hidden){height:calc(100dvh - 255px)!important;min-height:360px!important;overflow:hidden!important;display:flex!important;flex-direction:column;padding-bottom:10px!important}
+#view-programs #v43ProgListPane:not(.hidden) .library-list{flex:1;min-height:140px;max-height:none;overflow-y:auto}
+.rb-sign-chip{font:inherit;font-size:10px;font-weight:750;line-height:1.5;border-radius:999px;padding:0 7px;border:1px solid #4d596d;background:#1a2230;color:#cfd8e6;margin-left:6px;vertical-align:1px;cursor:pointer}
+.rb-sign-chip[data-kind="1"]{border-color:#2f6b52;color:#8fe0b9}
+.rb-sign-chip[data-kind="2"]{border-color:#f3b653;color:#f3b653;background:#3a2c10}
+.rb-sign-chip[data-kind="0"]{border-color:#ff6b6b;color:#ff9a9a;background:#3a1618}
+.rb-sign-now{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid #4d596d;border-radius:10px;background:#111823;margin:6px 0 10px}
+.rb-sign-now .rb-lucide{width:26px;height:26px;flex:0 0 26px}
+.rb-sign-now[data-kind="2"]{border-color:#f3b653}
+.rb-sign-now[data-kind="0"]{border-color:#ff6b6b}
+.rb-sign-now strong,.rb-sign-row strong{display:block;overflow-wrap:anywhere}
+.rb-sign-actions{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.rb-sign-actions button{flex:1 1 150px}
+.rb-sign-all{display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0}
+.rb-sign-all input{width:20px;height:20px;flex:0 0 20px}
+#rbSignList{display:grid;gap:8px;margin-top:8px}
+.rb-sign-row{display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 10px;align-items:center;padding:9px;border:1px solid #3c4659;border-radius:10px;background:#141b27}
+.rb-sign-row[data-active="1"]{border-color:#3ddc97}
+.rb-sign-sig{display:inline-flex;align-items:center;justify-content:center;color:#cfd8e6}
+.rb-sign-sig .rb-lucide{width:26px;height:26px}
+.rb-sign-sig[data-q="good"]{color:#3ddc97}.rb-sign-sig[data-q="mid"]{color:#f3b653}.rb-sign-sig[data-q="bad"]{color:#ff9a9a}
+.rb-sign-row small{display:block;color:#9aa6b8}
+.rb-sign-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:3px}
+.rb-sign-tag{font-size:10.5px;font-weight:750;padding:1px 7px;border-radius:999px;border:1px solid #4d596d;color:#cfd8e6}
+.rb-sign-tag.mine{border-color:#2f6b52;color:#8fe0b9}.rb-sign-tag.active{border-color:#3ddc97;color:#3ddc97}
+.rb-sign-btns{grid-column:1 / -1;display:flex;gap:8px;flex-wrap:wrap}
+.rb-sign-btns button{flex:1 1 140px;min-height:36px}
 </style></head>
 <body class="home-active" data-rb-view="home"><div id="rbBootScreen" class="rb-initial-loading" role="status" aria-live="polite"><span class="rb-boot-mark" aria-hidden="true"><svg aria-hidden="true" class="rb-lucide" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"></path><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"></path></svg></span><span>RavestickBoard wird geladen …</span></div><main id="appShell">
-<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.4.5.1-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span class="rb-ble" id="rbBle" data-state="idle" data-rb-icon="bluetooth" role="img" aria-label="LED-Tafel: noch kein Verbindungsversuch seit dem Start" title="LED-Tafel: noch kein Verbindungsversuch seit dem Start"></span><span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
+<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.5.0.0-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span class="rb-ble" id="rbBle" data-state="idle" data-rb-icon="bluetooth" role="img" aria-label="LED-Tafel: noch kein Verbindungsversuch seit dem Start" title="LED-Tafel: noch kein Verbindungsversuch seit dem Start"></span><button type="button" class="rb-sign-chip" id="rbSignChip" data-kind="1" hidden title="LED-Tafel wechseln">Meine Tafel</button><span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
 
 
 
@@ -531,17 +562,21 @@ body[data-rb-view='home'] .rb-dock-modes .v43-force-btn:not([data-mode='scroll']
 <div class="panel inner-panel"><h2>Ambiente</h2><p class="hint">Eine Farbe antippen, um die gesamte 64×16-Tafel mit dieser Farbe zu füllen. Die aktuelle Textanzeige wird dadurch ersetzt.</p>
 <div aria-label="LED-Farben" class="ambience-colors" id="ambienceColors"></div>
 
-</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary rb-btnlink" download="RavestickBoard_Diagnose_v0.4.5.1-dev.txt" href="/api/diagnostics.txt" data-rb-icon="database-arrow-down">TXT herunterladen</a><a class="secondary rb-btnlink" download="RavestickBoard_RAM_v0.4.5.1-dev.txt" href="/api/ram.txt" data-rb-icon="database-arrow-down">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
+</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary rb-btnlink" download="RavestickBoard_Diagnose_v0.5.0.0-dev.txt" href="/api/diagnostics.txt" data-rb-icon="database-arrow-down">TXT herunterladen</a><a class="secondary rb-btnlink" download="RavestickBoard_RAM_v0.5.0.0-dev.txt" href="/api/ram.txt" data-rb-icon="database-arrow-down">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
 <div class="panel"><h2>Einstellungen</h2>
 <div class="settings-section" id="v42SettingsBackup">
 <div class="label">Bibliothek &amp; Datensicherung</div>
 <p class="hint">Texte, Blockfolgen, Programme und Kurzwahlen als JSON sichern.</p>
 </div>
 <p class="tiny muted">Beim Import werden bestehende Einträge nicht automatisch überschrieben.</p>
-<div class="settings-section"><div class="label">LED-Tafel</div>
-<div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><strong>CoolLEDX</strong><div class="tiny muted">Fest konfiguriertes Gerät</div></div><span class="tiny muted">Aktiv</span></div>
+<div class="settings-section" id="rbSignSection"><div class="label">LED-Tafel</div>
+<div class="rb-sign-now" id="rbSignNow" data-kind="0"><span id="rbSignNowIcon" data-rb-icon="antenna"></span><div style="min-width:0"><strong id="rbSignName">Tafel wird abgefragt …</strong><div class="tiny muted" id="rbSignSub"></div></div></div>
+<div class="rb-sign-actions"><button type="button" class="primary" id="rbSignScan" data-rb-icon="antenna"><span id="rbSignScanLabel">Tafel suchen</span></button><button type="button" class="secondary" id="rbSignBack" data-rb-icon="arrow-left" hidden><span>Zurück zu meiner Tafel</span></button></div>
+<label class="rb-sign-all"><input type="checkbox" id="rbSignAll"/> Alle Bluetooth-Geräte zeigen (falls deine Tafel nicht auftaucht)</label>
+<p class="tiny muted" id="rbSignHint">Tafel einschalten und in die Nähe legen, nicht mit der Original-App verbinden. „Als meine Tafel speichern“ merkt sich die Tafel dauerhaft im ESP32 und ersetzt die bisherige. „Jetzt nutzen“ gilt nur bis zum Neustart des ESP32.</p>
+<div id="rbSignList" role="list" aria-live="polite"></div>
 </div>
-<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.5.1-dev</p></div>
+<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.5.0.0-dev</p></div>
 </section><aside id="rbDock" class="rb-dock" aria-label="Tafelsteuerung">
  <div class="pixel-range" role="group" aria-label="Globale Helligkeit"><span class="rb-range-icon" data-rb-icon="sunset" aria-hidden="true" data-rb-painted="sunset"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10V2"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m16 6-4 4-4-4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span><input aria-label="Helligkeit" data-global="brightness" id="dockBrightness" min="1" max="100" type="range" value="75"/><b data-global-label="brightness">75 %</b><span class="rb-range-icon" data-rb-icon="sunrise" aria-hidden="true" data-rb-painted="sunrise"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span></div>
  <div class="pixel-range rb-dock-speed" role="group" aria-label="Globale Geschwindigkeit"><span class="rb-range-icon" data-rb-icon="snail" aria-hidden="true" data-rb-painted="snail"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg></span><input aria-label="Geschwindigkeit" data-global="speed" id="dockSpeed" min="1" max="100" type="range" value="80"/><b data-global-label="speed">80 / 100</b><span class="rb-range-icon" data-rb-icon="rabbit" aria-hidden="true" data-rb-painted="rabbit"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 16a3 3 0 0 1 2.24 5"/><path d="M18 12h.01"/><path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/><path d="M20 8.54V4a2 2 0 1 0-4 0v3"/><path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/></svg></span></div>
@@ -630,11 +665,20 @@ function hexColor(n){return COLORS.find(c=>c[1]===Number(n))?.[2]||'#ffffff';}
 function esc(s){return String(s).replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
 function samplePage(){return {line1:'',line2:'',layout:3,align:1,color1:6,color2:7,duration:7};}
 function makeSwatches(root,selected,onChange){root.replaceChildren();for(const [name,code,hex] of COLORS){const b=document.createElement('button');b.type='button';b.className='swatch'+(Number(selected)===code?' selected':'');b.style.background=hex;b.setAttribute('aria-label',name);b.title=name;b.dataset.color=code;b.addEventListener('click',()=>onChange(code));root.append(b);}}
-function setTab(next){tab=next;try{localStorage.setItem('rb03-tab',tab);}catch(e){}$('tabScroll').classList.toggle('active',next==='scroll');$('tabPages').classList.toggle('active',next==='pages');$('scrollEditor').classList.toggle('hidden',next!=='scroll');$('pagesEditor').classList.toggle('hidden',next!=='pages');$('previewTools').classList.toggle('hidden',next==='pages');$('previewSpeedHint').classList.toggle('hidden',next==='pages');$('previewCaption').textContent='';restartPreview();draw();v42EditorMode(v42EditorOrigin); }
+function setTab(next){tab=next;if(next==='pages'&&rbHX.page.idx<0)rbHReset();try{localStorage.setItem('rb03-tab',tab);}catch(e){}$('tabScroll').classList.toggle('active',next==='scroll');$('tabPages').classList.toggle('active',next==='pages');$('scrollEditor').classList.toggle('hidden',next!=='scroll');$('pagesEditor').classList.toggle('hidden',next!=='pages');$('previewTools').classList.toggle('hidden',next==='pages');$('previewSpeedHint').classList.toggle('hidden',next==='pages');$('previewCaption').textContent='';restartPreview();draw();v42EditorMode(v42EditorOrigin); }
 $('tabScroll').onclick=()=>setTab('scroll');$('tabPages').onclick=()=>setTab('pages');
 function drawDots(context,pitch){context.fillStyle='#080b10';context.fillRect(0,0,W*pitch,H*pitch);for(let x=0;x<W;x++)for(let y=0;y<H;y++){context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.27,0,Math.PI*2);context.fillStyle='#28303a';context.fill();}}
 function drawLine(context,line,color,align,yTop,scale,pitch,leftOverride=null,style=0){const chars=codepoints(line).map(c=>displayCode(c,style)),width=linePixels(line,style);if(style===2)align=1;let x0=leftOverride!==null?leftOverride:align===0?0:align===2?W-width:Math.floor((W-width)/2);function led(x,y,n){if(x<0||x>=W||y<0||y>=H)return;context.fillStyle=hexColor(n);context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.34,0,Math.PI*2);context.fill();}for(const c of chars){const icon=iconFor(c);if(icon){const b=bounds[icon.id];for(let y=0;y<16;y++)for(let x=b.min;x<=b.max;x++){const clr=spritePixel(icon.id,x,y);if(clr)led(x0+x-b.min,y,icon.color||clr);}}else if(style===3||style===4){const g=(style===3?originalFonts.normal:originalFonts.bold)[c.codePointAt(0)];if(g)for(let y=0;y<16;y++)for(let x=0;x<g.width;x++)if(g.rows[y]&(1<<(g.width-1-x)))led(x0+x,y,color);}else{const rows=glyph(c);for(let ry=0;ry<7;ry++)for(let rx=0;rx<5;rx++){if(!(rows[ry]&(1<<(4-rx))))continue;for(let dy=0;dy<scale;dy++)led(x0+rx,yTop+ry*scale+dy,color);}}x0+=tokenWidth(c,style)+tokenGap(c);}}
-function drawPage(context,p,pitch){drawDots(context,pitch);if(!fontReady||!p)return;const style=Number(p.layout);drawLine(context,p.line1,p.color1,Number(p.align),style===0?1:style===2?4:0,style===0?2:1,pitch,null,style);if(style===1)drawLine(context,p.line2,p.color2,Number(p.align),8,1,pitch,null,style);}
+const rbMarked=t=>/[\u0090-\u009c]/.test(t||'');
+function rbPageLineTokens(enc,color,layout){const d=rbDecode(enc,layout);return rbTokensOf(d.text,d.c,d.f,color,layout);}
+function rbPageLinePx(enc,layout){return rbMarked(enc)?rbTokenX(rbPageLineTokens(enc,7,layout)).width:linePixels(enc,layout);}
+function drawPage(context,p,pitch){drawDots(context,pitch);if(!fontReady||!p)return;const style=Number(p.layout);
+ if(!rbMarked(p.line1)&&!rbMarked(p.line2)){drawLine(context,p.line1,p.color1,Number(p.align),style===0?1:style===2?4:0,style===0?2:1,pitch,null,style);if(style===1)drawLine(context,p.line2,p.color2,Number(p.align),8,1,pitch,null,style);return;}
+ /* v0.4.6.0: Zeilen mit Zeichenstilen laufen über den Maler des Lauftexts (gleiche Regeln wie die Firmware) */
+ const al=style===2?1:Number(p.align);
+ for(const [key,color,top] of (style===1?[['line1',p.color1,0],['line2',p.color2,8]]:[['line1',p.color1,rbTop(style)]])){
+  const tokens=rbPageLineTokens(p[key],Number(color),style),w=rbTokenX(tokens).width;
+  rbDrawTokens(context,tokens,style,top,al===0?0:al===2?W-w:Math.floor((W-w)/2),pitch);}}
 function draw(){if(tab==='pages')drawPage(ctx,pages[selected],PITCH);else{drawDots(ctx,PITCH);if(fontReady){const st=Number($('scrollLayout').value);rbDrawStyled(ctx,'a',PITCH,previewX);if(st===1)rbDrawStyled(ctx,'b',PITCH,previewX);}}}
 function restartPreview(){previewClock=0;previewX=W;previewPage=selected;draw();}
 function tick(now){if(!lastTick)lastTick=now;const dt=Math.min(90,now-lastTick);lastTick=now;if(previewPlaying&&fontReady){if(tab==='scroll'){{previewX-=dt/1000*(4+Number($('scrollSpeed').value)*.26)*previewRate;if(previewX<-Math.max(rbLineWidth('a'),Number($('scrollLayout').value)===1?rbLineWidth('b'):0)-8)previewX=W;}draw();}}requestAnimationFrame(tick);}
@@ -645,7 +689,7 @@ function rb44UpdatePreviewIcons(){
  rb43PaintIcons();
 }
 $('previewRestart').onclick=restartPreview;$('previewToggle').onclick=()=>{previewPlaying=!previewPlaying;rb44UpdatePreviewIcons();};$('previewSpeed').onclick=()=>{previewRate=previewRate===1?2:previewRate===2?4:1;rb44UpdatePreviewIcons();};
-function validatePage(p){const style=Number(p.layout),n1=codepoints(p.line1).length,n2=codepoints(p.line2).length,bytes=new TextEncoder();if(!p.line1.trim()&&(style!==1||!p.line2.trim()))return ''; if(n1>MAX_LINE||(style===1&&n2>MAX_LINE))return `Pro Zeile sind maximal ${MAX_LINE} Unicode-Zeichen möglich.`;if(bytes.encode(p.line1).length>47||bytes.encode(p.line2).length>47)return 'Maximal 47 UTF-8-Bytes pro Feld. Emojis benötigen mehrere Bytes.';const w1=linePixels(p.line1,style),w2=style===1?linePixels(p.line2,style):0;if(w1>64||w2>64)return `Inhalt zu breit (${Math.max(w1,w2)} von 64 LED-Spalten). Bitte kürzen oder andere Schrift wählen.`;return '';}
+function validatePage(p){const style=Number(p.layout),d1=rbDecode(p.line1,style),d2=rbDecode(p.line2,style),n1=codepoints(d1.text).length,n2=codepoints(d2.text).length,bytes=new TextEncoder();if(!d1.text.trim()&&(style!==1||!d2.text.trim()))return ''; if(n1>MAX_LINE||(style===1&&n2>MAX_LINE))return `Pro Zeile sind maximal ${MAX_LINE} Unicode-Zeichen möglich.`;if(bytes.encode(p.line1).length>47||bytes.encode(p.line2).length>47)return 'Maximal 47 UTF-8-Bytes pro Feld. Emojis und Zeichenstile (je 2 Bytes pro Wechsel) benötigen mehr Platz.';const w1=rbPageLinePx(p.line1,style),w2=style===1?rbPageLinePx(p.line2,style):0;if(w1>64||w2>64)return `Inhalt zu breit (${Math.max(w1,w2)} von 64 LED-Spalten). Bitte kürzen oder andere Schrift wählen.`;return '';}
 function updateWarning(){if(tab!=='pages'||!pages.length)return;const msg=validatePage(pages[selected]);$('pageWarning').textContent=msg;$('pageWarning').classList.toggle('hidden',!msg);}
 function renderRail(){const rail=$('pageRail');rail.replaceChildren();pages.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='page-card'+(i===selected?' selected':'');const head=document.createElement('div');head.className='page-card-top';const strong=document.createElement('strong');strong.textContent='Seite '+(i+1);head.append(strong);const cn=document.createElement('canvas');cn.width=192;cn.height=48;const g=cn.getContext('2d');drawPage(g,p,3);b.append(head,cn);b.onclick=()=>selectPage(i);rail.append(b);});}
 function v43PaintAlignment(){const value=Number($('pageAlign').value),locked=Number($('pageLayout').value)===2;
@@ -655,14 +699,45 @@ function v43PageToolState(){const single=pages.length<=1;
  const del=$('pageDelete');del.dataset.rbIcon=single?'trash-off':'trash';del.title=single?'Mindestens eine Seite bleibt erhalten.':'Seite löschen';del.setAttribute('aria-label',del.title);
  del.disabled=single;const clearAll=$('v42NewBlock');clearAll.disabled=single;clearAll.classList.toggle('danger',!single);clearAll.classList.toggle('secondary',single);$('pageLeft').disabled=selected<=0;$('pageRight').disabled=selected>=pages.length-1;
  $('pageAdd').disabled=pages.length>=MAX_PAGES;$('pageCopy').disabled=pages.length>=MAX_PAGES;rb43PaintIcons();}
-function renderSelected(){if(!pages.length)return;const p=pages[selected];$('pageTitle').textContent=`Seite ${selected+1} von ${pages.length}`;$('line1').value=p.line1;$('line2').value=p.line2;resetPageHistory();$('pageLayout').value=String(p.layout);$('pageAlign').value=String(p.align);v43PaintAlignment();document.querySelectorAll('#secondRow,#secondColors').forEach(e=>e.classList.toggle('hidden',Number(p.layout)!==1));$('pageAlign').disabled=Number(p.layout)===2;renderPageColors();$('dirty').textContent=blockDraftDirty?'Nicht in Bibliothek gespeichert':'';updateWarning();renderRail();v43PageToolState();draw();}
-function renderPageColors(){if(!pages.length)return;makeSwatches($('pageColors1'),pages[selected].color1,c=>{pages[selected].color1=c;changed();renderPageColors();});makeSwatches($('pageColors2'),pages[selected].color2,c=>{pages[selected].color2=c;changed();renderPageColors();});}
+/* Seite -> Eingabefelder und Stilfelder (Text im Feld ist ohne Marken) */
+function rbPageLoad(){
+  const p=pages[selected];if(!p)return;const l=Number(p.layout);
+  for(const [k,key] of [['a','line1'],['b','line2']]){
+    const d=rbDecode(p[key]||'',l),st=RBSX.page[k];
+    $(key).value=d.text;st.chars=codepoints(d.text);
+    if(d.c.length===st.chars.length){st.c=d.c.slice();st.f=d.f.slice();}
+    else{st.c=Array(st.chars.length).fill(0);st.f=Array(st.chars.length).fill(-1);}
+  }
+  if(tab==='pages')rbHReset();else RBHX_PAGE_RESET();
+}
+const RBHX_PAGE_RESET=()=>{rbHX.page.idx=-1;};
+/* Eingabefelder und Stilfelder -> Seite (Text mit Stilmarken); Zeile 2 nur bei Mini zweizeilig mit Marken */
+function rbPageStore(p){
+  p=p||pages[selected];if(!p||!rbIsPage())return;
+  p.line1=rbEncode('a');p.line2=Number(p.layout)===1?rbEncode('b'):$('line2').value;
+}
+function renderSelected(){if(!pages.length)return;const p=pages[selected];$('pageTitle').textContent=`Seite ${selected+1} von ${pages.length}`;rbPageLoad();$('pageLayout').value=String(p.layout);$('pageAlign').value=String(p.align);v43PaintAlignment();document.querySelectorAll('#secondRow,#secondColors').forEach(e=>e.classList.toggle('hidden',Number(p.layout)!==1));$('pageAlign').disabled=Number(p.layout)===2;renderPageColors();$('dirty').textContent=blockDraftDirty?'Nicht in Bibliothek gespeichert':'';updateWarning();renderRail();v43PageToolState();draw();}
+function renderPageColors(){if(!pages.length)return;
+ makeSwatches($('pageColors1'),pages[selected].color1,c=>rbPageBaseColor('a',c));
+ makeSwatches($('pageColors2'),pages[selected].color2,c=>rbPageBaseColor('b',c));
+ $('pageColors1').append(rbPaletteButton('rbzOpenPage'));}
+/* Zeilenfarbe der Seite: gilt wieder für alle Zeichen der Zeile (Einzelfarben werden zurückgesetzt) */
+function rbPageBaseColor(k,code){
+  const p=pages[selected];if(!p)return;
+  if(RBS[k].c.some(Boolean))rbSnapshot();
+  RBS[k].c.fill(0);if(k==='a')p.color1=code;else p.color2=code;
+  rbPageStore(p);changed();renderPageColors();rbHCommit();if(rbz.open)rbzRefresh();
+}
 let blockDraftDirty=false;
 function changed(){dirty=true;blockDraftDirty=true;$('dirty').textContent='Nicht in Bibliothek gespeichert';updateWarning();renderRail();draw();}
-['line1','line2','pageLayout','pageAlign'].forEach(id=>$(id).addEventListener('input',()=>{const p=pages[selected];p.line1=$('line1').value;p.line2=$('line2').value;p.layout=Number($('pageLayout').value);p.align=Number($('pageAlign').value);document.querySelectorAll('#secondRow,#secondColors').forEach(e=>e.classList.toggle('hidden',p.layout!==1));$('pageAlign').disabled=p.layout===2;v43PaintAlignment();changed();}));
+['line1','line2','pageLayout','pageAlign'].forEach(id=>$(id).addEventListener('input',()=>{const p=pages[selected];if(!p)return;
+ if(id==='line1')rbSync('a');if(id==='line2')rbSync('b');
+ if(id==='pageLayout'&&(RBS.a.f.some(x=>x>=0)||RBS.b.f.some(x=>x>=0))){rbSnapshot();RBS.a.f.fill(-1);RBS.b.f.fill(-1);}
+ p.layout=Number($('pageLayout').value);p.align=Number($('pageAlign').value);rbPageStore(p);
+ document.querySelectorAll('#secondRow,#secondColors').forEach(e=>e.classList.toggle('hidden',p.layout!==1));$('pageAlign').disabled=p.layout===2;v43PaintAlignment();changed();}));
 let rbBusy=0,rbBusySince=0;
 async function api(path,data=null){const opt={cache:'no-store'};const track=path!=='/api/status';if(track){if(!rbBusy)rbBusySince=Date.now();rbBusy++;}try{return await api0(path,data,opt);}finally{if(track)rbBusy=Math.max(0,rbBusy-1);}}
-async function api0(path,data,opt){if(data){opt.method='POST';opt.headers={'Content-Type':'application/x-www-form-urlencoded'};opt.body=new URLSearchParams(data);}const r=await fetch(path,opt);let j=await r.json();if(!r.ok||j.ok===false)throw Error(j.message||'HTTP '+r.status);return j;}
+async function api0(path,data,opt){if(data){opt.method='POST';opt.headers={'Content-Type':'application/x-www-form-urlencoded'};opt.body=new URLSearchParams(data);}const r=await fetch(path,opt);if(r.status===202)rbBleJobStart();let j=await r.json();if(!r.ok||j.ok===false)throw Error(j.message||'HTTP '+r.status);return j;}
 let toastTimeout=null;
 function notify(text){
  const message=String(text||'').trim();
@@ -742,16 +817,105 @@ function resetPageHistory(){}
 const latestControl=new Map();let liveTimer=null,livePumpRunning=false;
 function queueLive(key,params){if(key==='speed'&&programRunning)return;latestControl.set(key,params);clearTimeout(liveTimer);liveTimer=setTimeout(pumpLive,420);}
 // v0.4.5.1: kleines Bluetooth-Zeichen im Kopf. Waehrend der Uebertragung antwortet der ESP nicht; zuletzt gezeigter Zustand bleibt stehen.
-const RB_BLE_VIEW={idle:['bluetooth','idle','LED-Tafel: noch kein Verbindungsversuch seit dem Start'],
+const RB_BLE_VIEW={xfer:['bluetooth-connected','busy','LED-Tafel: Übertragung läuft'],idle:['bluetooth','idle','LED-Tafel: noch kein Verbindungsversuch seit dem Start'],
  busy:['bluetooth-searching','busy','LED-Tafel: Suche, Verbindung oder Übertragung läuft'],
  link:['bluetooth-connected','ok','LED-Tafel: verbunden'],
  ok:['bluetooth','ok','LED-Tafel: beim letzten Auftrag erreicht'],
  bad:['bluetooth-off','bad','LED-Tafel: beim letzten Auftrag nicht erreicht. Eingeschaltet, in Reichweite und nicht mit der Original-App verbunden?']};
-function rbBleShow(d){const el=$('rbBle');if(!el)return;
- let k='idle';
- if(d.state==='queued'||d.state==='sending')k='busy';else if(d.bleLink)k='link';else if(d.bleLast===2)k='bad';else if(d.bleLast===1)k='ok';
- if(el.dataset.view===k)return;el.dataset.view=k;
+/* Während einer Übertragung antwortet der ESP nicht. Die Seite merkt sich, wann ein Auftrag angenommen wurde (202):
+   zunächst „sucht“; schweigt der ESP danach länger als der Vor-Scan dauern kann (3 s), muss die Verbindung stehen und die Übertragung läuft.
+   Das ist ein Schluss aus dem Schweigen, keine Messung. Die erste Antwort danach liefert den echten Zustand. */
+let rbBleJobAt=0;
+const RB_BLE_LINK_AFTER_MS=3500;
+function rbBleSet(k){const el=$('rbBle');if(!el||el.dataset.view===k)return;el.dataset.view=k;
  const v=RB_BLE_VIEW[k];el.dataset.rbIcon=v[0];el.dataset.state=v[1];el.title=v[2];el.setAttribute('aria-label',v[2]);rb43PaintIcons();}
+function rbBleTick(){
+ if(!rbBleJobAt)return;
+ const age=Date.now()-rbBleJobAt;
+ if(age>180000){rbBleJobAt=0;return;}
+ rbBleSet(age<RB_BLE_LINK_AFTER_MS?'busy':'xfer');
+}
+function rbBleJobStart(){rbBleJobAt=Date.now();rbBleTick();}
+setInterval(rbBleTick,500);
+function rbBleShow(d){
+ rbSignChipShow(d);
+ if(d.state==='queued'||d.state==='sending'){if(!rbBleJobAt)rbBleJobAt=Date.now();rbBleTick();return;}
+ rbBleJobAt=0;
+ rbBleSet(d.bleLink?'link':d.bleLast===2?'bad':d.bleLast===1?'ok':'idle');
+}
+
+/* ===== v0.5.0.0: Tafelverwaltung ===== */
+const RB_SIGN_LABEL={0:'Keine Tafel',1:'Meine Tafel',2:'Fremde Tafel'};
+let rbSign={kind:0,mine:{set:false,name:'',tail:''},active:{name:'',tail:''}},rbSignItems=[],rbSignArm=null;
+const rbTail=t=>t?'…'+t:'';
+function rbSignChipShow(d){
+ const el=$('rbSignChip');if(!el)return;
+ if(d.signKind===undefined){el.hidden=true;return;}       /* ältere Firmware ohne Tafelverwaltung */
+ const k=Number(d.signKind);el.hidden=false;el.dataset.kind=String(k);el.textContent=RB_SIGN_LABEL[k]||'Tafel';
+ el.title=k===2?'Fremde Tafel (bis zum Neustart): '+(d.signName||''):k===0?'Keine Tafel eingerichtet, tippen zum Einrichten':'Meine Tafel: '+(d.signName||'');
+}
+function rbSignQuality(r){return r>=-60?['signal','good','sehr gut']:r>=-70?['signal-high','good','gut']:r>=-80?['signal-medium','mid','mittel']:r>=-90?['signal-low','bad','schwach']:['signal-zero','bad','sehr schwach'];}
+function rbSignNowRender(){
+ const k=rbSign.kind,now=$('rbSignNow');if(!now)return;
+ now.dataset.kind=String(k);
+ const icon=$('rbSignNowIcon');icon.dataset.rbIcon=k===0?'antenna':'antenna';icon.removeAttribute('data-rb-painted');
+ if(k===0){$('rbSignName').textContent='Noch keine Tafel eingerichtet';$('rbSignSub').textContent='Tafel suchen und als „Meine Tafel“ speichern.';}
+ else if(k===1){$('rbSignName').textContent=rbSign.active.name||'CoolLEDX';$('rbSignSub').textContent='Meine Tafel · '+rbTail(rbSign.active.tail);}
+ else{$('rbSignName').textContent=rbSign.active.name||'CoolLEDX';$('rbSignSub').textContent='Fremde Tafel · '+rbTail(rbSign.active.tail)+' · gilt bis zum Neustart des ESP32'+(rbSign.mine.set?'. Meine Tafel: '+(rbSign.mine.name||'CoolLEDX')+' '+rbTail(rbSign.mine.tail):'');}
+ $('rbSignBack').hidden=!(k===2&&rbSign.mine.set);
+ rb43PaintIcons();
+}
+async function rbSignLoad(){
+ try{const j=await api('/api/sign');rbSign={kind:Number(j.kind),mine:j.mine,active:j.active};rbSignChipShow({signKind:j.kind,signName:j.active.name});rbSignNowRender();}
+ catch(e){$('rbSignName').textContent='Tafel-Status nicht lesbar';$('rbSignSub').textContent=String(e.message||e);}
+}
+function rbSignRowsRender(note){
+ const box=$('rbSignList');if(!box)return;box.textContent='';rbSignArm=null;
+ if(note){const p=document.createElement('p');p.className='tiny muted';p.textContent=note;box.append(p);return;}
+ if(!rbSignItems.length){const p=document.createElement('p');p.className='tiny muted';p.textContent=$('rbSignAll').checked?'Keine Bluetooth-Geräte gehört.':'Keine Tafel gefunden. Ist sie eingeschaltet, in der Nähe und nicht mit der Original-App verbunden? Mit „Alle Bluetooth-Geräte zeigen“ siehst du auch Geräte ohne Tafelnamen.';box.append(p);return;}
+ rbSignItems.forEach((it,i)=>{
+  const q=rbSignQuality(it.rssi),row=document.createElement('div');row.className='rb-sign-row';row.setAttribute('role','listitem');row.dataset.active=it.active?'1':'0';
+  const sig=document.createElement('span');sig.className='rb-sign-sig';sig.dataset.rbIcon=q[0];sig.dataset.q=q[1];sig.setAttribute('role','img');sig.setAttribute('aria-label','Signal '+q[2]+', '+it.rssi+' dBm');sig.title='Signal '+q[2]+' ('+it.rssi+' dBm)';
+  const info=document.createElement('div'),nm=document.createElement('strong');nm.textContent=it.name||'(ohne Namen)';
+  const sm=document.createElement('small');sm.textContent=rbTail(it.addr.slice(12))+' · '+it.rssi+' dBm · Signal '+q[2];
+  const tags=document.createElement('div');tags.className='rb-sign-tags';
+  const tag=(t,c)=>{const e=document.createElement('span');e.className='rb-sign-tag '+c;e.textContent=t;tags.append(e);};
+  if(it.mine)tag('Meine Tafel','mine');if(it.active)tag('wird genutzt','active');if(!it.cool)tag('kein Tafelname','');
+  info.append(nm,sm,tags);
+  const btns=document.createElement('div');btns.className='rb-sign-btns';
+  if(!it.mine){const b=document.createElement('button');b.type='button';b.className='primary';b.dataset.act='save';b.dataset.i=String(i);b.textContent='Als meine Tafel speichern';btns.append(b);}
+  if(!it.active){const b=document.createElement('button');b.type='button';b.className='secondary';b.dataset.act='use';b.dataset.i=String(i);b.textContent=it.mine?'Meine Tafel nutzen':'Jetzt nutzen';btns.append(b);}
+  row.append(sig,info,btns);box.append(row);
+ });
+ rb43PaintIcons();
+}
+async function rbSignScan(){
+ const b=$('rbSignScan'),label=$('rbSignScanLabel');b.disabled=true;label.textContent='Suche läuft …';rbSignRowsRender('Suche läuft, etwa 4 Sekunden. Die Oberfläche antwortet währenddessen nicht.');
+ try{const j=await api('/api/sign/scan',{all:$('rbSignAll').checked?'1':'0'});rbSignItems=j.items||[];rbSignRowsRender();}
+ catch(e){rbSignRowsRender('Suche fehlgeschlagen: '+String(e.message||e));}
+ finally{b.disabled=false;label.textContent='Tafel erneut suchen';}
+}
+async function rbSignAct(act,i){
+ const it=rbSignItems[i];if(!it)return;
+ try{
+  const j=await api(act==='save'?'/api/sign/save':'/api/sign/use',{addr:it.addr,name:it.name||''});
+  if(act==='save')rbSignItems.forEach(x=>{x.mine=x===it;x.active=x===it;});else rbSignItems.forEach(x=>{x.active=x===it;});
+  notify(j.message);await rbSignLoad();rbSignRowsRender();
+ }catch(e){notify(String(e.message||e));}
+}
+$('rbSignScan').addEventListener('click',rbSignScan);
+$('rbSignBack').addEventListener('click',async()=>{try{const j=await api('/api/sign/back',{});rbSignItems.forEach(x=>{x.active=!!x.mine;});notify(j.message);await rbSignLoad();if(rbSignItems.length)rbSignRowsRender();}catch(e){notify(String(e.message||e));}});
+$('rbSignChip').addEventListener('click',()=>navigate('settings'));
+$('rbSignList').addEventListener('click',e=>{
+ const b=e.target.closest('button[data-act]');if(!b)return;
+ const i=Number(b.dataset.i),act=b.dataset.act;
+ if(act==='save'&&rbSign.mine.set){                    /* Ersetzen braucht einen zweiten Tipp */
+  if(rbSignArm!==b){rbSignArm=b;b.textContent='Meine Tafel ersetzen? Nochmal tippen';setTimeout(()=>{if(rbSignArm===b){rbSignArm=null;b.textContent='Als meine Tafel speichern';}},4000);return;}
+ }
+ rbSignArm=null;rbSignAct(act,i);
+});
+/* Zoom: iOS ignoriert user-scalable=no beim Spreizen; die Gestenereignisse lassen sich unterdrücken */
+for(const ev of ['gesturestart','gesturechange','gestureend'])document.addEventListener(ev,e=>e.preventDefault(),{passive:false});
 async function pumpLive(){if(livePumpRunning)return;livePumpRunning=true;try{while(latestControl.size){const [key,args]=latestControl.entries().next().value;latestControl.delete(key);let allowed=false;for(let retry=0;retry<24;retry++){try{const st=await api('/api/status');if(st.state!=='sending'&&st.state!=='queued'){allowed=true;break;}}catch(e){}await new Promise(r=>setTimeout(r,250));}if(!allowed){notify('Controller beschäftigt, Live-Anpassung später erneut versuchen.');break;}try{await api('/api/'+key,args);}catch(e){notify('Live-'+key+': '+e.message);}await new Promise(r=>setTimeout(r,180));}}finally{livePumpRunning=false;if(latestControl.size){clearTimeout(liveTimer);liveTimer=setTimeout(pumpLive,550);}}}
 
 function showPowerState(known,on){$('powerState').textContent=known?'Letzter Befehl: '+(on?'Ein':'Aus'):'Status nach Neustart unbekannt';$('powerOn').classList.toggle('active',known&&on);$('powerOff').classList.toggle('active',known&&!on);}
@@ -808,6 +972,7 @@ function navigate(view){
  document.querySelectorAll('[data-nav]').forEach(b=>{b.classList.toggle('current',b.dataset.nav===view);});
  showMenu(false);window.scrollTo({top:0,behavior:'instant'});
  if(view==='diagnostics')refreshDiagnostics();
+ if(view==='settings')rbSignLoad();
  // Listen aus dem Speicher zeigen und nur bei Bedarf (aelter als 60 s) im Hintergrund auffrischen.
  if(view==='library'){renderLibrary();if(Date.now()-rbFresh.lib>60000)refreshLibrary();}
  if(view==='programs'){v42ShowPrograms();if(Date.now()-rbFresh.prog>60000)v42RefreshPrograms();}
@@ -1046,7 +1211,7 @@ $('v42ClearPage').onclick=()=>{if(!confirm('Seite '+(selected+1)+' leeren?'))ret
 const v43SaveBlockNew=async()=>{if(!(await saveCurrent()))return;
  const fromLibrary=v42EditorOrigin==='library'&&!!v42BlockEditorId;
  const originalName=libraryItems.find(r=>r.id===v42BlockEditorId)?.name;
- const suggested=fromLibrary?(originalName||'Blockfolge')+' (Variante)':pages[0]?.line1||'Neue Blockfolge';
+ const suggested=fromLibrary?(originalName||'Blockfolge')+' (Variante)':rbPlain(pages[0]?.line1)||'Neue Blockfolge';
  const name=await v42NamePrompt(fromLibrary?'Blockfolge als neuen Eintrag speichern':'Blockfolge in Bibliothek speichern',suggested);
  if(name===null)return;
  try{const j=await api('/api/block/save',{name});v42BlockEditorId=j.id;blockDraftDirty=false;await refreshLibrary();librarySelected=j.id;v42BlockSnapshot=JSON.stringify(pages);v42EditorMode('library');v42BlockEditorLabel();notify(fromLibrary?'Neue Blockfolge mit '+pages.length+' Seiten gespeichert. Original unverändert.':'Blockfolge mit '+pages.length+' Seiten gespeichert.');}
@@ -1276,6 +1441,13 @@ const RB43_LUCIDE={
 'bluetooth-connected':'<path d="m7 7 10 10-5 5V2l5 5L7 17"/><line x1="18" x2="21" y1="12" y2="12"/><line x1="3" x2="6" y1="12" y2="12"/>',
 'bluetooth-off':'<path d="m17 17-5 5V12l-5 5"/><path d="m2 2 20 20"/><path d="M14.5 9.5 17 7l-5-5v4.5"/>',
 'bluetooth-searching':'<path d="m7 7 10 10-5 5V2l5 5L7 17"/><path d="M20.83 14.83a4 4 0 0 0 0-5.66"/><path d="M18 12h.01"/>',
+/* v0.5.0.0: Signalstärke (Pfade aus dem Gedächtnis nach Lucide: bitte im Browser prüfen) */
+'antenna':'<path d="M2 12 7 2"/><path d="m7 12 5-10"/><path d="m12 12 5-10"/><path d="m17 12 5-10"/><path d="M4.5 7h15"/><path d="M12 16v6"/>',
+'signal':'<path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/>',
+'signal-high':'<path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/>',
+'signal-medium':'<path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/>',
+'signal-low':'<path d="M2 20h.01"/><path d="M7 20v-4"/>',
+'signal-zero':'<path d="M2 20h.01"/>',
 'star-plus':'<path d="M11.013 18.582 6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16l2.309-4.679a.53.53 0 0 1 .95 0l2.31 4.679a2.12 2 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904L20 11.5"/><path d="M15 18h6"/><path d="M18 15v6"/>',
 'undo-dot':'<path d="M21 17a9 9 0 0 0-15-6.7L3 13"/><path d="M3 7v6h6"/><circle cx="12" cy="17" r="1"/>',
 'pencil-off':'<path d="m10 10-6.157 6.162a2 2 0 0 0-.5.833l-1.322 4.36a.5.5 0 0 0 .622.624l4.358-1.323a2 2 0 0 0 .83-.5L14 13.982"/><path d="m12.829 7.172 4.359-4.346a1 1 0 1 1 3.986 3.986l-4.353 4.353"/><path d="m15 5 4 4"/><path d="m2 2 20 20"/>',
@@ -1326,16 +1498,24 @@ function rb43StaticIcons(){
    Modell: je Zeile ein Feld mit Farbe (0 = Zeilenfarbe, 1..7) und Schrift (-1 = Zeilenschrift, 0..3) pro Zeichen.
    Transport: beim Senden/Speichern werden Stilmarken (U+0090..U+009C, siehe Firmware) in den Text geschrieben,
    beim Öffnen aus der Bibliothek wieder in Felder zerlegt. Text ohne Marken (alle bisherigen Einträge) bleibt gültig. */
-const RBS={a:{chars:[],c:[],f:[]},b:{chars:[],c:[],f:[]}};
+/* v0.4.6.0: dasselbe Modell und Fenster auch für Blockseiten. Der Zustand liegt je Bereich getrennt (Lauftext/Seite);
+   RBS.a und RBS.b zeigen immer auf den Bereich des gerade sichtbaren Editors (tab). */
+const RBSX={scroll:{a:{chars:[],c:[],f:[]},b:{chars:[],c:[],f:[]}},page:{a:{chars:[],c:[],f:[]},b:{chars:[],c:[],f:[]}}};
+const rbIsPage=()=>tab==='pages';
+const rbCtxName=()=>rbIsPage()?'page':'scroll';
+const RBS={};
+for(const k of ['a','b'])Object.defineProperty(RBS,k,{get:()=>RBSX[rbCtxName()][k],enumerable:true});
 const RB_FONT_NAMES=['Original Normal','Original Fett','Engschrift','Mini'];
 const RB_FONT_SHORT=['Normal','Fett','Engschrift','Mini'];
 const RB_FONT_LAYOUT=[3,4,0,2];
 const RB_LAYOUT_FONT={3:0,4:1,0:2,2:3};
 const RB_HEART_EMOJI=[['❤️',4],['💛',6],['💚',2],['🩵',3],['💙',1],['💜',5],['🤍',7]];
 const RB_LIB_TEXT_MAX=1599;
-const rbInput=k=>$(k==='a'?'scrollText':'scrollLine2');
-const rbBaseLayout=()=>Number($('scrollLayout').value);
-const rbBaseColor=k=>k==='a'?scrollColor:scrollColor2;
+const rbInput=k=>rbIsPage()?$(k==='a'?'line1':'line2'):$(k==='a'?'scrollText':'scrollLine2');
+const rbBaseLayout=()=>rbIsPage()?Number($('pageLayout').value):Number($('scrollLayout').value);
+const rbPageColor=k=>{const p=pages[selected];return p?(Number(k==='a'?p.color1:p.color2)||7):7;};
+const rbBaseColor=k=>rbIsPage()?rbPageColor(k):(k==='a'?scrollColor:scrollColor2);
+const rbAlign=()=>rbIsPage()?(rbBaseLayout()===2?1:Number($('pageAlign').value)):1;
 const rbBaseFont=()=>{const l=rbBaseLayout();return l===1?-1:RB_LAYOUT_FONT[l];};
 const rbTop=l=>l===0?1:l===2?4:0;
 const rbIsIcon=ch=>!!iconFor(ch);
@@ -1423,12 +1603,15 @@ function rbApplyDecoded(k,dec){
 }
 
 /* ---- Zeichen, Breite und Zeichnen mit Stil ---- */
-function rbTokens(k){
-  const st=RBS[k],base=rbBaseColor(k),bl=rbBaseLayout();
-  return codepoints(rbInput(k).value).map((ch,i)=>{
-    const f=bl===1?-1:(st.f[i]===undefined?-1:st.f[i]);
-    return {ch,color:st.c[i]||base,layout:f>=0?RB_FONT_LAYOUT[f]:bl};
+function rbTokensOf(text,cs,fs,base,bl){
+  return codepoints(text).map((ch,i)=>{
+    const f=bl===1?-1:(fs[i]===undefined?-1:fs[i]);
+    return {ch,color:cs[i]||base,layout:f>=0?RB_FONT_LAYOUT[f]:bl};
   });
+}
+function rbTokens(k){
+  const st=RBS[k];
+  return rbTokensOf(rbInput(k).value,st.c,st.f,rbBaseColor(k),rbBaseLayout());
 }
 function rbTokenX(tokens){
   let x=0;const xs=[];
@@ -1438,8 +1621,10 @@ function rbTokenX(tokens){
 const rbLineWidth=k=>rbTokenX(rbTokens(k)).width;
 
 function rbDrawStyled(context,k,pitch,left){
-  const tokens=rbTokens(k),bl=rbBaseLayout();
-  const topBase=bl===1?(k==='a'?0:8):rbTop(bl);
+  const bl=rbBaseLayout();
+  rbDrawTokens(context,rbTokens(k),bl,bl===1?(k==='a'?0:8):rbTop(bl),left,pitch);
+}
+function rbDrawTokens(context,tokens,bl,topBase,left,pitch){
   let x0=left;
   function led(x,y,n){if(x<0||x>=W||y<0||y>=H)return;context.fillStyle=hexColor(n);context.beginPath();context.arc((x+.5)*pitch,(y+.5)*pitch,pitch*.34,0,Math.PI*2);context.fill();}
   tokens.forEach((t,i)=>{
@@ -1455,8 +1640,12 @@ function rbDrawStyled(context,k,pitch,left){
    Ein Schritt = Text beider Zeilen, Farbe/Schrift je Zeichen, Zeilenfarben. Tippen wird nach einer kurzen Pause
    zu einem Schritt zusammengefasst; Aktionen im Fenster, „Text leeren“ usw. sind eigene Schritte. */
 const RB_HIST_MAX=60,RB_HIST_PAUSE=600;
-const rbH={stack:[],idx:-1,sig:'',watch:'',changedAt:0};
-function rbHState(){return {t:[$('scrollText').value,$('scrollLine2').value],a:{c:RBS.a.c.slice(),f:RBS.a.f.slice()},b:{c:RBS.b.c.slice(),f:RBS.b.f.slice()},sc:scrollColor,sc2:scrollColor2};}
+const rbHX={scroll:{stack:[],idx:-1,sig:'',watch:'',changedAt:0},page:{stack:[],idx:-1,sig:'',watch:'',changedAt:0}};
+const rbH={};
+for(const key of ['stack','idx','sig','watch','changedAt'])Object.defineProperty(rbH,key,{get:()=>rbHX[rbCtxName()][key],set:v=>{rbHX[rbCtxName()][key]=v;}});
+function rbHState(){
+  if(rbIsPage()){const p=pages[selected]||{};return {t:[$('line1').value,$('line2').value],a:{c:RBS.a.c.slice(),f:RBS.a.f.slice()},b:{c:RBS.b.c.slice(),f:RBS.b.f.slice()},sc:p.color1,sc2:p.color2};}
+  return {t:[$('scrollText').value,$('scrollLine2').value],a:{c:RBS.a.c.slice(),f:RBS.a.f.slice()},b:{c:RBS.b.c.slice(),f:RBS.b.f.slice()},sc:scrollColor,sc2:scrollColor2};}
 function rbHReset(){const s=rbHState();rbH.stack=[s];rbH.idx=0;rbH.sig=JSON.stringify(s);rbH.watch=rbH.sig;rbH.changedAt=0;rbHButtons();}
 function rbHCommit(){
   const s=rbHState(),g=JSON.stringify(s);rbH.watch=g;
@@ -1479,6 +1668,15 @@ function rbHTick(){
   rbHButtons(g);
 }
 function rbHRestore(s){
+  if(rbIsPage()){
+    const p=pages[selected];if(!p)return;
+    $('line1').value=s.t[0];$('line2').value=s.t[1];
+    for(const k of ['a','b']){RBS[k].chars=codepoints(rbInput(k).value);RBS[k].c=s[k].c.slice();RBS[k].f=s[k].f.slice();}
+    p.color1=s.sc;p.color2=s.sc2;rbPageStore(p);renderPageColors();changed();
+    rbH.sig=JSON.stringify(s);rbH.watch=rbH.sig;
+    if(rbz.open)rbzRefresh();
+    rbHButtons(rbH.sig);return;
+  }
   $('scrollText').value=s.t[0];$('scrollLine2').value=s.t[1];
   for(const k of ['a','b']){RBS[k].chars=codepoints(rbInput(k).value);RBS[k].c=s[k].c.slice();RBS[k].f=s[k].f.slice();}
   scrollColor=s.sc;scrollColor2=s.sc2;makeScrollSwatches();
@@ -1492,6 +1690,7 @@ function rbUndo(){rbHCommit();if(rbH.idx<=0)return;rbH.idx--;rbHRestore(rbH.stac
 function rbRedo(){rbHCommit();if(rbH.idx<0||rbH.idx>=rbH.stack.length-1)return;rbH.idx++;rbHRestore(rbH.stack[rbH.idx]);}
 function rbSnapshot(){rbHCommit();}   /* vor einer Aktion: bisherigen Stand festhalten */
 function rbAfterChange(){
+  if(rbIsPage()){const p=pages[selected];rbPageStore(p);changed();rbHCommit();if(rbz.open)rbzRefresh();return;}
   rbSaveDraftStyle();updateScrollCapacity();draw();rbHCommit();
   if(rbz.open)rbzRefresh();
 }
@@ -1535,15 +1734,15 @@ function rbWireFields(){
 function rbHasOverrides(k){return RBS[k].c.some(Boolean)||RBS[k].f.some(x=>x>=0);}
 
 /* ---- Hauptansicht: Palettenknopf, globale Farbe, globale Schrift ---- */
-function rbAddPaletteButton(){
-  const root=$('scrollColors');if(!root)return;
+function rbPaletteButton(id){
   const palette='<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>';
 
-  const b=document.createElement('button');b.type='button';b.id='rbzOpen';b.className='swatch-more';
+  const b=document.createElement('button');b.type='button';b.id=id;b.className='swatch-more';
   b.setAttribute('aria-label','Zeichen gestalten: Farbe und Schrift pro Zeichen');b.title='Zeichen gestalten';
   b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+palette+'</svg>';
-  b.addEventListener('click',rbzOpen);root.append(b);
+  b.addEventListener('click',rbzOpen);return b;
 }
+function rbAddPaletteButton(){const root=$('scrollColors');if(!root)return;root.append(rbPaletteButton('rbzOpen'));}
 function rbGlobalColor(k,code){
   if(RBS[k].c.some(Boolean))rbSnapshot();
   RBS[k].c.fill(0);
@@ -1672,7 +1871,8 @@ function rbzDrawPreview(){
   }
   const vx=maxW>W&&minStart!==null?Math.max(0,Math.min(maxW-W,minStart-6)):0;
   for(const k of lines){
-    const left=bl===1?-vx:(info[k].width<=W?Math.floor((W-info[k].width)/2):-vx);
+    const wk=info[k].width,al=rbAlign();
+    const left=rbIsPage()?(wk<=W?(al===0?0:al===2?W-wk:Math.floor((W-wk)/2)):-vx):(bl===1?-vx:(wk<=W?Math.floor((W-wk)/2):-vx));
     rbDrawStyled(g,k,PITCH,left);
   }
 }
@@ -1773,7 +1973,7 @@ function rbzApplyFlow(){
   })();
   $('rbzClose').addEventListener('click',rbzClose);$('rbzDone').addEventListener('click',rbzClose);
   $('rbz').addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();rbzClose();}});
-  $('rbzSend').addEventListener('click',()=>{$('sendScroll').click();});
+  $('rbzSend').addEventListener('click',()=>{(rbIsPage()?$('pageShow'):$('sendScroll')).click();});
   $('rbzAll').addEventListener('click',()=>{for(const k of rbLines()){rbz.sel[k]=new Set(RBS[k].chars.map((_,i)=>i));}rbzPaint();});
   $('rbzNone').addEventListener('click',()=>{rbz.sel={a:new Set(),b:new Set()};rbzPaint();});
   $('rbzUndo').addEventListener('click',rbUndo);$('rbzRedo').addEventListener('click',rbRedo);

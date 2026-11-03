@@ -21,6 +21,14 @@ Der Browser-Test erfordert Playwright und Chromium; Arduino-Boardpaket und reale
 
 `python tests/test_0431.py` prüft die JavaScript-Syntax, HTML/gzip-/ETag-Konsistenz, die korrigierte Versionskennung, den entkoppelten Diagnose-TXT-Download und die interaktive Darstellung in drei Chromium-Mobilgrößen. Der Stream-Puffer wurde außerdem separat mit einem Host-C++-Test kompiliert. Dies ersetzt **keinen Arduino-Gesamtcompile** und keinen Heap-/BLE-Test auf dem ESP32.
 
+## v0.5.0.0-dev (3.11.2026)
+
+Die Tests tragen jetzt die Endung `0500`. Neu: `python tests/host_sign_0500.py` übersetzt den Logikblock der Tafelverwaltung (Marken `Tafelverwaltung (Logik)` bis `(Ende Logik)` im Sketch) mit g++ gegen Attrappen der BLE-Klassen (`tests/host/scan_stub_0500.h`, `sign_main_0500.cpp`): Adresse prüfen und normalisieren, Namen säubern, Treffer sammeln (Name, Dienst, eigene Tafel ohne Namen, Dubletten, ungültige Adresse), Reihenfolge und Filter der JSON-Antwort, Überlauf bei zwölf Einträgen. Im Browser-Test: Mock-ESP mit `/api/sign*`, Einstellungen (Suche, „Alle zeigen“, Signalsymbole je Stärke, Speichern, Ersetzen mit zweitem Tipp, fremde Tafel, Zurück ohne Suche, Kopfzeilen-Chip), Zoom-Sperre (Viewport, `touch-action`, unterdrückte Spreizgeste, 16-px-Felder), Palettentaste in der Farbzeile und Programme/Bibliothek mit gefüllten Listen ohne Seitenscrollen. Als Testadresse dient `c0:ff:ee:00:00:01`; keine echte Tafeladresse mehr in den Tests. Die Statusabfrage-Prüfung toleriert einen zusätzlichen Takt (war zeitabhängig).
+
+## v0.4.6.0-dev (3.11.2026)
+
+Die Tests tragen jetzt die Endung `0460`. Neu: Seiten-Parität in `test_render_parity_0460.py` (Firmware-Modus `page` am Rechner gegen `drawPage` im Browser, 15 Fälle, plus Ablehnung zu breiter Seiten), Host-Modus `pagecmp` in `tests/host/drv.h` (Seiten ohne Marken: alter Weg gleich Lauftext-Maler), im Browser-Test das Zeichen-Fenster für Blockseiten und das Bluetooth-Zeichen bei einer Übertragung (Mock liefert HTTP 202 über `__mock.force202`; das Schweigen des ESP wird über die Wartezeit nachgestellt), in `test_build_0460.py` Invarianten zu den neuen Hilfen. Die Scan-Attrappen heißen jetzt `scan_stub_0460.h`/`scan_main_0460.cpp`.
+
 ## v0.4.5.1-dev (3.11.2026)
 
 Die Tests tragen jetzt die Endung `0451`. Neu: `python tests/host_scan_0451.py` übersetzt den Vor-Scan-Block des Sketches mit g++ gegen Attrappen der BLE-Klassen (`tests/host/scan_stub_0451.h`, `scan_main_0451.cpp`) und prüft Treffer (Abbruch, Signalstärke), nur fremde Geräte (volle Zeit, „nicht gesehen“) und nichts gehört („ohne Aussage“). Das ist eine Prüfung der Entscheidungslogik, keine der echten Bibliothek. `test_build_0451.py`: Invarianten zum Vor-Scan (Aufruf nur einmal und nur vor neuem Verbindungsaufbau, vor dem Zählen der Versuche, nur „nicht gesehen“ bricht ab), Statusfelder und Zeichen im Kopf. `test_browser_0451.py`: Bluetooth-Zeichen in den Zuständen idle, ok, bad, link und busy.

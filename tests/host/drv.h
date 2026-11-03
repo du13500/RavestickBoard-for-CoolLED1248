@@ -25,6 +25,20 @@ static Grid renderStream(const String&a,const String*b,uint8_t layout,uint8_t c1
   size_t total=prepareStreamText(a,b,layout,c1,c2,W,m1.chars,m2.chars,m1.pixels,m2.pixels);
   std::vector<uint8_t> payload(total); for(size_t o=0;o<total;o+=chunk){ size_t n=min(chunk,total-o); copyPayloadSlice(o,n,payload.data()+o);} 
   streamPayload=false; return unpack(payload.data()+IMAGE_HEADER_BYTES,W); }
+
+// v0.4.6.0: eine Blockseite (zwei Zeilen) auf 64 Spalten, wie renderBlockPage / rb42RenderPageTile
+static Grid renderPage(const std::string&l1,const std::string&l2,uint8_t layout,uint8_t align,uint8_t c1,uint8_t c2,int&w1,int&w2){
+  w1=rbPageLineWidth(l1.c_str(),layout); w2=layout==1?rbPageLineWidth(l2.c_str(),1):0;
+  std::vector<uint8_t> buf(64*6,0); pixelData=buf.data(); streamDrawingTile=false;
+  if(layout==1){ rbPageDrawLine(l1.c_str(),1,align,0,c1,64); rbPageDrawLine(l2.c_str(),1,align,8,c2,64); }
+  else rbPageDrawLine(l1.c_str(),layout,align,topFor(layout),c1,64);
+  Grid g=unpack(buf.data(),64); pixelData=nullptr; return g; }
+// Gegenprobe: dieselbe Seite ausschliesslich ueber den Lauftext-Maler (Weg fuer Zeilen mit Stilmarken)
+static Grid renderPageStyledPath(const std::string&l1,const std::string&l2,uint8_t layout,uint8_t align,uint8_t c1,uint8_t c2){
+  std::vector<uint8_t> buf(64*6,0); pixelData=buf.data(); streamDrawingTile=false;
+  if(layout==1){ drawInlineUtf8(String(l1.c_str()),1,align,0,c1,64); drawInlineUtf8(String(l2.c_str()),1,align,8,c2,64); }
+  else drawInlineUtf8(String(l1.c_str()),layout,align,topFor(layout),c1,64);
+  Grid g=unpack(buf.data(),64); pixelData=nullptr; return g; }
 static void dump(const char*name,const Grid&g,uint16_t W){
   printf("## %s W=%u\n",name,W);
   for(int y=0;y<16;++y){ for(uint16_t x=0;x<W;++x){ uint8_t c=g[y][x]; putchar(c?'0'+c:'.'); } putchar('\n'); } }
@@ -50,6 +64,24 @@ int main(int argc,char**argv){
     if(g!=h){ printf("STREAM-MISMATCH\n"); return 2; }
     printf("W=%u\n",W); for(int y=0;y<16;++y){ for(uint16_t x=0;x<min<uint16_t>(W,64);++x){ uint8_t c=g[y][x]; putchar(c?'0'+c:'.'); } putchar('\n'); }
     return 0; }
+
+  if(!strcmp(mode,"page")){   // page <layout> <align> <c1> <c2> <hex1> <hex2> -> W1 W2 + 16 Zeilen (64 Spalten)
+    auto unhex=[&](const char*h){ std::string o; for(size_t i=0;h[i]&&h[i+1];i+=2){ unsigned v; sscanf(h+i,"%2x",&v); o+=char(v);} return o; };
+    uint8_t layout=atoi(argv[2]),align=atoi(argv[3]),c1=atoi(argv[4]),c2=atoi(argv[5]); std::string a=unhex(argv[6]),b=unhex(argv[7]);
+    int w1,w2; Grid g=renderPage(a,b,layout,align,c1,c2,w1,w2);
+    printf("W=%d,%d\n",w1,w2); for(int y=0;y<16;++y){ for(int x=0;x<64;++x){ uint8_t c=g[y][x]; putchar(c?'0'+c:'.'); } putchar('\n'); }
+    return 0; }
+  if(!strcmp(mode,"pagecmp")){   // Zeilen ohne Marken: alter Weg == Lauftext-Maler (Pixel fuer Pixel), alle Schriften und Ausrichtungen
+    const char*texts[]={"Hi Raver","RAVESTICK","Aerger OEL","\xC3\x84rger \xC3\x96L \xC3\x9C\xC3\x9F","Du \xE2\x9D\xA4\xEF\xB8\x8F Du","LIVE \xF0\x9F\x8D\x8C\xEF\xB8\x8E DJ","Party! 22","a b c d e f","1234567890","\xF0\x9F\x8C\xB9\xF0\x9F\x8C\xBC x","",
+      "mini klein Text","AB cd EF gh ij kl mn"};
+    int fails=0,checked=0;
+    for(const char*t:texts)for(uint8_t layout=0;layout<=4;++layout)for(uint8_t align=0;align<=2;++align)for(uint8_t color=1;color<=7;color+=3){
+      std::string l1(t),l2("Zeile zwei");
+      int w1,w2; Grid g=renderPage(l1,l2,layout,align,color,color==7?1:color+1,w1,w2);
+      if(w1>64||w2>64||w1<0||w2<0)continue;
+      Grid h=renderPageStyledPath(l1,l2,layout,align,color,color==7?1:color+1);
+      ++checked; if(g!=h){ ++fails; printf("!! PAGECMP L%u A%u '%s'\n",layout,align,t); } }
+    printf(fails?"PAGECMP: FAIL (%d von %d)\n":"PAGECMP: ALL PASS (%d Faelle)\n",fails?fails:checked,checked); return fails?1:0; }
   if(!strcmp(mode,"styled")){
     int fails=0;
 #define CHECK(c,msg) do{ if(!(c)){ printf("FAIL: %s (line %d)\n",msg,__LINE__); ++fails; } }while(0)
