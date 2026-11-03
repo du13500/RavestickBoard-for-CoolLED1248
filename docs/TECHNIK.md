@@ -1,3 +1,40 @@
+## Technischer Nachtrag v0.6.1.0: Animationen als Dateien (3.11.2026)
+
+**Stand:** im Quellcode vorhanden und am Rechner geprüft (Dateispeicher mit dem echten Sketch-Code gegen ein Dateisystem im Speicher; Nutzlast gegen die unabhängige Referenz; Weboberfläche in Chromium). Arduino-Compile, echtes LittleFS, Webserver und BLE-Senden aus der Datei sind offen.
+
+**Aufteilung:** Die Weboberfläche zerlegt und wandelt alles um (GIF-Decoder, Bildstreifen, Text-Raster, Farbreduktion auf die sieben LED-Farben, Planung der Bildfolge) und baut die **Nutzlast des Befehls `0x04`** (Format siehe Nachtrag 0.6.0.0). Die Firmware speichert und sendet nur. Der Browser lädt Nutzlast, Vorschaubild und Name hoch; es gibt keinen Gesamtpuffer im ESP32.
+
+**Datei `/rb-anim/a<ID>.rba`** (ID 1 bis 9999, Dezimalzahl im Namen):
+
+| Bereich | Größe | Inhalt |
+|---|---|---|
+| Kopf `Rb61AnimHeader` | 448 Byte (`static_assert`) | Kennung `RBA1`, Bildzahl (u16, 2–79), Zeit je Bild (u16, 1–2000 ms), Länge der Nutzlast (u32 = 27 + Bilder × 384), Flags (0), Namenslänge (1–40), Name (UTF-8, mit 0 abgeschlossen), Füllbytes bis 64, Vorschaubild 384 Byte (erstes Bild, Ebenen R, G, B zu je 128 Byte) |
+| Nutzlast | 27 + Bilder × 384 | genau die Bytes, die an die Tafel gehen |
+
+Eine Datei gilt nur, wenn Kennung, Wertebereiche, Länge der Nutzlast und Dateigröße (448 + Nutzlast) zusammenpassen. Sonst erscheint sie in der Liste mit `broken` (zählt zu den 40 und lässt sich löschen, nicht senden).
+
+**Routen** (Antworten JSON `{ok, message, id?}`; Fehlerstatus 400 Eingabe, 404 nicht gefunden oder beschädigt, 409 Controller beschäftigt oder Reihenfolge/Limit, 500 Dateisystem, 503 Dateisystem nicht eingerichtet, 507 kein Platz):
+
+| Route | Zweck |
+|---|---|
+| `GET /api/anim/list` | `{ok, ready, max (79 Bilder), limit (40), free, total, items:[{id, name, frames, ms, broken, bytes, thumb}]}` (Bytes des Dateisystems; Vorschaubild als Base64) |
+| `GET /api/anim/get?id=` | `{ok, id, name, frames, ms, data}`; die Nutzlast kommt gestreamt in einer Antwort, intern in Stücken zu 600 Byte (Base64-URL ohne Füllzeichen) |
+| `POST /api/anim/put` | `off`, `data` (Base64-URL ohne Füllzeichen, höchstens 1200 Byte roh); erstes Stück (`off=0`) mit `frames`, `ms`, `total`, `name`, `thumb`; `abort=1` verwirft. Schreibt `up.tmp`, beim letzten Stück Prüfung und `rename` auf die nächste freie ID |
+| `POST /api/anim/send` | `id`; startet den Auftrag `ANIM` mit `rb61PendingAnimId`; Antwort 202 |
+| `POST /api/anim/rename`, `/duplicate`, `/delete` | `id` (und `name`); Duplizieren schreibt über `up.tmp` und `rename` (nächste freie ID) |
+
+Urlencodierte POST-Körper mit Base64-URL (`-` und `_`, ohne Füllzeichen), weil der Arduino-`WebServer` einfach, aber nicht für große Binärkörper gebaut ist; ein Stück ist etwa 1,6 KB. Der Webserver ist einfädig; während eines BLE-Auftrags (`rb61Busy`) lehnen die Schreibrouten mit 409 ab.
+
+**Senden:** `onAnimSend` -> `rb61PrepareAnimFile(id)` liest und prüft den Kopf und setzt Länge und Zeit; der Auftrag `ANIM` mit `rb60AnimPattern = ANIM_FILE` liest die Chunks über `rb60CopyAnimSlice` (Dateiposition 448 + Versatz). Ablauf, Antwortcodes und Wiederholungen wie im Animationstest; **kein `0x07`, kein `0x06`** (Hardwaretest 0.6.0.2: ohne Wirkung bei Animationen). Dauer bei 79 Bildern etwa 55 s (Adam: 0,2 s je Paket); der Wächter (25 s) wird je Paket über `rbPhase()` gefüttert.
+
+**`animActive`:** `rb61LastKind` (0 unbekannt, 1 Text/Bild, 2 Animation) wird nach jedem erfolgreichen Auftrag gesetzt; `/api/status` liefert `animActive` = (Art 2). Die Weboberfläche sperrt den Tempo-Regler (und erklärt es), solange das gilt. Nach Neustart des ESP32 ist die Art unbekannt (der Regler bleibt frei). Die Tafel behält die Animation über das Ausschalten; nach dem Neustart des ESP32 weiß die Firmware es nicht.
+
+**Aufbau des Sketchs:** Die neue Datei ist eine `.h` und bekommt von der Arduino-IDE keine automatischen Prototypen. Alles, was der Sketch schon vor ihrer Einbindung braucht (`ANIM_FILE`, `RB61_META_BYTES`, `rb61PendingAnimId`, `rb61LastKind`), steht oben im Sketch (nur Konstanten und Variablen vor der ersten Funktion, Regel aus 0.6.0.2). Eingebunden hinter `RavestickBoard_Library.h` (braucht `libraryMounted` und `LittleFS`); `rb61AnimBegin()` läuft nach `libraryBegin()`.
+
+**Weboberfläche (`RbAnim`):** reine Funktionen in einem eigenen `<script>`-Block (Nutzlast bauen, Base64, GIF-Decoder, Raster, Streifen, Farbumsetzung, Planung) vor dem Hauptskript, die Oberfläche (Ansicht `view-animations`) hinter den Hilfsfunktionen vor `init()`. GIF: zwischenzeitlich auf höchstens 192 Pixel Kantenlänge verkleinert, höchstens 300 Quellbilder; Einpassen `contain|cover|stretch|orig` mit Verschiebung; Farbreduktion auf die sieben Farben (Bits R=4, G=2, B=1) mit Schwelle, Floyd-Steinberg oder Bayer. Text-Raster: ein Zeichen je Pixel aus `.RGBCMYW` (zusätzlich `K`, `0` und Leerzeichen als „aus“, Groß- und Kleinschreibung egal); Tabulator-getrennte Zellen (Excel, höchstens ein Zeichen je Zelle, leere Zelle = aus) oder direkt aneinandergeschriebene Zeichen; eine Zeile ohne Tabulator und ohne Zeichen oder eine Zeile mit `---` am Anfang trennt Bilder; höchstens 512 × 512 Zeichen je Bild; ein 64 × 16 großes Raster entspricht 1:1 der Tafel, andere Größen werden wie GIF-Bilder eingepasst.
+
+**Bekannte Grenzen:** Die Größe der LittleFS-Partition wird nicht aus der Partitionsdatei gelesen; `rb61FreeFor` nutzt `totalBytes()`/`usedBytes()` zur Laufzeit. 80 Bilder sind in der Oberfläche gesperrt (die Tafel lehnt sie laut Adam ab; an unserer Tafel ungetestet). Die Helligkeit (`0x08`) wird bei Animationen nicht gesendet; ihre Wirkung ist ungeklärt.
+
 ## Technischer Nachtrag v0.6.0.0/0.6.0.1: Animationstest (Befehl 0x04) und Antwortcodes (3.11.2026)
 
 **Stand:** im Quellcode vorhanden und am Rechner geprüft; Arduino-Compile und Hardwaretest offen. Quelle der Formatfakten: Protokolldokumentation und Kodierer des OpenSign-Projekts (Adam Schulz, MIT). Unser Code ist eigenständig geschrieben und wurde lokal byte-genau gegen OpenSigns Kodierer abgeglichen.
@@ -17,7 +54,7 @@ Gesamtgröße 27 + Frames × 384 Byte. Grenze etwa 30 KiB (30 720 B): 79 Frames 
 
 **Antwort der Tafel je Chunk:** `01 | Länge (00 05) | Befehl 00 Nr.(2) Status | 03`. Status 0 in Ordnung, 6 Prüfsummenfehler (Paket neu senden), 1–5 Fehler (Abbruch; 4 „Datenlänge“). Die Firmware liest die Antwort in der Benachrichtigung (`rb60ParseAck`, Kopie in einen kleinen Puffer, Auswertung in `sendPacket`) und zählt sie (`ackOk`, `ackNak`, `ackFatal`, `ackOther`). Nur wenn `rb60AckStrict` gesetzt ist (Animationsauftrag), ist Status ≠ 0 ein Fehlschlag; sonst bleibt `sendPacket` bei seinem bisherigen Verhalten. In 2 979 aufgezeichneten Antworten eines fremden Protokolls war der Status immer 0; die Fehlerfälle sind aus der Protokollbeschreibung übernommen und an unserer Tafel ungeprüft.
 
-**Auftragsablauf `ANIM`:** Verbinden (Vor-Scan wie bisher), kein Tempo (`0x07`), kein Modus vorab, Daten in Chunks (bei Status 6 bis zu zwei Wiederholungen je Chunk), danach optional `0x06` mit dem gewählten Modus, trennen. Route `POST /api/anim/test` mit `pattern` (`colors|bar|limit`), optional `n`, `ms`, `mode` (`keep|static|scroll`); Antwort 202 wie bei den anderen BLE-Aufträgen. Muster: *Farben* (7 Frames, eine LED-Farbe je Frame in der Reihenfolge blau, grün, cyan, rot, magenta, gelb, weiß, 700 ms), *Balken* (16 Frames, 60 ms, Eckpixel rot oben links und blau unten rechts), *Grenze* (79 oder 80 Frames, ab 0.6.0.1 300 ms, zuvor 40 ms; Balkenfarbe wechselt alle 8 Frames durch sechs Farben). **Seit 0.6.0.1** zeigt jedes Frame seine Nummer (Frame + 1, zweistellig, Ziffern 3×5 doppelt gross, 14 × 10 Pixel ab Spalte 25, Zeile 3; Farbfläche schwarz, Balken grün, Grenze weiß; die Nummer hat Vorrang vor dem Balken, die Eckpixel liegen außerhalb). Die Ziffern sind eine eigene Tabelle (`RB60_DIGITS`), nicht die Schriften des Sketchs.
+**Auftragsablauf `ANIM`:** Verbinden (Vor-Scan wie bisher), kein Tempo (`0x07`), kein Modus vorab, Daten in Chunks (bei Status 6 bis zu zwei Wiederholungen je Chunk), trennen. (Bis 0.6.0.2 folgte optional `0x06` mit einem wählbaren Modus; der Hardwaretest zeigte keine Wirkung, ab 0.6.1.0 entfällt er.) Route `POST /api/anim/test` mit `pattern` (`colors|bar|limit`), optional `n`, `ms`, `mode` (`keep|static|scroll`); Antwort 202 wie bei den anderen BLE-Aufträgen. Muster: *Farben* (7 Frames, eine LED-Farbe je Frame in der Reihenfolge blau, grün, cyan, rot, magenta, gelb, weiß, 700 ms), *Balken* (16 Frames, 60 ms, Eckpixel rot oben links und blau unten rechts), *Grenze* (79 oder 80 Frames, ab 0.6.0.1 300 ms, zuvor 40 ms; Balkenfarbe wechselt alle 8 Frames durch sechs Farben). **Seit 0.6.0.1** zeigt jedes Frame seine Nummer (Frame + 1, zweistellig, Ziffern 3×5 doppelt gross, 14 × 10 Pixel ab Spalte 25, Zeile 3; Farbfläche schwarz, Balken grün, Grenze weiß; die Nummer hat Vorrang vor dem Balken, die Eckpixel liegen außerhalb). Die Ziffern sind eine eigene Tabelle (`RB60_DIGITS`), nicht die Schriften des Sketchs.
 
 **Aufbau des Sketchs (Arduino-Prototypen):** Die Arduino-IDE setzt automatisch erzeugte Funktionsprototypen vor die erste Funktionsdefinition der `.ino`. Jeder Typ (`enum`, `struct`, `class`), der in irgendeiner Funktionssignatur vorkommt, muss deshalb vor der ersten Funktion definiert oder vorab deklariert sein; vor der ersten Funktion dürfen nur Konstanten, Variablen und Typen stehen. In 0.6.0.1 war das verletzt (Animationsfunktionen vor `enum RamStage`), in 0.6.0.2 steht die erste Funktion (`rbPhase`) hinter den Typen und die Animationsfunktionen davor wieder dahinter. `tests/arduino_prototypes.py` prüft die Regel.
 

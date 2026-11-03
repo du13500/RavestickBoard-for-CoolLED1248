@@ -1,6 +1,10 @@
 # RavestickBoard · Diagnose und Fehlerprotokoll
 
-**Fortgeschrieben 3.11.2026 für v0.6.0.2-dev (neuester Abschnitt oben). Die älteren Abschnitte beschreiben den Stand ihrer Version.**
+**Fortgeschrieben 3.11.2026 für v0.6.1.0-dev (neuester Abschnitt oben). Die älteren Abschnitte beschreiben den Stand ihrer Version.**
+
+## Diagnose-Ergänzung v0.6.1.0 – Animationen (3.11.2026)
+
+Neue Ereignisse (Kategorie `ANIM`) im Diagnoseprotokoll: „Unfertiger Animations-Upload entfernt“ (beim Start, wenn `up.tmp` übrig war), „Animation gespeichert“ (ID, Bildzahl, Dateigröße) und beim Senden aus einer Datei (ID, Name, Bildzahl, Zeit je Bild). Umbenennen, Duplizieren und Löschen schreiben kein eigenes Ereignis. Ein Senden aus der Datei erscheint wie der Animationstest als Auftrag `ANIM` mit den Phasen der Übertragung; die Antwortzähler (`ackOk`, `ackNak`, `ackFatal`, `ackOther`) zählen dieselben Pakete. Bei einer Störung zuerst nachsehen: (1) meldet `GET /api/anim/list` `ready:false` (Dateisystem nicht eingerichtet), (2) steht in der Liste ein Eintrag mit `broken` (Datei beschädigt), (3) letzte Phase und Paketnummer des Wächter-Neustarts, falls das Senden hing (79 Bilder brauchen etwa 55 s, der Wächter wird je Paket gefüttert), (4) Heap-Minimum während des Hochladens und Sendens, besonders mit zwei Geräten. `animActive` im Status zeigt, was zuletzt gesendet wurde.
 
 ## Diagnose-Ergänzung v0.6.0.0/0.6.0.1 – Antwortcodes der Tafel und Animationstest (3.11.2026)
 

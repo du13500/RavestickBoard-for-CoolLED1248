@@ -1,4 +1,4 @@
-## Entscheidungen v0.6.0.0-dev bis v0.6.0.2-dev · 3.11.2026 (Animationen)
+## Entscheidungen v0.6.0.0-dev bis v0.6.1.0-dev · 3.11.2026 (Animationen)
 
 | ID | Entscheidung | Begründung |
 |---|---|---|
@@ -9,6 +9,13 @@
 | ADR-2026-11-03-E | **Antwortcodes strikt nur im Animationstest.** Andere Aufträge zählen und protokollieren sie nur. | Verhalten bestehender, hardwaregeprüfter Aufträge soll nicht unbemerkt ändern. Ob Status ≠ 0 dort bisher still auftrat, ist unbekannt. |
 | ADR-2026-11-03-H | **Reihenfolge im Sketch ist Teil der Prüfung:** Typen vor der ersten Funktion; automatische Prüfung der Prototyp-Regel im Build-Test. | Der Compile von 0.6.0.1 scheiterte, weil Animationsfunktionen vor `enum RamStage` standen. Rechnertests mit g++ auf Ausschnitten erkennen das nicht. |
 | ADR-2026-11-03-G | **Jedes Frame der Testmuster trägt seine Nummer; eigene Ziffern; Grenztest 300 ms.** | Vorschlag des Nutzers beim Planen des Tests: Bei 79 gleichartigen Frames sieht man sonst nicht, wie viele ankommen und wo die Schleife endet. Eigene 3×5-Ziffern halten den Animationsweg vom Text-Renderer getrennt und am Rechner exakt prüfbar. 40 ms sind zum Lesen zu schnell. Ersetzt 0.6.0.0 (nicht geflasht). |
+| ADR-2026-11-03-I | **Animationen liegen als Dateien im ESP32 (LittleFS), die Nutzlast unverändert.** Kopf 448 Byte mit Name, Zeit, Bildzahl und Vorschau. | Senden braucht keine Umrechnung und keinen Gesamtpuffer (Lesen ab Dateiposition 448); die Liste zeigt Vorschauen ohne Abruf der Nutzlast. Die Tafel speichert zwar die Animation selbst, hat aber keine auslesbare Liste. Alternative (Browser-Speicher) verworfen: nicht gerätübergreifend. |
+| ADR-2026-11-03-J | **Alles Umwandeln im Browser, der ESP32 speichert und sendet nur.** Eigener GIF-Decoder statt Browser-Decoder. | Rechenleistung und Speicher des ESP32-C3 reichen nicht; der Decoder von Chromium (`ImageDecoder`) fehlt in älteren Safari-Versionen, Canvas gibt bei Animationen nur das erste Bild. Der eigene Decoder ist am Rechner gegen Chromium geprüft; Safari ungeprüft. |
+| ADR-2026-11-03-K | **Anzeigemodus-Auswahl nach Animationen entfällt.** | Hardwaretest 0.6.0.2: `0x06` danach ohne Wirkung. Weniger Bedienung, ein Befehl weniger im Auftrag. |
+| ADR-2026-11-03-L | **Tempo-Regler bei Animationen sperren (`animActive`).** | Hardwaretest 0.6.0.2: wirkt nicht; die Zeit je Bild steckt in der Animation. Zustand aus dem zuletzt gesendeten Inhalt (nach Neustart unbekannt, Regler dann frei). Umgesetzt wie bei Programmen mit Eigenzeit. |
+| ADR-2026-11-03-M | **Beschädigte Dateien bleiben in der Liste sichtbar (`broken`) und zählen mit.** | Unsichtbare, aber mitzählende Dateien würden das Limit und den Speicher verbrauchen, ohne dass der Nutzer sie löschen kann. |
+| ADR-2026-11-03-N | **Die Testmuster und der Animationstest bleiben.** | Wunsch des Nutzers: Nummern, Vollbildfarbe mit Nummer und Balken sind gelungen und vielleicht später für Zähler oder Uhrzeit nutzbar. |
+| ADR-2026-11-03-O | **Neue Firmwareteile in eine `.h`-Datei (`RavestickBoard_Anim.h`).** | Eine `.h` bekommt keine automatischen Prototypen und kann die Regel aus 0.6.0.2 nicht verletzen; der Sketch bleibt überschaubar. Preis: Sketch-Ordner mit sieben Dateien. |
 | ADR-2026-11-03-F | **Kein OpenSign-Quelltext übernommen**; Format und Paketierung eigenständig umgesetzt und lokal gegen OpenSign abgeglichen. | Klare Rechtslage (siehe `QUELLEN_UND_LIZENZEN.md`): MIT-Lizenz, dazu ausdrückliche Erlaubnis von Adam Schulz per E-Mail. MIT-Hinweis nur bei tatsächlicher Übernahme nötig, steht aber vorsorglich in `THIRD_PARTY_NOTICES.md`. |
 
 ## Entscheidung v0.4.0-dev · 26.10.2026

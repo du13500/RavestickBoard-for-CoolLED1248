@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport"/>
 <meta content="#11141c" name="theme-color"/>
-<title>RavestickBoard · v0.6.0.2-dev</title>
+<title>RavestickBoard · v0.6.1.0-dev</title>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/><link rel="icon" type="image/png" href="/favicon.ico"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="RavestickBoard"/>
@@ -474,9 +474,30 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 .rb-sign-tag.mine{border-color:#2f6b52;color:#8fe0b9}.rb-sign-tag.active{border-color:#3ddc97;color:#3ddc97}
 .rb-sign-btns{grid-column:1 / -1;display:flex;gap:8px;flex-wrap:wrap}
 .rb-sign-btns button{flex:1 1 140px;min-height:36px}
+/* v0.6.1.0: Animationen (Liste, Import, Vorschau) */
+#view-animations .inner-panel{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;padding:9px 10px 14px}
+#view-animations h2{font-size:16px;line-height:1.1;margin:0 0 8px}
+#view-animations .library-actions{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+#view-animations .library-actions button{flex:1 1 17%;min-width:45px;min-height:38px;padding:6px 2px}
+#view-animations .library-list{flex:none;min-height:100px;max-height:min(46dvh,420px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:8px}
+.anim-screen{display:block;width:100%;max-width:512px;aspect-ratio:4/1;border:1px solid #2c3646;border-radius:8px;background:#05080d;margin:6px auto 2px}
+.anim-row .lib-pick{flex:1;min-width:0;text-align:left}
+.anim-thumb{width:96px;height:24px;flex:0 0 96px;border-radius:4px;background:#05080d}
+.anim-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.anim-grid label{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.anim-grid input:not([type=checkbox]):not([type=range]),.anim-grid select,.anim-grid button{font-size:16px;min-height:44px;padding:9px 10px}
+.anim-grid input[type=range]{min-height:32px;margin:0}
+.anim-grid .wide{grid-column:1/-1}
+.anim-grid .anim-check{flex-direction:row;align-items:center;gap:8px;font-size:13px}
+.anim-grid .anim-check input{width:20px;height:20px;margin:0}
+.anim-file{display:flex!important;align-items:center;justify-content:center;min-height:44px;border:1px solid #6b7280;border-radius:9px;background:#283345;cursor:pointer;padding:8px 10px;font-size:14px!important;text-align:center}
+.anim-raster{margin:8px 0}.anim-raster summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-size:14px}
+.anim-raster textarea{width:100%;box-sizing:border-box;font:16px/1.25 ui-monospace,Menlo,Consolas,monospace;white-space:pre;overflow:auto}
+.rb-anim-err{color:#ffb4a8;font-size:13px;line-height:1.4;margin:4px 0;min-height:0}.rb-anim-err:empty{display:none}
+#animProg{width:100%;height:10px;margin:8px 0}
 </style></head>
 <body class="home-active" data-rb-view="home"><div id="rbBootScreen" class="rb-initial-loading" role="status" aria-live="polite"><span class="rb-boot-mark" aria-hidden="true"><svg aria-hidden="true" class="rb-lucide" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"></path><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"></path></svg></span><span>RavestickBoard wird geladen …</span></div><main id="appShell">
-<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.6.0.2-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span class="rb-ble" id="rbBle" data-state="idle" data-rb-icon="bluetooth" role="img" aria-label="LED-Tafel: noch kein Verbindungsversuch seit dem Start" title="LED-Tafel: noch kein Verbindungsversuch seit dem Start"></span><span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
+<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.6.1.0-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span class="rb-ble" id="rbBle" data-state="idle" data-rb-icon="bluetooth" role="img" aria-label="LED-Tafel: noch kein Verbindungsversuch seit dem Start" title="LED-Tafel: noch kein Verbindungsversuch seit dem Start"></span><span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
 
 
 
@@ -492,6 +513,7 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <button data-nav="editor" type="button" data-rb-icon="pencil-sparkles" data-rb-painted="pencil-sparkles"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3H8"/><path d="m15.007 5.008 3.987 3.986"/><path d="M20 15v4"/><path d="M21.174 6.813a2.82 2.82 0 0 0-3.986-3.987L3.842 16.175a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="M22 17h-4"/><path d="M4 5v4"/><path d="M6 7H2"/><path d="M9 2v2"/></svg><span>Texteditor</span></button>
 <button data-nav="library" type="button" data-rb-icon="library" data-rb-painted="library"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg><span>Bibliothek</span></button>
 <button data-nav="programs" type="button" data-rb-icon="list-video" data-rb-painted="list-video"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 5H3"/><path d="M10 12H3"/><path d="M10 19H3"/><path d="M15 12.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997a1 1 0 0 1-1.517-.86z"/></svg><span>Programme</span></button>
+<button data-nav="animations" type="button" data-rb-icon="film"><span>Animationen</span></button>
 <button data-nav="ambience" type="button" data-rb-icon="spray-can" data-rb-painted="spray-can"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h.01"/><path d="M7 5h.01"/><path d="M11 7h.01"/><path d="M3 7h.01"/><path d="M7 9h.01"/><path d="M3 11h.01"/><rect width="4" height="4" x="15" y="5"/><path d="m19 9 2 2v10c0 .6-.4 1-1 1h-6c-.6 0-1-.4-1-1V11l2-2"/><path d="m13 14 8-2"/><path d="m13 19 8-2"/></svg><span>Ambiente</span></button>
 <button data-nav="diagnostics" type="button" data-rb-icon="bug" data-rb-painted="bug"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-9"/><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z"/><path d="M14.12 3.88 16 2"/><path d="M21 21a4 4 0 0 0-3.81-4"/><path d="M21 5a4 4 0 0 1-3.55 3.97"/><path d="M22 13h-4"/><path d="M3 21a4 4 0 0 1 3.81-4"/><path d="M3 5a4 4 0 0 0 3.55 3.97"/><path d="M6 13H2"/><path d="m8 2 1.88 1.88"/><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13"/></svg><span>Diagnose</span></button>
 <button data-nav="settings" type="button" data-rb-icon="wrench" data-rb-painted="wrench"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/></svg><span>Einstellungen</span></button>
@@ -522,7 +544,72 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <div class="library-footer hidden"><label for="libSlot">Kurzwahl</label><select id="libSlot"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select><button id="libAssign" type="button">Belegen</button><button id="libUnassign" type="button">Freigeben</button></div>
 <div class="library-footer settings-actions" id="v42BackupFooter"><button id="libExport" type="button" data-rb-icon="database-arrow-down" data-rb-painted="database-arrow-down"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 19 3 3 3-3"/><path d="M19 16v6"/><path d="M21 12.536V5"/><path d="M3 12A9 3 0 0 0 15.182 14.806"/><path d="M3 5V19A9 3 0 0 0 13.318 21.968"/><ellipse cx="12" cy="5" rx="9" ry="3"/></svg>Backup exportieren</button><label class="library-import" for="libImport" data-rb-icon="database-arrow-up">Backup zusammenführen</label><input type="file" accept=".json,application/json" id="libImport" class="visually-hidden"/></div>
 </div>
-</div></section><section aria-label="Programme" class="app-view inner-view hidden" id="view-programs">
+</div></section><section aria-label="Animationen" class="app-view inner-view hidden" id="view-animations">
+<div class="panel inner-panel" id="animListPane"><h2>Animationen</h2>
+<p class="tiny muted" id="animStatus" aria-live="polite">Animationen werden geladen …</p>
+<div aria-label="Animationsaktionen" class="fixed-actions library-actions" role="toolbar">
+<button id="animImport" type="button" data-rb-icon="plus" data-rb-only="1" title="Animation importieren" aria-label="Animation importieren"></button>
+<button id="animSend" type="button" data-rb-icon="plane-takeoff" data-rb-only="1" title="An die Tafel senden" aria-label="An die Tafel senden" disabled></button>
+<button id="animRename" type="button" data-rb-icon="text-cursor-input" data-rb-only="1" title="Umbenennen" aria-label="Umbenennen" disabled></button>
+<button id="animDuplicate" type="button" data-rb-icon="copy" data-rb-only="1" title="Duplizieren" aria-label="Duplizieren" disabled></button>
+<button id="animDelete" type="button" data-rb-icon="trash" data-rb-only="1" title="Löschen" aria-label="Löschen" disabled></button>
+</div>
+<div id="animPreviewWrap" class="hidden"><canvas id="animPreview" class="anim-screen" width="512" height="128" role="img" aria-label="Vorschau der gewählten Animation"></canvas><p class="tiny muted" id="animPreviewInfo" aria-live="polite"></p></div>
+<div aria-label="Gespeicherte Animationen" class="entry-list library-list" role="list" id="animList"></div>
+<p class="hint">Eine gesendete Animation ersetzt den Inhalt der Tafel. Die Tafel speichert sie und spielt sie selbst in Dauerschleife ab, auch nach dem Ausschalten, bis du wieder etwas sendest. Tempo-Regler und Anzeigemodus wirken bei Animationen nicht; die Geschwindigkeit steckt in der Animation (Zeit je Frame). Höchstens 79 Frames; das Senden dauert je nach Länge bis etwa eine Minute.</p>
+</div>
+<div class="panel inner-panel hidden" id="animImportPane">
+<div class="editor-context"><button id="animImpBack" type="button" class="secondary" data-rb-icon="arrow-left" data-rb-only="1" title="Zurück zur Liste" aria-label="Zurück zur Liste"></button><div style="flex:1;min-width:0"><strong>Animation importieren</strong><small id="animImpSub">Quelle wählen</small></div></div>
+<div class="label">Quelle</div>
+<div class="anim-grid">
+<label class="anim-file" for="animFileGif">GIF-Datei</label><input type="file" id="animFileGif" class="visually-hidden" accept="image/gif,.gif"/>
+<label class="anim-file" for="animFileStrip">Bildstreifen</label><input type="file" id="animFileStrip" class="visually-hidden" accept="image/*"/>
+</div>
+<p class="tiny muted">Bildstreifen: mehrere gleich große Bilder nebeneinander oder untereinander in einer Datei (PNG, JPG, WebP).</p>
+<div id="animStripOpts" class="anim-grid hidden">
+<label>Bilder im Streifen<input type="number" id="animStripN" min="1" max="300" step="1" inputmode="numeric"/></label>
+<label>Anordnung<select id="animStripDir"><option value="h">nebeneinander</option><option value="v">untereinander</option></select></label>
+</div>
+<details class="anim-raster"><summary>Text-Raster (aus Excel)</summary>
+<p class="tiny muted">Ein Zeichen je Pixel: <b>.</b> aus, <b>R</b> rot, <b>G</b> grün, <b>B</b> blau, <b>C</b> cyan, <b>M</b> magenta, <b>Y</b> gelb, <b>W</b> weiß. Zellen aus Excel (Tab-getrennt) einfügen oder Zeichen direkt aneinanderschreiben. Mehrere Bilder trennt eine leere Zeile oder eine Zeile, die mit <b>---</b> beginnt. 64 × 16 Zeichen entsprechen 1:1 der Tafel.</p>
+<textarea id="animRasterText" rows="6" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="RRRR....BBBB&#10;RRRR....BBBB"></textarea>
+<div class="anim-grid"><button type="button" id="animRasterGo" class="secondary">Aus Text übernehmen</button><label class="anim-file" for="animFileRaster">Textdatei laden</label><input type="file" id="animFileRaster" class="visually-hidden" accept=".txt,.csv,.tsv,text/plain"/></div>
+</details>
+<p class="tiny muted" id="animSrcInfo" aria-live="polite"></p>
+<div id="animAdjust" class="hidden">
+<div class="label">Anpassen</div>
+<div class="anim-grid">
+<label>Bildgröße<select id="animFit"><option value="contain">Einpassen</option><option value="cover">Füllen</option><option value="stretch">Strecken</option><option value="orig">Original</option></select></label>
+<label>Farbumsetzung<select id="animDither"><option value="thresh">Schwelle</option><option value="fs">Floyd-Steinberg</option><option value="bayer">Geordnet</option></select></label>
+</div>
+<p class="tiny muted">Einpassen zeigt das ganze Bild, Füllen schneidet zu (Ausschnitt verschiebbar), Strecken verzerrt, Original zeigt es unskaliert in der Mitte. Schwelle ergibt flächige Farben, die beiden Rasterungen täuschen Zwischentöne mit Punktmustern vor. Die Tafel kennt nur acht Farben (je Farbkanal an oder aus).</p>
+<div id="animOffsets" class="anim-grid hidden">
+<label>Ausschnitt waagerecht<input type="range" id="animOx" min="-100" max="100" step="1" value="0"/></label>
+<label>Ausschnitt senkrecht<input type="range" id="animOy" min="-100" max="100" step="1" value="0"/></label>
+</div>
+<div class="anim-grid">
+<label>Helligkeit der Schwelle<input type="range" id="animThr" min="0" max="255" step="1" value="128"/></label>
+<label>Kontrast<input type="range" id="animCon" min="-50" max="100" step="1" value="0"/></label>
+</div>
+<div class="label">Bilder und Zeit</div>
+<div class="anim-grid">
+<label>Von Bild<input type="number" id="animFrom" min="1" step="1" inputmode="numeric" value="1"/></label>
+<label>Bis Bild<input type="number" id="animTo" min="1" step="1" inputmode="numeric" value="1"/></label>
+<label>Jedes n-te Bild<input type="number" id="animStep" min="1" max="100" step="1" inputmode="numeric" value="1"/></label>
+<label>Zeit je Frame in ms<input type="number" id="animMs" min="1" max="2000" step="1" inputmode="numeric" value="100"/></label>
+<label class="anim-check wide"><input type="checkbox" id="animPing"/> Hin und zurück (Bilder rückwärts anhängen)</label>
+<label class="anim-check wide hidden" id="animVarWrap"><input type="checkbox" id="animVar"/> Unterschiedliche Bildzeiten des GIFs nachbilden (wiederholt Bilder)</label>
+</div>
+<canvas id="animImpPreview" class="anim-screen" width="512" height="128" role="img" aria-label="Vorschau der Animation"></canvas>
+<p class="tiny muted" id="animInfo" aria-live="polite"></p>
+<p class="rb-anim-err" id="animErr" role="alert"></p>
+<button type="button" id="animReduce" class="secondary hidden">Auf 79 Bilder verteilen</button>
+<label class="field">Name<input id="animName" class="v42-name" maxlength="40" placeholder="Meine Animation"/></label>
+<progress id="animProg" class="hidden" value="0" max="1"></progress>
+<div class="anim-grid"><button type="button" id="animSave" class="primary" data-rb-icon="save" disabled>Speichern</button><button type="button" id="animSaveSend" class="primary" data-rb-icon="plane-takeoff" disabled>Speichern und senden</button></div>
+</div>
+</div>
+</section><section aria-label="Programme" class="app-view inner-view hidden" id="view-programs">
 <div class="panel inner-panel" id="v43ProgListPane"><h2>Programme</h2>
 <p class="tiny muted" id="v43ProgCount" aria-live="polite">Programme werden geladen …</p>
 <div aria-label="Programmaktionen" class="fixed-actions library-actions" role="toolbar"><button id="v42NewProgram" type="button" data-rb-icon="plus" data-rb-only="1" title="Neues Programm" aria-label="Neues Programm"></button><button id="v43ProgEdit" type="button" data-rb-icon="pencil" data-rb-only="1" title="Programm bearbeiten" aria-label="Programm bearbeiten" disabled></button><button id="v42RunProgram" type="button" data-rb-icon="plane-takeoff" data-rb-only="1" title="Programm starten" aria-label="Programm starten" disabled></button><button id="v42StopProgram" type="button" data-rb-icon="monitor-x" data-rb-only="1" title="Programm stoppen" aria-label="Programm stoppen"></button><button id="v42DeleteProgram" type="button" data-rb-icon="trash" data-rb-only="1" title="Programm löschen" aria-label="Programm löschen" disabled></button></div>
@@ -562,7 +649,7 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <div class="panel inner-panel"><h2>Ambiente</h2><p class="hint">Eine Farbe antippen, um die gesamte 64×16-Tafel mit dieser Farbe zu füllen. Die aktuelle Textanzeige wird dadurch ersetzt.</p>
 <div aria-label="LED-Farben" class="ambience-colors" id="ambienceColors"></div>
 
-</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary rb-btnlink" download="RavestickBoard_Diagnose_v0.6.0.2-dev.txt" href="/api/diagnostics.txt" data-rb-icon="database-arrow-down">TXT herunterladen</a><a class="secondary rb-btnlink" download="RavestickBoard_RAM_v0.6.0.2-dev.txt" href="/api/ram.txt" data-rb-icon="database-arrow-down">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
+</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary rb-btnlink" download="RavestickBoard_Diagnose_v0.6.1.0-dev.txt" href="/api/diagnostics.txt" data-rb-icon="database-arrow-down">TXT herunterladen</a><a class="secondary rb-btnlink" download="RavestickBoard_RAM_v0.6.1.0-dev.txt" href="/api/ram.txt" data-rb-icon="database-arrow-down">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
 <div class="panel"><h2>Einstellungen</h2>
 <div class="settings-section" id="v42SettingsBackup">
 <div class="label">Bibliothek &amp; Datensicherung</div>
@@ -586,11 +673,11 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 </div>
 <div class="rb-anim-opts">
 <label>Zeit je Frame in ms<input type="number" id="rbAnimMs" min="1" max="2000" step="1" inputmode="numeric" placeholder="Standard"/></label>
-<label>Anzeigemodus danach<select id="rbAnimMode"><option value="keep">unverändert lassen</option><option value="static">statisch (0x01)</option><option value="scroll">Lauftext (0x02)</option></select></label>
+
 </div>
 <p class="tiny muted">Jedes Frame zeigt seine Nummer (01, 02, 03 …) in der Mitte, so sieht man, wie viele Frames ankommen und wo die Schleife endet. Der Balken wandert von links nach rechts, oben links leuchtet ein roter und unten rechts ein blauer Eckpixel. Standardzeiten: Farben 700 ms, Balken 60 ms, Grenze 300 ms. Zum bequemen Lesen der Nummer reichen 300 ms oder mehr. Die 80-Frames-Probe ist absichtlich zu groß: Die Tafel soll sie mit einem Fehlercode ablehnen, der danach im Diagnoseprotokoll steht.</p>
 </div>
-<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.6.0.2-dev</p></div>
+<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.6.1.0-dev</p></div>
 </section><aside id="rbDock" class="rb-dock" aria-label="Tafelsteuerung">
  <div class="pixel-range" role="group" aria-label="Globale Helligkeit"><span class="rb-range-icon" data-rb-icon="sunset" aria-hidden="true" data-rb-painted="sunset"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10V2"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m16 6-4 4-4-4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span><input aria-label="Helligkeit" data-global="brightness" id="dockBrightness" min="1" max="100" type="range" value="75"/><b data-global-label="brightness">75 %</b><span class="rb-range-icon" data-rb-icon="sunrise" aria-hidden="true" data-rb-painted="sunrise"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span></div>
  <div class="pixel-range rb-dock-speed" role="group" aria-label="Globale Geschwindigkeit"><span class="rb-range-icon" data-rb-icon="snail" aria-hidden="true" data-rb-painted="snail"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg></span><input aria-label="Geschwindigkeit" data-global="speed" id="dockSpeed" min="1" max="100" type="range" value="80"/><b data-global-label="speed">80 / 100</b><span class="rb-range-icon" data-rb-icon="rabbit" aria-hidden="true" data-rb-painted="rabbit"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 16a3 3 0 0 1 2.24 5"/><path d="M18 12h.01"/><path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/><path d="M20 8.54V4a2 2 0 1 0-4 0v3"/><path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/></svg></span></div>
@@ -641,6 +728,219 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <label class="field">Beschriftung<input class="v42-name" id="v42ShortcutLabel" maxlength="47" placeholder="Meine Kurzwahl"></label><small id="v42ShortcutBytes" class="v42-hint">0 / 47 UTF-8-Bytes</small>
 <div class="v42-row" id="v42ShortcutActions"><button class="secondary danger" id="v42ShortcutDelete" type="button" data-rb-only="1" data-rb-icon="trash" title="Kurzwahl löschen" aria-label="Kurzwahl löschen" data-rb-painted="trash"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button><button class="secondary" id="v42ShortcutCancel" type="button" data-rb-only="1" data-rb-icon="undo-dot" title="Abbrechen" aria-label="Abbrechen" data-rb-painted="undo-dot"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/><path d="M3 7v6h6"/><circle cx="12" cy="17" r="1"/></svg></button><button class="primary" id="v42ShortcutSave" type="button" data-rb-only="1" data-rb-icon="star-check" title="Kurzwahl speichern" aria-label="Kurzwahl speichern" data-rb-painted="star-check"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19.06 12.501 2.78-2.707a.53.53 0 0 0-.294-.905l-5.166-.755a2.1 2.1 0 0 1-1.595-1.16l-2.31-4.68a.53.53 0 0 0-.95.001L9.216 6.974a2.1 2.1 0 0 1-1.597 1.16l-5.165.755a.53.53 0 0 0-.294.906l3.736 3.637a2.1 2.1 0 0 1 .611 1.879l-.88 5.139a.53.53 0 0 0 .769.56l4.617-2.428.027-.014"/><path d="m15 18 2 2 4-4"/></svg></button></div></div></div>
 <div aria-live="polite" class="toast" id="status" role="status" aria-atomic="true" hidden></div><div aria-label="Symbole auswählen" aria-modal="true" class="symbol-modal hidden" id="symbolOverlay" role="dialog"><div class="symbol-sheet"><div class="symbol-head"><b>❤️ 🍌 Symbol einfügen</b><button aria-label="Symbolauswahl schließen" class="secondary" id="symbolClose" type="button">✕</button></div><div id="symbolsPicker"><p class="hint">Unsere 16×16-Pixelgrafiken – thematisch sortiert, direkt aus den LED-Matrizen gerendert. Tippen fügt das Motiv an der Cursorposition ein.</p><div id="symbolCategories"></div></div></div></div></main>
+<script>
+/* ==== v0.6.1.0 Animationen: reine Funktionen (ohne DOM, in Node testbar) ==== */
+const RbAnim=(()=>{
+ const W=64,H=16,MAXF=79,HDR=27,FB=384,MAXSRC=300;
+ // Farbwert = R*4+G*2+B (wie in der Firmware): 1 blau, 2 gruen, 3 cyan, 4 rot, 5 magenta, 6 gelb, 7 weiss
+ const RGB=[[0,0,0],[0,0,255],[0,255,0],[0,255,255],[255,0,0],[255,0,255],[255,255,0],[255,255,255]];
+ const CSS=['#0b0f16','#3d6bff','#27e04a','#2ee6e6','#ff3030','#ff4df0','#ffe033','#ffffff'];
+
+ function b64uEnc(u8){let s='';for(let i=0;i<u8.length;i+=0x2000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x2000));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+ function b64uDec(t){t=String(t).replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';const s=atob(t),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u;}
+
+ // frames: Liste von Uint8Array(64*16), Index y*64+x, Wert 0..7. Ergebnis: Nutzlast des Befehls 0x04.
+ function buildPayload(frames,ms){
+  const n=frames.length,out=new Uint8Array(HDR+n*FB);
+  out[24]=n;out[25]=ms>>8;out[26]=ms&255;
+  for(let f=0;f<n;f++){const px=frames[f];
+   for(let x=0;x<W;x++)for(let rb=0;rb<2;rb++){
+    let r=0,g=0,b=0;
+    for(let k=0;k<8;k++){const c=px[(rb*8+k)*W+x];r=(r<<1)|((c>>2)&1);g=(g<<1)|((c>>1)&1);b=(b<<1)|(c&1);}
+    const o=HDR+f*128+x*2+rb;out[o]=r;out[o+n*128]=g;out[o+2*n*128]=b;
+   }}
+  return out;
+ }
+ function unpackPayload(u8){
+  const n=u8[24],ms=(u8[25]<<8)|u8[26],frames=[];
+  for(let f=0;f<n;f++){const px=new Uint8Array(W*H);
+   for(let x=0;x<W;x++)for(let rb=0;rb<2;rb++){
+    const o=HDR+f*128+x*2+rb,r=u8[o],g=u8[o+n*128],b=u8[o+2*n*128];
+    for(let k=0;k<8;k++){const bit=7-k;px[(rb*8+k)*W+x]=(((r>>bit)&1)<<2)|(((g>>bit)&1)<<1)|((b>>bit)&1);}
+   }
+   frames.push(px);}
+  return {frames,ms};
+ }
+ // Erstes Bild als 384 Byte (Ebenen R, G, B zu je 128 Byte) fuer die Listenvorschau.
+ function thumbOf(payload,n){const t=new Uint8Array(FB);t.set(payload.subarray(HDR,HDR+128),0);t.set(payload.subarray(HDR+n*128,HDR+n*128+128),128);t.set(payload.subarray(HDR+2*n*128,HDR+2*n*128+128),256);return t;}
+ function thumbPixels(t){const px=new Uint8Array(W*H);
+  for(let x=0;x<W;x++)for(let rb=0;rb<2;rb++){const r=t[x*2+rb],g=t[128+x*2+rb],b=t[256+x*2+rb];
+   for(let k=0;k<8;k++){const bit=7-k;px[(rb*8+k)*W+x]=(((r>>bit)&1)<<2)|(((g>>bit)&1)<<1)|((b>>bit)&1);}}
+  return px;}
+
+ // ---- GIF-Decoder (GIF87a/89a), eigene Umsetzung nach der Spezifikation --------------------------
+ function lzwDecode(data,minCode,pixelCount){
+  const clear=1<<minCode,eoi=clear+1;
+  let size=minCode+1,mask=(1<<size)-1,next=eoi+1;
+  const prefix=new Uint16Array(4096),suffix=new Uint8Array(4096),stack=new Uint8Array(4097);
+  const out=new Uint8Array(pixelCount);
+  for(let i=0;i<clear;i++)suffix[i]=i;
+  let o=0,bits=0,acc=0,p=0,old=-1,first=0;
+  while(o<pixelCount){
+   while(bits<size){if(p>=data.length)return out;acc|=data[p++]<<bits;bits+=8;}
+   let code=acc&mask;acc>>>=size;bits-=size;
+   if(code===clear){size=minCode+1;mask=(1<<size)-1;next=eoi+1;old=-1;continue;}
+   if(code===eoi)break;
+   if(old===-1){if(code>=clear)return out;out[o++]=suffix[code];old=code;first=code;continue;}
+   const inCode=code;let sp=0;
+   if(code>=next){if(code>next)return out;stack[sp++]=first;code=old;}
+   while(code>=clear){stack[sp++]=suffix[code];code=prefix[code];}
+   first=suffix[code];stack[sp++]=first;
+   if(next<4096){prefix[next]=old;suffix[next]=first;next++;if((next&mask)===0&&next<4096){size++;mask=(1<<size)-1;}}
+   old=inCode;
+   while(sp>0&&o<pixelCount)out[o++]=stack[--sp];
+  }
+  return out;
+ }
+ // buf: Uint8Array. onFrame(rgba(Uint8ClampedArray, nur waehrend des Aufrufs gueltig), width, height, delayMs) je zusammengesetztem Bild.
+ // Rueckgabe: {width,height,count,truncated}. Mehr als MAXSRC Bilder werden nicht mehr gelesen (Speicher des Geraets).
+ async function gifDecode(buf,onFrame,opts){
+  opts=opts||{};const yieldEvery=opts.yieldEvery||6;
+  const sig=String.fromCharCode(...buf.subarray(0,6));
+  if(sig!=='GIF87a'&&sig!=='GIF89a')throw Error('Keine GIF-Datei.');
+  const w=buf[6]|(buf[7]<<8),h=buf[8]|(buf[9]<<8);
+  if(!w||!h||w*h>16e6)throw Error('GIF-Größe nicht unterstützt.');
+  const flags=buf[10];let p=13,gct=null;
+  if(flags&0x80){const n=2<<(flags&7);gct=buf.subarray(p,p+3*n);p+=3*n;}
+  const canvas=new Uint8ClampedArray(w*h*4);let saved=null;
+  let gce={disposal:0,trans:-1,delay:100};let prev=null;let count=0,truncated=false;
+  const skipBlocks=()=>{while(p<buf.length){const len=buf[p++];if(!len)break;p+=len;}};
+  while(p<buf.length){
+   const b=buf[p++];
+   if(b===0x3B)break;
+   if(b===0x21){
+    const label=buf[p++];
+    if(label===0xF9&&buf[p]===4){const f=buf[p+1];gce={disposal:(f>>2)&7,trans:(f&1)?buf[p+4]:-1,delay:(buf[p+2]|(buf[p+3]<<8))*10};p+=5;if(buf[p]===0)p++;else skipBlocks();}
+    else skipBlocks();
+    continue;
+   }
+   if(b!==0x2C){if(b===0)continue;throw Error('GIF-Datei beschädigt (Block '+b+').');}
+   const ix=buf[p]|(buf[p+1]<<8),iy=buf[p+2]|(buf[p+3]<<8),iw=buf[p+4]|(buf[p+5]<<8),ih=buf[p+6]|(buf[p+7]<<8),f=buf[p+8];p+=9;
+   let table=gct;
+   if(f&0x80){const n=2<<(f&7);table=buf.subarray(p,p+3*n);p+=3*n;}
+   const minCode=buf[p++];if(minCode<1||minCode>11)throw Error('GIF-Datei beschädigt (Codegröße).');
+   const parts=[];let total=0;
+   while(p<buf.length){const len=buf[p++];if(!len)break;parts.push(buf.subarray(p,p+len));total+=len;p+=len;}
+   const data=new Uint8Array(total);let q=0;for(const part of parts){data.set(part,q);q+=part.length;}
+   const idx=lzwDecode(data,minCode,iw*ih);
+   // Entsorgung des vorherigen Bildes
+   if(prev){
+    if(prev.disposal===2){for(let y=prev.y;y<Math.min(h,prev.y+prev.h);y++){const a=(y*w+prev.x)*4,e=(y*w+Math.min(w,prev.x+prev.w))*4;canvas.fill(0,a,e);}}
+    else if(prev.disposal===3&&saved){canvas.set(saved);}
+   }
+   saved=gce.disposal===3?canvas.slice():null;
+   const rows=new Int32Array(ih);
+   if(f&0x40){let r=0;for(const [s,st] of [[0,8],[4,8],[2,4],[1,2]])for(let y=s;y<ih;y+=st)rows[r++]=y;}else for(let y=0;y<ih;y++)rows[y]=y;
+   if(table){
+    for(let r=0;r<ih;r++){const y=iy+rows[r];if(y>=h)continue;
+     for(let x=0;x<iw;x++){const X=ix+x;if(X>=w)continue;
+      const c=idx[r*iw+x];if(c===gce.trans)continue;
+      const o=(y*w+X)*4,t=c*3;if(t+2>=table.length)continue;
+      canvas[o]=table[t];canvas[o+1]=table[t+1];canvas[o+2]=table[t+2];canvas[o+3]=255;}}
+   }
+   let delay=gce.delay;if(delay<=10)delay=100;   // wie die Browser: 0..10 ms -> 100 ms
+   onFrame(canvas,w,h,delay);
+   prev={disposal:gce.disposal,x:ix,y:iy,w:iw,h:ih};gce={disposal:0,trans:-1,delay:100};
+   count++;
+   if(count>=MAXSRC){truncated=true;break;}
+   if(count%yieldEvery===0)await new Promise(r=>setTimeout(r,0));
+  }
+  if(!count)throw Error('Das GIF enthält keine Bilder.');
+  return {width:w,height:h,count,truncated};
+ }
+
+ // ---- Text-Raster (Excel) ---------------------------------------------------------------------
+ const CH={'.':0,' ':0,'0':0,'K':0,'B':1,'G':2,'C':3,'R':4,'M':5,'Y':6,'W':7};
+ function parseRaster(text){
+  const lines=String(text).replace(/\r\n?/g,'\n').split('\n');
+  const frames=[];let rows=[];
+  const flush=()=>{if(!rows.length)return;
+   const w=Math.max(...rows.map(r=>r.length));if(w<1)throw Error('Ein Bild ist leer.');
+   if(w>512||rows.length>512)throw Error('Raster zu groß (höchstens 512 × 512).');
+   const px=new Uint8Array(w*rows.length);rows.forEach((r,y)=>px.set(r,y*w));
+   frames.push({w,h:rows.length,px});rows=[];};
+  lines.forEach((raw,ln)=>{
+   const trimmedNoTab=raw.replace(/\s+$/,'');
+   const firstCell=raw.split('\t')[0].trim();
+   if(firstCell.startsWith('---')||(raw.indexOf('\t')<0&&trimmedNoTab==='')){flush();return;}
+   const row=[];
+   const put=(ch,col)=>{
+    const c=ch==='' ?0:CH[ch.toUpperCase()];
+    if(c===undefined)throw Error('Zeichen „'+ch+'“ in Zeile '+(ln+1)+', Spalte '+(col+1)+' nicht erlaubt (erlaubt: . R G B C M Y W).');
+    row.push(c);};
+   if(raw.indexOf('\t')>=0){raw.split('\t').forEach((cell,i)=>{const t=cell.trim();if(t.length>1)throw Error('Zelle „'+t+'“ in Zeile '+(ln+1)+', Spalte '+(i+1)+' hat mehr als ein Zeichen.');put(t,i);});}
+   else{[...trimmedNoTab].forEach((ch,i)=>put(ch,i));}
+   rows.push(Uint8Array.from(row));
+  });
+  flush();
+  if(!frames.length)throw Error('Keine Rasterdaten gefunden.');
+  if(frames.length>MAXSRC)throw Error('Zu viele Bilder (höchstens '+MAXSRC+').');
+  return frames;
+ }
+
+ // ---- Farbumsetzung auf 8 Farben ---------------------------------------------------------------
+ const BAYER=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
+ // rgba: Uint8ClampedArray(64*16*4), schon ueber Schwarz zusammengesetzt. opt: {method:'thresh'|'fs'|'bayer', thr:0..255, contrast:-50..100}
+ function quantize(rgba,opt){
+  const method=opt.method||'thresh',bias=128-(opt.thr==null?128:opt.thr),cf=1+(opt.contrast||0)/100;
+  const px=new Uint8Array(W*H);
+  const ch=new Float32Array(W*H*3);
+  for(let i=0;i<W*H;i++)for(let k=0;k<3;k++){let v=rgba[i*4+k];v=(v-128)*cf+128+bias;ch[i*3+k]=v<0?0:v>255?255:v;}
+  if(method==='thresh'){for(let i=0;i<W*H;i++)px[i]=(ch[i*3]>=128?4:0)|(ch[i*3+1]>=128?2:0)|(ch[i*3+2]>=128?1:0);}
+  else if(method==='bayer'){for(let y=0;y<H;y++)for(let x=0;x<W;x++){const t=(BAYER[(y&3)*4+(x&3)]+.5)/16*255,i=y*W+x;px[i]=(ch[i*3]>t?4:0)|(ch[i*3+1]>t?2:0)|(ch[i*3+2]>t?1:0);}}
+  else{   // Floyd-Steinberg je Farbkanal
+   for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=y*W+x;let c=0;
+    for(let k=0;k<3;k++){const old=ch[i*3+k],nv=old>=128?255:0,err=old-nv;if(nv)c|=4>>k;
+     if(x+1<W)ch[(i+1)*3+k]+=err*7/16;
+     if(y+1<H){if(x>0)ch[(i+W-1)*3+k]+=err*3/16;ch[(i+W)*3+k]+=err*5/16;if(x+1<W)ch[(i+W+1)*3+k]+=err/16;}}
+    px[i]=c;}
+  }
+  return px;
+ }
+
+ // ---- Bildfolge: Auswahl, Zeiten, Pingpong -----------------------------------------------------
+ // delays: Verzoegerung je Quellbild (ms). opt: {from,to (1-basiert), step, ping, ms, variable}
+ // Rueckgabe: {order:[Quellindex je Ausgabebild], ms, count, tooMany}
+ function plan(delays,opt){
+  const total=delays.length;
+  const from=Math.max(1,Math.min(total,opt.from||1)),to=Math.max(from,Math.min(total,opt.to||total)),step=Math.max(1,opt.step||1);
+  let idx=[];for(let i=from-1;i<to;i+=step)idx.push(i);
+  let ms=Math.max(1,Math.min(2000,Math.round(opt.ms||100)));
+  let order=idx.slice();
+  if(opt.variable){
+   // Zeiten nachbilden: Basiszeit = kleinste Verzoegerung, jedes Bild wird round(delay/basis)-mal wiederholt; passt es nicht in 79 Bilder, wird die Basiszeit erhoeht.
+   const ds=idx.map(i=>delays[i]);let base=Math.max(1,Math.min(...ds));
+   const build=b=>{const o=[];idx.forEach((i,k)=>{const r=Math.max(1,Math.round(ds[k]/b));for(let j=0;j<r;j++)o.push(i);});return o;};
+   order=build(base);let guard=0;
+   while(order.length>MAXF&&base<2000&&guard++<400){base=Math.min(2000,Math.ceil(base*1.1));order=build(base);}
+   ms=Math.max(1,Math.min(2000,base));
+  }
+  if(opt.ping&&order.length>2){const back=order.slice(1,-1).reverse();order=order.concat(back);}
+  return {order,ms,count:order.length,tooMany:order.length>MAXF};
+ }
+
+ // ---- Fenster: wohin ein Quellbild (sw x sh) im 64x16-Feld gezeichnet wird -----------------
+ function fitRect(sw,sh,mode,ox,oy){
+  let s;
+  if(mode==='stretch')return {x:0,y:0,w:W,h:H,scale:Math.min(W/sw,H/sh)};
+  if(mode==='orig')s=1;else if(mode==='cover')s=Math.max(W/sw,H/sh);else s=Math.min(W/sw,H/sh);
+  const dw=sw*s,dh=sh*s,tx=(ox||0)/100,ty=(oy||0)/100;
+  const x=(W-dw)/2*(1+tx),y=(H-dh)/2*(1+ty);
+  return {x,y,w:dw,h:dh,scale:s};
+ }
+ // Streifen in n gleich grosse Teile zerlegen: Rechtecke {x,y,w,h}
+ function stripRects(imgW,imgH,n,dir){
+  const out=[];n=Math.max(1,Math.floor(n));
+  if(dir==='v'){const fh=Math.floor(imgH/n);for(let i=0;i<n;i++)out.push({x:0,y:i*fh,w:imgW,h:fh});}
+  else{const fw=Math.floor(imgW/n);for(let i=0;i<n;i++)out.push({x:i*fw,y:0,w:fw,h:imgH});}
+  return out;
+ }
+ function stripGuess(imgW,imgH){return imgW>=imgH?{dir:'h',n:Math.max(1,Math.round(imgW/imgH))}:{dir:'v',n:Math.max(1,Math.round(imgH/imgW))};}
+ function uploadSeconds(n){return Math.ceil((HDR+n*FB)/128)*0.23;}
+ return {W,H,MAXF,HDR,FB,MAXSRC,RGB,CSS,b64uEnc,b64uDec,buildPayload,unpackPayload,thumbOf,thumbPixels,gifDecode,lzwDecode,parseRaster,quantize,plan,fitRect,stripRects,stripGuess,uploadSeconds};
+})();
+/* ==== Ende reine Funktionen ==== */
+</script>
 <script>
 'use strict';
 const RB_ASSET_DATA = {"normal": "QQAHAAAAAAgAFAAiAEEAQQBBAH8AQQBBAEEAQQBBAAAAAABCAAcAAAAAfgBBAEEAQQBBAEIAfABCAEEAQQBBAH4AAAAAAEMABwAAAAA+AEEAQABAAEAAQABAAEAAQABAAEEAPgAAAAAARAAHAAAAAHwAQgBBAEEAQQBBAEEAQQBBAEEAQgB8AAAAAABFAAcAAAAAfwBAAEAAQABAAEAAfwBAAEAAQABAAH8AAAAAAEYABwAAAAB/AEAAQABAAEAAQAB/AEAAQABAAEAAQAAAAAAARwAHAAAAAD4AQQBAAEAAQABAAEAARwBBAEEAQQA+AAAAAABIAAcAAAAAQQBBAEEAQQBBAH8AQQBBAEEAQQBBAEEAAAAAAEkAAQAAAAABAAEAAQABAAEAAQABAAEAAQABAAEAAQAAAAAASgAHAAAAAAEAAQABAAEAAQABAAEAAQABAEEAQQA+AAAAAABLAAcAAAAAQQBCAEQASABQAGAAYABQAEgARABCAEEAAAAAAEwABwAAAABAAEAAQABAAEAAQABAAEAAQABAAEAAfwAAAAAATQAHAAAAAEEAYwBjAFUAVQBJAEkAQQBBAEEAQQBBAAAAAABOAAcAAAAAQQBhAGEAUQBRAEkASQBFAEUAQwBDAEEAAAAAAE8ABwAAAAAcACIAQQBBAEEAQQBBAEEAQQBBACIAHAAAAAAAUAAHAAAAAH4AQQBBAEEAQQBBAH4AQABAAEAAQABAAAAAAABRAAcAAAAAPgBBAEEAQQBBAEEAQQBBAEEARQBCAD0AAAAAAFIABwAAAAB+AEEAQQBBAEEAQgB8AFAASABEAEIAQQAAAAAAUwAHAAAAAD4AQQBBAEAAQAAwAA4AAQABAEEAQQA+AAAAAABUAAcAAAAAfwAIAAgACAAIAAgACAAIAAgACAAIAAgAAAAAAFUABwAAAABBAEEAQQBBAEEAQQBBAEEAQQBBACIAHAAAAAAAVgAHAAAAAEEAQQBBAEEAQQBBAEEAQQBBACIAFAAIAAAAAABXAAcAAAAAQQBBAEEAQQBBAEkASQBJAEkAVQBVACIAAAAAAFgABwAAAABBAEEAIgAiABQACAAIABQAIgAiAEEAQQAAAAAAWQAHAAAAAEEAQQBBACIAIgAUAAgACAAIAAgACAAIAAAAAABaAAcAAAAAfwABAAIABAAEAAgAEAAQACAA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", "bold": "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", "symbols": "AGYAAAAAAAAERAAAAAAAAEQUAAAAAAAAZEQAAAAAAAAEREAAAAAGYAREQAAABmRGBERGRkZERmQEREZGRkZkQARERkZEREZgBEREZGZGZAAARERGRERAAAAEREZmRgAAAABERERAAAAAAABgBgAAAAAAAGAGAAAAAAAGYGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAGYAAAAAAAAGZmAAAAAAAAZmYAAAAAAAZmZmAAAAZmZmZmZmZgAGZmZmZmZgAAAGZmZmYAAAAABmZmYAAAAABmZmZmAAAAAGYAAGYAAAAAZgAAZgAAAAYAAAAAYAAAAAAAAAAAAAAAAAYAAAAAAGAABgAAYAAGYGBgYGBmAAAGBmAGBgAAAGBgBgZgYAAABgBmYAYAAABmBgAGBmAAZgBmBgZgBmAAZgYABgZgAAAGAGZgBgAAAGBgBgBgYAAABgZgZgYAAAZgYGBgYGYAAGAABgAAYAAAAAAGAAAAAAAAAAAAAAAAAARAAAAEQAAAREQAAEREAAREREAERERAREREQARERERERERERERERERERERERERERERERERERERERERERERERARERERERERAAERERERERAAABERERERAAAAARERERAAAAAAERERAAAAAAABERAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEREREREAAAFEREREQRAAAUQREURBAQABERRBEREBAAABRERBEAEAABREREEREQABFBdxREEAAAFEdmdEQQAAAUR2Z0RBAAABRBdxREEAAAFEREREQQAAARERERERAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmYAAABmYABnd2AABnd2Bnd3dgBnd3dmcRd2AGcRd2ZxF3YAZxF3Znd3dgBnd3dgZ3dwAAZ3dgAGZgAAAGZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEAAAAAAAAAEQAAAAAAAAEREAAAAAAAAREQAAAAAAAREREAAAAAABEd0QAAAAABER3REAAAAAERHdEQAAAAEREd0REAAAARER3REQAAARERHdEREAABEREREREQABERER3REREAERERHdEREQEREREREREREREREREREREQAAAABEAAAAAAAABERAAAAAAAAFmEAAAAAAAEWYRAAAAAAAWZmEAAAAAARZmZhAAAAABZhFmEAAAABFmEWYRAAAAFmYRZmEAAAEWZhFmYRAAAWZmZmZmEAARZmYRZmYRABZmZhFmZmEBZmZmZmZmZhFmZmZmZmZmEREREREREREQAAAARAAAAAAAAAREQAAAAAAABERAAAAAAABEREQAAAAAAEQARAAAAAAERABEQAAAAARAAARAAAAAREAABEQAAABEAAAARAAABEQAAABEQAAEQAAAAARAAERAAAAABEQARAAAAAAARARAAAAAAAAEREREREREREREREREREREREAAAAAAAAAAAAAARERAAAAAAAREREQAAAAAREREREAAAARGZkZmRAAGZGZmZmZkZgZkZxZmcWRmAGRhFmYRZGAABGVWZlVkAAAARmZmZkAAAAAERmZEAAAAAAAERAAAYAAAAEREQABAAAAARERABEAAAAREREREAAAABEZGRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHcAAARAAAAAB3AABEQAAAAHdwBEREQAAAB3REREREAAAHdER0REFAAAd0R3REREAAAHcHdEd0AAAHcABHd3AAAAdwBEAAAAAAdwAEAAAAAAdwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREAABERAAERAAAAABEQARERAAARERAREAAAAAABEREAAAwAwAAREQARERERABEBEREREREREAABERERERAAAAEREREREAAAERERERERABEAEREREQARAAAQARABAAABEQAAAAAREAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAEAAAAAABERAQERAAABREQRFEQQABREREREREEBRERERHdERBFERERERHREEURERERER0QRRERERERHRBFEREREREREEUREREREREQQFEREREREQQAURERERERBAAFERERERBAAABFEREQRAAAAABEREQAAAAAAAAAAAAAAAAICIgAAAAAAICAAIAAAAAAAIRAAAAAAABEVUREAAAABVRVRVRAAAAFVERFVEAAAABERVREAAAAAFVFVERAAAAAVUREVUQAAAAFVERVRAAAAAVUVURAAAAAAEVFREAAAAAABURVRAAAAAAAQFVEAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAREAAAAAAAABYQAAAAAAABYRAAAAAAARZhEBEREREWZhYQFmZmYWZmFhABZhEWZmYWEBERZmZmYWYRZmZmZmYWZhFmZmZmYWZmEBZmZmYWZmEAAREREWZmEAAAFmZmZmEAAAABZmZhEAAAAAARERAAAAAAAAAAAAAAAAB3d3d3cAAAB3d3d3d3AAB3d3d3d3dwB3d3dxEXd3AHd3d3dxd3cAd3cXd3F3d3B3d3dxcXd3cHdxd3EXd3d3d3F3d3d3dwd3F3d3d3d3B3dwB3d3d3cHdwAHcAAAdwd3AAdwAAB3AHcAB3AAAHcAAAAAAAAAAAAAAAAREQAAAAAAAXd3EAAAAAAXd3dxAAAAAXd3d3cQAAABd3d3dxAAABd3d3d3cQAAF3d3d3dxAAF3d3d3d3cQAXd3d3d3dxABd3d3d3d3EAF3d3d3d3cQABd3d3d3cQAAF3d3d3dxAAABd3d3dxAAAAARd3cRAAAAAAAREQAAAAAAAAABEREAAAAAABRERBAAAAABREREQQAAAAFEREdBAAAAFERER0EAAAAURER0QQAAAURERERBAAABRERERBAAABREREQRAAAAFEREEQAAAAF0RBEAAAABF3cRAAAAABd3cQAAAAAAF3cQAAAAAAARdxAAAAAAAAERAAAAAAAAAAAAAAAAAAAAAREREREAABERZmZmYREQEAFmZmZhABAQAWZmZmEAEAEBZmZmYQEAABFmZmZhEAAAABZmZhAAAAAAAWZhAAAAAAAAFhAAAAAAAAAWEAAAAAAAABYQAAAAAAABFhEAAAAAABZmZhAAAAAAFmZmEAAAAAAREREQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERAAAQzM0MzNEQABDMzQzM3RAAEMzNDM3M0REQzM0M3MzRERERERERERERERERERERERERBEURERBEURBd3FERBd3FAF3cQAAF3cQAXdxAAAXdxAAERAAAAERAAAAAARAAAAAAAAAREQAAAAAAABHdAAAAAAAB3d3cAAAAAAER3RAAAAAAAREREAAAAAABmZmYAAAAAB3cRd3AAAABxcREXFwAAB3F3EXcXcAB3cXd3dxd3AAABd3d3EAAAAABEREQAAAAAAAREQAAAAAAABGZAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREAAAAAAAF3dxEAAAARF3d3dxEAAXd3d3d3dxABd3dxd3F3EBd3d3F3cXdxd3d3V3d3V3d3d3d3F3F3EXd3d3dxF3EAERF3d3d3cQAAABEREREQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREQAAAAAAERmZkQAAAAEZiIiZkAAAEYiEREiZAAARiEAABJkAARiEAAAASZABGIQAAABJkAEYhAAAAEmQHd3dwAAd3d3d3d3AAB3d3cHd3AAAAd3cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREQAAAAFmZmZhAAAAAWZmZhAAAAAWZmZhAAAAABZmZhAAAAABZmZhEQAAAAFmZmZmEAAAFmZmZmEAAAABERZmEAAAAAABZmEAAAAAAAFmEAAAAAAAFmEAAAAAAAAWEAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAHdwAAAAAAAAd3cAAAAAAAAHdwAAAAAAAAd3cAAAAAAAB3dwAAAAAABnd3dgAAAABmZ3dmYAAAAGBmZmBgAAAAYAZmYGAAAABgBmZgAAAAAAAGZmAAAAAAAAZmYAAAAAAAZmYAAAAAAAZmZgAAAAAABmZgAAAAAAACIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEQAREAAAABREEURBAAABR0REREQQARR0REREREEUREREREREREERERREQREREUREQREUREQQFERERERHQQAURERER3RBAAFERERERBAAABERERERAAAAAAAAAAAAAAAAAAAAAAAAAABEREQAAAAABERmREAAAAAERndkQAAAAARGd2RAAAAABERmREAAAAAAREREAAAAAAAAIAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAICIiAAACIiAiIiIgACIiIiAiIiAAIiIgICIiAAACIiAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAEAEAAAAAAAAQEAAAAAAAARERAAAAAAAWZmEQERAAAWFmFmF3cQABYWYWYXd3EAFWZmVRF3cQEWYRZmFhdxFxZmZmFmYRAXcWZmFmZhAAF3EREWZmEAABERZmZmYQAAAAARZmEQAAAAAAAREAEAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAABmZgAAAAAABmZmYAAAAAAEY2ZgAAAABERmZmAAAAAAREZmAAAAAAAAZmBmZgYAAAZmZmZmdgAAZmZ2ZmdmAABmZnd3dmYAAGZmZmZmZgAABmZmZmZgAAAAZmZmZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQARAAAAAAFhABYQAAAAEWERFhEAAAATMzd3cQAAAAExNxcQAAAAATF3FxAAAAAXVVVXcQAAABdRUVdxEQAAAVVVVxN3EAAAERERM3MRAAAXd3MzcxEAABMzN3d3EQAAExERcRcQAAARAAARARAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAIiIAAAAAAAAiIgAAAAAAACIiAAAAAiAAIiIAAAAiIgAiIgIgACIiACIiIiIAIiIAIiIiIgAiIiIiIiIiAAIiIiIiIiAAAAAiIiIAAAAAACIiIgAAAAAAIiIiAAAAAAACIiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREQAAAAAAEzMTEAAAAAEzIzExAAAAd3d3d3dwAAcXFxcXFxcAAAERERERAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARERAAAAAAATMxMQAAAAATMjMTEAAAB3d3d3d3AABxcXFxcXFwAAAREREREAAAAABmZmAAAAAAAGZmYAAAAAAAZmZgAAAAAABmZmAAAAAAAGZmYAAAAAAAZmZgAAAAAABmZmAAAAAAAAAAAAAAAAAAIiIiAAAAACIiIiIiAAACIiIiIiIgACIiIiIiIiIAIiIiIiIiIgAiIAIiIAIiAAIgACIAAiAAAiIAIgAiIAAAIiIiIiIAAAACIiIiIAAAAAAiIiIAAAAAAAIiIAAAAAAAACIAAAAAAAAAAAAAAAAAAAAAAAAAAAZgAAAAAAAAZmAAAAAAAAZjYAAAAAAABGZgAAAAAAAAZmYAAAAAZgBmZgAAAGZmYGZmZmZmZmZgZmZmZmZmZgBmZmZmZmZmAGZmZmZmZmAABmZmZmZmAAAAZmZmZmAAAAAGZmZmAAAAAAAEAEAAAAAAAAQAQAAAAAAARARAAAAAIiIAAAAiIgJ3dyIiInd3InInJmZicicid3cmZmJ3dyAiImZmZiIiAmZmZmZmZmYiYAAAAAAABiJmZmZmZmZmICIiIiIiIiIAJmZmZmZmYgAmZmZmZmZiAmZmZmZmZmYiZiZiZiZiZiAmJmIiJmJiAiJmYgAmZiIgACIgAAIiAAAAAAAzAAAAAAAAAzMwAAAAAAAzMzMAAAAAAzMzMzAAAAAzMzMzMwAAAzMzMzMzMAAzMzMzMzMzAzMzMzMzMzMzMzMzMzMzMzAzMzMzMzMzAAMzMzMzMzAAADMzMzMzAAAAAzMzMzAAAAAAMzMzAAAAAAADMzAAAAAAAAAzAAAAAHBwBwBwBwcHcHAAdwAHB3AHAHB3BwBwB3BwB3dwBwdwAAcAdwBwAAAHAHB3BwBwBwBwB3dwBwBwd3d3d3d3dwB3d3d3d3d3BwBwB3dwBwBwBwBwdwcAcAAABwB3AHAAB3BwB3dwBwdwBwBwdwcAcAdwcAB3AAcHcHBwBwBwBwcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADMzMzMzAAADMzMzMzMwADMzMzMzMzMAAzMTMzEzMAAAMzEzEzMAAAADMzMzMAAAAAAzMzMAAAAAAAMzMAAAAAAAADMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAAAAAIAACIAACAAAiAAIgACIAACIAAiAAIgAAAgACIAAgAAAAIAIgAgAAAAAgIiICAAAAACAiIgIAAAAAAiIiIAAAIiICIiIgIiIAIiIiIiIiAAAAACIiAAAAAAACAiAgAAAAIiACIAIiAAAAAAIgAAAAAAAAAiAAAAAAAAAAAABwAAAAAAA3cAcwAAAAAABzAHAAAAAAADcAcwAAAAAABzADAAAAAAADcAcAAAAAAABzMAAAAAAAADcHAAAAAAAABzAAAAAAAAADcAAAAAAAAAAAZmZnd3d3d1RmZmd3d3d3ZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAAAAADdwBzAAAAAAAHMAcAAAAAAANwBzAAAAAAAHMAMAAAAAAANwBwAAAAAAAHMwAAAAAAAANwcAAAAAAAAHMAAAAAAAAANwAAAAAAAAAABmYiIiIiIiVGZiIiIiIiJkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIAAAAAAAAAIgAAAAAAAAAiAAAAAAAAACIAAAAAAAAAIgAAAAAgAAAiAAACACIAACIAACIAIiAAIgACIgACIgAiACIgAAAiICICIgAAAAIiIiIgAAAAACIiIgAAAAAAAiIgAAAAAAAAIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAIiIAAAAAAAIiIiAAAAAAIiIiIgAAAAIiAiAiIAAAIiACIAIiAAIiAAIgACIgAiAAAiAAAiACAAACIAAAIAAAAAIgAAAAAAAAAiAAAAAAAAACIAAAAAAAAAIgAAAAAAAAAiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIAAAAAAAAiIiIiIiIiACIiIiIiIiIAAiIAAAAAAAAAIiAAAAAAAAACIgAAAAAAAAAiIAAAAAAAAAIiAAAAAAAAACIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIAAAAAAAAAIiAAAAAAAAACIgAAAAAAAAAiIAAAAAAAAAIiAAAAAAAAACIgACIiIiIiIiIAIiIiIiIiIgAAAAAAACIgAAAAAAACIgAAAAAAACIgAAAAAAACIgAAAAAAACIgAAAAAAACIgAAAAAAAAAAAAAABmAAAGYAAAZmZgAAZgAAZmBmYABmAAZmAAZmAAAAZmAAAGAAZgAGAAAAAGZmZgAAAAAAZmZmAAAGZgZmZmZgZmZmBmZmZmBmYAAAZmZmAAAAAABmZmYAAAAAYABmAAYAAAZmAAAAZmAAZmAAZgAGZgZmAABmAABmZmAAAGYAAAZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAEREAAAAAAAERERAAAAAAAREREAAAAAAAEREAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARERERERERERERERERERERERERERERERERERERERERERERERABERERERERAAARERERERAAAAERERERAAAAABERERAAAAAAARERAAAAAAAAERAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFUAAAAAAAAAMwAAAAAAAAMzMAAAAAAAAzMwAAAAAAADMzAAAAAAADMzMwAAAAAAMzMzAAAAAAAzMzMAAAAAAHd3dwAAAAAAERERAAAAAAAREREAAAAAABEREQAAAAAAERERAAAAAAAREREAAAAAAHd3dwAAAAAAMzMzAAAAAAAAAAAAAAAAd3d3d3cAAHd3d3d3d3cAAHd3d3d3AAAAAAAAAAAAAAAAAAAAAAAAB3d3d3d3cAd3d3d3d3d3d3d3d3d3d3dwB3d3d3d3cAAAAAAAAAAAAAAAAAAAAAAAAHd3d3d3AAB3d3d3d3d3AAB3d3d3dwAAAAAAAAAAAAAAAABVAAAAAAAAAFUAAAAAAAAFVVAAAAAAAAVVUAAAAAAAVVVVAAAAAABVd1UAAAAABVV3VVAAAAAFVXdVUAAAAFVVd1VVAAAAVVV3VVUAAAVVVXdVVVAABVVVVVVVUABVVVV3VVVVAFVVVXdVVVUFVVVVVVVVVVVVVVVVVVVVUAAAAGYAAAAAAAAAZgAAAAAAAAZmYAAAAAAABmZgAAAAAABmZmYAAAAAAGYAZgAAAAAGZgBmYAAAAAZmAGZgAAAAZmYAZmYAAABmZgBmZgAABmZmAGZmYAAGZmZmZmZgAGZmZgBmZmYAZmZmAGZmZgZmZmZmZmZmZmZmZmZmZmZgAAAAIgAAAAAAAAAiAAAAAAAAAiIgAAAAAAACIiAAAAAAACIiIgAAAAAAInciAAAAAAIidyIgAAAAAiJ3IiAAAAAiInciIgAAACIidyIiAAACIiJ3IiIgAAIiIiIiIiAAIiIidyIiIgAiIiJ3IiIiAiIiIiIiIiIiIiIiIiIiIiAAAAAAAAAAAAAAAAN3AEQAAAAAAAc0RAAAAAAAA0RHMAAAAAAERAAwAAAAAERHAHAAAAAERAczAAAAAERAA3BwAAAERAAAcwAAAERAAAA3AAAERAAAAAAGZkRHd3d3dUZkRHd3d3d2QERAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3cARAAAAAAABzREAAAAAAADREcwAAAAAAREADAAAAAAREcAcAAAAAREBzMAAAAAREADcHAAAAREAABzAAAAREAAADcAAAREAAAAAAZmREIiIiIlRmREIiIiIiZAREAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAAAMwAAAAAAAAAzAAAAAAAAAzMwAAAAAAADMzAAAAAAADMzMwAAAAAAM3czAAAAAAMzdzMwAAAAAzN3MzAAAAAzM3czMwAAADMzdzMzAAADMzN3MzMwAAMzMzMzMzAAMzMzdzMzMwAzMzN3MzMzAzMzMzMzMzMzMzMzMzMzMzAAAAARAAAAAAAAABEAAAAAAAABERAAAAAAAAEREAAAAAAAERERAAAAAAARdxEAAAAAARF3ERAAAAABEXcREAAAABERdxERAAAAERF3EREAAAEREXcRERAAAREREREREAARERF3ERERABEREXcREREBEREREREREREREREREREREAAAAHcAAAAAAAAAdwAAAAAAAAd3cAAAAAAAB3dwAAAAAAB3d3cAAAAAAHcAdwAAAAAHdwB3cAAAAAd3AHdwAAAAd3cAd3cAAAB3dwB3dwAAB3d3AHd3cAAHd3d3d3dwAHd3dwB3d3cAd3d3AHd3dwd3d3d3d3d3d3d3d3d3d3dwAAAAAAAAAAAAAAAzAAAAAAAAMzczAAAAAAMzczMwAAAAMzM3MzMAAAA3M3MzcwAAADNzMzczAAADMzczczMwAAMzMzMzMzAABzNwMwczcAAzcHB3BwczADM3AHcAczMAMzB3d3cDMwN3cAd3cAd3MzM3d3d3czMwAAAAAAAAAAAAAABVAAAAAAAAVVVVAAAAAABVVVUAAAAABVVVVVAAAAAFVVVVUAAAAABVVVUAAAAAAFVVVQAAAAAAAHcAAAAAAAAAdwAAAAAAAAB3AAAAAAAAAHcAAAAAAAAAdwAAAAAAAAB3AAAAAAAAAHcAAAAAAAAAdwAAAAAAAAB3AAAAAAAAAAAAAAAAAAAAAAAAVQAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAAVVAAAAAAAABVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB3cAd3cAdEAHAHBwAAdEQAd3AHdwBEQABwBwcABEQAAHAHBwBEQAAAcAcHdEQHdwAAAABEQAAAAAAABEQAAAAAd3BER3AHdwBwBEQAAHAAAHdER3cAcAAAdEQHAABwAABERwcAAHAAAEQHB3dwB3cAAAAAAAAAAARERERERERERERERERERERERERERERERERERERERERERERERHdERERERERHd3RERERERHd3d0RERERHd3d3dERERHd3d3d3RERHd3d3d3d0RHd3d3d3d3dHd3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3c="};
@@ -928,6 +1228,7 @@ function showPowerState(known,on){$('powerState').textContent=known?'Letzter Bef
 $('powerOn').addEventListener('click',()=>{showPowerState(false,true);$('powerState').textContent='Ein-Befehl wird gesendet …';queueLive('power',{state:'on'});});
 $('powerOff').addEventListener('click',()=>{showPowerState(false,false);$('powerState').textContent='Aus-Befehl wird gesendet …';queueLive('power',{state:'off'});});
 $('sendScroll').onclick=async()=>{const value=$('scrollText').value,second=$('scrollLine2').value,layout=Number($('scrollLayout').value);if((!value.trim()&&(layout!==1||!second.trim()))||scrollCapacity().exceeded){return;}try{const j=await api('/api/text',{text:rbEncode('a'),line2:layout===1?rbEncode('b'):'',layout,color:scrollColor,color2:layout===1?scrollColor2:scrollColor,brightness:$('brightness').value,mode:'scroll',speed:$('scrollSpeed').value});notify(j.message);}catch(e){notify('Fehler: '+e.message);}};
+let rbAnimActive=false;
 let rbPollFailures=0,rbPollFailureStarted=0,rbPollPending=false;
 async function poll(){
  if(rbPollPending)return;
@@ -938,7 +1239,7 @@ async function poll(){
   const d=await api('/api/status');rbPollFailures=0;rbPollFailureStarted=0;$('rbConnectionStatus').hidden=true;
   // Status belongs in the status view/diagnostics, never as a repeated toast.
   statusMessage=d.message||'';
-  programRunning=!!d.programPlaying;document.querySelectorAll('input[data-global="speed"],#scrollSpeed').forEach(x=>x.disabled=programRunning);
+  programRunning=!!d.programPlaying;rbAnimActive=!!d.animActive;document.querySelectorAll('input[data-global="speed"],#scrollSpeed').forEach(x=>{x.disabled=programRunning||rbAnimActive;if(rbAnimActive&&!programRunning)x.title='Das Tempo wirkt bei Animationen nicht: Die Tafel spielt sie selbst ab (Zeit je Frame steckt in der Animation).';else x.removeAttribute('title');});
   controllerBusy=d.state==='queued'||d.state==='sending';boardCurrent=d.current||0;
   showPowerState(!!d.powerKnown,!!d.powerOn);syncDashboardPower(!!d.powerKnown,!!d.powerOn);rbBleShow(d);
   if(!globalSliderEditing){if(Number.isFinite(Number(d.brightness)))syncGlobalControls('brightness',d.brightness);if(Number.isFinite(Number(d.speed)))syncGlobalControls('speed',d.speed);}
@@ -982,6 +1283,7 @@ function navigate(view){
  // Listen aus dem Speicher zeigen und nur bei Bedarf (aelter als 60 s) im Hintergrund auffrischen.
  if(view==='library'){renderLibrary();if(Date.now()-rbFresh.lib>60000)refreshLibrary();}
  if(view==='programs'){v42ShowPrograms();if(Date.now()-rbFresh.prog>60000)v42RefreshPrograms();}
+ if(view==='animations'){animShowList();if(Date.now()-(rbFresh.anim||0)>60000)animRefresh();}else animStopAll();
 }
 document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.nav)));
 $('editShortcuts').addEventListener('click',()=>{shortcutsEditing=!shortcutsEditing;const b=$('editShortcuts');b.setAttribute('aria-pressed',String(shortcutsEditing));b.classList.toggle('is-active',shortcutsEditing);b.dataset.rbIcon=shortcutsEditing?'pencil-off':'pencil';b.title=shortcutsEditing?'Bearbeitungsmodus beenden':'Kurzwahlen bearbeiten';b.setAttribute('aria-label',b.title);document.querySelectorAll('.shortcut').forEach(tile=>tile.classList.toggle('editing',shortcutsEditing));rb43PaintIcons();});
@@ -1156,7 +1458,7 @@ for(const [name,color] of ambienceNames){
  $('ambienceColors').appendChild(b);
 }
 (function(){
- const run=async(pattern,n)=>{const data={pattern,mode:$('rbAnimMode').value};const ms=$('rbAnimMs').value.trim();if(n)data.n=n;if(ms)data.ms=ms;
+ const run=async(pattern,n)=>{const data={pattern,mode:'keep'};const ms=$('rbAnimMs').value.trim();if(n)data.n=n;if(ms)data.ms=ms;
   try{const r=await api('/api/anim/test',data);notify(r.message||'Animationstest gestartet.');}catch(e){notify('Animationstest: '+e.message);}};
  document.querySelectorAll('#rbAnimTestSection [data-anim]').forEach(b=>b.addEventListener('click',()=>run(b.dataset.anim,b.dataset.n)));
 })();
@@ -1397,6 +1699,7 @@ $('libImport').onchange=async e=>{const file=e.target.files?.[0];e.target.value=
 // ISC / selected Feather MIT notices: THIRD_PARTY_NOTICES.md and LICENSE.
 // No external network required on ESP32 AP.
 const RB43_LUCIDE={
+'film':'<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/>',
 'chevron-left':'<path d="m15 18-6-6 6-6"/>',
 'chevron-right':'<path d="m9 18 6-6-6-6"/>',
 'chevron-up':'<path d="m18 15-6-6-6 6"/>',
@@ -1489,7 +1792,7 @@ function rb43PaintIcons(){document.querySelectorAll('[data-rb-icon]').forEach(no
  node.insertBefore(svg,node.firstChild);node.dataset.rbPainted=name;
  });}
 function rb43StaticIcons(){
- const menu=['star','pencil-sparkles','library','list-video','spray-can','bug','wrench','refresh-cw'];
+ const menu=['star','pencil-sparkles','library','list-video','film','spray-can','bug','wrench','refresh-cw'];
  document.querySelectorAll('#mainMenu [data-nav],#v42ReloadMenu').forEach((b,i)=>{if(menu[i])b.dataset.rbIcon=menu[i];});
  const buttons={bananaMenu:'banana',homePowerOff:'eye-closed',homePowerOn:'eye',editShortcuts:'pencil',libOpen:'pencil',libSend:'plane-takeoff',libDuplicate:'copy',libRename:'text-cursor-input',libDelete:'trash',libExport:'database-arrow-down',v42NewProgram:'plus',v43ProgEdit:'pencil',v43ProgBack:'arrow-left',v42DeleteProgram:'trash',v42RunProgram:'plane-takeoff',v42StopProgram:'monitor-x',v42StepAdd:'plus',v42SaveProgram:'save',v42ReturnLibrary:'arrow-left',v43NewContent:'plus',tabScroll:'line-height',tabPages:'letter-spacing',previewRestart:'skip-back',previewToggle:'pause',previewSpeed:'snail',v42ClearText:'eraser',sendScroll:'plane-takeoff',libSaveAs:'save',libSaveChanges:'save',v42SaveBlock:'save',v42UpdateBlock:'save',v42SendDraftBand:'plane-takeoff',v42ClearPage:'eraser',v42NewBlock:'flame-kindling',pageAdd:'plus',pageCopy:'copy',pageLeft:'arrow-left',pageRight:'arrow-right',pageDelete:'trash',pageShow:'plane-takeoff',diagCopy:'clipboard-copy',diagReload:'database-backup'};
  const only=new Set(['v42NewProgram','v43ProgEdit','v42RunProgram','v42StopProgram','v42DeleteProgram','v42StepAdd','v43ProgBack','libOpen','libSend','libDuplicate','libRename','libDelete','previewRestart','previewToggle','previewSpeed']);
@@ -2061,5 +2364,226 @@ async function init(){try{rb43StaticIcons();parseAssets();buildSymbolPicker();tr
   window.addEventListener('scroll',tick,{passive:true});
 })();
 async function rbLoadLists(){await v42RefreshShortcuts();await v42RefreshPrograms();await refreshLibrary();}
+/* ==== v0.6.1.0 Animationen: Oberfläche (Liste, Import, Vorschau) ==== */
+const animUI={items:[],selected:0,cache:new Map(),ready:false,free:0,total:0,limit:40,saving:false};
+const animImp={kind:'',sources:[],delays:[],name:'',strip:null,frames:null,ms:100,problem:'',timer:0};
+function animLed(canvas,px,s){
+ const w=RbAnim.W*s,h=RbAnim.H*s;if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
+ const ctx=canvas.getContext('2d');ctx.fillStyle='#05080d';ctx.fillRect(0,0,w,h);
+ for(let y=0;y<RbAnim.H;y++)for(let x=0;x<RbAnim.W;x++){const c=px?px[y*RbAnim.W+x]:0;
+  ctx.fillStyle=c?RbAnim.CSS[c]:'#10161f';
+  if(s>=4){ctx.beginPath();ctx.arc(x*s+s/2,y*s+s/2,Math.max(1,s/2-1),0,6.2832);ctx.fill();}else ctx.fillRect(x*s,y*s,s,s);}
+}
+function animMakePlayer(canvas){
+ let timer=0,i=0,frames=[],ms=100;
+ const step=()=>{if(!frames.length)return;animLed(canvas,frames[i],8);i=(i+1)%frames.length;timer=setTimeout(step,Math.max(16,ms));};
+ return {set(f,m){clearTimeout(timer);frames=f;ms=m;i=0;if(f.length)step();else animLed(canvas,null,8);},stop(){clearTimeout(timer);timer=0;}};
+}
+var animListPlayer=null,animImpPlayer=null;   // var: navigate('home') läuft beim Start schon vor diesem Block
+function animStopAll(){if(animListPlayer)animListPlayer.stop();if(animImpPlayer)animImpPlayer.stop();}
+function animBoundName(s){s=String(s||'').replace(/[\u0000-\u001f\u007f]/g,'').trim();const enc=new TextEncoder();while(enc.encode(s).length>40)s=[...s].slice(0,-1).join('');return s.trim();}
+function animSizeText(bytes){return bytes>=10240?Math.round(bytes/1024)+' KB':(bytes/1024).toFixed(1).replace('.',',')+' KB';}
+
+// ---- Liste ---------------------------------------------------------------------------------
+function animSelectedItem(){return animUI.items.find(i=>i.id===animUI.selected)||null;}
+function renderAnimList(){
+ const list=$('animList');list.replaceChildren();
+ if(!animUI.ready){const p=document.createElement('p');p.className='empty-state';p.textContent='Das Dateisystem ist noch nicht eingerichtet. Richte es zuerst in der Bibliothek ein; Animationen liegen im selben Dateisystem.';list.appendChild(p);}
+ else if(!animUI.items.length){const p=document.createElement('p');p.className='empty-state';p.textContent='Noch keine Animationen. Mit dem Plus-Knopf ein GIF, einen Bildstreifen oder ein Text-Raster importieren.';list.appendChild(p);}
+ animUI.items.forEach(r=>{
+  const row=document.createElement('div');row.className='library-row anim-row'+(animUI.selected===r.id?' selected':'');row.setAttribute('role','listitem');row.dataset.id=r.id;
+  const th=document.createElement('canvas');th.className='anim-thumb';th.setAttribute('aria-hidden','true');
+  try{animLed(th,r.broken?null:RbAnim.thumbPixels(RbAnim.b64uDec(r.thumb)),2);}catch(e){animLed(th,null,2);}
+  const pick=document.createElement('button');pick.className='lib-pick';pick.type='button';pick.setAttribute('aria-pressed',String(animUI.selected===r.id));
+  const title=document.createElement('strong');title.className='lib-name';title.textContent=r.broken?'⚠ Beschädigte Datei #'+r.id:r.name;
+  const info=document.createElement('small');info.textContent=r.broken?'Nur löschen möglich ('+animSizeText(r.bytes)+')':r.frames+' Frames · '+r.ms+' ms · '+animSizeText(r.bytes);
+  pick.append(title,info);pick.onclick=()=>animSelect(animUI.selected===r.id?0:r.id);
+  row.append(th,pick);list.appendChild(row);
+ });
+ const sel=animSelectedItem();
+ for(const id of ['animSend','animRename','animDuplicate'])$(id).disabled=!sel||sel.broken||!animUI.ready;
+ $('animDelete').disabled=!sel||!animUI.ready;
+ $('animImport').disabled=!animUI.ready;
+ $('animStatus').textContent=animUI.ready?(animUI.items.length+' von '+animUI.limit+' Animationen · frei '+animSizeText(animUI.free)):'Dateisystem nicht eingerichtet.';
+ $('animPreviewWrap').classList.toggle('hidden',!sel||sel.broken);
+ rb43PaintIcons();
+}
+async function animRefresh(){
+ try{const j=await api('/api/anim/list');rbFresh.anim=Date.now();animUI.ready=!!j.ready;animUI.items=j.items||[];animUI.free=j.free||0;animUI.total=j.total||0;animUI.limit=j.limit||40;
+  if(animUI.selected&&!animUI.items.some(i=>i.id===animUI.selected))animUI.selected=0;
+  renderAnimList();if(animUI.selected)animSelect(animUI.selected);}
+ catch(e){$('animStatus').textContent='Fehler: '+e.message;}
+}
+async function animSelect(id){
+ animUI.selected=id;renderAnimList();
+ const it=animSelectedItem();if(!it||it.broken){animListPlayer.set([],100);return;}
+ $('animPreviewInfo').textContent='lädt …';
+ try{
+  let c=animUI.cache.get(id);
+  if(!c||c.stamp!==it.bytes+':'+it.ms+':'+it.thumb.slice(0,24)){
+   const j=await api('/api/anim/get?id='+id);const u=RbAnim.unpackPayload(RbAnim.b64uDec(j.data));
+   c={frames:u.frames,ms:u.ms,stamp:it.bytes+':'+it.ms+':'+it.thumb.slice(0,24)};animUI.cache.set(id,c);
+  }
+  if(animUI.selected!==id)return;
+  animListPlayer.set(c.frames,c.ms);
+  $('animPreviewInfo').textContent=c.frames.length+' Frames · '+c.ms+' ms je Frame · Schleife '+(c.frames.length*c.ms/1000).toFixed(1).replace('.',',')+' s'+(c.ms<16?' · Vorschau höchstens 16 ms je Frame':'');
+ }catch(e){$('animPreviewInfo').textContent='Vorschau: '+e.message;}
+}
+function animShowList(){$('animListPane').classList.remove('hidden');$('animImportPane').classList.add('hidden');if(animImpPlayer)animImpPlayer.stop();renderAnimList();if(animUI.selected&&animListPlayer)animSelect(animUI.selected);}
+$('animSend').onclick=async()=>{const it=animSelectedItem();if(!it)return;try{const j=await api('/api/anim/send',{id:it.id});notify(j.message);}catch(e){notify('Senden: '+e.message);}};
+$('animRename').onclick=async()=>{const it=animSelectedItem();if(!it)return;const raw=await v42NamePrompt('Neuer Name',it.name);const name=raw===null?'':animBoundName(raw);if(!name||name===it.name)return;
+ try{await api('/api/anim/rename',{id:it.id,name});await animRefresh();notify('Animation umbenannt.');}catch(e){notify('Umbenennen: '+e.message);}};
+$('animDuplicate').onclick=async()=>{const it=animSelectedItem();if(!it)return;try{const j=await api('/api/anim/duplicate',{id:it.id});animUI.selected=j.id;await animRefresh();notify('Animation dupliziert.');}catch(e){notify('Duplizieren: '+e.message);}};
+$('animDelete').onclick=async()=>{const it=animSelectedItem();if(!it)return;
+ if(!confirm((it.broken?'Beschädigte Datei #'+it.id:'Animation „'+it.name+'“')+' wirklich löschen?'))return;
+ try{await api('/api/anim/delete',{id:it.id});animUI.cache.delete(it.id);animUI.selected=0;await animRefresh();notify('Animation gelöscht.');}catch(e){notify('Löschen: '+e.message);}};
+
+// ---- Import: Quellen ---------------------------------------------------------------------------
+function animShrink(c,max){const m=Math.max(c.width,c.height);if(m<=max)return c;const s=max/m,o=document.createElement('canvas');o.width=Math.max(1,Math.round(c.width*s));o.height=Math.max(1,Math.round(c.height*s));
+ const x=o.getContext('2d');x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(c,0,0,o.width,o.height);return o;}
+function animReset(){
+ animImp.kind='';animImp.sources=[];animImp.delays=[];animImp.strip=null;animImp.frames=null;animImp.problem='';animImp.saveError='';
+ $('animAdjust').classList.add('hidden');$('animStripOpts').classList.add('hidden');$('animSrcInfo').textContent='';$('animErr').textContent='';$('animInfo').textContent='';
+ $('animSave').disabled=true;$('animSaveSend').disabled=true;if(animImpPlayer)animImpPlayer.set([],100);
+}
+function animShowImport(){
+ animReset();$('animListPane').classList.add('hidden');$('animImportPane').classList.remove('hidden');animStopAll();
+ $('animImpSub').textContent='Quelle wählen';window.scrollTo({top:0,behavior:'instant'});
+}
+function animSetSources(kind,sources,delays,name,note){
+ animImp.kind=kind;animImp.sources=sources;animImp.delays=delays;
+ const n=sources.length;
+ $('animFrom').value=1;$('animTo').value=n;$('animFrom').max=n;$('animTo').max=n;$('animStep').value=1;$('animPing').checked=false;
+ const sorted=delays.slice().sort((a,b)=>a-b),med=sorted[Math.floor(sorted.length/2)]||100;
+ $('animMs').value=Math.max(1,Math.min(2000,med));
+ const varying=Math.max(...delays)>Math.min(...delays)*1.3;
+ $('animVarWrap').classList.toggle('hidden',!(kind==='gif'&&varying));$('animVar').checked=false;
+ const first=sources[0];
+ $('animFit').value=kind==='raster'&&first.width<=64&&first.height<=16?'orig':'contain';
+ $('animDither').value=kind==='raster'?'thresh':'fs';
+ $('animThr').value=128;$('animCon').value=0;$('animOx').value=0;$('animOy').value=0;animFitUi();
+ if(!$('animName').value.trim()||animImp.nameAuto!==false)$('animName').value=animBoundName(name||'Animation');
+ $('animSrcInfo').textContent=note||'';
+ $('animAdjust').classList.remove('hidden');$('animImpSub').textContent=n+' Bilder geladen';
+ animSchedule(0);
+}
+$('animFileGif').addEventListener('change',async e=>{
+ const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+ animReset();$('animSrcInfo').textContent='GIF wird gelesen …';
+ try{
+  const buf=new Uint8Array(await f.arrayBuffer());const sources=[],delays=[];let tmp=null,tctx=null,img=null;
+  const res=await RbAnim.gifDecode(buf,(rgba,w,h,d)=>{
+   if(!tmp){tmp=document.createElement('canvas');tmp.width=w;tmp.height=h;tctx=tmp.getContext('2d');img=tctx.createImageData(w,h);}
+   img.data.set(rgba);tctx.putImageData(img,0,0);
+   const c=animShrink(tmp,192);if(c===tmp){const o=document.createElement('canvas');o.width=w;o.height=h;o.getContext('2d').drawImage(tmp,0,0);sources.push(o);}else sources.push(c);
+   delays.push(d);
+  });
+  animImp.nameAuto=true;
+  animSetSources('gif',sources,delays,f.name.replace(/\.[^.]*$/,''),'GIF '+res.width+' × '+res.height+', '+res.count+' Bilder'+(res.truncated?' (mehr als '+RbAnim.MAXSRC+' Bilder: nur die ersten wurden gelesen)':'')+'.');
+ }catch(err){$('animSrcInfo').textContent='';$('animErr').textContent='GIF: '+err.message;}
+});
+$('animFileStrip').addEventListener('change',async e=>{
+ const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+ animReset();$('animSrcInfo').textContent='Bild wird gelesen …';
+ try{
+  const url=URL.createObjectURL(f);const im=new Image();im.src=url;await im.decode();URL.revokeObjectURL(url);
+  const s=Math.min(1,4096/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.naturalWidth*s));c.height=Math.max(1,Math.round(im.naturalHeight*s));
+  c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+  animImp.strip=c;animImp.nameAuto=true;animImp.name=f.name.replace(/\.[^.]*$/,'');
+  const g=RbAnim.stripGuess(c.width,c.height);$('animStripN').value=Math.min(RbAnim.MAXSRC,g.n);$('animStripDir').value=g.dir;
+  $('animStripOpts').classList.remove('hidden');animSplitStrip();
+ }catch(err){$('animSrcInfo').textContent='';$('animErr').textContent='Bild: '+err.message;}
+});
+function animSplitStrip(){
+ const c=animImp.strip;if(!c)return;
+ const n=Math.max(1,Math.min(RbAnim.MAXSRC,Number($('animStripN').value)||1)),dir=$('animStripDir').value;
+ const rects=RbAnim.stripRects(c.width,c.height,n,dir);
+ if(rects.some(r=>r.w<1||r.h<1)){$('animErr').textContent='Zu viele Teile für dieses Bild.';return;}
+ const sources=rects.map(r=>{const o=document.createElement('canvas');o.width=r.w;o.height=r.h;o.getContext('2d').drawImage(c,r.x,r.y,r.w,r.h,0,0,r.w,r.h);return animShrink(o,192);});
+ $('animErr').textContent='';
+ animSetSources('strip',sources,sources.map(()=>100),animImp.name,'Streifen '+c.width+' × '+c.height+' in '+n+' Teile ('+(dir==='h'?'nebeneinander':'untereinander')+') zerlegt.');
+}
+$('animStripN').addEventListener('change',animSplitStrip);$('animStripDir').addEventListener('change',animSplitStrip);
+const ANIM_RASTER_RGB=[[0,0,0],[0,0,255],[0,255,0],[0,255,255],[255,0,0],[255,0,255],[255,255,0],[255,255,255]];
+function animRasterApply(text,name){
+ animReset();
+ try{
+  const fr=RbAnim.parseRaster(text);
+  const sources=fr.map(f=>{const c=document.createElement('canvas');c.width=f.w;c.height=f.h;const x=c.getContext('2d'),d=x.createImageData(f.w,f.h);
+   for(let i=0;i<f.w*f.h;i++){const rgb=ANIM_RASTER_RGB[f.px[i]];d.data[i*4]=rgb[0];d.data[i*4+1]=rgb[1];d.data[i*4+2]=rgb[2];d.data[i*4+3]=255;}
+   x.putImageData(d,0,0);return c;});
+  animImp.nameAuto=true;
+  animSetSources('raster',sources,sources.map(()=>200),name||'Raster',fr.length+' Bilder, '+fr[0].w+' × '+fr[0].h+' Pixel.');
+ }catch(err){$('animErr').textContent='Raster: '+err.message;}
+}
+$('animRasterGo').onclick=()=>animRasterApply($('animRasterText').value,'Raster');
+$('animFileRaster').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;const t=await f.text();$('animRasterText').value=t;animRasterApply(t,f.name.replace(/\.[^.]*$/,''));});
+
+// ---- Import: Anpassen, Vorschau --------------------------------------------------------------
+const animRc=document.createElement('canvas');animRc.width=64;animRc.height=16;const animRx=animRc.getContext('2d',{willReadFrequently:true});
+function animRenderOne(src,o){
+ animRx.fillStyle='#000';animRx.fillRect(0,0,64,16);
+ const r=RbAnim.fitRect(src.width,src.height,o.fit,o.ox,o.oy),smooth=r.scale<1;
+ animRx.imageSmoothingEnabled=smooth;if(smooth)animRx.imageSmoothingQuality='high';
+ if(smooth)animRx.drawImage(src,r.x,r.y,r.w,r.h);else animRx.drawImage(src,Math.round(r.x),Math.round(r.y),Math.max(1,Math.round(r.w)),Math.max(1,Math.round(r.h)));
+ return RbAnim.quantize(animRx.getImageData(0,0,64,16).data,o);
+}
+function animSchedule(delay){animImp.saveError='';clearTimeout(animImp.timer);animImp.timer=setTimeout(animRender,delay==null?140:delay);}
+function animRender(){
+ if(!animImp.sources.length)return;
+ const n=animImp.sources.length;
+ const o={fit:$('animFit').value,ox:Number($('animOx').value),oy:Number($('animOy').value),method:$('animDither').value,thr:Number($('animThr').value),contrast:Number($('animCon').value)};
+ const p=RbAnim.plan(animImp.delays,{from:Number($('animFrom').value)||1,to:Number($('animTo').value)||n,step:Number($('animStep').value)||1,ping:$('animPing').checked,ms:Number($('animMs').value)||100,variable:$('animVar').checked&&!$('animVarWrap').classList.contains('hidden')});
+ const cache=new Map();
+ const frames=p.tooMany?[]:p.order.map(i=>{let f=cache.get(i);if(!f){f=animRenderOne(animImp.sources[i],o);cache.set(i,f);}return f;});
+ animImp.frames=frames;animImp.ms=p.ms;
+ const bytes=RbAnim.HDR+p.count*RbAnim.FB;let problem='';
+ if(p.count<2)problem='Mindestens 2 Bilder nötig. Bereich oder Schritt anpassen.';
+ else if(p.tooMany)problem=p.count+' Bilder sind zu viel (höchstens '+RbAnim.MAXF+'). Schritt erhöhen, Bereich kürzen oder „Auf '+RbAnim.MAXF+' Bilder verteilen“ drücken.';
+ else if(!animUI.ready)problem='Dateisystem nicht eingerichtet (zuerst in der Bibliothek einrichten).';
+ else if(animUI.items.length>=animUI.limit)problem='Es sind schon '+animUI.limit+' Animationen gespeichert. Bitte erst eine löschen.';
+ else if(bytes+448+24576>animUI.free)problem='Nicht genug freier Speicher ('+animSizeText(animUI.free)+' frei, '+animSizeText(bytes+448)+' nötig).';
+ animImp.problem=problem;
+ $('animErr').textContent=problem||animImp.saveError||'';$('animReduce').classList.toggle('hidden',!p.tooMany);
+ $('animInfo').textContent=p.tooMany?'':p.count+' Frames · '+p.ms+' ms je Frame · Schleife '+(p.count*p.ms/1000).toFixed(1).replace('.',',')+' s · '+animSizeText(bytes)+' · Übertragung etwa '+Math.round(RbAnim.uploadSeconds(p.count))+' s'+(p.ms<16?' · Vorschau höchstens 16 ms je Frame':'');
+ const ok=!problem;$('animSave').disabled=!ok||animUI.saving;$('animSaveSend').disabled=!ok||animUI.saving;
+ animImpPlayer.set(frames,p.ms);
+}
+$('animReduce').onclick=()=>{const n=animImp.sources.length,from=Number($('animFrom').value)||1,to=Number($('animTo').value)||n;const span=to-from+1;$('animStep').value=Math.ceil(span/RbAnim.MAXF);$('animPing').checked=false;animSchedule(0);};
+for(const id of ['animFit','animOx','animOy','animDither','animThr','animCon','animFrom','animTo','animStep','animPing','animMs','animVar'])$(id).addEventListener('input',()=>animSchedule());
+function animFitUi(){const v=$('animFit').value;$('animOffsets').classList.toggle('hidden',!(v==='cover'||v==='orig'));}
+$('animFit').addEventListener('change',animFitUi);
+$('animName').addEventListener('input',()=>{animImp.nameAuto=false;});
+$('animImport').onclick=animShowImport;
+$('animImpBack').onclick=animShowList;
+
+// ---- Import: Speichern -----------------------------------------------------------------------------
+async function animSaveImport(sendAfter){
+ if(animUI.saving||animImp.problem||!animImp.frames||animImp.frames.length<2)return;
+ animUI.saving=true;$('animSave').disabled=true;$('animSaveSend').disabled=true;
+ const frames=animImp.frames,ms=animImp.ms,n=frames.length,name=animBoundName($('animName').value)||'Animation';
+ const payload=RbAnim.buildPayload(frames,ms),thumb=RbAnim.thumbOf(payload,n),prog=$('animProg');
+ prog.max=payload.length;prog.value=0;prog.classList.remove('hidden');animImp.saveError='';$('animErr').textContent='';
+ let last=null;
+ try{
+  for(let off=0;off<payload.length;off+=1200){
+   const data={off:String(off),data:RbAnim.b64uEnc(payload.subarray(off,off+1200))};
+   if(off===0)Object.assign(data,{name,frames:String(n),ms:String(ms),total:String(payload.length),thumb:RbAnim.b64uEnc(thumb)});
+   last=await api('/api/anim/put',data);prog.value=Math.min(payload.length,off+1200);
+  }
+  const id=last&&last.id;if(!id)throw Error('Keine Antwort mit Animations-ID.');
+  animUI.selected=id;animUI.cache.delete(id);animShowList();await animRefresh();
+  if(sendAfter){const j=await api('/api/anim/send',{id});notify(j.message);}else notify('Animation gespeichert.');
+ }catch(e){
+  try{await api('/api/anim/put',{abort:'1'});}catch(x){}
+  animImp.saveError='Speichern: '+e.message;$('animErr').textContent=animImp.saveError;notify('Animation: '+e.message);
+ }finally{animUI.saving=false;prog.classList.add('hidden');if(!$('animImportPane').classList.contains('hidden'))animRender();}
+}
+$('animSave').onclick=()=>animSaveImport(false);
+$('animSaveSend').onclick=()=>animSaveImport(true);
+animListPlayer=animMakePlayer($('animPreview'));animImpPlayer=animMakePlayer($('animImpPreview'));
+animLed($('animPreview'),null,8);animLed($('animImpPreview'),null,8);
+/* ==== Ende Animationen: Oberfläche ==== */
+
 init();
 </script></body></html>

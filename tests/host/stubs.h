@@ -6,6 +6,14 @@
 #include <vector>
 #include <algorithm>
 using std::min; using std::max;
+// v0.6.1.0: Attrappe fuer fs::File (der Animationsblock des Sketches nutzt sie)
+struct File {
+  const uint8_t *data = nullptr; size_t len = 0, pos = 0;
+  explicit operator bool() const { return data != nullptr; }
+  bool seek(size_t p) { if (!data || p > len) return false; pos = p; return true; }
+  int read(uint8_t *d, size_t n) { if (!data) return -1; size_t k = pos + n <= len ? n : len - pos; std::memcpy(d, data + pos, k); pos += k; return (int)k; }
+  void close() { data = nullptr; len = pos = 0; }
+};
 #define PROGMEM
 #define pgm_read_byte(x) (*(const uint8_t *)(x))
 struct String{
@@ -38,3 +46,4 @@ static bool rb43StreamBand=false,rb42StreamBand=false;
 void rb43CopyMixedSlice(size_t,size_t,uint8_t*){}
 void rb42CopyBandSlice(size_t,size_t,uint8_t*){}
 static bool allocateRenderBuffer(uint32_t rgb){ if(textPayload)free(textPayload); textPayload=(uint8_t*)calloc(IMAGE_HEADER_BYTES+rgb,1); pixelData=textPayload+IMAGE_HEADER_BYTES; return true; }
+
