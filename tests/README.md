@@ -21,6 +21,10 @@ Der Browser-Test erfordert Playwright und Chromium; Arduino-Boardpaket und reale
 
 `python tests/test_0431.py` prüft die JavaScript-Syntax, HTML/gzip-/ETag-Konsistenz, die korrigierte Versionskennung, den entkoppelten Diagnose-TXT-Download und die interaktive Darstellung in drei Chromium-Mobilgrößen. Der Stream-Puffer wurde außerdem separat mit einem Host-C++-Test kompiliert. Dies ersetzt **keinen Arduino-Gesamtcompile** und keinen Heap-/BLE-Test auf dem ESP32.
 
+## v0.4.5.0-dev (2.11.2026)
+
+Die vier Tests tragen jetzt die Endung `0450`. Neu im Browser-Test: echte Touch-Ereignisse über das Chrome-Protokoll (`Input.dispatchTouchEvent`) für waagerechtes Markieren und senkrechtes Scrollen im Zeichen-Fenster, Doppeltipp-Wort (mit/ohne Satzzeichen), feste Kopfzone und deren Schrumpfen, Farbleiste (erscheint/verschwindet, wendet Farbe an), schrumpfende Vorschau im Editor (mit künstlich verlängerter Seite), Kurzwahl-Dialog (Quellen, Sperre des Speicherns, vorbelegte Beschriftung, leer gespeichert wenn unverändert), Auswahl aufheben in Bibliothek und Programmen, Knöpfe in Einstellungen und Diagnose, gleichmäßige Abstände im Startbildschirm-Bedienfeld. Der Build-Test prüft `RB_AP_MAX_CLIENTS` = 2. Nicht abgedeckt: das echte Verhalten auf iOS-Safari (Touch-Gesten, Doppeltipp-Zoom) und der ESP32 selbst.
+
 ## v0.4.4.2-dev (2.11.2026)
 
 Die vier Tests des vorherigen Stands tragen jetzt die Endung `0442` (`test_build_0442.py`, `test_browser_0442.py`, `test_render_parity_0442.py`, `host_program_order_0442.py`). Neu im Browser-Test: der Mock-ESP verzögert Sortierbefehle absichtlich (700 ms), liefert Kopien statt seines Speichers und kann Sortierfehler melden; geprüft werden sofortige Anzeige, Reihenfolge und Anzahl der Befehle, keine Neuabfrage nach Erfolg, Rückfall bei Fehler, kein erneutes Laden frischer Listen beim Seitenwechsel (veraltete werden im Hintergrund geholt), pausierte Statusabfrage und das reduzierte Startbildschirm-Bedienfeld (Tasten, Reihenfolge, Abstände, eine Zeile; übrige Seiten zeigen alle acht Tasten). Nicht abgedeckt: reale Zeiten auf dem ESP32, iPhone-Safari.

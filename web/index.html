@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="#11141c" name="theme-color"/>
-<title>RavestickBoard · v0.4.4.2-dev</title>
+<title>RavestickBoard · v0.4.5.0-dev</title>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/><link rel="icon" type="image/png" href="/favicon.ico"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="RavestickBoard"/>
@@ -349,9 +349,6 @@ body.home-active #rbDock{flex:0 0 auto;margin:8px auto 0!important}
 .rbz-sheet button:disabled{opacity:.45;cursor:not-allowed}
 .rbz-ibtn{padding:9px 11px}
 #rbzMatrix{display:block;width:100%;height:auto;border-radius:8px;flex:none}
-.rbz-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px;border-radius:12px;background:#11141c;border:1px solid #353e50}
-.rbz-seg button{background:transparent;color:#bbc6d5;font-size:14px;padding:12px 8px}
-.rbz-seg button.on{background:#ffd35c;color:#111820}
 .rbz-count{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .rbz-count>span{color:#b2bed0;font-size:14px}
 .rbz-tools{display:flex;gap:6px}
@@ -359,7 +356,6 @@ body.home-active #rbDock{flex:0 0 auto;margin:8px auto 0!important}
 #rbzGrids{display:flex;flex-direction:column}
 .rbz-tiles{display:grid;grid-template-columns:repeat(auto-fill,38px);gap:7px;justify-content:center;touch-action:pan-y}
 .rbz-tiles.compact{grid-template-columns:repeat(auto-fill,34px);gap:5px;justify-content:start}
-#rbzGrids.swipe .rbz-tiles{touch-action:none;-webkit-user-select:none;user-select:none}
 .rbz-tile{width:38px;height:48px;padding:0;border-radius:9px;background:#262d3a;border:2px solid transparent;font-size:23px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace;color:#f3f5fa;overflow:hidden}
 .rbz-tiles.compact .rbz-tile{width:34px;height:44px;border-radius:8px;font-size:20px}
 .rbz-tile.sel{border-color:#ffd45c;background:#2d3544}
@@ -412,12 +408,36 @@ textarea.rb-ta:focus{border-color:#ffd45c}
 .rbz-chips button.chip:disabled{opacity:.45;cursor:not-allowed}
 /* ===== v0.4.4.2 ===== */
 body[data-rb-view='home'] .rb-dock-modes .v43-force-btn:not([data-mode='scroll']):not([data-mode='static']){display:none}
-body[data-rb-view='home'] .rb-dock-actions .rb-dock-modes{margin:0 16px}
 .library-row.rb-moved{animation:rbMoved .7s ease-out}
 @keyframes rbMoved{from{box-shadow:0 0 0 2px #ffd45c}to{box-shadow:0 0 0 0 transparent}}
+/* ===== v0.4.5.0 ===== */
+.rb-btnlink,.library-import[data-rb-icon]{font:inherit;font-weight:750;display:inline-flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;text-align:center;cursor:pointer}
+.actions .rb-btnlink{flex:1 1 auto;font-size:13px;padding:12px 11px;border-radius:10px}
+@media(max-width:440px){.actions .rb-btnlink{flex:1 1 120px}}
+.settings-actions .library-import[data-rb-icon]{font-size:12px;line-height:1.2}
+.rb-btnlink .rb-lucide,.library-import .rb-lucide{width:18px;height:18px;flex:none}
+.v42-sources{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:5px 0 12px}
+.v42-sources button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:62px;padding:8px 2px;font-size:11px;font-weight:750;line-height:1.1;background:#283345;border:1px solid #41516a;border-radius:9px;color:#ecf3fc;cursor:pointer}
+.v42-sources button .rb-lucide{width:22px;height:22px}
+.v42-sources button[aria-pressed="true"]{background:#ffd45c;border-color:#ffd45c;color:#111821}
+.v42-sources button:disabled{opacity:.4;cursor:not-allowed}
+.rbz-top{flex:none;display:flex;flex-direction:column;gap:10px;padding:10px 15px 8px;border-bottom:1px solid #2c3544;background:#1d222e}
+.rbz-scroll{padding-top:12px}
+#rbzMatrix{transition:width .18s ease;margin:0 auto}
+.rbz-top.compact #rbzMatrix{width:62%}
+.rbz-hint{margin:0;font-size:12px;line-height:1.4;color:#9aa8bd}
+.rbz-tiles{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.rbz-colorbar{flex:none;display:none;padding:7px 15px;border-top:1px solid #2c3544;background:#1d222e}
+.rbz-colorbar.show{display:block}
+.rbz-colorbar .rbz-sw{width:30px;height:30px;border-width:2px}
+#rbzColors .rbz-sw{width:min(44px,100%);height:auto;aspect-ratio:1}
+.rbz-top.compact .rbz-grab{display:none}
+#view-editor .preview-sticky #matrix{transition:width .18s ease;margin:0 auto}
+#view-editor .preview-sticky.rb-compact #matrix{width:62%}
+#view-editor .preview-sticky.rb-compact .preview-tools,#view-editor .preview-sticky.rb-compact>.label{display:none}
 </style></head>
 <body class="home-active" data-rb-view="home"><div id="rbBootScreen" class="rb-initial-loading" role="status" aria-live="polite"><span class="rb-boot-mark" aria-hidden="true"><svg aria-hidden="true" class="rb-lucide" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"></path><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"></path></svg></span><span>RavestickBoard wird geladen …</span></div><main id="appShell">
-<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.4.4.2-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
+<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.4.5.0-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
 
 
 
@@ -461,7 +481,7 @@ body[data-rb-view='home'] .rb-dock-actions .rb-dock-modes{margin:0 16px}
 </div>
 <div aria-label="Gespeicherte Texte" class="entry-list library-list" role="list" id="libList"><p class="empty-state">Noch keine Texte gespeichert.</p></div>
 <div class="library-footer hidden"><label for="libSlot">Kurzwahl</label><select id="libSlot"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select><button id="libAssign" type="button">Belegen</button><button id="libUnassign" type="button">Freigeben</button></div>
-<div class="library-footer settings-actions" id="v42BackupFooter"><button id="libExport" type="button" data-rb-icon="database-arrow-down" data-rb-painted="database-arrow-down"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 19 3 3 3-3"/><path d="M19 16v6"/><path d="M21 12.536V5"/><path d="M3 12A9 3 0 0 0 15.182 14.806"/><path d="M3 5V19A9 3 0 0 0 13.318 21.968"/><ellipse cx="12" cy="5" rx="9" ry="3"/></svg>Backup exportieren</button><label class="library-import" for="libImport">↑ Backup zusammenführen</label><input type="file" accept=".json,application/json" id="libImport" class="visually-hidden"/></div>
+<div class="library-footer settings-actions" id="v42BackupFooter"><button id="libExport" type="button" data-rb-icon="database-arrow-down" data-rb-painted="database-arrow-down"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 19 3 3 3-3"/><path d="M19 16v6"/><path d="M21 12.536V5"/><path d="M3 12A9 3 0 0 0 15.182 14.806"/><path d="M3 5V19A9 3 0 0 0 13.318 21.968"/><ellipse cx="12" cy="5" rx="9" ry="3"/></svg>Backup exportieren</button><label class="library-import" for="libImport" data-rb-icon="database-arrow-up">Backup zusammenführen</label><input type="file" accept=".json,application/json" id="libImport" class="visually-hidden"/></div>
 </div>
 </div></section><section aria-label="Programme" class="app-view inner-view hidden" id="view-programs">
 <div class="panel inner-panel" id="v43ProgListPane"><h2>Programme</h2>
@@ -503,17 +523,17 @@ body[data-rb-view='home'] .rb-dock-actions .rb-dock-modes{margin:0 16px}
 <div class="panel inner-panel"><h2>Ambiente</h2><p class="hint">Eine Farbe antippen, um die gesamte 64×16-Tafel mit dieser Farbe zu füllen. Die aktuelle Textanzeige wird dadurch ersetzt.</p>
 <div aria-label="LED-Farben" class="ambience-colors" id="ambienceColors"></div>
 
-</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary" download="RavestickBoard_Diagnose_v0.4.4.2-dev.txt" href="/api/diagnostics.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">TXT herunterladen</a><a class="secondary" download="RavestickBoard_RAM_v0.4.4.2-dev.txt" href="/api/ram.txt" style="padding:12px;text-decoration:none;border-radius:10px;font-weight:750">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
+</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary rb-btnlink" download="RavestickBoard_Diagnose_v0.4.5.0-dev.txt" href="/api/diagnostics.txt" data-rb-icon="database-arrow-down">TXT herunterladen</a><a class="secondary rb-btnlink" download="RavestickBoard_RAM_v0.4.5.0-dev.txt" href="/api/ram.txt" data-rb-icon="database-arrow-down">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
 <div class="panel"><h2>Einstellungen</h2>
 <div class="settings-section" id="v42SettingsBackup">
-<div class="label">▤ Bibliothek &amp; Datensicherung</div>
+<div class="label">Bibliothek &amp; Datensicherung</div>
 <p class="hint">Texte, Blockfolgen, Programme und Kurzwahlen als JSON sichern.</p>
 </div>
 <p class="tiny muted">Beim Import werden bestehende Einträge nicht automatisch überschrieben.</p>
-<div class="settings-section"><div class="label">⌁ LED-Tafel</div>
+<div class="settings-section"><div class="label">LED-Tafel</div>
 <div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><strong>CoolLEDX</strong><div class="tiny muted">Fest konfiguriertes Gerät</div></div><span class="tiny muted">Aktiv</span></div>
 </div>
-<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.4.2-dev</p></div>
+<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.4.5.0-dev</p></div>
 </section><aside id="rbDock" class="rb-dock" aria-label="Tafelsteuerung">
  <div class="pixel-range" role="group" aria-label="Globale Helligkeit"><span class="rb-range-icon" data-rb-icon="sunset" aria-hidden="true" data-rb-painted="sunset"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10V2"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m16 6-4 4-4-4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span><input aria-label="Helligkeit" data-global="brightness" id="dockBrightness" min="1" max="100" type="range" value="75"/><b data-global-label="brightness">75 %</b><span class="rb-range-icon" data-rb-icon="sunrise" aria-hidden="true" data-rb-painted="sunrise"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span></div>
  <div class="pixel-range rb-dock-speed" role="group" aria-label="Globale Geschwindigkeit"><span class="rb-range-icon" data-rb-icon="snail" aria-hidden="true" data-rb-painted="snail"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg></span><input aria-label="Geschwindigkeit" data-global="speed" id="dockSpeed" min="1" max="100" type="range" value="80"/><b data-global-label="speed">80 / 100</b><span class="rb-range-icon" data-rb-icon="rabbit" aria-hidden="true" data-rb-painted="rabbit"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 16a3 3 0 0 1 2.24 5"/><path d="M18 12h.01"/><path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/><path d="M20 8.54V4a2 2 0 1 0-4 0v3"/><path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/></svg></span></div>
@@ -521,20 +541,17 @@ body[data-rb-view='home'] .rb-dock-actions .rb-dock-modes{margin:0 16px}
 </aside>
 <div class="rbz hidden" id="rbz" role="dialog" aria-modal="true" aria-labelledby="rbzTitle">
 <div class="rbz-sheet">
-<div class="rbz-scroll" id="rbzScroll">
-<div class="rbz-grab" aria-hidden="true"></div>
+<div class="rbz-top" id="rbzTop"><div class="rbz-grab" aria-hidden="true"></div>
 <div class="rbz-head"><strong id="rbzTitle">Zeichen gestalten</strong><button class="secondary rbz-ibtn" id="rbzClose" type="button" aria-label="Fenster schließen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
 <canvas id="rbzMatrix" width="768" height="192" role="img" aria-label="LED-Vorschau"></canvas>
-<div class="rbz-seg" id="rbzSeg" role="group" aria-label="Auswahlart">
-<button type="button" id="rbzModeSingle" class="on" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 14a8 8 0 0 1-8 8"/><path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/><path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>Einzeln</button>
-<button type="button" id="rbzModeSwipe" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 10 3 3"/><path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z"/><path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031"/></svg>Wischen</button>
-</div>
 <div class="rbz-count"><span id="rbzCount" aria-live="polite">0 von 0 gewählt</span>
 <div class="rbz-tools">
 <button class="secondary rbz-ibtn" id="rbzAll" type="button" aria-label="Alle auswählen" title="Alle auswählen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg></button>
 <button class="secondary rbz-ibtn" id="rbzNone" type="button" aria-label="Auswahl aufheben" title="Auswahl aufheben"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 12H3"/><path d="M16 6H3"/><path d="M16 18H3"/><path d="m19 10-4 4"/><path d="m15 10 4 4"/></svg></button>
 <button class="secondary rbz-ibtn" id="rbzUndo" type="button" aria-label="Rückgängig" title="Rückgängig" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg></button><button class="secondary rbz-ibtn" id="rbzRedo" type="button" aria-label="Wiederherstellen" title="Wiederherstellen" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13"/></svg></button>
-</div></div>
+</div></div></div>
+<div class="rbz-scroll" id="rbzScroll">
+<p class="rbz-hint" id="rbzHint">Antippen schaltet um · waagerecht wischen markiert (auf Markiertem: entmarkiert) · Doppeltipp markiert das Wort · senkrecht wischen scrollt.</p>
 <div id="rbzGrids"></div>
 <div class="rbz-block" id="rbzColorBlock"><span class="label">Farbe für die Auswahl</span><div class="rbz-swatches" id="rbzColors"></div><span class="rbz-note">Herzen tauschen auf das Herz in der gewählten Farbe. Andere Symbole bleiben unverändert.</span></div>
 <div class="rbz-box" id="rbzFontBox">
@@ -553,6 +570,7 @@ body[data-rb-view='home'] .rb-dock-actions .rb-dock-modes{margin:0 16px}
 </div>
 </div>
 </div>
+<div class="rbz-colorbar" id="rbzColorBar" aria-label="Farbe für die Auswahl"><div class="rbz-swatches" id="rbzBarColors"></div></div>
 <div class="rbz-foot">
 <button class="rbz-done" id="rbzDone" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Fertig</button>
 <button id="rbzSend" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 22h20"/><path d="M6.36 17.4 4 17l-2-4 1.1-.55a2 2 0 0 1 1.8 0l.17.1a2 2 0 0 0 1.8 0L8 12 5 6l.9-.45a2 2 0 0 1 2.09.2l4.02 3a2 2 0 0 0 2.1.2l4.19-2.06a2.41 2.41 0 0 1 1.73-.17L21 7a1.4 1.4 0 0 1 .87 1.99l-.38.76c-.23.46-.6.84-1.07 1.08L7.58 17.2a2 2 0 0 1-1.22.18Z"/></svg>Senden</button>
@@ -561,7 +579,7 @@ body[data-rb-view='home'] .rb-dock-actions .rb-dock-modes{margin:0 16px}
 </div>
 
 <div class="v42-dialog hidden" id="v42ShortcutDialog" role="dialog" aria-modal="true" aria-label="Kurzwahl belegen"><div class="v42-sheet">
-<h2 id="v42ShortcutTitle">Kurzwahl belegen</h2><label class="field">Quelle<select id="v42ShortcutType"><option value="0">Quelle auswählen</option><option value="1">Bibliothek</option><option value="2">Programme</option><option value="3">Ambiente</option><option value="4" disabled>Animationen (zukünftig)</option></select></label>
+<h2 id="v42ShortcutTitle">Kurzwahl belegen</h2><div class="field"><span id="v42SourceLabel">Quelle</span><div class="v42-sources" id="v42Sources" role="group" aria-labelledby="v42SourceLabel"><button type="button" data-src="1" data-rb-icon="library" aria-pressed="false">Bibliothek</button><button type="button" data-src="2" data-rb-icon="list-video" aria-pressed="false">Programme</button><button type="button" data-src="3" data-rb-icon="spray-can" aria-pressed="false">Ambiente</button><button type="button" data-src="4" data-rb-icon="play" aria-pressed="false" disabled title="Animationen folgen später">Animationen</button></div><select id="v42ShortcutType" class="hidden" aria-hidden="true" tabindex="-1"><option value="0">Quelle auswählen</option><option value="1">Bibliothek</option><option value="2">Programme</option><option value="3">Ambiente</option><option value="4" disabled>Animationen (zukünftig)</option></select></div>
 <label class="field" id="v42ShortcutTargetWrap">Inhalt<select id="v42ShortcutTarget"></select></label>
 <label class="field">Beschriftung<input class="v42-name" id="v42ShortcutLabel" maxlength="47" placeholder="Meine Kurzwahl"></label><small id="v42ShortcutBytes" class="v42-hint">0 / 47 UTF-8-Bytes</small>
 <div class="v42-row" id="v42ShortcutActions"><button class="secondary danger" id="v42ShortcutDelete" type="button" data-rb-only="1" data-rb-icon="trash" title="Kurzwahl löschen" aria-label="Kurzwahl löschen" data-rb-painted="trash"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button><button class="secondary" id="v42ShortcutCancel" type="button" data-rb-only="1" data-rb-icon="undo-dot" title="Abbrechen" aria-label="Abbrechen" data-rb-painted="undo-dot"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/><path d="M3 7v6h6"/><circle cx="12" cy="17" r="1"/></svg></button><button class="primary" id="v42ShortcutSave" type="button" data-rb-only="1" data-rb-icon="star-check" title="Kurzwahl speichern" aria-label="Kurzwahl speichern" data-rb-painted="star-check"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19.06 12.501 2.78-2.707a.53.53 0 0 0-.294-.905l-5.166-.755a2.1 2.1 0 0 1-1.595-1.16l-2.31-4.68a.53.53 0 0 0-.95.001L9.216 6.974a2.1 2.1 0 0 1-1.597 1.16l-5.165.755a.53.53 0 0 0-.294.906l3.736 3.637a2.1 2.1 0 0 1 .611 1.879l-.88 5.139a.53.53 0 0 0 .769.56l4.617-2.428.027-.014"/><path d="m15 18 2 2 4-4"/></svg></button></div></div></div>
@@ -781,7 +799,7 @@ document.querySelectorAll('.shortcut').forEach(b=>b.addEventListener('click',asy
 
 // v0.4.3.1-dev · Stored text library. The ESP32 is the source of truth, not
 // localStorage; draft/editor, stored record and current LED display are separate.
-let libraryItems=[],libraryShortcuts=[0,0,0,0,0,0],librarySelected=0,libraryEditorId=0,libraryReady=false;
+let libraryNoAuto=false,libraryItems=[],libraryShortcuts=[0,0,0,0,0,0],librarySelected=0,libraryEditorId=0,libraryReady=false;
 let libraryCurrentRecord=null,libraryDragId=0;
 let v42EditorOrigin='new',v42EditorSnapshot='',v42BlockSnapshot='';
 function v42TextSnapshot(){return JSON.stringify(libraryReadEditor());}
@@ -839,7 +857,7 @@ function renderLibrary(){
   const pick=document.createElement('button');pick.className='lib-pick';pick.type='button';pick.setAttribute('aria-pressed',String(librarySelected===r.id));
   const title=document.createElement('strong');title.className='lib-name';title.textContent=r.corrupt?'⚠ Beschädigter Eintrag #'+r.id:r.name;
   const info=document.createElement('small');info.textContent=r.corrupt?'Nur über Backup/Diagnose wiederherstellen':(r.kind==='block'?'Blockfolge · '+r.pages+' Seiten':r.mode===1?'Standbild':'Lauftext');
-  pick.append(title,info);pick.onclick=()=>{librarySelected=r.id;renderLibrary();};
+  pick.append(title,info);pick.onclick=()=>{if(librarySelected===r.id){librarySelected=0;libraryNoAuto=true;}else{librarySelected=r.id;libraryNoAuto=false;}renderLibrary();};
   const up=document.createElement('button');up.type='button';up.textContent='';up.dataset.rbIcon='arrow-up';up.dataset.rbOnly='1';up.title='Nach oben';up.disabled=i===0;
   up.onclick=()=>libraryMove(r.id,-1);
   const down=document.createElement('button');down.type='button';down.textContent='';down.dataset.rbIcon='arrow-down';down.dataset.rbOnly='1';down.title='Nach unten';down.disabled=i===shown.length-1;
@@ -859,7 +877,7 @@ async function refreshLibrary(){
  $('libInitWrap').classList.toggle('hidden',libraryReady||!!j.damaged);
  $('libWorkspace').classList.toggle('hidden',!libraryReady);
  $('libStatus').textContent=libraryReady?`${libraryItems.length} Einträge · Flash ${(j.used/1024).toFixed(0)} / ${(j.total/1024).toFixed(0)} KiB`:(j.damaged?'⚠ Bibliotheksmetadaten beschädigt – nicht formatieren.':'LittleFS muss einmalig eingerichtet werden.');
- if(!libraryItems.some(r=>r.id===librarySelected))librarySelected=libraryItems.find(r=>!r.corrupt)?.id||0;
+ if(!libraryItems.some(r=>r.id===librarySelected))librarySelected=libraryNoAuto?0:(libraryItems.find(r=>!r.corrupt)?.id||0);
  renderLibrary();libShortcutsDraw();
  }catch(e){$('libStatus').textContent='Bibliotheksfehler: '+e.message;notify('Bibliothek: '+e.message);}
 }
@@ -1068,7 +1086,7 @@ function v42ShowPrograms(){const list=$('v42Programs');list.replaceChildren();
   const title=document.createElement('strong');title.className='lib-name';title.textContent=item.name+(item.missing?' ⚠':'');
   const info=document.createElement('small');
   info.textContent=item.missing?item.missing+(item.missing===1?' Eintrag fehlt':' Einträge fehlen'):item.count+(item.count===1?' Eintrag':' Einträge')+' · '+(item.playback===1?'Gemeinsames Laufband':'Original');
-  pick.append(title,info);pick.onclick=()=>v43SelectProgram(item.id);
+  pick.append(title,info);pick.onclick=()=>{if(v42ProgramId===item.id)v43ProgReset();else v43SelectProgram(item.id);};
   const up=v43IconBtn('arrow-up','Nach oben',idx===0,()=>v44MoveProgram(item.id,-1)),down=v43IconBtn('arrow-down','Nach unten',idx===total-1,()=>v44MoveProgram(item.id,1));
   row.append(pick,up,down);list.append(row);});
  v43ProgToolbar();}
@@ -1095,14 +1113,19 @@ async function v42RefreshShortcuts(){try{const j=await api('/api/shortcuts');v42
 async function v42OpenShortcut(slot){v42ShortcutSlot=slot;await v42RefreshPrograms();await v42RefreshShortcuts();
  const s=v42Shortcuts[slot-1]||{type:0,id:0,label:''};$('v42ShortcutTitle').textContent='Kurzwahl '+slot+' belegen';
  $('v42ShortcutType').value=String(s.type||0);v42ShortcutPopulate();$('v42ShortcutTarget').value=String(s.id||0);
- $('v42ShortcutLabel').value=s.type?s.label||'':'';v42ShortcutCount();v42ShortcutUpdate();$('v42ShortcutDialog').classList.remove('hidden');}
+ $('v42ShortcutLabel').value=s.type?s.label||'':'';v42LabelAuto='';if(s.type&&!$('v42ShortcutLabel').value)$('v42ShortcutTarget').onchange();v42SourcesPaint();v42ShortcutCount();v42ShortcutUpdate();$('v42ShortcutDialog').classList.remove('hidden');}
 function v42ShortcutPopulate(){const type=Number($('v42ShortcutType').value),target=$('v42ShortcutTarget');target.replaceChildren();if(!type)$('v42ShortcutLabel').value='';
  let sources=type===1?libraryItems.filter(r=>!r.corrupt).map(r=>[r.id,r.name]):type===2?v42ProgramItems.map(r=>[r.id,r.name]):type===3?COLORS.map(r=>[r[1],r[0]]):[];
  const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Inhalt auswählen';target.append(placeholder);
+ v42SourcesPaint();
  for(const [id,name] of sources){const option=document.createElement('option');option.value=id;option.textContent=name;target.append(option);}
  $('v42ShortcutTargetWrap').classList.toggle('hidden',type===0);v42ShortcutUpdate();}
+let v42LabelAuto='';
+function v42SourcesPaint(){const t=$('v42ShortcutType').value;document.querySelectorAll('#v42Sources button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.src===t)));}
+document.querySelectorAll('#v42Sources button').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;const t=$('v42ShortcutType');if(t.value!==b.dataset.src){t.value=b.dataset.src;v42LabelAuto='';$('v42ShortcutLabel').value='';v42ShortcutPopulate();}}));
 $('v42ShortcutType').onchange=v42ShortcutPopulate;
-$('v42ShortcutTarget').onchange=v42ShortcutUpdate;
+$('v42ShortcutTarget').onchange=()=>{const t=$('v42ShortcutTarget'),name=t.selectedOptions[0]&&t.value?t.selectedOptions[0].textContent:'',lab=$('v42ShortcutLabel');
+ if(!lab.value||lab.value===v42LabelAuto){lab.value=v42BoundName(name);v42LabelAuto=lab.value;}v42ShortcutUpdate();};
 function v42ShortcutUpdate(){const type=Number($('v42ShortcutType').value),id=Number($('v42ShortcutTarget').value);const usable=type>0&&id>0;$('v42ShortcutLabel').disabled=!usable;$('v42ShortcutSave').disabled=!usable;$('v42ShortcutDelete').classList.toggle('hidden',!v42Shortcuts[v42ShortcutSlot-1]?.type);v42ShortcutCount();}
 
 function v42ShortcutCount(){const i=$('v42ShortcutLabel');i.value=v42BoundName(i.value);$('v42ShortcutBytes').textContent=v42Bytes(i.value)+' / 47 UTF-8-Bytes';}
@@ -1111,7 +1134,8 @@ $('v42ShortcutCancel').onclick=()=>$('v42ShortcutDialog').classList.add('hidden'
 $('v42ShortcutDelete').onclick=async()=>{if(!v42Shortcuts[v42ShortcutSlot-1]?.type)return;if(!confirm('Kurzwahl '+v42ShortcutSlot+' vollständig löschen, einschließlich Beschriftung?'))return;try{await api('/api/shortcuts/set',{slot:v42ShortcutSlot,type:0,id:0,label:''});$('v42ShortcutDialog').classList.add('hidden');await v42RefreshShortcuts();notify('Kurzwahl entfernt.');}catch(e){notify('Kurzwahl: '+e.message);}};
 $('v42ShortcutSave').onclick=async()=>{const type=Number($('v42ShortcutType').value),id=type?Number($('v42ShortcutTarget').value):0;
  if(!type||!id){notify('Bitte zuerst Quelle und Inhalt auswählen.');return;}
- try{const j=await api('/api/shortcuts/set',{slot:v42ShortcutSlot,type,id,label:$('v42ShortcutLabel').value.trim()});$('v42ShortcutDialog').classList.add('hidden');await v42RefreshShortcuts();notify(j.message);}catch(e){notify('Kurzwahl: '+e.message);}};
+ const labelText=$('v42ShortcutLabel').value.trim();
+ try{const j=await api('/api/shortcuts/set',{slot:v42ShortcutSlot,type,id,label:labelText===v42LabelAuto?'':labelText});$('v42ShortcutDialog').classList.add('hidden');await v42RefreshShortcuts();notify(j.message);}catch(e){notify('Kurzwahl: '+e.message);}};
 $('v42ReloadMenu').onclick=()=>{if((dirty||blockDraftDirty)&&!confirm('Webinterface neu laden? Nicht in der Bibliothek gesicherte Änderungen können verloren gehen.'))return;
  // Server sends Cache-Control: no-store, including the standalone iPhone web app.
  location.reload();};
@@ -1510,8 +1534,7 @@ function rbGlobalFontReset(){
 }
 
 /* ---- Fenster „Zeichen gestalten“ ---- */
-const rbz={open:false,mode:'single',sel:{a:new Set(),b:new Set()},tiles:{a:[],b:[]},flow:[],flowMode:'char',flowOpen:false,drag:null,opener:null};
-try{if(localStorage.getItem('rb440-selmode')==='swipe')rbz.mode='swipe';}catch(e){}
+const rbz={open:false,lastTap:null,sel:{a:new Set(),b:new Set()},tiles:{a:[],b:[]},flow:[],flowMode:'char',flowOpen:false,drag:null,opener:null};
 const rbzTokensAll=()=>rbLines().map(k=>({k,tokens:rbTokens(k)}));
 function rbzSelectedList(){const out=[];for(const k of rbLines())[...rbz.sel[k]].filter(i=>i<RBS[k].chars.length).sort((x,y)=>x-y).forEach(i=>out.push({k,i}));return out;}
 function rbzIconCanvas(icon){
@@ -1544,7 +1567,6 @@ function rbzBuildGrids(){
     tokens.forEach((t,i)=>{const el=rbzMakeTile(k,i,t);grid.append(el);rbz.tiles[k][i]=el;});
     root.append(grid);
   }
-  root.classList.toggle('swipe',rbz.mode==='swipe');
 }
 function rbzCommon(list,pick){
   let v;
@@ -1557,13 +1579,13 @@ function rbzPaint(){
     total+=RBS[k].chars.length;n+=rbz.sel[k].size;
     (rbz.tiles[k]||[]).forEach((el,i)=>{const on=rbz.sel[k].has(i);el.classList.toggle('sel',on);el.setAttribute('aria-pressed',on?'true':'false');});
   }
-  $('rbzCount').textContent=n+' von '+total+' gewählt'+(rbz.mode==='swipe'?' · Wischen markiert, auf Markiertem entmarkiert':'');
+  $('rbzCount').textContent=n+' von '+total+' gewählt';
   const sel=rbzSelectedList(),tok={a:rbTokens('a'),b:rbTokens('b')};
   const of=e=>tok[e.k][e.i];
   // Farbe der Auswahl (nur Zeichen, die eine Farbe tragen: weder Leerzeichen noch Symbole)
   const colored=sel.filter(e=>{const t=of(e);return t&&t.ch!==' '&&!rbIsIcon(t.ch);});
   const common=rbzCommon(colored,e=>of(e).color);
-  document.querySelectorAll('#rbzColors .rbz-sw').forEach(b=>{b.classList.toggle('on',common!==null&&common!==undefined&&Number(b.dataset.color)===common);b.disabled=!sel.length;});
+  document.querySelectorAll('#rbzColors .rbz-sw,#rbzBarColors .rbz-sw').forEach(b=>{b.classList.toggle('on',common!==null&&common!==undefined&&Number(b.dataset.color)===common);b.disabled=!sel.length;});
   // Schrift der Auswahl
   const bl=rbBaseLayout(),chips=document.querySelectorAll('#rbzChips .chip');
   const fontSel=sel.filter(e=>{const t=of(e);return t&&!rbIsIcon(t.ch);});
@@ -1602,7 +1624,7 @@ function rbzPaintFlow(selCount){
   $('rbzFlowBody').classList.toggle('hidden',!rbz.flowOpen);
   $('rbzFlowHead').setAttribute('aria-expanded',rbz.flowOpen?'true':'false');
   $('rbzFlowChevron').innerHTML=rbz.flowOpen?'<path d="m18 15-6-6-6 6"/>':'<path d="m6 9 6 6 6-6"/>';
-  for(const id of ['rbzSeg','rbzColorBlock','rbzFontBox'])$(id).classList.toggle('hidden',rbz.flowOpen);
+  for(const id of ['rbzHint','rbzColorBlock','rbzFontBox'])$(id).classList.toggle('hidden',rbz.flowOpen);rbzBarUpdate();
 }
 const RB_SVG_NEXT='<svg viewBox="0 0 24 24" aria-hidden="true" class="mini-ico"><path d="m9 18 6-6-6-6"/></svg>';
 const RB_SVG_REPEAT='<svg viewBox="0 0 24 24" aria-hidden="true" class="mini-ico"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>';
@@ -1642,21 +1664,28 @@ function rbzOpen(){
   rbz.opener=document.activeElement;rbz.open=true;
   rbz.sel={a:new Set(),b:new Set()};rbz.flowOpen=false;rbz.drag=null;
   $('rbz').classList.remove('hidden');document.body.style.overflow='hidden';document.body.classList.add('rbz-open');
-  $('rbzScroll').scrollTop=0;
+  $('rbzScroll').scrollTop=0;if(rbz.resetTop)rbz.resetTop();
   rbzRefresh();$('rbzClose').focus();
 }
 function rbzClose(){
   if(!rbz.open)return;
-  rbz.open=false;$('rbz').classList.add('hidden');document.body.style.overflow='';document.body.classList.remove('rbz-open');
+  rbz.open=false;rbzBarUpdate();$('rbz').classList.add('hidden');document.body.style.overflow='';document.body.classList.remove('rbz-open');
   updateScrollCapacity();draw();
   try{(rbz.opener&&rbz.opener.isConnected?rbz.opener:$('rbzOpen')).focus();}catch(e){}
 }
-function rbzSetMode(mode){
-  rbz.mode=mode;rbz.drag=null;try{localStorage.setItem('rb440-selmode',mode);}catch(e){}
-  $('rbzModeSingle').classList.toggle('on',mode==='single');$('rbzModeSwipe').classList.toggle('on',mode==='swipe');
-  $('rbzModeSingle').setAttribute('aria-pressed',mode==='single'?'true':'false');$('rbzModeSwipe').setAttribute('aria-pressed',mode==='swipe'?'true':'false');
-  $('rbzGrids').classList.toggle('swipe',mode==='swipe');rbzPaint();
+/* Doppeltipp: Zustand des ersten Tipps (an/aus) gilt für das ganze Wort; Satzzeichen am Rand bleiben außen vor. */
+const RBZ_EDGE=/^[.,;:!?…"'„“”‚‘’()\[\]«»]$/;
+function rbzSelectWord(k,i){
+  const tokens=rbTokens(k),map=rbzWordMap(tokens),w=map[i];
+  if(w===undefined||w<0){rbzToggle(k,i);return;}             // Leerzeichen: zweiter Tipp macht den ersten rückgängig
+  let a=i,b=i;while(a>0&&map[a-1]===w)a--;while(b<tokens.length-1&&map[b+1]===w)b++;
+  let a2=a,b2=b;while(a2<=b2&&RBZ_EDGE.test(tokens[a2].ch))a2++;while(b2>=a2&&RBZ_EDGE.test(tokens[b2].ch))b2--;
+  if(a2>b2){a2=a;b2=b;}                                      // Wort besteht nur aus Satzzeichen
+  const on=rbz.sel[k].has(i);
+  for(let j=a2;j<=b2;j++){if(on)rbz.sel[k].add(j);else rbz.sel[k].delete(j);}
+  rbzPaint();
 }
+function rbzBarUpdate(){const bar=$('rbzColorBar');if(bar)bar.classList.toggle('show',!!rbz.open&&!rbz.colorVisible&&!rbz.flowOpen);}
 function rbzToggle(k,i){const s=rbz.sel[k];if(s.has(i))s.delete(i);else s.add(i);rbzPaint();}
 
 /* Farbe auf eine Liste von Zeichen anwenden; Herzen werden gegen das Herz in der Farbe getauscht. */
@@ -1714,11 +1743,15 @@ function rbzApplyFlow(){
 /* ---- Fenster verdrahten ---- */
 (function rbzWire(){
   const grids=$('rbzGrids');
+  (function(){const sc=$('rbzScroll'),top=$('rbzTop'),bar=$('rbzColorBar');let compact=false;
+    sc.addEventListener('scroll',()=>{const y=sc.scrollTop;if(!compact&&y>60){compact=true;top.classList.add('compact');}else if(compact&&y<8){compact=false;top.classList.remove('compact');}},{passive:true});
+    rbz.resetTop=()=>{compact=false;top.classList.remove('compact');};
+    rbz.colorVisible=true;
+    if(window.IntersectionObserver)new IntersectionObserver(es=>{rbz.colorVisible=es[es.length-1].isIntersecting;rbzBarUpdate();},{root:sc,threshold:0}).observe($('rbzColorBlock'));
+  })();
   $('rbzClose').addEventListener('click',rbzClose);$('rbzDone').addEventListener('click',rbzClose);
   $('rbz').addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();rbzClose();}});
   $('rbzSend').addEventListener('click',()=>{$('sendScroll').click();});
-  $('rbzModeSingle').addEventListener('click',()=>rbzSetMode('single'));
-  $('rbzModeSwipe').addEventListener('click',()=>rbzSetMode('swipe'));
   $('rbzAll').addEventListener('click',()=>{for(const k of rbLines()){rbz.sel[k]=new Set(RBS[k].chars.map((_,i)=>i));}rbzPaint();});
   $('rbzNone').addEventListener('click',()=>{rbz.sel={a:new Set(),b:new Set()};rbzPaint();});
   $('rbzUndo').addEventListener('click',rbUndo);$('rbzRedo').addEventListener('click',rbRedo);
@@ -1729,26 +1762,37 @@ function rbzApplyFlow(){
   $('rbzFlowWord').addEventListener('click',()=>{rbz.flowMode='word';rbzPaint();});
   $('rbzFlowApply').addEventListener('click',rbzApplyFlow);
   for(const [name,code,hex] of COLORS){
-    for(const [rootId,handler] of [['rbzColors',()=>rbzApplyColor(code)],['rbzFlowColors',()=>{const p=rbz.flow.indexOf(code);if(p>=0)rbz.flow.splice(p,1);else rbz.flow.push(code);rbzPaint();}]]){
+    for(const [rootId,handler] of [['rbzColors',()=>rbzApplyColor(code)],['rbzBarColors',()=>rbzApplyColor(code)],['rbzFlowColors',()=>{const p=rbz.flow.indexOf(code);if(p>=0)rbz.flow.splice(p,1);else rbz.flow.push(code);rbzPaint();}]]){
       const b=document.createElement('button');b.type='button';b.className='rbz-sw';b.style.background=hex;b.dataset.color=String(code);b.setAttribute('aria-label',name);b.title=name;
       b.addEventListener('click',handler);$(rootId).append(b);
     }
   }
-  // Einzeln: Tippen schaltet um. Wischen: Fingerbahn markiert zusätzlich, Tippen schaltet um.
+  // Tippen schaltet um, Doppeltipp markiert das Wort. Waagerechtes Wischen markiert (auf Markiertem: entmarkiert),
+  // senkrechtes Wischen scrollt (touch-action: pan-y). Die Richtung entscheidet sich in den ersten Pixeln.
+  const SLOP=8;
   grids.addEventListener('click',e=>{
     const t=e.target.closest('.rbz-tile');if(!t)return;
-    if(rbz.mode==='swipe'&&e.detail!==0)return;   // Zeigereingabe läuft über pointerdown/up
+    if(e.detail!==0)return;   // Zeigereingabe läuft über pointerdown/up; nur Tastatur kommt hier an
     rbzToggle(t.dataset.line,Number(t.dataset.i));
   });
   grids.addEventListener('pointerdown',e=>{
-    if(rbz.mode!=='swipe')return;
+    if(e.pointerType==='mouse'&&e.button!==0)return;
     const t=e.target.closest('.rbz-tile');if(!t)return;
-    e.preventDefault();
-    try{grids.setPointerCapture(e.pointerId);}catch(err){}
-    rbz.drag={k:t.dataset.line,start:Number(t.dataset.i),last:Number(t.dataset.i),moved:false,pid:e.pointerId,erase:rbz.sel[t.dataset.line].has(Number(t.dataset.i))};
+    const k=t.dataset.line,i=Number(t.dataset.i);
+    rbz.drag={k,start:i,last:i,moved:false,mode:'pending',x0:e.clientX,y0:e.clientY,pid:e.pointerId,type:e.pointerType,erase:rbz.sel[k].has(i)};
   });
+  function startMark(d){
+    d.mode='mark';
+    try{grids.setPointerCapture(d.pid);}catch(err){}
+  }
   grids.addEventListener('pointermove',e=>{
     const d=rbz.drag;if(!d||e.pointerId!==d.pid)return;
+    if(d.mode==='pending'){
+      const dx=e.clientX-d.x0,dy=e.clientY-d.y0;
+      if(Math.max(Math.abs(dx),Math.abs(dy))<SLOP)return;
+      if(d.type==='mouse'||Math.abs(dx)>=Math.abs(dy))startMark(d);   // Maus kann nicht scrollen: jede Richtung markiert
+      else{rbz.drag=null;return;}                                      // senkrecht: der Browser scrollt
+    }
     const el=document.elementFromPoint(e.clientX,e.clientY),t=el&&el.closest?el.closest('.rbz-tile'):null;
     if(!t||t.dataset.line!==d.k)return;
     const i=Number(t.dataset.i);if(i===d.last)return;
@@ -1757,17 +1801,32 @@ function rbzApplyFlow(){
     for(let j=a;j<=b;j++){if(d.erase)rbz.sel[d.k].delete(j);else rbz.sel[d.k].add(j);}
     d.last=i;rbzPaint();
   });
+  // Waehrend des Markierens darf die Seite nicht mitscrollen
+  grids.addEventListener('touchmove',e=>{if(rbz.drag&&rbz.drag.mode==='mark'&&e.cancelable)e.preventDefault();},{passive:false});
   const end=e=>{
     const d=rbz.drag;if(!d||e.pointerId!==d.pid)return;
     rbz.drag=null;
     try{grids.releasePointerCapture(e.pointerId);}catch(err){}
-    if(!d.moved&&e.type==='pointerup')rbzToggle(d.k,d.start);
+    if(d.moved||e.type!=='pointerup')return;
+    const now=performance.now(),L=rbz.lastTap;
+    if(L&&L.k===d.k&&L.i===d.start&&now-L.t<400){rbz.lastTap=null;rbzSelectWord(d.k,d.start);}
+    else{rbzToggle(d.k,d.start);rbz.lastTap={k:d.k,i:d.start,t:now};}
   };
   grids.addEventListener('pointerup',end);grids.addEventListener('pointercancel',end);
-  rbzSetMode(rbz.mode);
 })();
 
 async function init(){try{rb43StaticIcons();parseAssets();buildSymbolPicker();try{const draft=localStorage.getItem('rb03-scroll-draft');if(draft!==null)$('scrollText').value=draft;try{$('scrollLine2').value=localStorage.getItem('rb032-scroll-line2')||'';}catch(e){}rbRestoreDraft();rbWireFields();rbGrowAll();rbHReset();if(editHistory.scrollText)editHistory.scrollText.current=$('scrollText').value;}catch(e){}const r=await fetch('/api/font',{cache:'no-store'});if(!r.ok)throw Error('Schrift nicht erreichbar');font=await r.json();fontReady=true;await refreshPages();try{if(localStorage.getItem('rb03-tab')==='pages')setTab('pages');}catch(e){}$('scrollText').dispatchEvent(new Event('input'));restartPreview();}catch(e){notify('Fehler beim Start: '+e.message);}finally{document.documentElement.classList.remove('rb-booting');}poll();setTimeout(rbLoadLists,150);requestAnimationFrame(tick);}
+(function rbPreviewCompact(){
+  const pv=document.querySelector('#view-editor .preview-sticky');if(!pv)return;let compact=false;
+  function tick(){
+    const y=window.scrollY||document.documentElement.scrollTop||0;
+    if(typeof activeView!=='undefined'&&activeView!=='editor'){if(compact){compact=false;pv.classList.remove('rb-compact');}return;}
+    // Nur wenn die Seite danach noch genug zum Scrollen hat (sonst koennte das Schrumpfen selbst das Scrollen aufheben).
+    if(!compact&&y>60&&document.documentElement.scrollHeight-window.innerHeight>260){compact=true;pv.classList.add('rb-compact');}
+    else if(compact&&y<8){compact=false;pv.classList.remove('rb-compact');}
+  }
+  window.addEventListener('scroll',tick,{passive:true});
+})();
 async function rbLoadLists(){await v42RefreshShortcuts();await v42RefreshPrograms();await refreshLibrary();}
 init();
 </script></body></html>
