@@ -4,14 +4,14 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.4.5.0--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.4.5.1--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
 <img alt="Mission" src="https://img.shields.io/badge/mission-hugs%20and%20love-ff69b4">
 </p>
 
-> **Aktueller Entwicklungskandidat: v0.4.5.0-dev (2.11.2026).** Zeichen-Editor für Lauftexte (Farbe und Schrift pro Zeichen) mit Wischen nach Richtung, Doppeltipp-Wort, fester Vorschau und Farbleiste; Kurzwahl-Dialog mit Quellen-Schaltflächen; höchstens zwei WLAN-Geräte. Hardware-/Heap-Abnahme steht aus. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md), Kurzüberblick: [`VERSIONSGESCHICHTE.md`](VERSIONSGESCHICHTE.md).
+> **Aktueller Entwicklungskandidat: v0.4.5.1-dev (3.11.2026).** Vor jedem neuen Verbindungsaufbau prüft die Firmware per kurzem Scan, ob die Tafel überhaupt zu hören ist (behebt den Hänger bei ausgeschalteter Tafel, Hardwaretest steht aus); kleines Bluetooth-Zeichen im Seitenkopf. Darunter unverändert 0.4.5.0: Zeichen-Editor für Lauftexte mit Wischen nach Richtung und Doppeltipp-Wort, Kurzwahl-Dialog mit Quellen-Schaltflächen, höchstens zwei WLAN-Geräte. Hardware-/Heap-Abnahme steht aus. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md), Kurzüberblick: [`VERSIONSGESCHICHTE.md`](VERSIONSGESCHICHTE.md).
 
 ## Was ist RavestickBoard?
 
@@ -26,9 +26,14 @@ Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` de
 - **Tafelsteuerung:** Helligkeit, Tempo und Anzeige an/aus stehen unten auf jeder Seite; die Tasten zum Erzwingen eines Anzeigeverhaltens auf allen Seiten außer der Kurzwahl, wo nur Linkslauf, Standbild und der Stift zum Bearbeiten bleiben.
 - **Diagnose:** RAM-Messung, HTTP-Spur, Absturzspur nach Hänger, Export als Textdatei.
 
-## Aktuell: v0.4.5.0-dev – Bedienung im Zeichen-Fenster, Kurzwahl-Dialog, zwei WLAN-Geräte
+## Aktuell: v0.4.5.1-dev – Vor-Scan der Tafel, Bluetooth-Zeichen (aufbauend auf 0.4.5.0: Zeichen-Fenster, Kurzwahl-Dialog, zwei WLAN-Geräte)
 
 - **Zeichen gestalten (seit 0.4.4.0):** Im Lauftext-Editor öffnet die Palettentaste ein Fenster. Zeichen einzeln antippen oder per Wischen auswählen, dann Farbe und Schrift (Normal, Fett, Engschrift, Mini) für die Auswahl setzen. „Farbwechsel“ färbt reihum pro Zeichen oder pro Wort. Bei Zweizeilig Mini gehen Farben pro Zeichen und Zeile.
+- **Neu in 0.4.5.1** (Auswertung des Serial-Monitors von 0.4.5.0):
+  - **Vor-Scan:** Vor jedem *neuen* Verbindungsaufbau lauscht der ESP bis zu 3 s passiv nach der Tafel und bricht beim Treffer sofort ab. Wird die Tafel nicht gehört, aber andere Bluetooth-Geräte, gibt es keinen Verbindungsversuch und die Meldung „LED-Tafel nicht gefunden“. Hört der Scan gar nichts, verbindet die Firmware wie bisher. Hintergrund: Mit ausgeschalteter Tafel kehrte `connect()` nicht rechtzeitig zurück, der Hang-Wächter hat nach 25 s neu gestartet. Abschaltbar mit `RB_PRESCAN 0`. Ist die Tafel mit der Original-App verbunden, wirbt sie nicht und wird nicht gefunden.
+  - **Bluetooth-Zeichen im Seitenkopf:** `bluetooth` (kein Verbindungsversuch bzw. zuletzt erreicht, dann grün), `bluetooth-searching` (Auftrag läuft), `bluetooth-connected` (Verbindung steht), `bluetooth-off` (zuletzt nicht erreicht). Während einer Übertragung antwortet der ESP nicht; es bleibt der zuletzt gemeldete Zustand stehen.
+  - **Diagnose:** Zähler und Dauer der Vor-Scans (mit Signalstärke); ein Heap-Tiefstand außerhalb von Anfragen nennt jetzt die zuletzt beendete Anfrage, den Abstand dazu und das Minimum davor.
+  - **Übergang:** Die Adresse der Tafel steht noch fest im Code. Geplant (0.5.0.0): „Meine Tafel“ wird im ESP gespeichert und per Suche eingerichtet, es wird keine Adresse mehr mitgeliefert; zusätzlich Wechsel auf eine fremde Tafel mit Rückweg.
 - **Neu in 0.4.5.0** (Rückmeldungen aus dem Test von 0.4.4.2):
   - **Höchstens zwei WLAN-Geräte:** `RB_AP_MAX_CLIENTS` steht jetzt auf 2 (zuvor 4). Das ist festgelegt, mehr Geräte sind nicht vorgesehen; ein drittes Gerät wird vom Access Point abgewiesen. Grund: Das dritte Gerät hat in 0.4.4.2 das System-Minimum des Heaps auf 3288 B gedrückt. Die Tafel zählt nicht mit, sie hängt per BLE.
   - **Zeichen-Fenster (Lauftext):** Waagerecht wischen markiert (auf Markiertem entmarkiert), senkrecht wischen scrollt. Der Umschalter Einzeln/Wischen entfällt. Doppeltipp markiert ein ganzes Wort (Satzzeichen am Rand bleiben außen), nochmal entmarkiert es. Vorschau und Werkzeugleiste stehen oben fest und werden beim Scrollen kleiner. Unten hält eine schmale Farbleiste, solange der große Farbblock nicht im Bild ist; die Schriften stehen nur im großen Block.
@@ -71,12 +76,14 @@ Bearbeitungen werden auf dem jeweiligen Gerät direkt in der Bibliothek angezeig
 ## Installation und Datensicherheit
 
 1. Vorab ein JSON-Backup aus der aktuell laufenden Firmware erstellen und lokal aufbewahren. Die bisherige Firmware als Rückfallversion sichern.
-2. `firmware/RavestickBoard_v0_4_5_0/RavestickBoard_v0_4_5_0.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h`.
+2. `firmware/RavestickBoard_v0_4_5_1/RavestickBoard_v0_4_5_1.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h`.
 3. Arduino IDE: **ESP32C3 Dev Module**, Espressif **3.3.12**, **USB CDC On Boot: Enabled**, **No OTA (2MB APP/2MB SPIFFS)**. Bestehendes Partitionsschema **nicht ändern**, **Erase All Flash deaktiviert** lassen.
 4. Nach dem Flashen mit WLAN `CoolLED1248` verbinden, `http://192.168.4.1` aufrufen. Bibliothek nicht neu formatieren; das Bibliotheksformat ist unverändert. Falls das Homescreen-Icon nicht übernommen wird, die Verknüpfung über Safari erneut hinzufügen.
 5. Nach Änderungen an `web/index.html`: `python tools/sync_web.py` erzeugt den gzip-Webheader neu.
 
 Weiterführend: [Bibliotheksformat](docs/BIBLIOTHEK_v0.4.1.md), [letzte ausführliche Installationsanleitung](docs/INSTALLATION_v0.4.2.4.1.md), [Testplan](docs/TESTPLAN_v0.4.2.4.1.md), [Changelog](CHANGELOG.md), [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md).
+
+**Teststand v0.4.5.1:** zusätzlich zu den unten genannten Prüfungen: Entscheidungslogik des Vor-Scans mit dem echten Sketch-Code gegen Attrappen der BLE-Klassen (Treffer, nur fremde Geräte, nichts gehört) und Browser-Test des Bluetooth-Zeichens. Die echte BLE-Bibliothek des Arduino-Core ist hier nicht verfügbar; Signaturen von `BLEScan`/`BLEAdvertisedDeviceCallbacks` sind nicht gegen Core 3.3.x kompiliert.
 
 **Teststand v0.4.5.0:** JavaScript-Syntax, Browser-Test der Oberfläche (inkl. echter Touch-Wischereignisse, Doppeltipp, sofortigem Sortieren mit absichtlich langsamem Mock-ESP und Fehlerfall) (Playwright/Chromium, mehrere Mobilgrößen), Versionierung, gzip-/ETag-Konsistenz und Firmware-Invarianten geprüft. Die Firmware-Zeichenfunktionen und die neue Programm-Reihenfolge wurden im Host-Build (g++) mit dem echten Sketch-Code kompiliert und getestet; die Zeichnung wurde pixelweise mit der Browser-Vorschau verglichen. **Kein Arduino-Gesamtcompile dieses Standes und keine Hardwareprüfung auf ESP32-C3 und Tafel.** Details: [`tests/README.md`](tests/README.md).
 

@@ -21,6 +21,10 @@ Der Browser-Test erfordert Playwright und Chromium; Arduino-Boardpaket und reale
 
 `python tests/test_0431.py` prüft die JavaScript-Syntax, HTML/gzip-/ETag-Konsistenz, die korrigierte Versionskennung, den entkoppelten Diagnose-TXT-Download und die interaktive Darstellung in drei Chromium-Mobilgrößen. Der Stream-Puffer wurde außerdem separat mit einem Host-C++-Test kompiliert. Dies ersetzt **keinen Arduino-Gesamtcompile** und keinen Heap-/BLE-Test auf dem ESP32.
 
+## v0.4.5.1-dev (3.11.2026)
+
+Die Tests tragen jetzt die Endung `0451`. Neu: `python tests/host_scan_0451.py` übersetzt den Vor-Scan-Block des Sketches mit g++ gegen Attrappen der BLE-Klassen (`tests/host/scan_stub_0451.h`, `scan_main_0451.cpp`) und prüft Treffer (Abbruch, Signalstärke), nur fremde Geräte (volle Zeit, „nicht gesehen“) und nichts gehört („ohne Aussage“). Das ist eine Prüfung der Entscheidungslogik, keine der echten Bibliothek. `test_build_0451.py`: Invarianten zum Vor-Scan (Aufruf nur einmal und nur vor neuem Verbindungsaufbau, vor dem Zählen der Versuche, nur „nicht gesehen“ bricht ab), Statusfelder und Zeichen im Kopf. `test_browser_0451.py`: Bluetooth-Zeichen in den Zuständen idle, ok, bad, link und busy.
+
 ## v0.4.5.0-dev (2.11.2026)
 
 Die vier Tests tragen jetzt die Endung `0450`. Neu im Browser-Test: echte Touch-Ereignisse über das Chrome-Protokoll (`Input.dispatchTouchEvent`) für waagerechtes Markieren und senkrechtes Scrollen im Zeichen-Fenster, Doppeltipp-Wort (mit/ohne Satzzeichen), feste Kopfzone und deren Schrumpfen, Farbleiste (erscheint/verschwindet, wendet Farbe an), schrumpfende Vorschau im Editor (mit künstlich verlängerter Seite), Kurzwahl-Dialog (Quellen, Sperre des Speicherns, vorbelegte Beschriftung, leer gespeichert wenn unverändert), Auswahl aufheben in Bibliothek und Programmen, Knöpfe in Einstellungen und Diagnose, gleichmäßige Abstände im Startbildschirm-Bedienfeld. Der Build-Test prüft `RB_AP_MAX_CLIENTS` = 2. Nicht abgedeckt: das echte Verhalten auf iOS-Safari (Touch-Gesten, Doppeltipp-Zoom) und der ESP32 selbst.
