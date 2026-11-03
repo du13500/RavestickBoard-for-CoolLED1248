@@ -1,4 +1,4 @@
-## Entscheidungen v0.6.0.0-dev bis v0.6.1.0-dev · 3.11.2026 (Animationen)
+## Entscheidungen v0.6.0.0-dev bis v0.6.1.1-dev · 3.11.2026 (Animationen)
 
 | ID | Entscheidung | Begründung |
 |---|---|---|
@@ -16,6 +16,7 @@
 | ADR-2026-11-03-M | **Beschädigte Dateien bleiben in der Liste sichtbar (`broken`) und zählen mit.** | Unsichtbare, aber mitzählende Dateien würden das Limit und den Speicher verbrauchen, ohne dass der Nutzer sie löschen kann. |
 | ADR-2026-11-03-N | **Die Testmuster und der Animationstest bleiben.** | Wunsch des Nutzers: Nummern, Vollbildfarbe mit Nummer und Balken sind gelungen und vielleicht später für Zähler oder Uhrzeit nutzbar. |
 | ADR-2026-11-03-O | **Neue Firmwareteile in eine `.h`-Datei (`RavestickBoard_Anim.h`).** | Eine `.h` bekommt keine automatischen Prototypen und kann die Regel aus 0.6.0.2 nicht verletzen; der Sketch bleibt überschaubar. Preis: Sketch-Ordner mit sieben Dateien. |
+| ADR-2026-11-03-P | **Auch die Include-Reihenfolge und die Deklarationsreihenfolge des zusammengesetzten Sketchs werden automatisch geprüft** (`tests/decl_order.py`). | Zweiter Compile-Fehler (0.6.0.1: Typ vor Prototyp, 0.6.1.0: Variable vor Deklaration), den die Ausschnitt-Tests am Rechner nicht sehen. Näherung, kein Ersatz für den Compile; nach jedem Firmware-Build zusammen mit `arduino_prototypes.py` laufen lassen. |
 | ADR-2026-11-03-F | **Kein OpenSign-Quelltext übernommen**; Format und Paketierung eigenständig umgesetzt und lokal gegen OpenSign abgeglichen. | Klare Rechtslage (siehe `QUELLEN_UND_LIZENZEN.md`): MIT-Lizenz, dazu ausdrückliche Erlaubnis von Adam Schulz per E-Mail. MIT-Hinweis nur bei tatsächlicher Übernahme nötig, steht aber vorsorglich in `THIRD_PARTY_NOTICES.md`. |
 
 ## Entscheidung v0.4.0-dev · 26.10.2026
