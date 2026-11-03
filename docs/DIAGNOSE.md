@@ -1,6 +1,6 @@
 # RavestickBoard · Diagnose und Fehlerprotokoll
 
-**Fortgeschrieben 3.11.2026 für v0.6.0.1-dev (neuester Abschnitt oben). Die älteren Abschnitte beschreiben den Stand ihrer Version.**
+**Fortgeschrieben 3.11.2026 für v0.6.0.2-dev (neuester Abschnitt oben). Die älteren Abschnitte beschreiben den Stand ihrer Version.**
 
 ## Diagnose-Ergänzung v0.6.0.0/0.6.0.1 – Antwortcodes der Tafel und Animationstest (3.11.2026)
 

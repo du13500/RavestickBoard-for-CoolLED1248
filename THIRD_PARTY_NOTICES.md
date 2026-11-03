@@ -1,4 +1,4 @@
-# Third-party notices — RavestickBoard v0.6.0.1-dev
+# Third-party notices — RavestickBoard v0.6.0.2-dev
 
 ## Lucide Icons
 

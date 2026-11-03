@@ -1,4 +1,4 @@
-## Entscheidungen v0.6.0.0-dev / v0.6.0.1-dev · 3.11.2026 (Animationen)
+## Entscheidungen v0.6.0.0-dev bis v0.6.0.2-dev · 3.11.2026 (Animationen)
 
 | ID | Entscheidung | Begründung |
 |---|---|---|
@@ -7,6 +7,7 @@
 | ADR-2026-11-03-C | **Erst Hardwaretest, dann Funktion.** 0.6.0.0 baut nur den Animationstest; 0.6.1.0 (Import/Liste), 0.6.2.0 (Editor), 0.6.3.0 (Komfort) folgen erst nach dem Ergebnis. | Ob die eigene Tafel `0x04` annimmt, wie sie es abspielt und was nach dem Ausschalten bleibt, ist ungeprüft. Alle Formatfakten stammen von einem anderen Gerät. |
 | ADR-2026-11-03-D | **Obergrenze 79 Frames, ein globales Tempo je Animation, ein Inhalt auf der Tafel.** Halten durch wiederholte Frames. | 27 + 79 × 384 = 30 363 B passen in 30 KiB, 80 Frames nicht. Das Protokoll kennt keinen Zeitwert pro Frame. |
 | ADR-2026-11-03-E | **Antwortcodes strikt nur im Animationstest.** Andere Aufträge zählen und protokollieren sie nur. | Verhalten bestehender, hardwaregeprüfter Aufträge soll nicht unbemerkt ändern. Ob Status ≠ 0 dort bisher still auftrat, ist unbekannt. |
+| ADR-2026-11-03-H | **Reihenfolge im Sketch ist Teil der Prüfung:** Typen vor der ersten Funktion; automatische Prüfung der Prototyp-Regel im Build-Test. | Der Compile von 0.6.0.1 scheiterte, weil Animationsfunktionen vor `enum RamStage` standen. Rechnertests mit g++ auf Ausschnitten erkennen das nicht. |
 | ADR-2026-11-03-G | **Jedes Frame der Testmuster trägt seine Nummer; eigene Ziffern; Grenztest 300 ms.** | Vorschlag des Nutzers beim Planen des Tests: Bei 79 gleichartigen Frames sieht man sonst nicht, wie viele ankommen und wo die Schleife endet. Eigene 3×5-Ziffern halten den Animationsweg vom Text-Renderer getrennt und am Rechner exakt prüfbar. 40 ms sind zum Lesen zu schnell. Ersetzt 0.6.0.0 (nicht geflasht). |
 | ADR-2026-11-03-F | **Kein OpenSign-Quelltext übernommen**; Format und Paketierung eigenständig umgesetzt und lokal gegen OpenSign abgeglichen. | Klare Rechtslage (siehe `QUELLEN_UND_LIZENZEN.md`): MIT-Lizenz, dazu ausdrückliche Erlaubnis von Adam Schulz per E-Mail. MIT-Hinweis nur bei tatsächlicher Übernahme nötig, steht aber vorsorglich in `THIRD_PARTY_NOTICES.md`. |
 

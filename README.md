@@ -4,14 +4,14 @@
 <p align="center"><strong>Offline-Webcontroller für die 64 × 16-Pixel-CoolLEDX-Tafel mit ESP32-C3.</strong><br>
 Entstanden aus einer Festival-Banane und dem Wunsch, mehr aus der ursprünglichen CoolLED1248-App herauszuholen.</p>
 <p align="center">
-<img alt="Version" src="https://img.shields.io/badge/version-v0.6.0.1--dev-7056d8">
+<img alt="Version" src="https://img.shields.io/badge/version-v0.6.0.2--dev-7056d8">
 <img alt="Hardware" src="https://img.shields.io/badge/hardware-ESP32--C3-007c91">
 <img alt="Status" src="https://img.shields.io/badge/status-dev%20hardware%20test%20pending-f3b653">
 <img alt="Lizenz" src="https://img.shields.io/badge/license-MIT-brightgreen">
 <img alt="Mission" src="https://img.shields.io/badge/mission-hugs%20and%20love-ff69b4">
 </p>
 
-> **Aktueller Entwicklungskandidat: v0.6.0.1-dev (3.11.2026).** Erster Schritt zu Animationen: ein **Hardwaretest für den Tafelbefehl 0x04** (gespeicherte Animation, die die Tafel selbst abspielt). In den Einstellungen sendet der Abschnitt „Animationstest“ eingebaute Testmuster (Farben, wandernder Balken, 79 Frames als Grenze, 80 Frames als absichtlicher Fehler), jedes Frame mit seiner Nummer, und liest die Antwortcodes der Tafel mit. **Das ist ein Testwerkzeug, noch keine Animationsfunktion:** Import und Zeichnen folgen erst, wenn der Test auf der echten Tafel bestanden ist. Ob deine Tafel das Format annimmt, wie sie es abspielt und was nach dem Ausschalten bleibt, ist ungeprüft. Darunter unverändert 0.5.0.1 (Tafelverwaltung; Hardwaretest bestanden: „Perfekt.“). Der Animationstest **ersetzt den Inhalt der Tafel**, danach ist ein normaler Textversand nötig. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md), Kurzüberblick: [`VERSIONSGESCHICHTE.md`](VERSIONSGESCHICHTE.md), Testschritte: [`docs/TESTPLAN_v0.6.0.1.md`](docs/TESTPLAN_v0.6.0.1.md).
+> **Aktueller Entwicklungskandidat: v0.6.0.2-dev (3.11.2026).** *Behebt den Arduino-Compile-Fehler von 0.6.0.1* (siehe unten). Erster Schritt zu Animationen: ein **Hardwaretest für den Tafelbefehl 0x04** (gespeicherte Animation, die die Tafel selbst abspielt). In den Einstellungen sendet der Abschnitt „Animationstest“ eingebaute Testmuster (Farben, wandernder Balken, 79 Frames als Grenze, 80 Frames als absichtlicher Fehler), jedes Frame mit seiner Nummer, und liest die Antwortcodes der Tafel mit. **Das ist ein Testwerkzeug, noch keine Animationsfunktion:** Import und Zeichnen folgen erst, wenn der Test auf der echten Tafel bestanden ist. Ob deine Tafel das Format annimmt, wie sie es abspielt und was nach dem Ausschalten bleibt, ist ungeprüft. Darunter unverändert 0.5.0.1 (Tafelverwaltung; Hardwaretest bestanden: „Perfekt.“). Der Animationstest **ersetzt den Inhalt der Tafel**, danach ist ein normaler Textversand nötig. Vollständige Versionsgeschichte: [`CHANGELOG.md`](CHANGELOG.md), Kurzüberblick: [`VERSIONSGESCHICHTE.md`](VERSIONSGESCHICHTE.md), Testschritte: [`docs/TESTPLAN_v0.6.0.2.md`](docs/TESTPLAN_v0.6.0.2.md).
 
 ## Was ist RavestickBoard?
 
@@ -28,9 +28,11 @@ Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` de
 - **Tafelsteuerung:** Helligkeit, Tempo und Anzeige an/aus stehen unten auf jeder Seite; die Tasten zum Erzwingen eines Anzeigeverhaltens auf allen Seiten außer der Kurzwahl, wo nur Linkslauf, Standbild und der Stift zum Bearbeiten bleiben.
 - **Diagnose:** RAM-Messung, HTTP-Spur, Absturzspur nach Hänger, Export als Textdatei.
 
-## Aktuell: v0.6.0.1-dev – Animationstest mit Frame-Nummer (aufbauend auf 0.5.0.1: Tafelverwaltung)
+## Aktuell: v0.6.0.2-dev – Animationstest mit Frame-Nummer (aufbauend auf 0.5.0.1: Tafelverwaltung)
 
-- **Neu in 0.6.0.1** (Vorschlag aus der Planung des Hardwaretests; 0.6.0.0 wurde nicht geflasht):
+- **Neu in 0.6.0.2** (Rückmeldung aus dem ersten Compile von 0.6.0.1): Der Sketch ließ sich nicht übersetzen (`'RamStage' was not declared in this scope` bei `ramStageLabel` und `ramTraceMark`, Folgefehler an allen Aufrufstellen). Ursache: Ich hatte die Animationsfunktionen **vor** `enum RamStage` in die Datei gesetzt. Die Arduino-IDE erzeugt die Funktionsprototypen automatisch und setzt sie vor die erste Funktionsdefinition; dort kannte der Prototyp von `ramStageLabel(RamStage)` den Typ noch nicht. Die Funktionen stehen jetzt hinter den Typdefinitionen und hinter `rbPhase()`, Konstanten und Variablen der Animation bleiben oben. **Sonst ist der Stand gleich 0.6.0.1.** Neu im Test: `tests/arduino_prototypes.py` bildet diese Regel nach (kein selbstdefinierter Typ in einer Funktionssignatur vor der ersten Funktion); der Test erkennt die Fassung 0.6.0.1 als fehlerhaft und die kompilierte 0.5.0.1 als in Ordnung. Das ersetzt keinen Compile: weitere Fehler dieser Art sind nicht ausgeschlossen.
+
+- **Neu in 0.6.0.1** (Vorschlag aus der Planung des Hardwaretests; 0.6.0.0 wurde nicht geflasht, 0.6.0.1 ließ sich nicht kompilieren):
   - **Frame-Nummer:** Jedes Frame der Testmuster zeigt seine Nummer, zweistellig und 1-basiert (01, 02 …), mit eigenen 3×5-Ziffern in doppelter Größe in der Mitte (14 × 10 Pixel). So sieht man bei 79 Frames, wie viele ankommen, wo die Schleife endet und ob die Reihenfolge stimmt. Farben: schwarz auf der Farbfläche, grün über dem Balken, weiß im Grenztest.
   - **Grenztest:** Standardzeit jetzt 300 ms (zuvor 40 ms), damit die Nummer lesbar ist; ein Durchlauf mit 79 Frames dauert etwa 24 s. Die Balkenfarbe wechselt alle 8 Frames durch sechs Farben ohne Weiß (Weiß ist der Nummer vorbehalten). Zum Lesen der Nummer sind etwa 300 ms oder mehr nötig; mit kürzeren Zeiten bleibt die Prüfung der Geschwindigkeit möglich.
   - **Sonst unverändert gegenüber 0.6.0.0**, siehe unten.
@@ -81,10 +83,11 @@ Das iPhone oder ein anderer Browser verbindet sich mit dem WLAN `CoolLED1248` de
 - **Technik:** Die Gestaltung reist als unsichtbare Steuerzeichen im Text (U+0090..U+009C, Format in [`docs/TECHNIK.md`](docs/TECHNIK.md)). Die Firmware wertet sie beim Zeichnen aus, daher wirken sie auch in Bibliothek, Programmen und Gruppen. Einträge ohne Marken bleiben unverändert gültig; ältere Firmware kennt die Marken nicht (Darstellung dort ungeprüft).
 - **Entwicklungsschalter:** `RB_TEST_HANG` steht in diesem Stand noch auf 1 (Test-Auslöser `/api/test/hang` für den Wiederanlauftest). Für eine Freigabe auf 0 setzen.
 - **Bekannt:** Die Gesten im Zeichen-Fenster (Richtungserkennung, Doppeltipp ohne Zoom) sind nur im simulierten Chromium geprüft, nicht auf dem iPhone. Die Bibliotheksliste braucht auf dem ESP32 etwa 0,9 s, weil jeder Eintrag vollständig gelesen und geprüft wird; währenddessen bedient der Webserver nichts anderes. Eine Firmware-Beschleunigung ist offen. Der seltene BLE-Hänger (Diagnose: Phase `ble_regNotify`, Wächter-Neustart) und der niedrige Heap-Tiefstwert bleiben ungelöst.
-- **Noch offen:** Hardwaretest des Animationstests (0.6.0.1), danach Animationen als eigener Bereich: GIF-Import und Animationsliste (0.6.1.0), Zeichen-Editor mit Stift (0.6.2.0), Komfortfunktionen (0.6.3.0); Arduino-Compile, Wiederanlauf- und Zwei-Geräte-Test (siehe [`docs/ROADMAP.md`](docs/ROADMAP.md)).
+- **Noch offen:** Hardwaretest des Animationstests (0.6.0.2), danach Animationen als eigener Bereich: GIF-Import und Animationsliste (0.6.1.0), Zeichen-Editor mit Stift (0.6.2.0), Komfortfunktionen (0.6.3.0); Arduino-Compile, Wiederanlauf- und Zwei-Geräte-Test (siehe [`docs/ROADMAP.md`](docs/ROADMAP.md)).
 
 ## Kurz zurückgeblickt
 
+- **v0.6.0.2-dev:** Compile-Fehler von 0.6.0.1 behoben (Reihenfolge von Typen und Funktionen für die Arduino-Prototypen).
 - **v0.6.0.1-dev:** Frame-Nummer in den Testmustern, Grenztest mit 300 ms.
 - **v0.6.0.0-dev:** Animationstest (Befehl `0x04`) mit eingebauten Mustern, Antwortcodes der Tafel in der Diagnose.
 - **v0.5.0.1-dev:** Kopfzeilen-Chip der Tafelverwaltung entfällt.
@@ -110,14 +113,14 @@ Bearbeitungen werden auf dem jeweiligen Gerät direkt in der Bibliothek angezeig
 ## Installation und Datensicherheit
 
 1. Vorab ein JSON-Backup aus der aktuell laufenden Firmware erstellen und lokal aufbewahren. Die bisherige Firmware als Rückfallversion sichern.
-2. `firmware/RavestickBoard_v0_6_0_1/RavestickBoard_v0_6_0_1.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h`.
+2. `firmware/RavestickBoard_v0_6_0_2/RavestickBoard_v0_6_0_2.ino` öffnen. **Alle sechs Dateien** im selben Sketch-Ordner belassen: `.ino`, `RavestickBoard_WebUI.h`, `RavestickBoard_Assets.h`, `RavestickBoard_Library.h`, `RavestickBoard_v042.h` und `RavestickBoard_Icon.h`.
 3. Arduino IDE: **ESP32C3 Dev Module**, Espressif **3.3.12**, **USB CDC On Boot: Enabled**, **No OTA (2MB APP/2MB SPIFFS)**. Bestehendes Partitionsschema **nicht ändern**, **Erase All Flash deaktiviert** lassen.
 4. Nach dem Flashen mit WLAN `CoolLED1248` verbinden, `http://192.168.4.1` aufrufen. Bibliothek nicht neu formatieren; das Bibliotheksformat ist unverändert. Falls das Homescreen-Icon nicht übernommen wird, die Verknüpfung über Safari erneut hinzufügen.
 5. Nach Änderungen an `web/index.html`: `python tools/sync_web.py` erzeugt den gzip-Webheader neu.
 
 Weiterführend: [Bibliotheksformat](docs/BIBLIOTHEK_v0.4.1.md), [letzte ausführliche Installationsanleitung](docs/INSTALLATION_v0.4.2.4.1.md), [Testplan](docs/TESTPLAN_v0.4.2.4.1.md), [Changelog](CHANGELOG.md), [Roadmap](docs/ROADMAP.md) und [Themenspeicher](docs/THEMENSPEICHER.md).
 
-**Teststand v0.6.0.1 (Tests mit Endung `0601`; seit 0.6.0.0 gilt der Animationsteil):** zusätzlich zu den unten genannten Prüfungen: `tests/host_anim_0600.py` erzeugt den Nutzdatenstrom der Animation mit dem echten Sketch-Code am Rechner und prüft ihn gegen eine unabhängige Rechnung (Kopf, Ebenenreihenfolge, Spaltenbyte, Chunk-Kopf, Prüfsumme, Rahmen mit Escape, 79 Frames passen, 80 nicht) und die Frame-Nummer (Ziffern gegen eine Textvorlage, alle Muster, alle Frames) sowie den Antwort-Parser (auch gegen echte Antworten, wenn der Quelltext des OpenSign-Projekts per `OPENSIGN_SRC` angegeben wird; sonst übersprungen). Der Browser-Test deckt den Abschnitt „Animationstest“ ab (vier Tasten, Parameter, Fehleranzeige). **Nicht geprüft:** Arduino-Gesamtcompile, ob die Tafel `0x04` annimmt, Anzeige, Wirkung von `0x06` danach, Verhalten nach dem Ausschalten, Prüfsummen-Wiederholung.
+**Teststand v0.6.0.2 (Tests mit Endung `0602`; seit 0.6.0.0 gilt der Animationsteil):** zusätzlich zu den unten genannten Prüfungen: `tests/host_anim_0600.py` erzeugt den Nutzdatenstrom der Animation mit dem echten Sketch-Code am Rechner und prüft ihn gegen eine unabhängige Rechnung (Kopf, Ebenenreihenfolge, Spaltenbyte, Chunk-Kopf, Prüfsumme, Rahmen mit Escape, 79 Frames passen, 80 nicht) und die Frame-Nummer (Ziffern gegen eine Textvorlage, alle Muster, alle Frames) sowie den Antwort-Parser (auch gegen echte Antworten, wenn der Quelltext des OpenSign-Projekts per `OPENSIGN_SRC` angegeben wird; sonst übersprungen). Der Browser-Test deckt den Abschnitt „Animationstest“ ab (vier Tasten, Parameter, Fehleranzeige). **Nicht geprüft:** Arduino-Gesamtcompile, ob die Tafel `0x04` annimmt, Anzeige, Wirkung von `0x06` danach, Verhalten nach dem Ausschalten, Prüfsummen-Wiederholung.
 
 **Teststand v0.5.0.1 (Tests damals mit Endung `0501`) und v0.5.0.0:** zusätzlich: Logik der Tafelverwaltung mit dem echten Sketch-Code gegen Attrappen der BLE-Klassen (Adresse prüfen, Namen säubern, Treffer sammeln, sortieren, auf zwölf Einträge begrenzen), Browser-Test der Einstellungen (Suche, Signalsymbole, Speichern mit zweitem Tipp beim Ersetzen, fremde Tafel, Zurück ohne neue Suche, Anzeige in den Einstellungen), der Zoom-Sperre, der Palettentaste und der Listenhöhen sowie ein Test, dass keine Tafeladresse mehr im Code steht. **Nicht geprüft:** Arduino-Gesamtcompile mit den neuen Aufrufen (`haveName`, `getName`, `haveServiceUUID`, `isAdvertisingService`, aktiver Scan), die echte Suche und alle Tafelwechsel an der Hardware, das Verhalten der Zoom-Sperre auf dem iPhone, die Pfade der sechs neuen Lucide-Symbole (aus dem Gedächtnis).
 

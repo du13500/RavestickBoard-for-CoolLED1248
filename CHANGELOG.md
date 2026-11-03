@@ -2,6 +2,14 @@
 
 # RavestickBoard · Versionsgeschichte / Changelog
 
+## v0.6.0.2-dev – Compile-Fehler von 0.6.0.1 behoben (3.11.2026)
+
+- **Anlass:** Der erste Compile von 0.6.0.1 in der Arduino-IDE (Core 3.3.12, Board ESP32C3 Dev Module) schlug fehl: `'RamStage' was not declared in this scope` in Zeile 356 (`const char *ramStageLabel(RamStage s)`), dazu `ramStageLabel cannot be used as a function` an allen Aufrufstellen (u. a. Zeilen 395, 438, 1190–1353). Die Warnungen `-Wvolatile` (`++notifyCount` usw.) sind alt und harmlos.
+- **Ursache:** In 0.6.0.0 hatte ich den Animationsblock mit seinen Funktionen (`rb60NumberPixel`, `rb60AnimColor` …) weit oben in die Datei gesetzt, vor `enum RamStage`. Die Arduino-IDE erzeugt die Funktionsprototypen automatisch und setzt sie vor die **erste** Funktionsdefinition der Datei. Damit stand der Prototyp von `ramStageLabel(RamStage)` vor der Definition von `RamStage`. Dieselbe Falle ist im Projekt bekannt (bei 0.5.0.0 stand `SignRef` deshalb vor den automatischen Prototypen); ich habe sie hier übersehen. Meine Rechnertests übersetzen nur Ausschnitte des Sketchs mit g++ und haben das nicht bemerkt.
+- **Firmware:** Die Animationsfunktionen (von `rb60NumberPixel` bis `rb60AckText`) stehen jetzt direkt vor `WebServer web(80);`, hinter `RamStage`, `RbCrumb`, `rbPhase()` und `ramTraceMark()`. Konstanten, Variablen und `enum AnimPattern` bleiben oben (sie erzeugen keine Prototypen). Ein Kommentar an beiden Stellen erklärt die Regel. Inhaltlich keine Änderung gegenüber 0.6.0.1.
+- **Tests:** `tests/arduino_prototypes.py` bildet die Prototyp-Regel nach: Jeder in der Datei definierte Typ, der in einer Funktionssignatur vorkommt, muss vor der ersten Funktionsdefinition stehen. Geprüft: 0.6.0.1 liefert genau die gemeldeten Fehler (RamStage in `ramStageLabel` und `ramTraceMark`), die kompilierte 0.5.0.1 und 0.6.0.2 sind in Ordnung. `tests/test_build_0602.py` ruft die Prüfung auf. Die Rechnertests setzen die Animationsteile jetzt aus zwei Bereichen zusammen (Konstanten oben, Funktionen weiter unten).
+- **Nicht geprüft:** Ein vollständiger Arduino-Compile ist hier weiterhin nicht möglich. Weitere Compile-Fehler sind nicht ausgeschlossen; die Fehlermeldung vom 3.11. enthielt allerdings außer den RamStage-Folgefehlern keinen weiteren, der Compiler meldet sonst alle Fehler einer Datei auf einmal. Hardware wie bei 0.6.0.1 offen.
+
 ## v0.6.0.1-dev – Frame-Nummer in den Testmustern (3.11.2026)
 
 - **Anlass:** Beim Planen des Hardwaretests von 0.6.0.0 (noch nicht geflasht) kam der Vorschlag, jedes Frame mit seiner Nummer zu beschriften. Damit sieht man beim 79-Frames-Test, wie viele Frames ankommen, wo die Schleife endet und ob die Reihenfolge stimmt. 0.6.0.1 ersetzt 0.6.0.0.
