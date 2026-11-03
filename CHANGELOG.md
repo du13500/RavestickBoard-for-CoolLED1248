@@ -2,6 +2,15 @@
 
 # RavestickBoard · Versionsgeschichte / Changelog
 
+## v0.6.0.1-dev – Frame-Nummer in den Testmustern (3.11.2026)
+
+- **Anlass:** Beim Planen des Hardwaretests von 0.6.0.0 (noch nicht geflasht) kam der Vorschlag, jedes Frame mit seiner Nummer zu beschriften. Damit sieht man beim 79-Frames-Test, wie viele Frames ankommen, wo die Schleife endet und ob die Reihenfolge stimmt. 0.6.0.1 ersetzt 0.6.0.0.
+- **Firmware:** `rb60NumberPixel` und die Ziffernreihen `RB60_DIGITS` (3×5, doppelt gross, zweistellig, 14 × 10 Pixel ab Spalte 25, Zeile 3); Nummer = Frame + 1. Die Nummer hat im Muster Vorrang vor dem Balken; die Eckpixel liegen ausserhalb. Farben: Farbfläche schwarz, Balken grün, Grenztest weiss. Grenztest: Balkenfarbe wechselt alle 8 Frames durch sechs Farben (ohne Weiss, damit die weisse Nummer sichtbar bleibt); Standardzeit 300 ms statt 40 ms. Eigene Ziffern statt der Schriftarten des Sketchs: Der Animationsweg bleibt vom Text-Renderer getrennt und ist am Rechner exakt prüfbar. Sonst keine Änderung (Format, Route, Antwortcodes, Ablauf).
+- **Weboberfläche:** Hinweistext des Animationsteils nennt die Nummer und die neue Standardzeit; Version 0.6.0.1-dev.
+- **Dokumentation:** Neuer Testplan [`docs/TESTPLAN_v0.6.0.1.md`](docs/TESTPLAN_v0.6.0.1.md) (ersetzt den Plan von 0.6.0.0) mit Nummern in den Erwartungen, korrigierter Farbreihenfolge der Muster *Farben* (blau, grün, cyan, rot, magenta, gelb, weiss; der Plan von 0.6.0.0 nannte sie falsch), der Erwartung „Paket 1“ bei 80 Frames und einem 8-ms-Versuch. Quellen: Adam Schulz hat die Nutzung seiner Arbeit per E-Mail ausdrücklich erlaubt (zusätzlich zur MIT-Lizenz); Hinweise aus seiner Mail im Themenspeicher (Dauer des Uploads, Flackertrick bei etwa 8 ms, Programme als Animation).
+- **Abweichung:** Die Balkenfarbe des Grenztests nutzt sechs statt sieben Farben (siehe oben).
+- **Geprüft (ohne Arduino/Hardware):** `tests/host_anim_0601.py` (Nutzdaten inklusive Nummern gegen eine unabhängige Rechnung mit Textvorlage für die Ziffern, alle Muster), `tests/test_build_0601.py` (Invarianten), `tests/test_browser_0601.py`, übrige Tests unverändert (Endung `0601`). **Nicht geprüft:** Arduino-Compile, Annahme von `0x04` an der Tafel, Lesbarkeit der Nummer auf der Tafel, alles aus 0.6.0.0 (siehe dort).
+
 ## v0.6.0.0-dev – Animationstest (Befehl 0x04) (3.11.2026)
 
 - **Anlass:** 0.5.0.1 wurde getestet („Perfekt.“). Als Nächstes stehen Animationen an. Nach der Auswertung des OpenSign-Projekts von Adam Schulz (Befehl `0x04`, gespeicherte Animation) und der Absprache: Animationen (GIF und gezeichnete Bildfolgen) werden ein **eigener Bereich**, losgelöst von Lauftext, Seiten, Programmen, Effekten und Diashow. Hauptweg ist der Import (GIF, Bildstreifen, Text-Raster aus Excel) mit Anpassungswerkzeugen; der Zeichen-Editor dient zum Nachbessern, kann aber auch eine Animation vollständig erzeugen (iPad mit Stift). Bevor das gebaut wird, prüft dieser Schritt auf der echten Tafel, ob und wie sie `0x04` annimmt.

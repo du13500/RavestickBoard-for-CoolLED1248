@@ -1,12 +1,12 @@
 # RavestickBoard · Diagnose und Fehlerprotokoll
 
-**Fortgeschrieben 3.11.2026 für v0.6.0.0-dev (neuester Abschnitt oben). Die älteren Abschnitte beschreiben den Stand ihrer Version.**
+**Fortgeschrieben 3.11.2026 für v0.6.0.1-dev (neuester Abschnitt oben). Die älteren Abschnitte beschreiben den Stand ihrer Version.**
 
-## Diagnose-Ergänzung v0.6.0.0 – Antwortcodes der Tafel und Animationstest (3.11.2026)
+## Diagnose-Ergänzung v0.6.0.0/0.6.0.1 – Antwortcodes der Tafel und Animationstest (3.11.2026)
 
 Die Tafel bestätigt jedes Datenpaket mit einer Antwort (`01 | Länge | Befehl 00 Nr. Status | 03`). Seit 0.6.0.0 liest die Firmware den Status und zählt ihn: im JSON `ackOk` (Status 0), `ackNak` (6, Prüfsummenfehler), `ackFatal` (1–5) und `ackOther` (nicht lesbar oder fehlend), im Textbericht als Zeile „Antwortcodes der Tafel“. Zeigt `ackOther` bei allen Aufträgen hohe Werte, liefert die Tafel die Antworten nicht in der erwarteten Form oder zu spät; das ist ein Befund, kein Fehler des Auftrags.
 
-Beim **Animationstest** (Ereignis `ANIM`) steht im Protokoll zuerst die Anfrage („Test Balken, 16 Frames, 60 ms, Modus danach: keep“). Lehnt die Tafel ein Paket ab, steht die Meldung „Tafel lehnt Paket n von m ab: Code 0x04 (Datenlänge)“ in der Statusanzeige und im Protokoll; bei Status 6 steht „Paket n wird nach Pruefsummenfehler erneut gesendet“. Der absichtliche 80-Frame-Test soll genau die Ablehnung mit Code 0x04 zeigen. **Bestehende Aufträge** (Text, Seiten, Blockfolge, Ambiente) werten die Codes nicht aus, ein Status ungleich 0 ändert dort nichts am Ablauf.
+Beim **Animationstest** (Ereignis `ANIM`) steht im Protokoll zuerst die Anfrage („Test Balken, 16 Frames, 60 ms, Modus danach: keep“). Lehnt die Tafel ein Paket ab, steht die Meldung „Tafel lehnt Paket n von m ab: Code 0x04 (Datenlänge)“ in der Statusanzeige und im Protokoll; bei Status 6 steht „Paket n wird nach Pruefsummenfehler erneut gesendet“. Der absichtliche 80-Frame-Test soll genau die Ablehnung mit Code 0x04 zeigen, nach Adams Erfahrung schon beim ersten Paket („Paket 1 von …“). **Bestehende Aufträge** (Text, Seiten, Blockfolge, Ambiente) werten die Codes nicht aus, ein Status ungleich 0 ändert dort nichts am Ablauf.
 
 Für den Fehlerbericht nach einem Animationstest bitte angeben: Muster, Frameanzahl, Zeit je Frame, Modus danach, die Zähler der Antwortcodes vor und nach dem Test, was die Tafel zeigt (nichts / Standbild / Animation / ERROR) und was nach dem Aus- und Einschalten der Tafel zu sehen ist.
 
