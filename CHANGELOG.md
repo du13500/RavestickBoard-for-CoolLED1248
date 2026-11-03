@@ -2,6 +2,13 @@
 
 # RavestickBoard · Versionsgeschichte / Changelog
 
+## v0.5.0.1-dev – Kopfzeilen-Chip entfällt (3.11.2026)
+
+- **Anlass:** Test von 0.5.0.0 („funktioniert wie vorgeschlagen, sieht gut aus“); der Chip „Meine Tafel/Fremde Tafel/Keine Tafel“ in der Kopfzeile darf entfallen.
+- **Weboberfläche:** Chip, sein Stil und seine Logik (`rbSignChipShow`) sind entfernt. Die Einstellungen zeigen weiter die aktive Tafel mit Art (Meine/Fremde/keine) und, bei fremder Tafel, den Hinweis „gilt bis zum Neustart“. Firmware: nur Version; die Statusantwort enthält weiter `signKind` und `signName` (die Seite nutzt sie derzeit nicht).
+- **Folge:** Eine fremde oder fehlende Tafel ist außerhalb der Einstellungen nicht mehr sichtbar. Bei fehlender Tafel meldet ein Sendeauftrag „Keine Tafel eingerichtet“; bei fremder Tafel gibt es außerhalb der Einstellungen keinen Hinweis mehr (bis zum Neustart des ESP32).
+- **Geprüft:** `tests/test_build_0501.py` (Chip nicht mehr im Quelltext), `tests/test_browser_0501.py` (Kopfzeile ohne Chip, übrige Tafelverwaltung unverändert), übrige Tests unverändert (Endung `0501`). **Nicht geprüft:** Arduino-Compile, Hardware.
+
 ## v0.5.0.0-dev – Tafelverwaltung, Oberflächen-Korrekturen (3.11.2026)
 
 - **Anlass:** Test von 0.4.6.0 („funktioniert wie gewünscht“) und die abgesprochene Tafelverwaltung. Rückmeldungen: Die Palettentaste der Blockanzeige steht unter den Farben statt in derselben Zeile; Zoom per Doppeltipp auf dem iPhone soll global gesperrt werden; die Programme-Ansicht ist zu lang (Scrollen bis zum Bedienfeld nötig).

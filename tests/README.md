@@ -21,6 +21,10 @@ Der Browser-Test erfordert Playwright und Chromium; Arduino-Boardpaket und reale
 
 `python tests/test_0431.py` prüft die JavaScript-Syntax, HTML/gzip-/ETag-Konsistenz, die korrigierte Versionskennung, den entkoppelten Diagnose-TXT-Download und die interaktive Darstellung in drei Chromium-Mobilgrößen. Der Stream-Puffer wurde außerdem separat mit einem Host-C++-Test kompiliert. Dies ersetzt **keinen Arduino-Gesamtcompile** und keinen Heap-/BLE-Test auf dem ESP32.
 
+## v0.5.0.1-dev (3.11.2026)
+
+Die Tests tragen jetzt die Endung `0501`. Der Kopfzeilen-Chip entfällt; der Browser-Test prüft, dass er fehlt, und die Tafelverwaltung über die Einstellungen (`#rbSignNow`, `#rbSignSub`).
+
 ## v0.5.0.0-dev (3.11.2026)
 
 Die Tests tragen jetzt die Endung `0500`. Neu: `python tests/host_sign_0500.py` übersetzt den Logikblock der Tafelverwaltung (Marken `Tafelverwaltung (Logik)` bis `(Ende Logik)` im Sketch) mit g++ gegen Attrappen der BLE-Klassen (`tests/host/scan_stub_0500.h`, `sign_main_0500.cpp`): Adresse prüfen und normalisieren, Namen säubern, Treffer sammeln (Name, Dienst, eigene Tafel ohne Namen, Dubletten, ungültige Adresse), Reihenfolge und Filter der JSON-Antwort, Überlauf bei zwölf Einträgen. Im Browser-Test: Mock-ESP mit `/api/sign*`, Einstellungen (Suche, „Alle zeigen“, Signalsymbole je Stärke, Speichern, Ersetzen mit zweitem Tipp, fremde Tafel, Zurück ohne Suche, Kopfzeilen-Chip), Zoom-Sperre (Viewport, `touch-action`, unterdrückte Spreizgeste, 16-px-Felder), Palettentaste in der Farbzeile und Programme/Bibliothek mit gefüllten Listen ohne Seitenscrollen. Als Testadresse dient `c0:ff:ee:00:00:01`; keine echte Tafeladresse mehr in den Tests. Die Statusabfrage-Prüfung toleriert einen zusätzlichen Takt (war zeitabhängig).
