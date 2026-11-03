@@ -1,6 +1,6 @@
 # RavestickBoard · Quellen, Lizenzumfang und Rechte
 
-**Aktueller Stand: 26.10.2026 · Projektcode unter MIT.** Diese Übersicht trennt von uns lizenzierbare Bestandteile, fremde Werke und technische Gerätefakten. Sie ersetzt keine individuelle rechtliche Prüfung.
+**Aktueller Stand: 3.11.2026 · Projektcode unter MIT.** Diese Übersicht trennt von uns lizenzierbare Bestandteile, fremde Werke und technische Gerätefakten. Sie ersetzt keine individuelle rechtliche Prüfung.
 
 ## MIT ab v0.4.0-dev
 
@@ -26,9 +26,9 @@ Die von uns selbst entwickelten Pixelmotive sind eigenständig erstellte Inhalte
 | --- | --- | --- |
 | [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) | MIT, Copyright © 2025 Greg Tatham; technische BLE-Protokollreferenz | Bei konkreter Übernahme urheberrechtlich geschützter Codeanteile Attribution und Lizenz erhalten |
 | [ohtaras/led](https://github.com/ohtaras/led) | Zum früheren Prüfzeitpunkt keine allgemeine Wiederverwendungslizenz gesichert | Nur technische Fakten untersuchen, keinen unlizenzierbaren Code übernehmen |
-| [schulzad/coolled-sign-controller (OpenSign)](https://github.com/schulzad/coolled-sign-controller) | Zum früheren Prüfzeitpunkt „All rights reserved until one is added“ | Keine Quellcodeübernahme/Portierung ohne geeignete Erlaubnis |
+| [schulzad/coolled-sign-controller (OpenSign)](https://github.com/schulzad/coolled-sign-controller) | **MIT, Copyright © 2026 Adam Schulz** (geprüft am 3.11.2026 an einer Kopie vom 30.10.2026; zum früheren Prüfzeitpunkt noch „All rights reserved“) | Protokollfakten (Befehl `0x04`, Antwortcodes) als Grundlage des Animationstests; eigenständig geschriebener Code, **kein Quelltext übernommen**. Bei einer späteren Übernahme von Codeanteilen Lizenztext und Urheberhinweis beibehalten (siehe `THIRD_PARTY_NOTICES.md`) |
 
-Wir haben Adam Schulz am 23.10.2026 um eine Erlaubnis zur Einbeziehung geeigneter OpenSign-Teile gebeten. **Bis zum hier dokumentierten Stand liegt keine bestätigte Erlaubnis vor.** Unsere künftige Recherche zum Animationsbefehl `0x04` trennt ungeschützte Geräteprotokollfakten von konkreter externer Implementierung.
+Wir haben Adam Schulz am 23.10.2026 um eine Erlaubnis zur Einbeziehung geeigneter OpenSign-Teile gebeten. Inzwischen steht OpenSign unter der MIT-Lizenz; eine gesonderte Erlaubnis ist für die Nutzung unter deren Bedingungen nicht mehr nötig. **Tatsächlich übernommen wurde bisher nur Wissen über das Geräteprotokoll** (Aufbau der Animationsdaten, Paketantworten, Datenlimit), kein Quelltext. Der Animationstest in 0.6.0.0 wurde lokal gegen OpenSigns Kodierer abgeglichen (nur als Prüfwerkzeug, nicht im Repository). Danksagung an Adam Schulz im README.
 
 **Historische Einordnung:** Ältere Entwicklungsberichte in `docs/` können weiterhin den früheren Lizenzstand „All Rights Reserved“ nennen. Sie dokumentieren ihren damaligen Zustand; für neu veröffentlichte eigene Codebestandteile gilt die aktuelle [`LICENSE`](../LICENSE) mit diesen Grenzen.
 

@@ -1,3 +1,14 @@
+## Entscheidungen v0.6.0.0-dev · 3.11.2026 (Animationen)
+
+| ID | Entscheidung | Begründung |
+|---|---|---|
+| ADR-2026-11-03-A | **Animationen sind ein eigener Bereich**, losgelöst von Lauftext, Seiten, Programmen, Effekten und Diashow. | Absprache vom 3.11.2026. Animation heißt hier GIF und gezeichnete Bildfolge, die die Tafel selbst abspielt; eine Diashow aus bestehenden Funktionen (Stufe 1 der Recherche) entfällt. |
+| ADR-2026-11-03-B | **Import ist der Hauptweg, Zeichnen der Weg zum Nachbessern und zum vollständigen Erstellen.** Importquellen: GIF, Bildstreifen, Text-Raster mit Buchstaben `.RGBCMYW`. | Pixelweise Frames in Excel gehen für eine Animation, nicht für viele; Frame für Frame auf dem Handy ist sehr fummelig. Der Editor muss trotzdem auch iPad mit Stift tragen (Zeigerereignisse). |
+| ADR-2026-11-03-C | **Erst Hardwaretest, dann Funktion.** 0.6.0.0 baut nur den Animationstest; 0.6.1.0 (Import/Liste), 0.6.2.0 (Editor), 0.6.3.0 (Komfort) folgen erst nach dem Ergebnis. | Ob die eigene Tafel `0x04` annimmt, wie sie es abspielt und was nach dem Ausschalten bleibt, ist ungeprüft. Alle Formatfakten stammen von einem anderen Gerät. |
+| ADR-2026-11-03-D | **Obergrenze 79 Frames, ein globales Tempo je Animation, ein Inhalt auf der Tafel.** Halten durch wiederholte Frames. | 27 + 79 × 384 = 30 363 B passen in 30 KiB, 80 Frames nicht. Das Protokoll kennt keinen Zeitwert pro Frame. |
+| ADR-2026-11-03-E | **Antwortcodes strikt nur im Animationstest.** Andere Aufträge zählen und protokollieren sie nur. | Verhalten bestehender, hardwaregeprüfter Aufträge soll nicht unbemerkt ändern. Ob Status ≠ 0 dort bisher still auftrat, ist unbekannt. |
+| ADR-2026-11-03-F | **Kein OpenSign-Quelltext übernommen**; Format und Paketierung eigenständig umgesetzt und lokal gegen OpenSign abgeglichen. | Klare Rechtslage (siehe `QUELLEN_UND_LIZENZEN.md`); MIT-Hinweis nur bei tatsächlicher Übernahme nötig, steht aber vorsorglich in `THIRD_PARTY_NOTICES.md`. |
+
 ## Entscheidung v0.4.0-dev · 26.10.2026
 
 Wir wechseln von einer Editor-zentrierten Oberfläche zu sieben Bereichen mit festem Header und Menü über den Bananen-Button. Die Startseite besitzt sechs Kurzwahlen statt der früheren acht. Bibliothek und Programme sind getrennte Datenebenen, Programmzeilen referenzieren Bibliothekseinträge und übernehmen spätere Textänderungen. Globale Helligkeit und Geschwindigkeit bleiben bei Inhaltswechseln unverändert; ein manueller Modus-Override gilt nur bis zum nächsten Inhalt, dessen gespeicherter Modus wieder gilt. Einzelheiten dokumentiert `ENTWICKLUNGSSTAND_v0.4.0_2026-10-26.md`. Unsere **eigenen Codebestandteile** veröffentlichen wir ab dieser Version unter MIT; Herstellerpixel und andere Fremdmaterialien sind davon ausgenommen.

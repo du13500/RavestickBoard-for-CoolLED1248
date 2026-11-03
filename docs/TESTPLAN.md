@@ -1,3 +1,5 @@
+> **Neuester Testplan:** [`TESTPLAN_v0.6.0.0.md`](TESTPLAN_v0.6.0.0.md) (Animationstest, 3.11.2026). Die folgenden Abschnitte sind die Testpläne und Abnahmeprotokolle früherer Versionen und gelten für deren Stand; Hardwareergebnisse stehen jeweils in den zugehörigen Entwicklungsständen und im Changelog.
+
 ## Ergänzung v0.3.5
 
 

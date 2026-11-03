@@ -2,6 +2,19 @@
 
 # RavestickBoard · Versionsgeschichte / Changelog
 
+## v0.6.0.0-dev – Animationstest (Befehl 0x04) (3.11.2026)
+
+- **Anlass:** 0.5.0.1 wurde getestet („Perfekt.“). Als Nächstes stehen Animationen an. Nach der Auswertung des OpenSign-Projekts von Adam Schulz (Befehl `0x04`, gespeicherte Animation) und der Absprache: Animationen (GIF und gezeichnete Bildfolgen) werden ein **eigener Bereich**, losgelöst von Lauftext, Seiten, Programmen, Effekten und Diashow. Hauptweg ist der Import (GIF, Bildstreifen, Text-Raster aus Excel) mit Anpassungswerkzeugen; der Zeichen-Editor dient zum Nachbessern, kann aber auch eine Animation vollständig erzeugen (iPad mit Stift). Bevor das gebaut wird, prüft dieser Schritt auf der echten Tafel, ob und wie sie `0x04` annimmt.
+- **Firmware:**
+  - Neuer Auftrag `ANIM` mit der Route `POST /api/anim/test` (Parameter `pattern` = `colors|bar|limit`, optional `n`, `ms`, `mode` = `keep|static|scroll`). Die Prüfung der Werte erfolgt vor dem Auftrag (2 bis 79 Frames, 1 bis 2000 ms; nur das Grenzmuster erlaubt 80).
+  - Nutzdaten (`rb60CopyAnimSlice`): 24 Byte Null, Frameanzahl, Zeit je Frame (u16, big endian), danach die Ebenen Rot, Grün, Blau über alle Frames; je Frame und Ebene 64 Spalten zu 2 Byte (höchstes Bit = oberste Zeile). Gesamtgröße 27 + Frames × 384 Byte, Obergrenze 30 720 B. Die Daten entstehen beim Senden aus dem Muster (kein Puffer im RAM), über denselben Weg wie das Tile-Streaming (`copyPayloadSlice`), Chunks zu 128 Byte mit dem bekannten Kopf `Opcode, 00, gesamt, Nr., Länge, Daten, XOR`.
+  - Antwortcodes: Die Benachrichtigung der Tafel (`01 | Länge | Befehl 00 Nr. Status | 03`) wird gelesen (`rb60ParseAck`) und in der Diagnose gezählt (`ackOk`, `ackNak`, `ackFatal`, `ackOther` im JSON und im Textbericht). Nur im Animationstest macht ein Status ungleich 0 das Paket zum Fehler (6 = Prüfsumme: bis zu zweimal erneut senden; 1–5: Abbruch mit Klartext). Danach optional Anzeigemodus (`0x06`). **Bestehende Aufträge werden nicht verändert.**
+  - Beim Animationsauftrag wird kein Tempo (`0x07`) und vor den Daten kein Modus gesendet; ein Standbild/Lauftext-Modus folgt nur auf Wunsch nach dem Upload.
+- **Weboberfläche:** Neuer Abschnitt „Animationstest“ in den Einstellungen (vier Tasten, Zeit je Frame, Modus danach), Meldung über die vorhandene Auftragsanzeige.
+- **Abweichungen/Entscheidungen:** (1) Der Test ist absichtlich ein Werkzeug in den Einstellungen und kein Teil der Programme oder Effekte. (2) Die strikte Auswertung der Antwortcodes gilt nur für den Animationstest, damit bestehendes Verhalten nicht unbeabsichtigt ändert (ein bisher stiller Fehlercode würde sonst Aufträge abbrechen). (3) 79 Frames als Obergrenze statt 80, weil 80 Frames (30 747 B) über dem 30-KiB-Rahmen liegen; der Test mit 80 Frames soll genau diese Ablehnung zeigen. (4) Der Test ersetzt den Inhalt der Tafel; er wird nicht gespeichert und taucht in Bibliothek/Programmen nicht auf.
+- **Geprüft (ohne Arduino/Hardware):** `tests/host_anim_0600.py` (Nutzdatenstrom, Chunks, Rahmen, Antwort-Parser, optionaler Abgleich mit OpenSigns Kodierer: byte-identisch), `tests/test_build_0600.py` (Invarianten der Animation, Route, kein Tempo/Modus-Versand im Auftrag, Dokumentationsversion), `tests/test_browser_0600.py` (Abschnitt mit Mock-ESP), übrige Tests unverändert (Endung `0600`). **Nicht geprüft:** Arduino-Compile, Annahme von `0x04` an der Tafel, Wirkung von `0x06` nach dem Upload, Verhalten nach dem Ausschalten, der Wiederholungspfad bei Prüfsummenfehler, iPhone/iPad.
+- **Bekannt/offen:** Ob die Tafel die Animation nach dem Ausschalten behält und was ein späterer Text-Upload damit macht, ist unbekannt (Testfragen im Testplan). `RB_TEST_HANG` bleibt in diesem Entwicklungsstand 1.
+
 ## v0.5.0.1-dev – Kopfzeilen-Chip entfällt (3.11.2026)
 
 - **Anlass:** Test von 0.5.0.0 („funktioniert wie vorgeschlagen, sieht gut aus“); der Chip „Meine Tafel/Fremde Tafel/Keine Tafel“ in der Kopfzeile darf entfallen.

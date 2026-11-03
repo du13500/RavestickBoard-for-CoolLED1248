@@ -1,3 +1,26 @@
+## Technischer Nachtrag v0.6.0.0: Animationstest (Befehl 0x04) und Antwortcodes (3.11.2026)
+
+**Stand:** im Quellcode vorhanden und am Rechner geprüft; Arduino-Compile und Hardwaretest offen. Quelle der Formatfakten: Protokolldokumentation und Kodierer des OpenSign-Projekts (Adam Schulz, MIT). Unser Code ist eigenständig geschrieben und wurde lokal byte-genau gegen OpenSigns Kodierer abgeglichen.
+
+**Nutzdaten (`0x04`, gespeicherte Animation):**
+
+| Bereich | Größe | Inhalt |
+|---|---|---|
+| Kopf | 24 Byte | Nullen |
+| Frameanzahl | 1 Byte | 2 bis 79 |
+| Zeit je Frame | 2 Byte | Millisekunden, big endian (kleiner = schneller; Gegenteil zu `0x07`) |
+| Ebene Rot, Grün, Blau | je Frames × 128 Byte | nacheinander über alle Frames; je Frame 64 Spalten zu 2 Byte, höchstes Bit = oberste Zeile |
+
+Gesamtgröße 27 + Frames × 384 Byte. Grenze etwa 30 KiB (30 720 B): 79 Frames = 30 363 B passen, 80 Frames = 30 747 B nicht (die Tafel antwortet mit Status 0x04 „Datenlänge“). Die 30-KiB-Grenze stammt aus Adams Messung an seiner Tafel; an unserer ist sie ungeprüft.
+
+**Paketierung:** wie beim Text. Chunks zu 128 Byte mit dem Kopf `Opcode (04), 00, gesamt (u16), Nr. (u16), Länge (u8), Daten, XOR` (XOR über alle Bytes nach dem Opcode), Rahmen `01 … 03` mit Escape (`02 x` steht für x − 4), Länge u16. Die Daten entstehen beim Senden Stück für Stück aus dem Muster (`rb60CopyAnimSlice`), analog zum Tile-Streaming, es gibt keinen Gesamtpuffer.
+
+**Antwort der Tafel je Chunk:** `01 | Länge (00 05) | Befehl 00 Nr.(2) Status | 03`. Status 0 in Ordnung, 6 Prüfsummenfehler (Paket neu senden), 1–5 Fehler (Abbruch; 4 „Datenlänge“). Die Firmware liest die Antwort in der Benachrichtigung (`rb60ParseAck`, Kopie in einen kleinen Puffer, Auswertung in `sendPacket`) und zählt sie (`ackOk`, `ackNak`, `ackFatal`, `ackOther`). Nur wenn `rb60AckStrict` gesetzt ist (Animationsauftrag), ist Status ≠ 0 ein Fehlschlag; sonst bleibt `sendPacket` bei seinem bisherigen Verhalten. In 2 979 aufgezeichneten Antworten eines fremden Protokolls war der Status immer 0; die Fehlerfälle sind aus der Protokollbeschreibung übernommen und an unserer Tafel ungeprüft.
+
+**Auftragsablauf `ANIM`:** Verbinden (Vor-Scan wie bisher), kein Tempo (`0x07`), kein Modus vorab, Daten in Chunks (bei Status 6 bis zu zwei Wiederholungen je Chunk), danach optional `0x06` mit dem gewählten Modus, trennen. Route `POST /api/anim/test` mit `pattern` (`colors|bar|limit`), optional `n`, `ms`, `mode` (`keep|static|scroll`); Antwort 202 wie bei den anderen BLE-Aufträgen. Muster: *Farben* (7 Frames, eine LED-Farbe je Frame, 700 ms), *Balken* (16 Frames, 60 ms, Eckpixel rot oben links und blau unten rechts), *Grenze* (79 oder 80 Frames, 40 ms).
+
+**Nicht verändert:** Stilmarken, Tile-Streaming für Text und Blockband, Tafelverwaltung, Wächter, Diagnose-Gerüst. Aufgehobene Aussagen weiter unten: „`0x04` nicht implementiert“ gilt ab 0.6.0.0 nur noch für eine *Funktion* (Animationen als Bereich); der Test ist vorhanden.
+
 ## Technischer Nachtrag v0.4.4.0 (31.10.2026): Stilmarken im Text
 
 Farbe und Schrift pro Zeichen reisen als C1-Steuerzeichen im UTF-8-Text (je 2 Byte, Breite 0):
@@ -117,7 +140,7 @@ Nach der ersten v0.2.0-Kompilierungsfehlermeldung (`'function' does not name a t
   | `0x08` | Laser | offen |
 
   **Nicht verwechseln:** Die Moduswerte `0x04`, `0x06` und `0x08` sind Parameter des Befehls `0x06`, keine selbstständigen Opcodes. Der separate **Opcode `0x04` für gespeicherte Animationen** ist hiervon unabhängig. Ein Moduswechsel bestätigt noch keinen autonomen Szenenwechsel/keine Unterstützung einer bestimmten Animation.
-- **`0x04` gespeicherte Animation**: OpenSign meldet autonome Animationen auf **einem anderen Referenzboard** (ca. 30 KiB bzw. 80 Frames). **Nicht in unserer v0.2.0-Firmware implementiert, auf unserer Hardware ungetestet.**
+- **`0x04` gespeicherte Animation**: OpenSign meldet autonome Animationen auf **einem anderen Referenzboard** (ca. 30 KiB, 79 Frames passen, 80 nicht). *Historisch (v0.2.0):* nicht implementiert. **Seit v0.6.0.0** als Animationstest vorhanden (siehe Nachtrag oben), **auf unserer Hardware ungetestet.**
 
 ### Verbindungskonflikte und Uploadverhalten
 
@@ -200,7 +223,7 @@ Siehe [`ROADMAP.md`](ROADMAP.md) und [`THEMENSPEICHER.md`](THEMENSPEICHER.md): e
 - Layoutwerte in `PageRecord.layout`: 0 Engschrift 14px; 1 Mini zwei Zeilen; 2 Mini eine Zeile **horizontal und vertikal zentriert**; 3 Normal; 4 Bold. Das bestehende NVS-Schema 1 und die Recordgröße bleiben unverändert.
 - `/api/speed` sendet `0x07`, `/api/mode` sendet `0x06`, `/api/brightness` bleibt `0x08`, jeweils **ohne vollständige Bilddaten**. BLE-Verbindung für Folgekommandos maximal ca. 2,5 Sekunden inaktiv behalten; Hersteller-App-Koexistenz muss getestet werden.
 - `localStorage` sichert Browser-Entwurf und Reiter, **nicht** als plattformübergreifende Controllerbibliothek. NVS behält die gespeicherten Blockseiten.
-- **Nicht implementiert:** gespeicherte `0x04`-Animationen, native Programme ohne Prozentanzeige, LittleFS-Bibliothek, pixelgenaue frei formatierte Zeichenabschnitte.
+- **Nicht implementiert (Stand v0.3.x; seitdem teils nachgeholt):** native Programme ohne Prozentanzeige, pixelgenaue frei formatierte Zeichenabschnitte. Gespeicherte `0x04`-Animationen gibt es seit v0.6.0.0 als Test (kein Import, kein Editor), die Bibliothek seit v0.4.x als Flash-Dateien. Animationsdateien auf LittleFS sind für 0.6.1.0 geplant.
 - **Sicherheit:** Kein reales Arduino-Kompilat/ESP32- oder LED-Tafel-Testprotokoll für v0.3.0 vorhanden. Änderungen nicht als hardwarebestätigt kennzeichnen.
 
 

@@ -323,10 +323,14 @@ Nach nachgewiesener Umsetzung einer Funktion: den passenden Eintrag (etwa `PRE-0
 
 ## Zukunft: Hardware-Animationen und Quellenkontrolle
 
-- [ ] **ANM-01 · P1** Separaten CoolLEDX-Opcode `0x04` zunächst mit sieben vorhandenen 64×16-Ambiente-Farbbildern und einer sicheren seriellen Testkonsole auf der eigenen Tafel erproben. Nur real bestätigte Ergebnisse in die Firmware übernehmen.
-- [ ] **ANM-02 · P1** Frame-Limit, Zeitsteuerung, Wiederholung, Dateiformat, ACK und reales Anzeigeverhalten messen. Nie aus BLE-Quittungen auf sichtbaren Erfolg schließen.
-- [ ] **ANM-03 · P2** GIF-Import, Farbkonvertierung auf sieben LED-Farben, browserseitige Vorberechnung und Animationsvorschau erforschen.
-- [ ] **ANM-04 · P2** Native Animation `0x04`, Effektmodus `0x06` und Controller-gesteuerte Programme voneinander trennen.
+- [ ] **ANM-01 · P1** Separaten CoolLEDX-Opcode `0x04` auf der eigenen Tafel erproben. *In 0.6.0.0 gebaut* als Animationstest in den Einstellungen; Hardwaretest offen. Nur real bestätigte Ergebnisse in die Firmware übernehmen.
+- [ ] **ANM-02 · P1** Frame-Limit, Zeitsteuerung, Wiederholung, Dateiformat, ACK und reales Anzeigeverhalten messen. Nie aus BLE-Quittungen auf sichtbaren Erfolg schließen. *Werkzeug in 0.6.0.0 vorhanden.*
+- [ ] **ANM-03 · P1** GIF-Import, Farbkonvertierung auf sieben LED-Farben, browserseitige Vorberechnung und Animationsvorschau; geplant für 0.6.1.0 (siehe `ROADMAP.md`, Abschnitt „Animationen – Plan“).
+- [ ] **ANM-04 · P2** Native Animation `0x04`, Effektmodus `0x06` und Controller-gesteuerte Programme voneinander trennen. Entschieden am 3.11.2026: Animationen sind ein eigener Bereich.
+- [ ] **ANM-05 · P1** Import: GIF (im Browser zerlegen, auf 64×16 zuschneiden/skalieren, auf sieben LED-Farben reduzieren), Bildstreifen, Text-Raster mit Buchstaben `.RGBCMYW` (Excel-Weg), Anpassungswerkzeuge (Frames wählen/entfernen, Tempo, Vorschau). Ablage als Dateien auf LittleFS, je höchstens 30 KB. Geplant 0.6.1.0.
+- [ ] **ANM-06 · P1** Zeichen-Editor für Animationen: Stift (Zeigerereignisse für iPad mit Apple Pencil), Frames, Füllen, Linie, Rechteck, Pipette, Rückgängig, eigenes Zoomen/Verschieben, Bildstreifen. Muss auch vollständiges Erstellen tragen. Geplant 0.6.2.0.
+- [ ] **ANM-07 · P2** Komfort: Auswahl verschieben, Spiegeln, Zwiebelschicht, lokale Ablage im Browser. Geplant 0.6.3.0.
+- [ ] **ANM-08 · P2** Offene Fragen aus dem Hardwaretest: bleibt die Animation nach dem Ausschalten, Zusammenspiel mit `0x06` und mit einem späteren Text-Upload, Übertragungsdauer für 30 KB, Flashbedarf je Datei, Platz der LittleFS-Partition.
 - [ ] **SYM-WIDE · P2** Frei gestaltbare Symbole mit 16 Pixel Höhe und variabler Breite (z. B. 40×16 Flugzeug) im Renderer und in der Vorschau ermöglichen; 16×16-Originalsymbole bleiben erhalten.
 - [ ] **LIC-04 · P1** Bei tatsächlicher Übernahme fremder MIT- oder Apache-lizenzierter Bestandteile Lizenztexte und Urheberhinweise beibehalten; nur technische Protokollrecherche erfordert keine Codeübernahme.
 

@@ -1,3 +1,5 @@
+> Stand v0.6.0.0-dev (3.11.2026): 0.5.0.1 wurde getestet („Perfekt.“). Gebaut ist der **Animationstest** (Befehl `0x04`, eingebaute Muster, Antwortcodes der Tafel in der Diagnose); Hardwaretest offen, siehe [`TESTPLAN_v0.6.0.0.md`](TESTPLAN_v0.6.0.0.md). Der nächste Schritt hängt vom Ergebnis ab. Planung der Animationen: Abschnitt „Animationen – Plan“ weiter unten. Die darunter stehenden älteren „Stand“-Hinweise sind Verlauf und nicht mehr maßgeblich.
+>
 > Stand v0.5.0.1-dev: wie 0.5.0.0 ohne Kopfzeilen-Chip; 0.5.0.0 wurde getestet und für gut befunden („funktioniert wie vorgeschlagen“). Tafelverwaltung gebaut (Meine Tafel im ESP32, Suche mit Signalstärke, fremde Tafel mit Rückweg; keine Adresse mehr im Code), dazu Zoom-Sperre, Palettentaste in der Farbzeile und Listenhöhen (Hardwaretest offen). Offen und möglicher Inhalt der nächsten Stände: Hardwaretest der Tafelverwaltung (insbesondere Adresstyp bei fremden Tafeln, Namensfilter), Aufräumen der Bedienung (Rot nur für endgültiges Löschen, alte Tafelsteuerungs-Reste und alte Überschriftensymbole entfernen), schnellere Bibliotheksliste, ACK-Auswertung (F-03), Maßnahmen gegen den seltenen Verbindungshänger (Verbindungsaufbau mit eigener Zeitüberwachung, NimBLE), Tafeln mit anderer Pixelgröße als 64×16 (Hinweis in der Oberfläche; Anpassung nur, wenn das Protokoll die Maße liefert). Festlegung: kein gleichzeitiger Betrieb mehrerer Tafeln.
 >
 > Davor v0.4.6.0-dev: Zeichen-Editor für Blockseiten und Bluetooth-Zeichen „verbunden“ während der Übertragung (Hardwaretest bestanden; ein Verbindungshänger bei sichtbarer Tafel wurde vom Wächter nach 25 s behoben).
@@ -27,7 +29,7 @@ Messreihen: Messreihen A–C auf 0.4.3.2 liegen vor (Einbruch beim Beitritt des 
 
 - Speicher-Hardening: Extremwerte unter 1 KiB in WLAN- und HTTP-Testläufen, weiter eingrenzen; keine voreilige Entwarnung.
 - API-/UI-Optimierung v0.4.2.5 am ESP32 verifizieren; keine neue Datenmigration.
-- Danach: BLE-ACK-Decoding und native Opcode-0x04-Animationen nach Adam Schulz / OpenSign untersuchen (MIT-Attribution bei späterer Codeübernahme).
+- Danach: BLE-ACK-Decoding und native Opcode-0x04-Animationen nach Adam Schulz / OpenSign untersuchen (MIT-Attribution bei späterer Codeübernahme). **Stand 3.11.2026:** Antwortcodes werden seit 0.6.0.0 gelesen und gezählt; `0x04` ist als Animationstest gebaut, Hardwaretest offen.
 
 # RavestickBoard Roadmap
 
@@ -39,7 +41,7 @@ Messreihen: Messreihen A–C auf 0.4.3.2 liegen vor (Einbruch beim Beitritt des 
 - [ ] **RAM-Sicherheitsreserve:** Bei etwa 2:55 h wurde ein historischer System-Heap-Tiefstwert von **1.076 Byte** bei zwei WLAN-Clients beobachtet. Kein kontinuierliches Speicherleck belegt; Ursache offen. BLE-Paketfehler konnte nicht reproduziert werden.
 - [ ] **Build A hardwaretesten:** HTTP-Endpunkt-/404-Profiling, temporäre 20-ms-Speicherminima; Webseite weiter unkomprimiert. Beim Vergleich jeweils vor Messreihe neu starten.
 - [ ] **Build B hardwaretesten:** identischer Profiler, gzip-9, Inhalts-ETag und 304; 200- und 304-Antworten getrennt auswerten. A/B mit einem und zwei WLAN-Clients vergleichen.
-- [ ] **Weiter offen:** F-01/02/03 (Schema, Webserver während BLE und echte Paketantwortprüfung), F-04/05/07/08/09, S-01–S-05, Lauftextkalibrierung und Animationen. Der neue HTTP-Profiler ersetzt keine Hardwareabnahme.
+- [ ] **Weiter offen:** F-01/02/03 (Schema, Webserver während BLE und echte Paketantwortprüfung; F-03: Antwortcodes werden seit 0.6.0.0 gelesen und gezählt, strikt ausgewertet nur im Animationstest), F-04/05/07/08/09, S-01–S-05, Lauftextkalibrierung und Animationen. Der neue HTTP-Profiler ersetzt keine Hardwareabnahme.
 - [ ] **Bedienungswünsche nach dem Speichervergleich:** Kapazitätsanzeige für 30-KiB-Gruppen im Programmeditor; „Als neuen Eintrag speichern“ bei Bibliotheksbearbeitung; kein kurzes Emoji-Logo beim Neuladen.
 
 Siehe [Vergleichstest](VERGLEICHSTEST_v0.4.2.4.2.md). Historischer Status der vorherigen Versionen folgt unverändert.
@@ -81,6 +83,19 @@ Siehe [Vergleichstest](VERGLEICHSTEST_v0.4.2.4.2.md). Historischer Status der vo
 5. Alle Seiten bei 390 px Breite auf Scrollbarkeit, einheitliche Tafelsteuerung, Shortcut-Größen und unverdeckte Buttons prüfen.
 6. RAMTRACE nach großen Übertragungen, mehrere WLAN-Clients und Wiederholungen beobachten. Ohne Test nicht als langzeitstabil markieren.
 
+## Animationen – Plan (3.11.2026)
+
+Entschieden (Absprache vom 3.11.2026): Animationen sind GIFs und „gezeichnete“ Bildfolgen und bilden einen **eigenen Bereich**, losgelöst von den bisherigen Funktionen (Lauftext, Seiten, Programme, Effekte, Diashow). Die Tafel speichert und spielt die Animation selbst (Befehl `0x04`); ein Inhalt zugleich auf der Tafel. Grenzen aus dem Protokoll: höchstens etwa 30 KiB, das sind 79 Frames zu 384 Byte, ein globales Tempo je Animation (Millisekunden je Frame), kein Zeitwert pro Frame (Halten durch wiederholte Frames).
+
+| Version | Inhalt | Voraussetzung |
+|---|---|---|
+| **0.6.0.0** | Hardwaretest: `0x04` mit Testmustern, Antwortcodes, Streaming-Grundlage (gebaut) | Test auf der Tafel |
+| **0.6.1.0** | Import und Animationsliste: GIF (im Browser zerlegt, auf sieben LED-Farben reduziert), Bildstreifen, Text-Raster mit Buchstaben `.RGBCMYW` (für den Excel-Weg), Anpassungswerkzeuge (Zuschnitt/Skalierung auf 64×16, Frames auswählen/entfernen, Tempo, Farbreduktion, Vorschau); Ablage als Dateien auf LittleFS (je höchstens 30 KB); Senden an die Tafel | Test 0.6.0.0 bestanden; Größe der LittleFS-Partition aus dem Partitionsschema prüfen |
+| **0.6.2.0** | Zeichen-Editor: Stift, Frames, Füllen, Linie, Rechteck, Pipette, Rückgängig; Eingabe per Zeigerereignisse (iPad mit Apple Pencil), eigenes Zoomen/Verschieben, Bildstreifen der Frames | 0.6.1.0 |
+| **0.6.3.0** | Komfort: Auswahl verschieben, Spiegeln, Zwiebelschicht (Vorbild-Frame), lokale Ablage im Browser | 0.6.2.0 |
+
+Der Editor dient zum Nachbessern importierter Animationen, muss aber auch eine Animation vollständig erzeugen können. Vor jeder Stufe: Ergebnis des vorherigen Hardwaretests abwarten; was die Tafel nicht annimmt, wird nicht gebaut. Offen: Verhalten nach dem Ausschalten, Zusammenspiel mit `0x06` und mit einem späteren Text-Upload, Zeit für 30 KB über BLE (Dauer der Übertragung, Prozentanzeige), RAM-Bedarf beim Zerlegen großer GIFs (im Browser, nicht im ESP32), Flashbedarf je Animationsdatei.
+
 ## Offene Produktfragen
 
 - 🔬 **Lauftext-Zykluszeit:** Pixelbreite und Geschwindigkeit auf echter Tafel messen und eine zuverlässige Kurvenformel bestimmen. Die alte 5–180-s-Ersatzgruppe wurde in v0.4.2.4 aus der Wiedergabe entfernt; ein genaues Lauftextzeitmodell fehlt weiterhin.
@@ -93,7 +108,7 @@ Siehe [Vergleichstest](VERGLEICHSTEST_v0.4.2.4.2.md). Historischer Status der vo
 - 🔬 **BLE-Recovery:** Nach fehlender Paketbestätigung maximal einen kontrollierten vollständigen Neuversuch der ganzen Übertragung mit neuem Verbindungsaufbau. Ein in v0.4.0.3 beobachteter `MTU=0`-Reconnect war erfolgreich; ein automatischer Komplettretry ist in v0.4.2.4 implementiert, aber noch nicht hardwarebestätigt.
 - 🔬 **Speichergrenzen:** Untersuchung des kurzzeitig gemessenen historischen Heap-Minimums bei mehreren WLAN-Clients, sichere Browser-HTTP-Statusabfragen während langen BLE-Übertragungen.
 - 🔬 **Bibliothekskapazität:** Der v0.4.2-Index hat zunächst 192 Slots und prüft Flashreserve. Langfristig variable Datensatzlängen, echte kapazitätsabhängige Indexstruktur und Stromausfalltests.
-- 🔬 **Animationen v0.4.3 (Vorschlag):** isolierter, nur seriell angesteuerter Test des Opcode `0x04` mit vorhandenen sieben Ambiente-Farben als Frames. Danach optional GIF-Konvertierung; das Python-RGB444/LZSS-Programmformat ist nicht ohne Hardwaretest als kompatibel anzunehmen.
+- 🔬 **Animationen (überholt durch den Plan unten):** ursprünglich ein nur seriell angesteuerter Test des Opcode `0x04`. Umgesetzt als Animationstest in den Einstellungen (0.6.0.0). Das Python-RGB444/LZSS-Programmformat bleibt ohne Hardwaretest als nicht kompatibel anzunehmen.
 - 🎨 **Pixelart:** Variable Symbolbreiten bei 16-Pixel-Höhe (z. B. Flugzeug 40×16, Fahrzeuge/Szenen); vorher Renderer, Browser-Vorschau, Flashformat und BLE-Datenbudget anpassen.
 - 🕒 **Programme:** Countdown, Stoppuhr, Scoreboard/Punktetafel, frei platzierbare Grafiken, gemischte Schrift-/Farbsegmente, zusätzliche Überblendeffekte und acht statt sechs Schnellzugriffe nur falls sinnvoll.
 - 🔐 **Sicherheit/Ergonomie:** Individuelles WLAN-Passwort und Passwortschutz, dynamische BLE-Gerätesuche, Bedienung mehrerer Boards, Export/Import-Robustheit.

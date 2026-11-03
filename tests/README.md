@@ -1,4 +1,6 @@
-# Offline-Tests – v0.4.2.5.4-dev
+# Offline-Tests
+
+**Aktuell: v0.6.0.0-dev** (Abschnitt unten). Die weiteren Abschnitte beschreiben ältere Stände mit den damaligen Dateinamen; `test_build_4253.py` bis `browser_8_shortcuts.py` am Anfang gehören zum Stand 0.4.2.5.4.
 
 - `python tests/test_build_4253.py`: prüft Version, Schema-Konstanten, gzip/ETag, JavaScript/C++-Syntax und JSON-Chunks. Enthält Regressionen auf die sieben `<span>`-Menülabels, bereits gerenderte Kurzwahl-SVGs und den initialen Home-Zustand.
 - `python tests/browser_hotfix_smoke.py`: prüft mit einem headless Chromium und simulierten lokalen APIs die sichtbare Startansicht, den Ladezustand, das Hauptmenü und den Wechsel Home ↔ Texteditor.
@@ -21,9 +23,17 @@ Der Browser-Test erfordert Playwright und Chromium; Arduino-Boardpaket und reale
 
 `python tests/test_0431.py` prüft die JavaScript-Syntax, HTML/gzip-/ETag-Konsistenz, die korrigierte Versionskennung, den entkoppelten Diagnose-TXT-Download und die interaktive Darstellung in drei Chromium-Mobilgrößen. Der Stream-Puffer wurde außerdem separat mit einem Host-C++-Test kompiliert. Dies ersetzt **keinen Arduino-Gesamtcompile** und keinen Heap-/BLE-Test auf dem ESP32.
 
-## v0.5.0.1-dev (3.11.2026)
+## v0.6.0.0-dev (3.11.2026)
 
-Die Tests tragen jetzt die Endung `0501`. Der Kopfzeilen-Chip entfällt; der Browser-Test prüft, dass er fehlt, und die Tafelverwaltung über die Einstellungen (`#rbSignNow`, `#rbSignSub`).
+Die Tests tragen jetzt die Endung `0600` (aus `0500`/`0501` umbenannt). Ältere Abschnitte unten nennen die Dateien unter ihrem damaligen Namen. Aufruf aus dem Repo-Wurzelverzeichnis:
+
+- `python tests/test_build_0600.py`: Version, gzip/ETag, JavaScript-Syntax, Firmware-Invarianten (u. a. Tafeladresse nicht im Code, Animation: Route, Konstanten 79/80 Frames, kein Tempo- und Moduswechsel vor den Daten im Animationsauftrag, strikte Antwortauswertung nur dort) und Dokumentationsversion (README-Banner unter der Titelzeile, Versionsangaben in README, CHANGELOG, VERSIONSGESCHICHTE, Installationspfad).
+- `python tests/test_browser_0600.py`: Browser-Test mit simuliertem ESP (Playwright/Chromium), u. a. neuer Abschnitt „Animationstest“ in den Einstellungen (vier Tasten, gesendete Parameter, Zeit je Frame, Modus danach, Fehlermeldung), Tafelverwaltung, Zoom-Sperre.
+- `python tests/test_render_parity_0600.py`: Firmware-Seitendarstellung gegen die Browser-Vorschau.
+- `python tests/host_sign_0600.py`, `host_scan_0600.py`, `host_program_order_0600.py`: Logik von Tafelverwaltung, Vor-Scan und Programm-Reihenfolge mit dem echten Sketch-Code am Rechner (g++, Attrappen in `tests/host/`).
+- **Neu:** `python tests/host_anim_0600.py`: erzeugt Nutzdaten und Chunks der Animation (`0x04`) mit dem echten Sketch-Code (Marken im Sketch, Attrappe `tests/host/anim_stub_0600.h`, Hauptprogramm `anim_main_0600.cpp`) und vergleicht sie mit einer unabhängigen Python-Rechnung (Kopf, Ebenenreihenfolge, Spaltenbytes, Chunk-Kopf, XOR, Rahmen mit Escape, Größen für 7/16/79/80 Frames); prüft den Antwort-Parser (Status 0–6, falsche Länge/Rahmen). Mit `OPENSIGN_SRC=<Pfad zu schulzad/coolled-sign-controller/src>` wird zusätzlich gegen OpenSigns Kodierer und echte aufgezeichnete Antworten abgeglichen; ohne diese Variable entfällt dieser Teil (Hinweis in der Ausgabe). `tests/host/build.py` setzt die Hilfsprogramme aus den Sketch-Marken zusammen.
+
+Weiterhin gilt: kein Arduino-Compile, keine Hardware. Der Test belegt nicht, dass die Tafel `0x04` annimmt.
 
 ## v0.5.0.0-dev (3.11.2026)
 

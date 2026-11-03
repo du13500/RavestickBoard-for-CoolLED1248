@@ -1,4 +1,4 @@
-# Third-party notices — RavestickBoard v0.4.2.4-dev
+# Third-party notices — RavestickBoard v0.6.0.0-dev
 
 ## Lucide Icons
 
@@ -66,3 +66,16 @@ icon contributions. They do not relicense the original RavestickBoard source,
 CoolLEDX original assets, or third-party content whose rights belong to
 other parties. RavestickBoard's root `LICENSE` contains the project's MIT license for original repository-authored code and documentation.
 Third-party rights are not replaced by the project's MIT license.
+
+## OpenSign (protocol reference, no source code included)
+
+Project: https://github.com/schulzad/coolled-sign-controller — MIT License,
+Copyright (c) 2026 Adam Schulz.
+
+RavestickBoard v0.6.0.0 implements the CoolLEDX animation command (opcode 0x04)
+and the evaluation of the sign's packet replies on the basis of the protocol
+facts documented by the OpenSign project (data layout, packet acknowledgement,
+data size limit). The RavestickBoard code is written independently; no OpenSign
+source code is copied or included. If source code from OpenSign is incorporated
+in a later version, its MIT license text and copyright notice will be
+reproduced here.
