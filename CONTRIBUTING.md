@@ -4,7 +4,7 @@ Danke, dass du RavestickBoard verbessern möchtest. Wir entwickeln den Offline-W
 
 ## Bevor du etwas änderst
 
-Lies die aktuelle [README](README.md), [Roadmap](docs/ROADMAP.md), [Themenspeicher](docs/THEMENSPEICHER.md) und den [Testplan](docs/TESTPLAN_v0.4.2.4.md). Verwendete Hardware: ESP32-C3 Super Mini + CoolLEDX 64×16. Bitte keine Herstellerkompatibilität behaupten, die wir noch nicht getestet haben.
+Lies die aktuelle [README](README.md), [Roadmap](docs/ROADMAP.md), [Themenspeicher](docs/THEMENSPEICHER.md) und den [Testplan](docs/archive/TESTPLAN_v0.4.2.4.md). Verwendete Hardware: ESP32-C3 Super Mini + CoolLEDX 64×16. Bitte keine Herstellerkompatibilität behaupten, die wir noch nicht getestet haben.
 
 Ein Fehlerbericht ist besonders hilfreich mit Firmwareversion, Browser/Endgerät, ESP32-Boardpaket, konkreten Schritten, erwartetem/tatsächlichem Verhalten und – wenn sinnvoll – dem exportierten Diagnose-/RAMTRACE-Log. **Keine Passwörter, privaten BLE-Adressen oder persönlichen Daten veröffentlichen.**
 

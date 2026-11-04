@@ -1,6 +1,12 @@
 # RavestickBoard · Diagnose und Fehlerprotokoll
 
-**Fortgeschrieben 3.11.2026 für v0.6.1.2-dev (neuester Abschnitt oben). Die älteren Abschnitte beschreiben den Stand ihrer Version.**
+**Fortgeschrieben 4.11.2026 für v0.6.1.3-dev (neuester Abschnitt oben). Die älteren Abschnitte beschreiben den Stand ihrer Version.**
+
+## Diagnose-Ergänzung v0.6.1.3 – Prüfsumme, Lesefehler, Stapel (4.11.2026)
+
+Neue Ereignisse (Kategorie `ANIM`; Fehler sind markiert): „Upload verworfen: Pruefsumme stimmt nicht“ (die Weboberfläche zeigt „Pruefsumme stimmt nicht …“, HTTP 422), „Upload verworfen: Datei beim Pruefen nicht lesbar“, „Senden abgebrochen: Pruefsumme der Animationsdatei stimmt nicht“ (beschädigte Datei, der Auftrag startet nicht), „Lesefehler bei der Vorabpruefung, Auftrag abgebrochen“ und die Statusmeldung „Animation: Lesefehler beim Senden (Paket n von m). Uebertragung abgebrochen.“, „Alte Animation nach unterbrochenem Ersetzen wiederhergestellt“ (beim Start, wenn nach einem Stromausfall nur `…rba.bak` da war), „Ersetzen fehlgeschlagen und die alte Animation liegt noch als .bak da (wird beim Start zurueckgeholt)“. Das Senden einer gespeicherten Animation heißt im Protokoll jetzt „Animation startet“; der Animationstest bleibt „Animationstest startet“.
+
+**Stapel:** Die Textdiagnose enthält die Zeile „Kleinster freier Stapel (Loop-Task): … Bytes“, das JSON das Feld `minStack`, `ram.txt` „Stapel min=…“. Es ist der kleinste freie Stapel seit dem Start, gemessen am Arduino-Loop-Task, in dem die Webhandler laufen. Werte nahe 0 bedeuten Überlaufgefahr; ein Wert unter etwa 1000 Byte wäre ein Grund, Puffer von `onAnimPut` und Verwandten ins statische RAM zu legen. Zum Messen einmal alle Animationsaktionen durchspielen (speichern, bearbeiten, senden, löschen, Liste laden) und danach exportieren. Der Compiler gibt beim Bauen „Globale Variablen verwenden … Bytes“ aus; bitte mit notieren (Befund M4).
 
 ## Diagnose-Ergänzung v0.6.1.0 – Animationen (3.11.2026)
 
@@ -24,7 +30,7 @@ Der seriellen HTTP-Logzeile für Lauftextaufträge werden **dekodierte Zeichen, 
 
 ## Neuer Diagnosebefund: Bildtransfer ≠ Bildanzeige (25.10.2026)
 
-Beim v0.3.2-Korrektur-2-Praxistest wurden teilweise alle BLE-Pakete quittiert und `JOB OK` gemeldet, obwohl die CoolLEDX-Tafel keine neue Grafik anzeigte (etwa 320 gemischte Symbole, 31.853 B / 249 Pakete). Deshalb den Status **„vollständig gesendet“** nicht mit **„Tafel zeigt neue Grafik“** gleichsetzen. Ein wirkliches Display-Abschluss-ACK ist bislang nicht nachgewiesen. Gleichzeitig können sehr lange Symbolfolgen auf dem Controller bereits an einer fehlgeschlagenen zusammenhängenden RAM-Allokation scheitern. Für vollständige Messwerte und Grenzideen siehe [`ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md).
+Beim v0.3.2-Korrektur-2-Praxistest wurden teilweise alle BLE-Pakete quittiert und `JOB OK` gemeldet, obwohl die CoolLEDX-Tafel keine neue Grafik anzeigte (etwa 320 gemischte Symbole, 31.853 B / 249 Pakete). Deshalb den Status **„vollständig gesendet“** nicht mit **„Tafel zeigt neue Grafik“** gleichsetzen. Ein wirkliches Display-Abschluss-ACK ist bislang nicht nachgewiesen. Gleichzeitig können sehr lange Symbolfolgen auf dem Controller bereits an einer fehlgeschlagenen zusammenhängenden RAM-Allokation scheitern. Für vollständige Messwerte und Grenzideen siehe [`archive/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](archive/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md).
 
 ## Aufrufen und Exportieren
 

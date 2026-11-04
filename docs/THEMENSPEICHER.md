@@ -96,7 +96,7 @@ Heuristik im getesteten Bereich: `T[s] ≈ Seiten × 0,0795 × (100 - Tempo)`, n
 
 ---
 
-# Stand v0.4.2-dev: Neue, noch ungetestete Firmwarefunktionen siehe [ROADMAP](ROADMAP.md) und [ENTWICKLUNGSSTAND](ENTWICKLUNGSSTAND_v0.4.2.md). Die unten stehenden älteren Einträge sind Planungshistorie, nicht der aktuelle Status.
+# Stand v0.4.2-dev: Neue, noch ungetestete Firmwarefunktionen siehe [ROADMAP](ROADMAP.md) und [ENTWICKLUNGSSTAND](archive/ENTWICKLUNGSSTAND_v0.4.2.md). Die unten stehenden älteren Einträge sind Planungshistorie, nicht der aktuelle Status.
 
 ## Ergänzung v0.3.5
 
@@ -328,21 +328,47 @@ Nach nachgewiesener Umsetzung einer Funktion: den passenden Eintrag (etwa `PRE-0
 - [x] **ANM-03 · P1** *(in 0.6.1.0 gebaut, Compile und Hardwaretest offen)* GIF-Import, Farbkonvertierung auf sieben LED-Farben, browserseitige Vorberechnung und Animationsvorschau; geplant für 0.6.1.0 (siehe `ROADMAP.md`, Abschnitt „Animationen – Plan“).
 - [ ] **ANM-04 · P2** Native Animation `0x04`, Effektmodus `0x06` und Controller-gesteuerte Programme voneinander trennen. Entschieden am 3.11.2026: Animationen sind ein eigener Bereich.
 - [x] **ANM-05 · P1** *(in 0.6.1.0 gebaut, Hardwaretest offen)* Import: GIF (im Browser zerlegen, auf 64×16 zuschneiden/skalieren, auf sieben LED-Farben reduzieren), Bildstreifen, Text-Raster mit Buchstaben `.RGBCMYW` (Excel-Weg), Anpassungswerkzeuge (Frames wählen/entfernen, Tempo, Vorschau). Ablage als Dateien auf LittleFS, je höchstens 30 KB. Geplant 0.6.1.0.
-- [ ] **ANM-06 · P1** Zeichen-Editor für Animationen: Stift (Zeigerereignisse für iPad mit Apple Pencil), Frames, Füllen, Linie, Rechteck, Pipette, Rückgängig, eigenes Zoomen/Verschieben, Bildstreifen. Muss auch vollständiges Erstellen tragen. Geplant 0.6.2.0.
+- [ ] **ANM-06 · P1** Zeichen-Editor für Animationen: Stift (Zeigerereignisse für iPad mit Apple Pencil), Frames, Füllen, Linie, Rechteck, Pipette, Rückgängig, eigenes Zoomen/Verschieben, Bildstreifen. Muss auch vollständiges Erstellen tragen. Geplant 0.6.2.0. *Anforderungen gesammelt am 4.11.2026 (noch nicht begonnen):* Kern 0.6.2.0: Bildleiste (hinzufügen, kopieren, löschen; neues Frame = Kopie des vorigen), Stift, Radierer, Füllen, Leeren, Auswahl mit Verschieben und Drehen, Zoom, Rückgängig/Wiederherstellen, Finger- und Pencil-Eingabe über Zeigerereignisse, vorhandene Animation öffnen. Komfort 0.6.3.0 (ANM-07): Auswahl kopieren/einfügen, Spiegeln, Linie/Rechteck/Kreis, Pipette, Zwiebelschicht, Textwerkzeug mit eigenen Schriften und Symbolen. Lucide-Symbole, eigene Linie, übliche Farbreihenfolge. Speichern-Dialog fragt das Ziel (Animation; Block nicht möglich) und die Zeit je Frame; ein Einzelbild = zwei gleiche Frames (ungetestet). Als eigenes Modul nach dem Muster `RbAnim` (Review N11).
 - [ ] **ANM-07 · P2** Komfort: Auswahl verschieben, Spiegeln, Zwiebelschicht, lokale Ablage im Browser. Geplant 0.6.3.0.
-- [ ] **ANM-09 · P3** Flackertrick (aus Adams Mail): ein Bild mit mehr wahrgenommenen Farben durch sehr kurze Frames, bei ihm etwa 8 ms, damit die Frames ohne sichtbares Flimmern verschmelzen; er erzeugt sie bisher in Python. Im ESP wäre es mit vorberechneten Frames denkbar. Erst nach dem Hardwaretest (B3 enthält einen 8-ms-Lauf) und nur als Idee.
+- [ ] **ANM-09 · P3** Flackertrick (aus Adams Mail): ein Bild mit mehr wahrgenommenen Farben durch sehr kurze Frames, bei ihm etwa 8 ms, damit die Frames ohne sichtbares Flimmern verschmelzen; er erzeugt sie bisher in Python. Im ESP wäre es mit vorberechneten Frames denkbar. Erst nach dem Hardwaretest (B3 enthält einen 8-ms-Lauf) und nur als Idee. *4.11.2026:* Der Hardwaretest von 0.6.1.2 zeigt GIFs mit mittelmäßiger Bildqualität (sieben Farben, 64 × 16); der Trick würde genau dort ansetzen, bleibt aber Idee.
 - [ ] **ANM-10 · P2** Upload beschleunigen: Adam braucht für 79 Frames rund 55 s, vor allem wegen des Wartens auf die Bestätigung jedes Chunks. Messen (Test C1), dann die feste Pause pro Paket durch ein Warten auf die Antwort ersetzen. Nach Adam gibt es außerdem einen Visualisierungs-/Musik-Opcode, der schneller hochladen soll (nur Balken, vermutlich uninteressant).
-- [ ] **ANM-11 · P3** Seitenprogramm als Animation (mehrere Seiten einmal hochladen, Standzeiten durch wiederholte Frames, z. B. 2 s und 3 s mit 1000 ms Frame und 2× bzw. 3× wiederholt): vermeidet die Prozentanzeige beim Wechsel. Berührt die Entscheidung „Animation als eigener Bereich“; erst nach dem Test und der Import-Stufe entscheiden.
+- [ ] **ANM-11 · P3** Seitenprogramm als Animation (mehrere Seiten einmal hochladen, Standzeiten durch wiederholte Frames, z. B. 2 s und 3 s mit 1000 ms Frame und 2× bzw. 3× wiederholt): vermeidet die Prozentanzeige beim Wechsel. Berührt die Entscheidung „Animation als eigener Bereich“; erst nach dem Test und der Import-Stufe entscheiden. *4.11.2026:* Wiederholte Frames für Standzeiten sind auch der Weg für Einzelbilder im Zeichner (zwei gleiche Frames) und die Grundlage für ANM-20.
 - [ ] **ANM-12 · P3** *Zukunftsmusik, nicht scrappen:* Die Testbilder aus dem Animationstest (Nummern, Vollbildfarbe mit Nummer, Balken) sind für Zähler und eine Uhrzeit-Anzeige denkbar (Nutzer, 3.11.2026: „könnte gegebenenfalls für die Counter nutzbar sein. Oder eine Uhrzeit-Funktion“). Deshalb bleiben `rb60NumberPixel` und die Ziffernreihen sowie der Animationstest erhalten. Voraussetzung wäre eine Zeitquelle (siehe unten „Zeitquelle“) und, weil die Tafel nur Frames abspielt, eine Folge vorberechneter Bilder.
-- [x] **ANM-13 · P2** *(in 0.6.1.2 gebaut, Hardwaretest offen)* Animationen als Kurzwahl: Quelle „Animationen“ im Kurzwahl-Dialog, Kachel sendet die gespeicherte Animation, bei gelöschter Animation „Animation fehlt“ (sendet nichts). Offen bleibt, ob Animationen ins Backup sollen (derzeit nicht).
+- [x] **ANM-13 · P2** *(in 0.6.1.2 gebaut, Hardwaretest offen)* Animationen als Kurzwahl: Quelle „Animationen“ im Kurzwahl-Dialog, Kachel sendet die gespeicherte Animation, bei beschädigter Animation „Animation fehlt“ (sendet nichts); *seit 0.6.1.3* leert das Löschen einer Animation die zugehörigen Kurzwahlen. Offen bleibt, ob Animationen ins Backup sollen (derzeit nicht).
 - [x] **ANM-15 · P2** *(in 0.6.1.2 gebaut, Hardwaretest offen)* Ausschnitt-Rahmen 4 : 1 auf dem Quellbild statt Schiebereglern (Wunsch 3.11.2026). Möglich später: Rahmen auch drehbar? Mehrere Rahmen je Bild (Kamerafahrt über ein großes Bild als Animation)? Bisher nicht gewünscht.
 - [x] **ANM-18 · P1** *(in 0.6.1.2 gebaut, Hardwaretest offen)* Bestehende Animation bearbeiten: Zeit je Bild, Bildbereich, Schrittweite, Hin und Zurück, Name; Speichern überschreibt unter derselben Nummer, Kopie möglich. Nicht möglich ohne das Original: Ausschnitt, Farbumsetzung. Einzelne Bilder löschen/umsortieren und malen folgen mit dem Zeichen-Editor (ANM-06, 0.6.2.0).
 - [x] **ANM-16 · P2** *(in 0.6.1.2 gebaut, Hardwaretest offen)* „Nur senden“: Animation ohne Speichern an die Tafel (temporäre Datei, danach gelöscht).
-- [x] **ANM-17 · P3** *(in 0.6.1.2)* Symbol `image-play` für Animationen in Menü und Kurzwahl-Quellenwahl (Wunsch 3.11.2026); Duplizieren in der Animationsliste entfällt (Wunsch 3.11.2026), die Firmware-Route `/api/anim/duplicate` ist noch da und könnte entfallen.
+- [x] **ANM-17 · P3** *(in 0.6.1.2)* Symbol `image-play` für Animationen in Menü und Kurzwahl-Quellenwahl (Wunsch 3.11.2026); Duplizieren in der Animationsliste entfällt (Wunsch 3.11.2026), die Firmware-Route `/api/anim/duplicate` ist seit 0.6.1.3 entfernt.
+- [ ] **ANM-19 · P3** *Vorschlag, nicht entschieden (4.11.2026):* „Bildblock“: ein im Zeichner gemaltes Einzelbild als Blockseite speichern (Block ist als Ziel der Animation nicht möglich, ein Bild als Seite wäre ein eigener Weg). Erst nach 0.6.2.0 überlegen.
+- [ ] **ANM-20 · P2** *Vorschlag (4.11.2026):* „Zeit je Frame“ skaliert automatisch mit, wenn Schrittweite oder „Auf 79 verteilen“ Bilder auslässt, damit die Abspielgeschwindigkeit ungefähr gleich bleibt (Nutzer kann übersteuern).
+- [ ] **ANM-21 · P3** *Vorschlag (4.11.2026):* Hinweise in der Importansicht, z. B. „GIF wiederholt sich nach 60 Bildern – nur einen Durchlauf nehmen?“, wenn sich der Bildinhalt nach n Bildern wiederholt.
 - [ ] **ANM-14 · P2** Helligkeit bei Animationen: Wirkt `0x08` nach einer Animation? Ungeprüft (der Test 0.6.0.2 hat das nicht beantwortet); Tempo-Regler ist bei Animationen gesperrt (0.6.1.0).
 - [ ] **ANM-08 · P2** Offene Fragen aus dem Hardwaretest (Stand 0.6.0.2 beantwortet: Persistenz nach Ausschalten = ja; Text ersetzt Animation sauber = ja; `0x06` danach = ohne Wirkung; 1–8 ms = flüssig): bleibt die Animation nach dem Ausschalten, Zusammenspiel mit `0x06` und mit einem späteren Text-Upload, Übertragungsdauer für 30 KB, Flashbedarf je Datei, Platz der LittleFS-Partition.
 - [ ] **SYM-WIDE · P2** Frei gestaltbare Symbole mit 16 Pixel Höhe und variabler Breite (z. B. 40×16 Flugzeug) im Renderer und in der Vorschau ermöglichen; 16×16-Originalsymbole bleiben erhalten.
 - [ ] **LIC-04 · P1** Bei tatsächlicher Übernahme fremder MIT- oder Apache-lizenzierter Bestandteile Lizenztexte und Urheberhinweise beibehalten; nur technische Protokollrecherche erfordert keine Codeübernahme.
+
+## Code-Review 4.11.2026 – Stand der Befunde (v0.6.1.3-dev)
+
+Bericht: Code-Review von 0.6.1.2 (V1, M1–M5, N1–N14). Stand nach dem Aufräum-Build 0.6.1.3:
+
+| Befund | Inhalt | Stand |
+|---|---|---|
+| V1 | `RB_TEST_HANG` auf 1 | bleibt in Entwicklungsbuilds; **Release-Checkliste:** auf 0 setzen, `test_build` prüft den ausgelieferten Stand |
+| M1 | Lesefehler, keine Prüfsumme | erledigt in 0.6.1.3 (CRC-32, Abbruch) |
+| M2 | ID-Wiederverwendung und Kurzwahl | erledigt in 0.6.1.3 (Kurzwahlen beim Löschen leeren statt ID-Zähler, ADR-2026-11-04-A) |
+| M3 | Ersetzen kann Original verlieren | erledigt in 0.6.1.3 (`.bak`); echtes LittleFS-`rename` im Hardwaretest beobachten |
+| M4 | statischer RAM ≈ 37 KB | nur Messung: Compilerzeile „Globale Variablen“ festhalten; kein Umbau |
+| M5 | Stack unbekannt | Stapelwert in der Diagnose; nach einem Durchgang notieren |
+| N1, N5, N6, N10 | `up.tmp`, Längenprüfung, `duplicate`, Beschriftungen | erledigt in 0.6.1.3 |
+| N2 | MTU-Vorprüfung | bewusst nicht (ADR-2026-11-04-C) |
+| N3 | Helligkeit bei Animationen | im Hardwaretest beobachten (siehe ANM-14) |
+| N4 | `/api/library` bei vielen Einträgen | offen, bei 100+ Einträgen messen |
+| N7 | GIF-Decoder: Teilbild und LZW-Ende | offen |
+| N8 | Cache-Stempel der Vorschau | offen (CRC in den Stempel aufnehmen) |
+| N9 | `fetch` ohne Zeitlimit | offen (`AbortController`, 70 s) |
+| N11 | Skript als ein Block | Zeichen-Editor wird ein eigenes Modul (0.6.2.0) |
+| N12, N13 | Altlasten | erledigt: `tests/legacy/`, `docs/archive/` |
+| N14 | WLAN-Passwort im Quelltext | bleibt SYS-13 |
 
 ## 23.10.2026 · GitHub, Dokumentationsdesign und fortlaufender Testprozess
 

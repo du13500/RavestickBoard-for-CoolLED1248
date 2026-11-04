@@ -1,14 +1,20 @@
-## Technischer Nachtrag v0.6.1.0/0.6.1.1/0.6.1.2: Animationen als Dateien (3.11.2026)
+## Technischer Nachtrag v0.6.1.0/0.6.1.1/0.6.1.2/0.6.1.3: Animationen als Dateien (3.11.2026)
 
 **Stand:** im Quellcode vorhanden und am Rechner geprüft (Dateispeicher mit dem echten Sketch-Code gegen ein Dateisystem im Speicher; Nutzlast gegen die unabhängige Referenz; Weboberfläche in Chromium). Arduino-Compile, echtes LittleFS, Webserver und BLE-Senden aus der Datei sind offen.
 
 **Aufteilung:** Die Weboberfläche zerlegt und wandelt alles um (GIF-Decoder, Bildstreifen, Text-Raster, Farbreduktion auf die sieben LED-Farben, Planung der Bildfolge) und baut die **Nutzlast des Befehls `0x04`** (Format siehe Nachtrag 0.6.0.0). Die Firmware speichert und sendet nur. Der Browser lädt Nutzlast, Vorschaubild und Name hoch; es gibt keinen Gesamtpuffer im ESP32.
 
+**Neu in 0.6.1.3 (Aufräum-Build):**
+- *Prüfsumme:* Standard-CRC-32 (zlib, Polynom `0xEDB88320`, Prüfwert für „123456789“ = `0xCBF43926`). Web: Tabellenverfahren; Firmware: bitweise ohne Tabelle (`rb61Crc32Update`), 256-Byte-Puffer, `rb61FileCrc` ruft `rbPhase("anim_crc")`, damit der Wächter bei großen Dateien nicht anschlägt. Geprüft wird (1) am Ende des Uploads (Datei neu lesen, fängt Übertragungs- und Schreibfehler), (2) in `rb61PrepareAnimFile` vor dem Senden. Dateien ohne Flag (0.6.1.0 bis 0.6.1.2) werden nicht geprüft.
+- *Lesefehler:* `rb60CopyAnimSlice` setzt bei fehlgeschlagenem `seek` oder `read` (oder zu wenigen Bytes) `rb61ReadFailed`; `rb61PrepareAnimFile` setzt es zurück; `runJob` bricht in der MTU-Vorprüfung (nach der Schleife, vor `rawBrightness`) und in der Sendeschleife (nach `makeChunk`, vor `framePacket`) ab. Die MTU-Vorprüfung selbst bleibt (Befund N2 bewusst nicht umgesetzt: sie schützt vor zu langen Paketen).
+- *Stapel:* `rbStackFreeMin()` = `uxTaskGetStackHighWaterMark(nullptr)` (auf ESP-IDF in Bytes), Diagnose-Text, JSON `minStack`, `ram.txt`.
+- *Entfernt:* Route `/api/anim/duplicate`.
+
 **Datei `/rb-anim/a<ID>.rba`** (ID 1 bis 9999, Dezimalzahl im Namen):
 
 | Bereich | Größe | Inhalt |
 |---|---|---|
-| Kopf `Rb61AnimHeader` | 448 Byte (`static_assert`) | Kennung `RBA1`, Bildzahl (u16, 2–79), Zeit je Bild (u16, 1–2000 ms), Länge der Nutzlast (u32 = 27 + Bilder × 384), Flags (0), Namenslänge (1–40), Name (UTF-8, mit 0 abgeschlossen), Füllbytes bis 64, Vorschaubild 384 Byte (erstes Bild, Ebenen R, G, B zu je 128 Byte) |
+| Kopf `Rb61AnimHeader` | 448 Byte (`static_assert`) | Kennung `RBA1`, Bildzahl (u16, 2–79), Zeit je Bild (u16, 1–2000 ms), Länge der Nutzlast (u32 = 27 + Bilder × 384), Flags (Bit 0 = Prüfsumme vorhanden, seit 0.6.1.3; andere Bits machen den Kopf ungültig), Namenslänge (1–40), Name (UTF-8, mit 0 abgeschlossen), Prüfsumme (CRC-32 der Nutzlast, 4 Byte little endian, Bytes 55–58, nur mit Flag), Füllbytes bis 64, Vorschaubild 384 Byte (erstes Bild, Ebenen R, G, B zu je 128 Byte) |
 | Nutzlast | 27 + Bilder × 384 | genau die Bytes, die an die Tafel gehen |
 
 Eine Datei gilt nur, wenn Kennung, Wertebereiche, Länge der Nutzlast und Dateigröße (448 + Nutzlast) zusammenpassen. Sonst erscheint sie in der Liste mit `broken` (zählt zu den 40 und lässt sich löschen, nicht senden).
@@ -19,10 +25,10 @@ Eine Datei gilt nur, wenn Kennung, Wertebereiche, Länge der Nutzlast und Dateig
 |---|---|
 | `GET /api/anim/list` | `{ok, ready, max (79 Bilder), limit (40), free, total, items:[{id, name, frames, ms, broken, bytes, thumb}]}` (Bytes des Dateisystems; Vorschaubild als Base64) |
 | `GET /api/anim/get?id=` | `{ok, id, name, frames, ms, data}`; die Nutzlast kommt gestreamt in einer Antwort, intern in Stücken zu 600 Byte (Base64-URL ohne Füllzeichen) |
-| `POST /api/anim/put` | `off`, `data` (Base64-URL ohne Füllzeichen, höchstens 1200 Byte roh); erstes Stück (`off=0`) mit `frames`, `ms`, `total`, `name`, `thumb`; `abort=1` verwirft. Schreibt `up.tmp`, beim letzten Stück Prüfung und `rename` auf die nächste freie ID |
+| `POST /api/anim/put` | `off`, `data` (Base64-URL ohne Füllzeichen, höchstens 1200 Byte roh); erstes Stück (`off=0`) mit `frames`, `ms`, `total`, `name`, `thumb`, `crc` (seit 0.6.1.3, nur Ziffern, höchstens `0xFFFFFFFF`, sonst 400; bei Abweichung am Ende 422 und Upload verworfen); `abort=1` verwirft. Schreibt `up.tmp`, beim letzten Stück Prüfung und `rename` auf die nächste freie ID |
 | `POST /api/anim/send` | `id`; startet den Auftrag `ANIM` mit `rb61PendingAnimId`; Antwort 202 |
-| `POST /api/anim/rename`, `/duplicate`, `/delete` | `id` (und `name`); Duplizieren schreibt über `up.tmp` und `rename` (nächste freie ID); `/duplicate` wird seit 0.6.1.2 von der Oberfläche nicht mehr benutzt |
-| `POST /api/anim/put` mit `replace=<ID>` (0.6.1.2, Bearbeiten) | wie `put`, aber die Datei `a<ID>.rba` wird beim Abschluss ersetzt (`rename`, Fallback Entfernen und erneutes `rename`); die ID muss vorhanden und unbeschädigt sein (sonst 404), nicht mit `temp`; das Limit von 40 gilt nicht; geprüft wird weiterhin freier Platz für die komplette neue Datei plus Reserve |
+| `POST /api/anim/rename`, `/delete` | `id` (und `name`); `/delete` leert vorher Typ-4-Kurzwahlen mit dieser ID (`rb61DetachShortcuts`, 500 und nichts gelöscht, wenn die Kurzwahl-Datei beschädigt ist oder das Schreiben scheitert). `/duplicate` ist seit 0.6.1.3 entfernt |
+| `POST /api/anim/put` mit `replace=<ID>` (0.6.1.2, Bearbeiten) | wie `put`, aber die Datei `a<ID>.rba` wird beim Abschluss ersetzt (`rename`; scheitert es, wird die alte Datei nach `a<ID>.rba.bak` verschoben, dann `rename`, bei Erfolg `.bak` entfernt, sonst zurückbenannt; `rb61RecoverBackups()` beim Start holt ein übrig gebliebenes `.bak` zurück, wenn das Original fehlt, sonst entfernt es es); die ID muss vorhanden und unbeschädigt sein (sonst 404), nicht mit `temp`; das Limit von 40 gilt nicht; geprüft wird weiterhin freier Platz für die komplette neue Datei plus Reserve |
 | `POST /api/anim/put` mit `temp=1` (0.6.1.2) | wie `put`, aber das Ziel ist `/rb-anim/send.rba` (ID 60000): kein Listeneintrag, kein 40er-Limit; nur `POST /api/anim/send` mit `temp=1` sendet sie; `rb61DropTemp()` löscht sie nach dem Auftrag und vor jedem neuen Upload, `up.tmp` wird beim Start entfernt |
 
 Urlencodierte POST-Körper mit Base64-URL (`-` und `_`, ohne Füllzeichen), weil der Arduino-`WebServer` einfach, aber nicht für große Binärkörper gebaut ist; ein Stück ist etwa 1,6 KB. Der Webserver ist einfädig; während eines BLE-Auftrags (`rb61Busy`) lehnen die Schreibrouten mit 409 ab.
@@ -127,7 +133,7 @@ Der Arduino-`WebServer` arbeitet Anfragen nacheinander ab. Gemessen mit 0.4.4.1:
 
 **Aktualisiert: 25.10.2026 · Auf Hardware geprüft: v0.3.3; neues Modus-Feature v0.3.4 noch ungetestet.**
 
-**Mess- und Architektur-Nachtrag:** In v0.3.3 erfolgreich: 650 Zeichen / 30.689 B und 301 gemischte Zeichen / 30.695 B. `107 + 6 × max(64, Pixelspalten)` ist die aktuelle Payloadformel, mit bewusst **vorläufigem 30-KiB-Softwarebudget**. Der frühere 600-Zeichen-Grenzwert ist seit v0.3.3 entfernt. Die tatsächliche Grenzgröße des LED-Boards bleibt unbekannt; BLE-Paketquittung beweist keine sichtbare Grafik. Siehe [`ENTWICKLUNGSSTAND_v0.3.4_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.4_2026-10-25.md).
+**Mess- und Architektur-Nachtrag:** In v0.3.3 erfolgreich: 650 Zeichen / 30.689 B und 301 gemischte Zeichen / 30.695 B. `107 + 6 × max(64, Pixelspalten)` ist die aktuelle Payloadformel, mit bewusst **vorläufigem 30-KiB-Softwarebudget**. Der frühere 600-Zeichen-Grenzwert ist seit v0.3.3 entfernt. Die tatsächliche Grenzgröße des LED-Boards bleibt unbekannt; BLE-Paketquittung beweist keine sichtbare Grafik. Siehe [`archive/ENTWICKLUNGSSTAND_v0.3.4_2026-10-25.md`](archive/ENTWICKLUNGSSTAND_v0.3.4_2026-10-25.md).
 
 Dieses Dokument unterscheidet **durch Nutzer am konkreten Board bestätigt**, **im Quellcode vorhanden** und **für spätere Versionen geplant**. Die Firmware des LED-Boards wird nicht verändert. Historische v0.1.x-Einschränkungen sind weiter unten separat aufgeführt.
 

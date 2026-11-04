@@ -1,4 +1,4 @@
-> **Neuester Testplan:** [`TESTPLAN_v0.6.1.2.md`](TESTPLAN_v0.6.1.2.md) (Animationen: Import, Ausschnitt-Rahmen, Senden, Kurzwahl, 3.11.2026). Die folgenden Abschnitte sind die Testpläne und Abnahmeprotokolle früherer Versionen und gelten für deren Stand; Hardwareergebnisse stehen jeweils in den zugehörigen Entwicklungsständen und im Changelog.
+> **Neuester Testplan:** [`TESTPLAN_v0.6.1.3.md`](TESTPLAN_v0.6.1.3.md) (Aufräum-Build: Prüfsumme, Kurzwahl-Bereinigung, Stapelwert, Regression der Animationen, 4.11.2026). Die folgenden Abschnitte sind die Testpläne und Abnahmeprotokolle früherer Versionen und gelten für deren Stand; Hardwareergebnisse stehen jeweils in den zugehörigen Entwicklungsständen und im Changelog.
 
 ## Ergänzung v0.3.5
 
@@ -80,7 +80,7 @@ Nach Prüfung: Neustart/WLAN, gespeicherte Blockseiten, normale Textübertragung
 
 ## v0.3.3 – Kompakter Hardwaretest (25.10.2026)
 
-**Historischer Testplan vor der inzwischen erfolgreichen Hardwareabnahme von v0.3.3.** Der ausführliche Testbogen steht in [`ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md). Schwerpunkte: Start und gespeicherte Blockseiten; 600 und über 600 normale Zeichen; Schriftwechsel und spontane Live-Byteberechnung; 300 × ⚠️ (~30.701 B) vs. 301 × ⚠️ (~30.803 B, blockiert); getrennte Farben im Mini-Zweizeilen-Lauftext und synchrones Scrollen; erneuter WLAN/RAM-Stabilitätstest. Bitte bei Übertragungen `JOB OK` und **sichtbare Darstellung** unterscheiden. **NVS nicht löschen.**
+**Historischer Testplan vor der inzwischen erfolgreichen Hardwareabnahme von v0.3.3.** Der ausführliche Testbogen steht in [`archive/ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md`](archive/ENTWICKLUNGSSTAND_v0.3.3_2026-10-25.md). Schwerpunkte: Start und gespeicherte Blockseiten; 600 und über 600 normale Zeichen; Schriftwechsel und spontane Live-Byteberechnung; 300 × ⚠️ (~30.701 B) vs. 301 × ⚠️ (~30.803 B, blockiert); getrennte Farben im Mini-Zweizeilen-Lauftext und synchrones Scrollen; erneuter WLAN/RAM-Stabilitätstest. Bitte bei Übertragungen `JOB OK` und **sichtbare Darstellung** unterscheiden. **NVS nicht löschen.**
 
 ## Abnahme-Nachtrag 25.10.2026 – reale Hardwaretests v0.3.2 Korrektur 2
 
@@ -93,7 +93,7 @@ Nach Prüfung: Neustart/WLAN, gespeicherte Blockseiten, normale Textübertragung
 | 302 × `⚠️` | 30.905 B | noch offen |
 | Lange reine Texte >600 nach kontrolliertem Firmwareumbau | abhängig von Schrift/Breite | nicht mit v0.3.2 regulär möglich |
 
-**Gesamte Messreihe:** [`ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md). Die folgenden ursprünglichen Testtabellen bleiben als **historische, vor dem Test erstellte Checklisten** dokumentiert; deren leere Ergebnisfelder sind **kein aktueller Negativstatus**.
+**Gesamte Messreihe:** [`archive/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md`](archive/ENTWICKLUNGSSTAND_v0.3.2_2026-10-25.md). Die folgenden ursprünglichen Testtabellen bleiben als **historische, vor dem Test erstellte Checklisten** dokumentiert; deren leere Ergebnisfelder sind **kein aktueller Negativstatus**.
 
 ---
 
