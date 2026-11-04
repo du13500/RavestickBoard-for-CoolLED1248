@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport"/>
 <meta content="#11141c" name="theme-color"/>
-<title>RavestickBoard · v0.6.1.1-dev</title>
+<title>RavestickBoard · v0.6.1.2-dev</title>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/><link rel="icon" type="image/png" href="/favicon.ico"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="RavestickBoard"/>
@@ -319,7 +319,7 @@ body.home-active #rbDock{flex:0 0 auto;margin:8px auto 0!important}
 /* ===== v0.4.4.0 ===== */
 :root{--rb-send:#3ddc97;--rb-send-ink:#0d1712}
 /* Senden überall gleich: eigene Farbe, die sonst nirgends vorkommt */
-#sendScroll,#libSend,#v42SendDraftBand,#v42RunProgram,#pageShow,#rbzSend{background:var(--rb-send)!important;color:var(--rb-send-ink)!important}
+#sendScroll,#libSend,#v42SendDraftBand,#v42RunProgram,#pageShow,#rbzSend,#animSend,#animSaveSend,#animSendOnly{background:var(--rb-send)!important;color:var(--rb-send-ink)!important}
 /* Regler unten: etwas größer, etwas mehr Abstand */
 .rb-dock{gap:6px!important;padding:9px 11px 8px!important}
 .rb-dock .pixel-range{min-height:34px!important;gap:8px!important}
@@ -490,6 +490,9 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 .anim-grid .wide{grid-column:1/-1}
 .anim-grid .anim-check{flex-direction:row;align-items:center;gap:8px;font-size:13px}
 .anim-grid .anim-check input{width:20px;height:20px;margin:0}
+.anim-crop-wrap{display:flex;justify-content:center;margin:8px 0}
+#animCrop{display:block;touch-action:none;max-width:100%;border:1px solid #2c3646;border-radius:10px;background:#0b0f16;cursor:grab;-webkit-user-select:none;user-select:none}
+#animCrop.dragging{cursor:grabbing}
 .anim-file{display:flex!important;align-items:center;justify-content:center;min-height:44px;border:1px solid #6b7280;border-radius:9px;background:#283345;cursor:pointer;padding:8px 10px;font-size:14px!important;text-align:center}
 .anim-raster{margin:8px 0}.anim-raster summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-size:14px}
 .anim-raster textarea{width:100%;box-sizing:border-box;font:16px/1.25 ui-monospace,Menlo,Consolas,monospace;white-space:pre;overflow:auto}
@@ -497,7 +500,7 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 #animProg{width:100%;height:10px;margin:8px 0}
 </style></head>
 <body class="home-active" data-rb-view="home"><div id="rbBootScreen" class="rb-initial-loading" role="status" aria-live="polite"><span class="rb-boot-mark" aria-hidden="true"><svg aria-hidden="true" class="rb-lucide" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"></path><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"></path></svg></span><span>RavestickBoard wird geladen …</span></div><main id="appShell">
-<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.6.1.1-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span class="rb-ble" id="rbBle" data-state="idle" data-rb-icon="bluetooth" role="img" aria-label="LED-Tafel: noch kein Verbindungsversuch seit dem Start" title="LED-Tafel: noch kein Verbindungsversuch seit dem Start"></span><span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
+<header class="app-header"><button aria-controls="mainMenu" aria-expanded="false" aria-label="Menü öffnen" class="logo" id="bananaMenu" type="button" data-rb-icon="banana" data-rb-painted="banana"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13c3.5-2 8-2 10 2a5.5 5.5 0 0 1 8 5"/><path d="M5.15 17.89c5.52-1.52 8.65-6.89 7-12C11.55 4 11.5 2 13 2c3.22 0 5 5.5 5 8 0 6.5-4.2 12-10.49 12C5.11 22 2 22 2 20c0-1.5 1.14-1.55 3.15-2.11Z"/></svg></button><div><h1>RavestickBoard <span class="version">v0.6.1.2-dev</span></h1><div class="sub">for CoolLEDX · ESP32-C3 <span class="rb-ble" id="rbBle" data-state="idle" data-rb-icon="bluetooth" role="img" aria-label="LED-Tafel: noch kein Verbindungsversuch seit dem Start" title="LED-Tafel: noch kein Verbindungsversuch seit dem Start"></span><span id="rbConnectionStatus" hidden>WLAN-Verbindung prüfen</span></div></div></header>
 
 
 
@@ -513,7 +516,7 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <button data-nav="editor" type="button" data-rb-icon="pencil-sparkles" data-rb-painted="pencil-sparkles"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3H8"/><path d="m15.007 5.008 3.987 3.986"/><path d="M20 15v4"/><path d="M21.174 6.813a2.82 2.82 0 0 0-3.986-3.987L3.842 16.175a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="M22 17h-4"/><path d="M4 5v4"/><path d="M6 7H2"/><path d="M9 2v2"/></svg><span>Texteditor</span></button>
 <button data-nav="library" type="button" data-rb-icon="library" data-rb-painted="library"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg><span>Bibliothek</span></button>
 <button data-nav="programs" type="button" data-rb-icon="list-video" data-rb-painted="list-video"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 5H3"/><path d="M10 12H3"/><path d="M10 19H3"/><path d="M15 12.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997a1 1 0 0 1-1.517-.86z"/></svg><span>Programme</span></button>
-<button data-nav="animations" type="button" data-rb-icon="film"><span>Animationen</span></button>
+<button data-nav="animations" type="button" data-rb-icon="image-play"><span>Animationen</span></button>
 <button data-nav="ambience" type="button" data-rb-icon="spray-can" data-rb-painted="spray-can"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h.01"/><path d="M7 5h.01"/><path d="M11 7h.01"/><path d="M3 7h.01"/><path d="M7 9h.01"/><path d="M3 11h.01"/><rect width="4" height="4" x="15" y="5"/><path d="m19 9 2 2v10c0 .6-.4 1-1 1h-6c-.6 0-1-.4-1-1V11l2-2"/><path d="m13 14 8-2"/><path d="m13 19 8-2"/></svg><span>Ambiente</span></button>
 <button data-nav="diagnostics" type="button" data-rb-icon="bug" data-rb-painted="bug"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20v-9"/><path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z"/><path d="M14.12 3.88 16 2"/><path d="M21 21a4 4 0 0 0-3.81-4"/><path d="M21 5a4 4 0 0 1-3.55 3.97"/><path d="M22 13h-4"/><path d="M3 21a4 4 0 0 1 3.81-4"/><path d="M3 5a4 4 0 0 0 3.55 3.97"/><path d="M6 13H2"/><path d="m8 2 1.88 1.88"/><path d="M9 7.13V6a3 3 0 1 1 6 0v1.13"/></svg><span>Diagnose</span></button>
 <button data-nav="settings" type="button" data-rb-icon="wrench" data-rb-painted="wrench"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/></svg><span>Einstellungen</span></button>
@@ -550,8 +553,8 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <div aria-label="Animationsaktionen" class="fixed-actions library-actions" role="toolbar">
 <button id="animImport" type="button" data-rb-icon="plus" data-rb-only="1" title="Animation importieren" aria-label="Animation importieren"></button>
 <button id="animSend" type="button" data-rb-icon="plane-takeoff" data-rb-only="1" title="An die Tafel senden" aria-label="An die Tafel senden" disabled></button>
+<button id="animEdit" type="button" data-rb-icon="pencil" data-rb-only="1" title="Bearbeiten (Zeit, Bilder, Name)" aria-label="Animation bearbeiten" disabled></button>
 <button id="animRename" type="button" data-rb-icon="text-cursor-input" data-rb-only="1" title="Umbenennen" aria-label="Umbenennen" disabled></button>
-<button id="animDuplicate" type="button" data-rb-icon="copy" data-rb-only="1" title="Duplizieren" aria-label="Duplizieren" disabled></button>
 <button id="animDelete" type="button" data-rb-icon="trash" data-rb-only="1" title="Löschen" aria-label="Löschen" disabled></button>
 </div>
 <div id="animPreviewWrap" class="hidden"><canvas id="animPreview" class="anim-screen" width="512" height="128" role="img" aria-label="Vorschau der gewählten Animation"></canvas><p class="tiny muted" id="animPreviewInfo" aria-live="polite"></p></div>
@@ -559,8 +562,8 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <p class="hint">Eine gesendete Animation ersetzt den Inhalt der Tafel. Die Tafel speichert sie und spielt sie selbst in Dauerschleife ab, auch nach dem Ausschalten, bis du wieder etwas sendest. Tempo-Regler und Anzeigemodus wirken bei Animationen nicht; die Geschwindigkeit steckt in der Animation (Zeit je Frame). Höchstens 79 Frames; das Senden dauert je nach Länge bis etwa eine Minute.</p>
 </div>
 <div class="panel inner-panel hidden" id="animImportPane">
-<div class="editor-context"><button id="animImpBack" type="button" class="secondary" data-rb-icon="arrow-left" data-rb-only="1" title="Zurück zur Liste" aria-label="Zurück zur Liste"></button><div style="flex:1;min-width:0"><strong>Animation importieren</strong><small id="animImpSub">Quelle wählen</small></div></div>
-<div class="label">Quelle</div>
+<div class="editor-context"><button id="animImpBack" type="button" class="secondary" data-rb-icon="arrow-left" data-rb-only="1" title="Zurück zur Liste" aria-label="Zurück zur Liste"></button><div style="flex:1;min-width:0"><strong id="animImpTitle">Animation importieren</strong><small id="animImpSub">Quelle wählen</small></div></div>
+<div id="animSourcePick"><div class="label">Quelle</div>
 <div class="anim-grid">
 <label class="anim-file" for="animFileGif">GIF-Datei</label><input type="file" id="animFileGif" class="visually-hidden" accept="image/gif,.gif"/>
 <label class="anim-file" for="animFileStrip">Bildstreifen</label><input type="file" id="animFileStrip" class="visually-hidden" accept="image/*"/>
@@ -574,22 +577,23 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <p class="tiny muted">Ein Zeichen je Pixel: <b>.</b> aus, <b>R</b> rot, <b>G</b> grün, <b>B</b> blau, <b>C</b> cyan, <b>M</b> magenta, <b>Y</b> gelb, <b>W</b> weiß. Zellen aus Excel (Tab-getrennt) einfügen oder Zeichen direkt aneinanderschreiben. Mehrere Bilder trennt eine leere Zeile oder eine Zeile, die mit <b>---</b> beginnt. 64 × 16 Zeichen entsprechen 1:1 der Tafel.</p>
 <textarea id="animRasterText" rows="6" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="RRRR....BBBB&#10;RRRR....BBBB"></textarea>
 <div class="anim-grid"><button type="button" id="animRasterGo" class="secondary">Aus Text übernehmen</button><label class="anim-file" for="animFileRaster">Textdatei laden</label><input type="file" id="animFileRaster" class="visually-hidden" accept=".txt,.csv,.tsv,text/plain"/></div>
-</details>
+</details></div>
 <p class="tiny muted" id="animSrcInfo" aria-live="polite"></p>
 <div id="animAdjust" class="hidden">
+<div id="animPixelOpts"><div class="label">Ausschnitt</div>
+<div class="anim-crop-wrap"><canvas id="animCrop" width="340" height="170" role="img" aria-label="Quellbild mit Ausschnitt-Rahmen. Rahmen ziehen zum Verschieben, an den Ecken oder mit zwei Fingern zum Vergrößern und Verkleinern."></canvas></div>
+<div class="anim-grid"><button type="button" id="animCropSmaller" class="secondary" aria-label="Rahmen kleiner (mehr Vergrößerung)">Rahmen kleiner</button><button type="button" id="animCropBigger" class="secondary" aria-label="Rahmen größer">Rahmen größer</button></div>
+<p class="tiny muted">Der Rahmen zeigt, was auf die Tafel kommt. Mit dem Finger oder Stift verschieben, an den Ecken oder mit zwei Fingern in der Größe ändern; das Seitenverhältnis bleibt 4 : 1 wie die Tafel. Außerhalb des Bildes ist die Tafel schwarz.</p>
 <div class="label">Anpassen</div>
 <div class="anim-grid">
-<label>Bildgröße<select id="animFit"><option value="contain">Einpassen</option><option value="cover">Füllen</option><option value="stretch">Strecken</option><option value="orig">Original</option></select></label>
+<label>Voreinstellung<select id="animFit"><option value="contain">Einpassen</option><option value="cover">Füllen</option><option value="stretch">Strecken</option><option value="orig">Original</option><option value="crop">Eigener Ausschnitt</option></select></label>
 <label>Farbumsetzung<select id="animDither"><option value="thresh">Schwelle</option><option value="fs">Floyd-Steinberg</option><option value="bayer">Geordnet</option></select></label>
 </div>
-<p class="tiny muted">Einpassen zeigt das ganze Bild, Füllen schneidet zu (Ausschnitt verschiebbar), Strecken verzerrt, Original zeigt es unskaliert in der Mitte. Schwelle ergibt flächige Farben, die beiden Rasterungen täuschen Zwischentöne mit Punktmustern vor. Die Tafel kennt nur acht Farben (je Farbkanal an oder aus).</p>
-<div id="animOffsets" class="anim-grid hidden">
-<label>Ausschnitt waagerecht<input type="range" id="animOx" min="-100" max="100" step="1" value="0"/></label>
-<label>Ausschnitt senkrecht<input type="range" id="animOy" min="-100" max="100" step="1" value="0"/></label>
-</div>
+<p class="tiny muted">Einpassen zeigt das ganze Bild, Füllen schneidet zu, Strecken verzerrt, Original zeigt es unskaliert in der Mitte; jede Voreinstellung setzt nur den Rahmen, den du danach noch verschieben kannst. Schwelle ergibt flächige Farben, die beiden Rasterungen täuschen Zwischentöne mit Punktmustern vor. Die Tafel kennt nur acht Farben (je Farbkanal an oder aus).</p>
 <div class="anim-grid">
 <label>Helligkeit der Schwelle<input type="range" id="animThr" min="0" max="255" step="1" value="128"/></label>
 <label>Kontrast<input type="range" id="animCon" min="-50" max="100" step="1" value="0"/></label>
+</div>
 </div>
 <div class="label">Bilder und Zeit</div>
 <div class="anim-grid">
@@ -606,7 +610,9 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <button type="button" id="animReduce" class="secondary hidden">Auf 79 Bilder verteilen</button>
 <label class="field">Name<input id="animName" class="v42-name" maxlength="40" placeholder="Meine Animation"/></label>
 <progress id="animProg" class="hidden" value="0" max="1"></progress>
-<div class="anim-grid"><button type="button" id="animSave" class="primary" data-rb-icon="save" disabled>Speichern</button><button type="button" id="animSaveSend" class="primary" data-rb-icon="plane-takeoff" disabled>Speichern und senden</button></div>
+<div class="anim-grid"><button type="button" id="animSave" class="primary" data-rb-icon="save" disabled>Speichern</button><button type="button" id="animSaveSend" class="primary" data-rb-icon="plane-takeoff" disabled>Speichern und senden</button><button type="button" id="animSaveCopy" class="secondary wide hidden" data-rb-icon="copy" disabled>Als Kopie speichern</button><button type="button" id="animSendOnly" class="secondary wide" data-rb-icon="plane-takeoff" disabled>Nur senden (nicht speichern)</button></div>
+<p class="tiny muted hidden" id="animEditHint">„Speichern“ überschreibt diese Animation (gleiche Nummer, Kurzwahlen bleiben gültig). Mit „Als Kopie speichern“ bleibt das Original unverändert. Ausschnitt und Farben stehen nach dem Speichern fest; geändert werden können Zeit, Bildbereich, Reihenfolge und Name.</p>
+<p class="tiny muted">„Nur senden“ legt die Animation nur vorübergehend im ESP32 ab und löscht sie nach dem Senden wieder; es entsteht kein Listeneintrag.</p>
 </div>
 </div>
 </section><section aria-label="Programme" class="app-view inner-view hidden" id="view-programs">
@@ -649,7 +655,7 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 <div class="panel inner-panel"><h2>Ambiente</h2><p class="hint">Eine Farbe antippen, um die gesamte 64×16-Tafel mit dieser Farbe zu füllen. Die aktuelle Textanzeige wird dadurch ersetzt.</p>
 <div aria-label="LED-Farben" class="ambience-colors" id="ambienceColors"></div>
 
-</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary rb-btnlink" download="RavestickBoard_Diagnose_v0.6.1.1-dev.txt" href="/api/diagnostics.txt" data-rb-icon="database-arrow-down">TXT herunterladen</a><a class="secondary rb-btnlink" download="RavestickBoard_RAM_v0.6.1.1-dev.txt" href="/api/ram.txt" data-rb-icon="database-arrow-down">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
+</div></section><section aria-label="Diagnose" class="app-view inner-view hidden" id="view-diagnostics"><h2>Diagnose</h2><details class="panel" id="diagnostics" open=""><summary>Diagnose und Ereignisprotokoll</summary><p class="hint">Daten seit dem letzten ESP32-Start. Keine Textinhalte, Passwörter oder BLE-Adressen im Protokoll.</p><div class="diag-grid" id="diagGrid"></div><div class="actions"><button class="secondary" id="diagReload" data-rb-icon="database-backup" data-rb-painted="database-backup"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 5 2.69"/><path d="M21 9.3V5"/><path d="M3 5v14a9 3 0 0 0 6.47 2.88"/><path d="M12 12v4h4"/><path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16"/></svg>Aktualisieren</button><button class="primary" id="diagCopy" data-rb-icon="clipboard-copy" data-rb-painted="clipboard-copy"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>Log kopieren</button><a class="secondary rb-btnlink" download="RavestickBoard_Diagnose_v0.6.1.2-dev.txt" href="/api/diagnostics.txt" data-rb-icon="database-arrow-down">TXT herunterladen</a><a class="secondary rb-btnlink" download="RavestickBoard_RAM_v0.6.1.2-dev.txt" href="/api/ram.txt" data-rb-icon="database-arrow-down">RAM-Verlauf TXT</a></div><div class="label" style="margin-top:15px">Letzte Ereignisse</div><div class="diag-log" id="diagLog"></div><p class="hint" id="diagFeedback"></p><div hidden="" id="copyManual"><textarea aria-label="Log manuell kopieren" id="manualText" readonly=""></textarea></div></details></section><section aria-label="Einstellungen" class="app-view inner-view hidden" id="view-settings">
 <div class="panel"><h2>Einstellungen</h2>
 <div class="settings-section" id="v42SettingsBackup">
 <div class="label">Bibliothek &amp; Datensicherung</div>
@@ -677,7 +683,7 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 </div>
 <p class="tiny muted">Jedes Frame zeigt seine Nummer (01, 02, 03 …) in der Mitte, so sieht man, wie viele Frames ankommen und wo die Schleife endet. Der Balken wandert von links nach rechts, oben links leuchtet ein roter und unten rechts ein blauer Eckpixel. Standardzeiten: Farben 700 ms, Balken 60 ms, Grenze 300 ms. Zum bequemen Lesen der Nummer reichen 300 ms oder mehr. Die 80-Frames-Probe ist absichtlich zu groß: Die Tafel soll sie mit einem Fehlercode ablehnen, der danach im Diagnoseprotokoll steht.</p>
 </div>
-<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.6.1.1-dev</p></div>
+<p class="tiny muted" style="margin-top:20px">RavestickBoard · v0.6.1.2-dev</p></div>
 </section><aside id="rbDock" class="rb-dock" aria-label="Tafelsteuerung">
  <div class="pixel-range" role="group" aria-label="Globale Helligkeit"><span class="rb-range-icon" data-rb-icon="sunset" aria-hidden="true" data-rb-painted="sunset"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10V2"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m16 6-4 4-4-4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span><input aria-label="Helligkeit" data-global="brightness" id="dockBrightness" min="1" max="100" type="range" value="75"/><b data-global-label="brightness">75 %</b><span class="rb-range-icon" data-rb-icon="sunrise" aria-hidden="true" data-rb-painted="sunrise"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v8"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/></svg></span></div>
  <div class="pixel-range rb-dock-speed" role="group" aria-label="Globale Geschwindigkeit"><span class="rb-range-icon" data-rb-icon="snail" aria-hidden="true" data-rb-painted="snail"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13a6 6 0 1 0 12 0 4 4 0 1 0-8 0 2 2 0 0 0 4 0"/><circle cx="10" cy="13" r="8"/><path d="M2 21h12c4.4 0 8-3.6 8-8V7a2 2 0 1 0-4 0v6"/><path d="M18 3 19.1 5.2"/><path d="M22 3 20.9 5.2"/></svg></span><input aria-label="Geschwindigkeit" data-global="speed" id="dockSpeed" min="1" max="100" type="range" value="80"/><b data-global-label="speed">80 / 100</b><span class="rb-range-icon" data-rb-icon="rabbit" aria-hidden="true" data-rb-painted="rabbit"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 16a3 3 0 0 1 2.24 5"/><path d="M18 12h.01"/><path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/><path d="M20 8.54V4a2 2 0 1 0-4 0v3"/><path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/></svg></span></div>
@@ -723,7 +729,7 @@ input,select,textarea{font-size:16px}              /* iOS zoomt sonst beim Fokus
 </div>
 
 <div class="v42-dialog hidden" id="v42ShortcutDialog" role="dialog" aria-modal="true" aria-label="Kurzwahl belegen"><div class="v42-sheet">
-<h2 id="v42ShortcutTitle">Kurzwahl belegen</h2><div class="field"><span id="v42SourceLabel">Quelle</span><div class="v42-sources" id="v42Sources" role="group" aria-labelledby="v42SourceLabel"><button type="button" data-src="1" data-rb-icon="library" aria-pressed="false">Bibliothek</button><button type="button" data-src="2" data-rb-icon="list-video" aria-pressed="false">Programme</button><button type="button" data-src="3" data-rb-icon="spray-can" aria-pressed="false">Ambiente</button><button type="button" data-src="4" data-rb-icon="play" aria-pressed="false" disabled title="Animationen folgen später">Animationen</button></div><select id="v42ShortcutType" class="hidden" aria-hidden="true" tabindex="-1"><option value="0">Quelle auswählen</option><option value="1">Bibliothek</option><option value="2">Programme</option><option value="3">Ambiente</option><option value="4" disabled>Animationen (zukünftig)</option></select></div>
+<h2 id="v42ShortcutTitle">Kurzwahl belegen</h2><div class="field"><span id="v42SourceLabel">Quelle</span><div class="v42-sources" id="v42Sources" role="group" aria-labelledby="v42SourceLabel"><button type="button" data-src="1" data-rb-icon="library" aria-pressed="false">Bibliothek</button><button type="button" data-src="2" data-rb-icon="list-video" aria-pressed="false">Programme</button><button type="button" data-src="3" data-rb-icon="spray-can" aria-pressed="false">Ambiente</button><button type="button" data-src="4" data-rb-icon="image-play" aria-pressed="false">Animationen</button></div><select id="v42ShortcutType" class="hidden" aria-hidden="true" tabindex="-1"><option value="0">Quelle auswählen</option><option value="1">Bibliothek</option><option value="2">Programme</option><option value="3">Ambiente</option><option value="4">Animationen</option></select></div>
 <label class="field" id="v42ShortcutTargetWrap">Inhalt<select id="v42ShortcutTarget"></select></label>
 <label class="field">Beschriftung<input class="v42-name" id="v42ShortcutLabel" maxlength="47" placeholder="Meine Kurzwahl"></label><small id="v42ShortcutBytes" class="v42-hint">0 / 47 UTF-8-Bytes</small>
 <div class="v42-row" id="v42ShortcutActions"><button class="secondary danger" id="v42ShortcutDelete" type="button" data-rb-only="1" data-rb-icon="trash" title="Kurzwahl löschen" aria-label="Kurzwahl löschen" data-rb-painted="trash"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button><button class="secondary" id="v42ShortcutCancel" type="button" data-rb-only="1" data-rb-icon="undo-dot" title="Abbrechen" aria-label="Abbrechen" data-rb-painted="undo-dot"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/><path d="M3 7v6h6"/><circle cx="12" cy="17" r="1"/></svg></button><button class="primary" id="v42ShortcutSave" type="button" data-rb-only="1" data-rb-icon="star-check" title="Kurzwahl speichern" aria-label="Kurzwahl speichern" data-rb-painted="star-check"><svg class="rb-lucide" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19.06 12.501 2.78-2.707a.53.53 0 0 0-.294-.905l-5.166-.755a2.1 2.1 0 0 1-1.595-1.16l-2.31-4.68a.53.53 0 0 0-.95.001L9.216 6.974a2.1 2.1 0 0 1-1.597 1.16l-5.165.755a.53.53 0 0 0-.294.906l3.736 3.637a2.1 2.1 0 0 1 .611 1.879l-.88 5.139a.53.53 0 0 0 .769.56l4.617-2.428.027-.014"/><path d="m15 18 2 2 4-4"/></svg></button></div></div></div>
@@ -920,8 +926,23 @@ const RbAnim=(()=>{
  }
 
  // ---- Fenster: wohin ein Quellbild (sw x sh) im 64x16-Feld gezeichnet wird -----------------
- function fitRect(sw,sh,mode,ox,oy){
+ // Ausschnitt-Rahmen (v0.6.1.2): {cx,cy,w} = Mitte als Anteil von Breite/Hoehe der Quelle, w = Rahmenbreite als Anteil der
+ // Quellbreite; die Rahmenhoehe ergibt sich aus dem Seitenverhaeltnis der Tafel (64:16 = 4:1).
+ function cropFor(sw,sh,mode){
+  const s=mode==='orig'?1:mode==='cover'?Math.max(W/sw,H/sh):Math.min(W/sw,H/sh);
+  return {cx:0.5,cy:0.5,w:(W/s)/sw};
+ }
+ function clampCrop(c,sw,sh){
+  const wmin=Math.min(8,sw)/sw,wmax=2*Math.max(sw,sh*W/H)/sw;
+  return {cx:Math.max(0,Math.min(1,c.cx)),cy:Math.max(0,Math.min(1,c.cy)),w:Math.max(wmin,Math.min(wmax,c.w))};
+ }
+ function cropRect(sw,sh,c){
+  const cw=c.w*sw,x0=c.cx*sw-cw/2,y0=c.cy*sh-(cw*H/W)/2,s=W/cw;
+  return {x:-x0*s,y:-y0*s,w:sw*s,h:sh*s,scale:s};
+ }
+ function fitRect(sw,sh,mode,ox,oy,crop){
   let s;
+  if(mode==='crop'&&crop)return cropRect(sw,sh,crop);
   if(mode==='stretch')return {x:0,y:0,w:W,h:H,scale:Math.min(W/sw,H/sh)};
   if(mode==='orig')s=1;else if(mode==='cover')s=Math.max(W/sw,H/sh);else s=Math.min(W/sw,H/sh);
   const dw=sw*s,dh=sh*s,tx=(ox||0)/100,ty=(oy||0)/100;
@@ -937,7 +958,7 @@ const RbAnim=(()=>{
  }
  function stripGuess(imgW,imgH){return imgW>=imgH?{dir:'h',n:Math.max(1,Math.round(imgW/imgH))}:{dir:'v',n:Math.max(1,Math.round(imgH/imgW))};}
  function uploadSeconds(n){return Math.ceil((HDR+n*FB)/128)*0.23;}
- return {W,H,MAXF,HDR,FB,MAXSRC,RGB,CSS,b64uEnc,b64uDec,buildPayload,unpackPayload,thumbOf,thumbPixels,gifDecode,lzwDecode,parseRaster,quantize,plan,fitRect,stripRects,stripGuess,uploadSeconds};
+ return {W,H,MAXF,HDR,FB,MAXSRC,RGB,CSS,b64uEnc,b64uDec,buildPayload,unpackPayload,thumbOf,thumbPixels,gifDecode,lzwDecode,parseRaster,quantize,plan,fitRect,stripRects,stripGuess,uploadSeconds,cropFor,cropRect,clampCrop};
 })();
 /* ==== Ende reine Funktionen ==== */
 </script>
@@ -1339,7 +1360,7 @@ $('v43NewContent').onclick=async()=>{
 
 function librarySelectedItem(){return libraryItems.find(x=>x.id===librarySelected&&!x.corrupt);}
 function libraryRecordPayload(r){return {name:r.name,text:r.text,line2:r.line2||'',layout:r.layout,color1:r.color1,color2:r.color2,mode:r.mode||2,favorite:r.favorite?1:0};}
-function libShortcutsDraw(){document.querySelectorAll('.shortcut').forEach(b=>{const n=Number(b.dataset.shortcut),item=v42Shortcuts[n-1]||{},r=libraryItems.find(v=>v.id===item.id);const label=b.querySelector('span:nth-child(2)'),sub=b.querySelector('small');label.textContent=(item.type?item.label:'')||(item.type===1?r?.name:item.type===3?COLORS.find(c=>c[1]===item.id)?.[0]:v42ProgramItems.find(x=>x.id===item.id)?.name)||'Kurzwahl '+n;const broken=item.type===2&&v42ProgramItems.find(x=>x.id===item.id)?.missing;sub.textContent=broken?'Programm reparieren':item.type===1?'Bibliothek':item.type===2?'Programm':item.type===3?'Ambiente':'Noch nicht belegt';b.classList.toggle('shortcut-invalid',!!broken);b.classList.toggle('shortcut-empty',!item.type);const pict=b.querySelector('.shortcut-icon');if(pict)pict.dataset.rbIcon=!item.type?'star-plus':broken?'triangle-alert':'star';});}
+function libShortcutsDraw(){document.querySelectorAll('.shortcut').forEach(b=>{const n=Number(b.dataset.shortcut),item=v42Shortcuts[n-1]||{},r=libraryItems.find(v=>v.id===item.id);const an=item.type===4&&animUI?animUI.items.find(x=>x.id===item.id):null,anMissing=item.type===4&&animUI&&animUI.loaded&&(!an||an.broken);const label=b.querySelector('span:nth-child(2)'),sub=b.querySelector('small');label.textContent=(item.type?item.label:'')||(item.type===1?r?.name:item.type===3?COLORS.find(c=>c[1]===item.id)?.[0]:item.type===4?an?.name:v42ProgramItems.find(x=>x.id===item.id)?.name)||'Kurzwahl '+n;const broken=(item.type===2&&v42ProgramItems.find(x=>x.id===item.id)?.missing)||anMissing;sub.textContent=anMissing?'Animation fehlt':broken?'Programm reparieren':item.type===1?'Bibliothek':item.type===2?'Programm':item.type===3?'Ambiente':item.type===4?'Animation':'Noch nicht belegt';b.classList.toggle('shortcut-invalid',!!broken);b.classList.toggle('shortcut-empty',!item.type);const pict=b.querySelector('.shortcut-icon');if(pict)pict.dataset.rbIcon=!item.type?'star-plus':broken?'triangle-alert':'star';});}
 function renderLibrary(){
  const list=$('libList');list.replaceChildren();
  const shown=libraryItems;
@@ -1607,12 +1628,12 @@ $('v42ProgramName').addEventListener('input',e=>e.target.value=v42BoundName(e.ta
 $('v42ProgramName').addEventListener('input',v43ProgHeading);
 
 async function v42RefreshShortcuts(){try{const j=await api('/api/shortcuts');v42Shortcuts=j.items||v42Shortcuts;libShortcutsDraw();}catch(e){if(libraryReady)notify('Kurzwahlen: '+e.message);}}
-async function v42OpenShortcut(slot){v42ShortcutSlot=slot;await v42RefreshPrograms();await v42RefreshShortcuts();
+async function v42OpenShortcut(slot){v42ShortcutSlot=slot;await v42RefreshPrograms();await v42RefreshShortcuts();try{await animLoad();}catch(e){}
  const s=v42Shortcuts[slot-1]||{type:0,id:0,label:''};$('v42ShortcutTitle').textContent='Kurzwahl '+slot+' belegen';
  $('v42ShortcutType').value=String(s.type||0);v42ShortcutPopulate();$('v42ShortcutTarget').value=String(s.id||0);
  $('v42ShortcutLabel').value=s.type?s.label||'':'';v42LabelAuto='';if(s.type&&!$('v42ShortcutLabel').value)$('v42ShortcutTarget').onchange();v42SourcesPaint();v42ShortcutCount();v42ShortcutUpdate();$('v42ShortcutDialog').classList.remove('hidden');}
 function v42ShortcutPopulate(){const type=Number($('v42ShortcutType').value),target=$('v42ShortcutTarget');target.replaceChildren();if(!type)$('v42ShortcutLabel').value='';
- let sources=type===1?libraryItems.filter(r=>!r.corrupt).map(r=>[r.id,r.name]):type===2?v42ProgramItems.map(r=>[r.id,r.name]):type===3?COLORS.map(r=>[r[1],r[0]]):[];
+ let sources=type===1?libraryItems.filter(r=>!r.corrupt).map(r=>[r.id,r.name]):type===2?v42ProgramItems.map(r=>[r.id,r.name]):type===3?COLORS.map(r=>[r[1],r[0]]):type===4?animUI.items.filter(r=>!r.broken).map(r=>[r.id,r.name]):[];
  const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Inhalt auswählen';target.append(placeholder);
  v42SourcesPaint();
  for(const [id,name] of sources){const option=document.createElement('option');option.value=id;option.textContent=name;target.append(option);}
@@ -1699,7 +1720,7 @@ $('libImport').onchange=async e=>{const file=e.target.files?.[0];e.target.value=
 // ISC / selected Feather MIT notices: THIRD_PARTY_NOTICES.md and LICENSE.
 // No external network required on ESP32 AP.
 const RB43_LUCIDE={
-'film':'<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/>',
+'image-play':'<path d="M15 15.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997a1 1 0 0 1-1.517-.86z"/><path d="M21 12.17V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6"/><path d="m6 21 5-5"/><circle cx="9" cy="9" r="2"/>',
 'chevron-left':'<path d="m15 18-6-6 6-6"/>',
 'chevron-right':'<path d="m9 18 6-6-6-6"/>',
 'chevron-up':'<path d="m18 15-6-6-6 6"/>',
@@ -1792,7 +1813,7 @@ function rb43PaintIcons(){document.querySelectorAll('[data-rb-icon]').forEach(no
  node.insertBefore(svg,node.firstChild);node.dataset.rbPainted=name;
  });}
 function rb43StaticIcons(){
- const menu=['star','pencil-sparkles','library','list-video','film','spray-can','bug','wrench','refresh-cw'];
+ const menu=['star','pencil-sparkles','library','list-video','image-play','spray-can','bug','wrench','refresh-cw'];
  document.querySelectorAll('#mainMenu [data-nav],#v42ReloadMenu').forEach((b,i)=>{if(menu[i])b.dataset.rbIcon=menu[i];});
  const buttons={bananaMenu:'banana',homePowerOff:'eye-closed',homePowerOn:'eye',editShortcuts:'pencil',libOpen:'pencil',libSend:'plane-takeoff',libDuplicate:'copy',libRename:'text-cursor-input',libDelete:'trash',libExport:'database-arrow-down',v42NewProgram:'plus',v43ProgEdit:'pencil',v43ProgBack:'arrow-left',v42DeleteProgram:'trash',v42RunProgram:'plane-takeoff',v42StopProgram:'monitor-x',v42StepAdd:'plus',v42SaveProgram:'save',v42ReturnLibrary:'arrow-left',v43NewContent:'plus',tabScroll:'line-height',tabPages:'letter-spacing',previewRestart:'skip-back',previewToggle:'pause',previewSpeed:'snail',v42ClearText:'eraser',sendScroll:'plane-takeoff',libSaveAs:'save',libSaveChanges:'save',v42SaveBlock:'save',v42UpdateBlock:'save',v42SendDraftBand:'plane-takeoff',v42ClearPage:'eraser',v42NewBlock:'flame-kindling',pageAdd:'plus',pageCopy:'copy',pageLeft:'arrow-left',pageRight:'arrow-right',pageDelete:'trash',pageShow:'plane-takeoff',diagCopy:'clipboard-copy',diagReload:'database-backup'};
  const only=new Set(['v42NewProgram','v43ProgEdit','v42RunProgram','v42StopProgram','v42DeleteProgram','v42StepAdd','v43ProgBack','libOpen','libSend','libDuplicate','libRename','libDelete','previewRestart','previewToggle','previewSpeed']);
@@ -2363,9 +2384,9 @@ async function init(){try{rb43StaticIcons();parseAssets();buildSymbolPicker();tr
   }
   window.addEventListener('scroll',tick,{passive:true});
 })();
-async function rbLoadLists(){await v42RefreshShortcuts();await v42RefreshPrograms();await refreshLibrary();}
+async function rbLoadLists(){await v42RefreshShortcuts();await v42RefreshPrograms();await refreshLibrary();try{await animLoad();libShortcutsDraw();}catch(e){}}
 /* ==== v0.6.1.0 Animationen: Oberfläche (Liste, Import, Vorschau) ==== */
-const animUI={items:[],selected:0,cache:new Map(),ready:false,free:0,total:0,limit:40,saving:false};
+var animUI={items:[],selected:0,cache:new Map(),ready:false,loaded:false,free:0,total:0,limit:40,saving:false};   // var: libShortcutsDraw kann vor diesem Block laufen
 const animImp={kind:'',sources:[],delays:[],name:'',strip:null,frames:null,ms:100,problem:'',timer:0};
 function animLed(canvas,px,s){
  const w=RbAnim.W*s,h=RbAnim.H*s;if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
@@ -2401,15 +2422,16 @@ function renderAnimList(){
   row.append(th,pick);list.appendChild(row);
  });
  const sel=animSelectedItem();
- for(const id of ['animSend','animRename','animDuplicate'])$(id).disabled=!sel||sel.broken||!animUI.ready;
+ for(const id of ['animSend','animRename','animEdit'])$(id).disabled=!sel||sel.broken||!animUI.ready;
  $('animDelete').disabled=!sel||!animUI.ready;
  $('animImport').disabled=!animUI.ready;
  $('animStatus').textContent=animUI.ready?(animUI.items.length+' von '+animUI.limit+' Animationen · frei '+animSizeText(animUI.free)):'Dateisystem nicht eingerichtet.';
  $('animPreviewWrap').classList.toggle('hidden',!sel||sel.broken);
  rb43PaintIcons();
 }
+async function animLoad(){const j=await api('/api/anim/list');rbFresh.anim=Date.now();animUI.ready=!!j.ready;animUI.items=j.items||[];animUI.free=j.free||0;animUI.total=j.total||0;animUI.limit=j.limit||40;animUI.loaded=true;return j;}
 async function animRefresh(){
- try{const j=await api('/api/anim/list');rbFresh.anim=Date.now();animUI.ready=!!j.ready;animUI.items=j.items||[];animUI.free=j.free||0;animUI.total=j.total||0;animUI.limit=j.limit||40;
+ try{await animLoad();
   if(animUI.selected&&!animUI.items.some(i=>i.id===animUI.selected))animUI.selected=0;
   renderAnimList();if(animUI.selected)animSelect(animUI.selected);}
  catch(e){$('animStatus').textContent='Fehler: '+e.message;}
@@ -2433,18 +2455,19 @@ function animShowList(){$('animListPane').classList.remove('hidden');$('animImpo
 $('animSend').onclick=async()=>{const it=animSelectedItem();if(!it)return;try{const j=await api('/api/anim/send',{id:it.id});notify(j.message);}catch(e){notify('Senden: '+e.message);}};
 $('animRename').onclick=async()=>{const it=animSelectedItem();if(!it)return;const raw=await v42NamePrompt('Neuer Name',it.name);const name=raw===null?'':animBoundName(raw);if(!name||name===it.name)return;
  try{await api('/api/anim/rename',{id:it.id,name});await animRefresh();notify('Animation umbenannt.');}catch(e){notify('Umbenennen: '+e.message);}};
-$('animDuplicate').onclick=async()=>{const it=animSelectedItem();if(!it)return;try{const j=await api('/api/anim/duplicate',{id:it.id});animUI.selected=j.id;await animRefresh();notify('Animation dupliziert.');}catch(e){notify('Duplizieren: '+e.message);}};
 $('animDelete').onclick=async()=>{const it=animSelectedItem();if(!it)return;
- if(!confirm((it.broken?'Beschädigte Datei #'+it.id:'Animation „'+it.name+'“')+' wirklich löschen?'))return;
- try{await api('/api/anim/delete',{id:it.id});animUI.cache.delete(it.id);animUI.selected=0;await animRefresh();notify('Animation gelöscht.');}catch(e){notify('Löschen: '+e.message);}};
+ const useBy=(v42Shortcuts||[]).flatMap((x,k)=>x.type===4&&x.id===it.id?[k+1]:[]);
+ if(!confirm((it.broken?'Beschädigte Datei #'+it.id:'Animation „'+it.name+'“')+' wirklich löschen?'+(useBy.length?'\n\nVerwendet von: '+useBy.map(k=>'Kurzwahl '+k).join(', ')+'. Die Kurzwahl zeigt danach „Animation fehlt“ und sendet nichts.':'')))return;
+ try{await api('/api/anim/delete',{id:it.id});animUI.cache.delete(it.id);animUI.selected=0;await animRefresh();libShortcutsDraw();notify('Animation gelöscht.');}catch(e){notify('Löschen: '+e.message);}};
 
 // ---- Import: Quellen ---------------------------------------------------------------------------
 function animShrink(c,max){const m=Math.max(c.width,c.height);if(m<=max)return c;const s=max/m,o=document.createElement('canvas');o.width=Math.max(1,Math.round(c.width*s));o.height=Math.max(1,Math.round(c.height*s));
  const x=o.getContext('2d');x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(c,0,0,o.width,o.height);return o;}
 function animReset(){
  animImp.kind='';animImp.sources=[];animImp.delays=[];animImp.strip=null;animImp.frames=null;animImp.problem='';animImp.saveError='';
+ animImp.editId=0;animImp.stored=null;$('animSourcePick').classList.remove('hidden');$('animPixelOpts').classList.remove('hidden');$('animImpTitle').textContent='Animation importieren';$('animEditHint').classList.add('hidden');$('animSaveCopy').classList.add('hidden');$('animSaveCopy').disabled=true;
  $('animAdjust').classList.add('hidden');$('animStripOpts').classList.add('hidden');$('animSrcInfo').textContent='';$('animErr').textContent='';$('animInfo').textContent='';
- $('animSave').disabled=true;$('animSaveSend').disabled=true;if(animImpPlayer)animImpPlayer.set([],100);
+ $('animSave').disabled=true;$('animSaveSend').disabled=true;$('animSendOnly').disabled=true;animImp.crop=null;animImp.limitProblem='';if(animImpPlayer)animImpPlayer.set([],100);
 }
 function animShowImport(){
  animReset();$('animListPane').classList.add('hidden');$('animImportPane').classList.remove('hidden');animStopAll();
@@ -2461,11 +2484,11 @@ function animSetSources(kind,sources,delays,name,note){
  const first=sources[0];
  $('animFit').value=kind==='raster'&&first.width<=64&&first.height<=16?'orig':'contain';
  $('animDither').value=kind==='raster'?'thresh':'fs';
- $('animThr').value=128;$('animCon').value=0;$('animOx').value=0;$('animOy').value=0;animFitUi();
+ $('animThr').value=128;$('animCon').value=0;animFitUi(true);
  if(!$('animName').value.trim()||animImp.nameAuto!==false)$('animName').value=animBoundName(name||'Animation');
  $('animSrcInfo').textContent=note||'';
  $('animAdjust').classList.remove('hidden');$('animImpSub').textContent=n+' Bilder geladen';
- animSchedule(0);
+ animCropDraw();animSchedule(0);
 }
 $('animFileGif').addEventListener('change',async e=>{
  const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
@@ -2519,48 +2542,140 @@ function animRasterApply(text,name){
 $('animRasterGo').onclick=()=>animRasterApply($('animRasterText').value,'Raster');
 $('animFileRaster').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;const t=await f.text();$('animRasterText').value=t;animRasterApply(t,f.name.replace(/\.[^.]*$/,''));});
 
+
+// ---- Ausschnitt-Rahmen auf dem Quellbild (Zeigerereignisse) ---------------------------------------------
+const animCv=$('animCrop'),animCg=animCv.getContext('2d');
+const animCropPts=new Map();let animCropGest=null,animCropGeo=null;
+const ANIM_PAD=0.25,ANIM_HANDLE=22;
+function animCropSource(){const i=Math.max(0,Math.min(animImp.sources.length-1,(Number($('animFrom').value)||1)-1));return animImp.sources[i]||animImp.sources[0]||null;}
+function animCropLayout(){
+ const s0=animImp.sources[0];if(!s0)return null;
+ const sw=s0.width,sh=s0.height,pad=ANIM_PAD*Math.max(sw,sh),vw=sw+2*pad,vh=sh+2*pad;
+ const avail=Math.max(200,Math.min(440,(animCv.parentElement.clientWidth||340)));
+ let cw=avail,ch=cw*vh/vw;if(ch>300){ch=300;cw=ch*vw/vh;}
+ return {sw,sh,pad,vw,vh,cw:Math.round(cw),ch:Math.round(ch),k:cw/vw};
+}
+function animCropToCanvas(g,x,y){return [(x+g.pad)*g.k,(y+g.pad)*g.k];}
+function animCropFromClient(g,ev){const r=animCv.getBoundingClientRect();return [((ev.clientX-r.left)/r.width)*g.vw-g.pad,((ev.clientY-r.top)/r.height)*g.vh-g.pad];}
+// Rahmen in Quellpixeln: [links, oben, breit, hoch]
+function animCropBox(g){
+ const c=animImp.crop;if(!c)return null;
+ if($('animFit').value==='stretch')return [0,0,g.sw,g.sh,true];
+ const w=c.w*g.sw,h=w*RbAnim.H/RbAnim.W;return [c.cx*g.sw-w/2,c.cy*g.sh-h/2,w,h,false];
+}
+function animCropDraw(){
+ const g=animCropLayout();if(!g||!animImp.crop&&!animImp.sources.length)return;animCropGeo=g;
+ const dpr=Math.min(2,window.devicePixelRatio||1);
+ if(animCv.width!==Math.round(g.cw*dpr)||animCv.height!==Math.round(g.ch*dpr)){animCv.width=Math.round(g.cw*dpr);animCv.height=Math.round(g.ch*dpr);}
+ animCv.style.width=g.cw+'px';animCv.style.height=g.ch+'px';
+ const x=animCg;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,g.cw,g.ch);x.fillStyle='#0b0f16';x.fillRect(0,0,g.cw,g.ch);
+ const src=animCropSource();
+ if(src){const [ix,iy]=animCropToCanvas(g,0,0);x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(src,ix,iy,g.sw*g.k,g.sh*g.k);}
+ const b=animCropBox(g);if(!b)return;
+ const [rx,ry]=animCropToCanvas(g,b[0],b[1]),rw=b[2]*g.k,rh=b[3]*g.k;
+ x.fillStyle='rgba(0,0,0,.62)';x.beginPath();x.rect(0,0,g.cw,g.ch);x.rect(rx,ry,rw,rh);x.fill('evenodd');
+ x.strokeStyle='#ffd45c';x.lineWidth=2;x.setLineDash(b[4]?[6,4]:[]);x.strokeRect(rx,ry,rw,rh);x.setLineDash([]);
+ if(!b[4]){x.fillStyle='#ffd45c';for(const [hx,hy] of [[rx,ry],[rx+rw,ry],[rx,ry+rh],[rx+rw,ry+rh]])x.fillRect(hx-5,hy-5,10,10);}
+}
+function animCropSet(c){const g=animCropLayout();if(!g)return;animImp.crop=RbAnim.clampCrop(c,g.sw,g.sh);
+ if($('animFit').value!=='crop')$('animFit').value='crop';animCropDraw();animSchedule(30);}
+function animCropZoom(f){if(!animImp.crop)return;const c=animImp.crop;animCropSet({cx:c.cx,cy:c.cy,w:c.w*f});}
+function animCropHit(g,px,py){   // -> 'move' | Ecke 0..3 (oben links, oben rechts, unten links, unten rechts)
+ const b=animCropBox(g);if(!b||b[4])return 'move';
+ const pts=[[b[0],b[1]],[b[0]+b[2],b[1]],[b[0],b[1]+b[3]],[b[0]+b[2],b[1]+b[3]]];
+ let best=-1,bd=ANIM_HANDLE/g.k;
+ pts.forEach(([hx,hy],i)=>{const d=Math.hypot(hx-px,hy-py);if(d<bd){bd=d;best=i;}});
+ return best>=0?best:'move';
+}
+animCv.addEventListener('pointerdown',ev=>{
+ const g=animCropLayout();if(!g||!animImp.sources.length)return;
+ ev.preventDefault();animCv.setPointerCapture(ev.pointerId);animCropPts.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});
+ if($('animFit').value==='stretch'&&animImp.crop)animImp.crop=RbAnim.cropFor(g.sw,g.sh,'contain');
+ if(animCropPts.size===2){const a=[...animCropPts.values()];animCropGest={mode:'pinch',d0:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,w0:animImp.crop.w};return;}
+ const [px,py]=animCropFromClient(g,ev),hit=animCropHit(g,px,py),c=animImp.crop;
+ if(hit==='move'){
+  const b=animCropBox(g),inside=px>=b[0]&&px<=b[0]+b[2]&&py>=b[1]&&py<=b[1]+b[3];
+  animCropGest={mode:'move',dx:inside?px-c.cx*g.sw:0,dy:inside?py-c.cy*g.sh:0};
+  if(!inside)animCropSet({cx:px/g.sw,cy:py/g.sh,w:c.w});
+ }else{
+  const b=animCropBox(g),fixed=[[b[0]+b[2],b[1]+b[3]],[b[0],b[1]+b[3]],[b[0]+b[2],b[1]],[b[0],b[1]]][hit];
+  animCropGest={mode:'corner',fx:fixed[0],fy:fixed[1],right:hit===1||hit===3,bottom:hit>=2};
+ }
+ animCv.classList.add('dragging');
+});
+animCv.addEventListener('pointermove',ev=>{
+ if(!animCropPts.has(ev.pointerId)||!animCropGest)return;
+ animCropPts.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});
+ const g=animCropLayout();if(!g||!animImp.crop)return;const c=animImp.crop,gs=animCropGest;
+ if(gs.mode==='pinch'&&animCropPts.size>=2){const a=[...animCropPts.values()];const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1;animCropSet({cx:c.cx,cy:c.cy,w:gs.w0*gs.d0/d});return;}
+ const [px,py]=animCropFromClient(g,ev);
+ if(gs.mode==='move'){animCropSet({cx:(px-gs.dx)/g.sw,cy:(py-gs.dy)/g.sh,w:c.w});}
+ else if(gs.mode==='corner'){
+  const clamped=RbAnim.clampCrop({cx:.5,cy:.5,w:Math.max(Math.abs(px-gs.fx),Math.abs(py-gs.fy)*RbAnim.W/RbAnim.H)/g.sw},g.sw,g.sh);
+  const wp=clamped.w*g.sw,hp=wp*RbAnim.H/RbAnim.W;
+  const left=gs.right?gs.fx:gs.fx-wp,top=gs.bottom?gs.fy:gs.fy-hp;
+  animCropSet({cx:(left+wp/2)/g.sw,cy:(top+hp/2)/g.sh,w:clamped.w});
+ }
+});
+const animCropEnd=ev=>{animCropPts.delete(ev.pointerId);if(animCropPts.size<2&&animCropGest&&animCropGest.mode==='pinch')animCropGest=null;if(!animCropPts.size){animCropGest=null;animCv.classList.remove('dragging');}};
+animCv.addEventListener('pointerup',animCropEnd);animCv.addEventListener('pointercancel',animCropEnd);
+animCv.addEventListener('wheel',ev=>{if(!animImp.crop)return;ev.preventDefault();animCropZoom(ev.deltaY>0?1.1:1/1.1);},{passive:false});
+$('animCropSmaller').onclick=()=>animCropZoom(0.85);$('animCropBigger').onclick=()=>animCropZoom(1/0.85);
+$('animFrom').addEventListener('input',()=>animCropDraw());
+window.addEventListener('resize',()=>{if(!$('animImportPane').classList.contains('hidden'))animCropDraw();});
+
 // ---- Import: Anpassen, Vorschau --------------------------------------------------------------
 const animRc=document.createElement('canvas');animRc.width=64;animRc.height=16;const animRx=animRc.getContext('2d',{willReadFrequently:true});
 function animRenderOne(src,o){
  animRx.fillStyle='#000';animRx.fillRect(0,0,64,16);
- const r=RbAnim.fitRect(src.width,src.height,o.fit,o.ox,o.oy),smooth=r.scale<1;
+ const r=RbAnim.fitRect(src.width,src.height,o.fit,0,0,o.crop),smooth=r.scale<1;
  animRx.imageSmoothingEnabled=smooth;if(smooth)animRx.imageSmoothingQuality='high';
  if(smooth)animRx.drawImage(src,r.x,r.y,r.w,r.h);else animRx.drawImage(src,Math.round(r.x),Math.round(r.y),Math.max(1,Math.round(r.w)),Math.max(1,Math.round(r.h)));
  return RbAnim.quantize(animRx.getImageData(0,0,64,16).data,o);
 }
 function animSchedule(delay){animImp.saveError='';clearTimeout(animImp.timer);animImp.timer=setTimeout(animRender,delay==null?140:delay);}
 function animRender(){
- if(!animImp.sources.length)return;
- const n=animImp.sources.length;
- const o={fit:$('animFit').value,ox:Number($('animOx').value),oy:Number($('animOy').value),method:$('animDither').value,thr:Number($('animThr').value),contrast:Number($('animCon').value)};
+ if(!animImp.sources.length&&!animImp.stored)return;
+ const n=animImp.stored?animImp.stored.length:animImp.sources.length;   // Bearbeiten: gespeicherte Bilder statt Quellbilder
+ const o={fit:$('animFit').value,crop:animImp.crop,method:$('animDither').value,thr:Number($('animThr').value),contrast:Number($('animCon').value)};
  const p=RbAnim.plan(animImp.delays,{from:Number($('animFrom').value)||1,to:Number($('animTo').value)||n,step:Number($('animStep').value)||1,ping:$('animPing').checked,ms:Number($('animMs').value)||100,variable:$('animVar').checked&&!$('animVarWrap').classList.contains('hidden')});
  const cache=new Map();
- const frames=p.tooMany?[]:p.order.map(i=>{let f=cache.get(i);if(!f){f=animRenderOne(animImp.sources[i],o);cache.set(i,f);}return f;});
+ const frames=p.tooMany?[]:p.order.map(i=>{let f=cache.get(i);if(!f){f=animImp.stored?animImp.stored[i]:animRenderOne(animImp.sources[i],o);cache.set(i,f);}return f;});
  animImp.frames=frames;animImp.ms=p.ms;
  const bytes=RbAnim.HDR+p.count*RbAnim.FB;let problem='';
  if(p.count<2)problem='Mindestens 2 Bilder nötig. Bereich oder Schritt anpassen.';
  else if(p.tooMany)problem=p.count+' Bilder sind zu viel (höchstens '+RbAnim.MAXF+'). Schritt erhöhen, Bereich kürzen oder „Auf '+RbAnim.MAXF+' Bilder verteilen“ drücken.';
  else if(!animUI.ready)problem='Dateisystem nicht eingerichtet (zuerst in der Bibliothek einrichten).';
- else if(animUI.items.length>=animUI.limit)problem='Es sind schon '+animUI.limit+' Animationen gespeichert. Bitte erst eine löschen.';
  else if(bytes+448+24576>animUI.free)problem='Nicht genug freier Speicher ('+animSizeText(animUI.free)+' frei, '+animSizeText(bytes+448)+' nötig).';
  animImp.problem=problem;
- $('animErr').textContent=problem||animImp.saveError||'';$('animReduce').classList.toggle('hidden',!p.tooMany);
+ // Das Limit betrifft nur das Speichern; "Nur senden" legt keinen Eintrag an.
+ animImp.limitProblem=(!problem&&animUI.items.length>=animUI.limit)?'Es sind schon '+animUI.limit+' Animationen gespeichert. Zum Speichern erst eine löschen; „Nur senden“ geht trotzdem.':'';
+ $('animErr').textContent=problem||(animImp.editId?'':animImp.limitProblem)||animImp.saveError||'';$('animReduce').classList.toggle('hidden',!p.tooMany);
  $('animInfo').textContent=p.tooMany?'':p.count+' Frames · '+p.ms+' ms je Frame · Schleife '+(p.count*p.ms/1000).toFixed(1).replace('.',',')+' s · '+animSizeText(bytes)+' · Übertragung etwa '+Math.round(RbAnim.uploadSeconds(p.count))+' s'+(p.ms<16?' · Vorschau höchstens 16 ms je Frame':'');
- const ok=!problem;$('animSave').disabled=!ok||animUI.saving;$('animSaveSend').disabled=!ok||animUI.saving;
+ const ok=!problem,okSave=ok&&(!!animImp.editId||!animImp.limitProblem);$('animSave').disabled=!okSave||animUI.saving;$('animSaveSend').disabled=!okSave||animUI.saving;$('animSendOnly').disabled=!ok||animUI.saving;
+ $('animSaveCopy').disabled=!(ok&&!animImp.limitProblem)||animUI.saving;$('animSaveCopy').title=animImp.limitProblem?'Es sind schon '+animUI.limit+' Animationen gespeichert.':'';
  animImpPlayer.set(frames,p.ms);
 }
-$('animReduce').onclick=()=>{const n=animImp.sources.length,from=Number($('animFrom').value)||1,to=Number($('animTo').value)||n;const span=to-from+1;$('animStep').value=Math.ceil(span/RbAnim.MAXF);$('animPing').checked=false;animSchedule(0);};
-for(const id of ['animFit','animOx','animOy','animDither','animThr','animCon','animFrom','animTo','animStep','animPing','animMs','animVar'])$(id).addEventListener('input',()=>animSchedule());
-function animFitUi(){const v=$('animFit').value;$('animOffsets').classList.toggle('hidden',!(v==='cover'||v==='orig'));}
-$('animFit').addEventListener('change',animFitUi);
+$('animReduce').onclick=()=>{const n=animImp.stored?animImp.stored.length:animImp.sources.length,from=Number($('animFrom').value)||1,to=Number($('animTo').value)||n;const span=to-from+1;$('animStep').value=Math.ceil(span/RbAnim.MAXF);$('animPing').checked=false;animSchedule(0);};
+for(const id of ['animFit','animDither','animThr','animCon','animFrom','animTo','animStep','animPing','animMs','animVar'])$(id).addEventListener('input',()=>animSchedule());
+// Voreinstellung -> Rahmen setzen (ausser "Eigener Ausschnitt" und "Strecken": dort bleibt der Rahmen wie er ist bzw. zeigt das ganze Bild)
+function animFitUi(){
+ const s0=animImp.sources[0];if(!s0){animImp.crop=null;return;}
+ const v=$('animFit').value;
+ if(v==='contain'||v==='cover'||v==='orig')animImp.crop=RbAnim.cropFor(s0.width,s0.height,v);
+ else if(!animImp.crop)animImp.crop=RbAnim.cropFor(s0.width,s0.height,'cover');
+ animCropDraw();
+}
+$('animFit').addEventListener('change',()=>animFitUi());
 $('animName').addEventListener('input',()=>{animImp.nameAuto=false;});
 $('animImport').onclick=animShowImport;
 $('animImpBack').onclick=animShowList;
 
 // ---- Import: Speichern -----------------------------------------------------------------------------
-async function animSaveImport(sendAfter){
- if(animUI.saving||animImp.problem||!animImp.frames||animImp.frames.length<2)return;
- animUI.saving=true;$('animSave').disabled=true;$('animSaveSend').disabled=true;
+async function animSaveImport(mode){   // 'save' | 'saveSend' | 'sendOnly'
+ const sendOnly=mode==='sendOnly',sendAfter=mode==='saveSend',replaceId=(animImp.editId&&!sendOnly&&mode!=='copy')?animImp.editId:0;   // 'copy' = Bearbeiten, aber als neue Animation
+ if(animUI.saving||animImp.problem||(!sendOnly&&!replaceId&&animImp.limitProblem)||!animImp.frames||animImp.frames.length<2)return;
+ animUI.saving=true;$('animSave').disabled=true;$('animSaveSend').disabled=true;$('animSendOnly').disabled=true;
  const frames=animImp.frames,ms=animImp.ms,n=frames.length,name=animBoundName($('animName').value)||'Animation';
  const payload=RbAnim.buildPayload(frames,ms),thumb=RbAnim.thumbOf(payload,n),prog=$('animProg');
  prog.max=payload.length;prog.value=0;prog.classList.remove('hidden');animImp.saveError='';$('animErr').textContent='';
@@ -2568,19 +2683,42 @@ async function animSaveImport(sendAfter){
  try{
   for(let off=0;off<payload.length;off+=1200){
    const data={off:String(off),data:RbAnim.b64uEnc(payload.subarray(off,off+1200))};
-   if(off===0)Object.assign(data,{name,frames:String(n),ms:String(ms),total:String(payload.length),thumb:RbAnim.b64uEnc(thumb)});
+   if(off===0)Object.assign(data,{name,frames:String(n),ms:String(ms),total:String(payload.length),thumb:RbAnim.b64uEnc(thumb)},sendOnly?{temp:'1'}:{},replaceId?{replace:String(replaceId)}:{});
    last=await api('/api/anim/put',data);prog.value=Math.min(payload.length,off+1200);
   }
   const id=last&&last.id;if(!id)throw Error('Keine Antwort mit Animations-ID.');
+  if(sendOnly){const j=await api('/api/anim/send',{temp:'1'});notify(j.message);return;}
   animUI.selected=id;animUI.cache.delete(id);animShowList();await animRefresh();
-  if(sendAfter){const j=await api('/api/anim/send',{id});notify(j.message);}else notify('Animation gespeichert.');
+  if(sendAfter){const j=await api('/api/anim/send',{id});notify(j.message);}else notify(replaceId?'Animation aktualisiert.':'Animation gespeichert.');
  }catch(e){
   try{await api('/api/anim/put',{abort:'1'});}catch(x){}
   animImp.saveError='Speichern: '+e.message;$('animErr').textContent=animImp.saveError;notify('Animation: '+e.message);
  }finally{animUI.saving=false;prog.classList.add('hidden');if(!$('animImportPane').classList.contains('hidden'))animRender();}
 }
-$('animSave').onclick=()=>animSaveImport(false);
-$('animSaveSend').onclick=()=>animSaveImport(true);
+$('animSave').onclick=()=>animSaveImport('save');
+$('animSaveSend').onclick=()=>animSaveImport('saveSend');
+$('animSendOnly').onclick=()=>animSaveImport('sendOnly');
+$('animSaveCopy').onclick=()=>animSaveImport('copy');
+// ---- Bearbeiten einer gespeicherten Animation (Zeit, Bildbereich, Reihenfolge, Name) ----------------------
+function animEditOpen(it,c){
+ const n=c.frames.length;
+ animImp.kind='edit';animImp.editId=it.id;animImp.stored=c.frames;animImp.delays=Array(n).fill(c.ms);animImp.nameAuto=false;
+ $('animImpTitle').textContent='Animation bearbeiten';$('animImpSub').textContent=it.name+' · '+n+' Bilder';
+ $('animSourcePick').classList.add('hidden');$('animPixelOpts').classList.add('hidden');
+ $('animFrom').value=1;$('animTo').value=n;$('animFrom').max=n;$('animTo').max=n;$('animStep').value=1;$('animPing').checked=false;$('animMs').value=c.ms;
+ $('animVarWrap').classList.add('hidden');$('animVar').checked=false;
+ $('animName').value=it.name;$('animSrcInfo').textContent='';
+ $('animEditHint').classList.remove('hidden');$('animSaveCopy').classList.remove('hidden');$('animAdjust').classList.remove('hidden');
+ animSchedule(0);
+}
+$('animEdit').onclick=async()=>{
+ const it=animSelectedItem();if(!it||it.broken)return;
+ try{
+  let c=animUI.cache.get(it.id);const stamp=it.bytes+':'+it.ms+':'+it.thumb.slice(0,24);
+  if(!c||c.stamp!==stamp){const j=await api('/api/anim/get?id='+it.id);const u=RbAnim.unpackPayload(RbAnim.b64uDec(j.data));c={frames:u.frames,ms:u.ms,stamp};animUI.cache.set(it.id,c);}
+  animShowImport();animEditOpen(it,c);
+ }catch(e){notify('Bearbeiten: '+e.message);}
+};
 animListPlayer=animMakePlayer($('animPreview'));animImpPlayer=animMakePlayer($('animImpPreview'));
 animLed($('animPreview'),null,8);animLed($('animImpPreview'),null,8);
 /* ==== Ende Animationen: Oberfläche ==== */

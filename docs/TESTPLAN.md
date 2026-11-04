@@ -1,4 +1,4 @@
-> **Neuester Testplan:** [`TESTPLAN_v0.6.1.1.md`](TESTPLAN_v0.6.1.1.md) (Animationen: Import, Liste, Senden, 3.11.2026). Die folgenden Abschnitte sind die Testpläne und Abnahmeprotokolle früherer Versionen und gelten für deren Stand; Hardwareergebnisse stehen jeweils in den zugehörigen Entwicklungsständen und im Changelog.
+> **Neuester Testplan:** [`TESTPLAN_v0.6.1.2.md`](TESTPLAN_v0.6.1.2.md) (Animationen: Import, Ausschnitt-Rahmen, Senden, Kurzwahl, 3.11.2026). Die folgenden Abschnitte sind die Testpläne und Abnahmeprotokolle früherer Versionen und gelten für deren Stand; Hardwareergebnisse stehen jeweils in den zugehörigen Entwicklungsständen und im Changelog.
 
 ## Ergänzung v0.3.5
 

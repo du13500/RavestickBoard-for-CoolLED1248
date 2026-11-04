@@ -1,4 +1,4 @@
-## Technischer Nachtrag v0.6.1.0/0.6.1.1: Animationen als Dateien (3.11.2026)
+## Technischer Nachtrag v0.6.1.0/0.6.1.1/0.6.1.2: Animationen als Dateien (3.11.2026)
 
 **Stand:** im Quellcode vorhanden und am Rechner geprüft (Dateispeicher mit dem echten Sketch-Code gegen ein Dateisystem im Speicher; Nutzlast gegen die unabhängige Referenz; Weboberfläche in Chromium). Arduino-Compile, echtes LittleFS, Webserver und BLE-Senden aus der Datei sind offen.
 
@@ -21,9 +21,15 @@ Eine Datei gilt nur, wenn Kennung, Wertebereiche, Länge der Nutzlast und Dateig
 | `GET /api/anim/get?id=` | `{ok, id, name, frames, ms, data}`; die Nutzlast kommt gestreamt in einer Antwort, intern in Stücken zu 600 Byte (Base64-URL ohne Füllzeichen) |
 | `POST /api/anim/put` | `off`, `data` (Base64-URL ohne Füllzeichen, höchstens 1200 Byte roh); erstes Stück (`off=0`) mit `frames`, `ms`, `total`, `name`, `thumb`; `abort=1` verwirft. Schreibt `up.tmp`, beim letzten Stück Prüfung und `rename` auf die nächste freie ID |
 | `POST /api/anim/send` | `id`; startet den Auftrag `ANIM` mit `rb61PendingAnimId`; Antwort 202 |
-| `POST /api/anim/rename`, `/duplicate`, `/delete` | `id` (und `name`); Duplizieren schreibt über `up.tmp` und `rename` (nächste freie ID) |
+| `POST /api/anim/rename`, `/duplicate`, `/delete` | `id` (und `name`); Duplizieren schreibt über `up.tmp` und `rename` (nächste freie ID); `/duplicate` wird seit 0.6.1.2 von der Oberfläche nicht mehr benutzt |
+| `POST /api/anim/put` mit `replace=<ID>` (0.6.1.2, Bearbeiten) | wie `put`, aber die Datei `a<ID>.rba` wird beim Abschluss ersetzt (`rename`, Fallback Entfernen und erneutes `rename`); die ID muss vorhanden und unbeschädigt sein (sonst 404), nicht mit `temp`; das Limit von 40 gilt nicht; geprüft wird weiterhin freier Platz für die komplette neue Datei plus Reserve |
+| `POST /api/anim/put` mit `temp=1` (0.6.1.2) | wie `put`, aber das Ziel ist `/rb-anim/send.rba` (ID 60000): kein Listeneintrag, kein 40er-Limit; nur `POST /api/anim/send` mit `temp=1` sendet sie; `rb61DropTemp()` löscht sie nach dem Auftrag und vor jedem neuen Upload, `up.tmp` wird beim Start entfernt |
 
 Urlencodierte POST-Körper mit Base64-URL (`-` und `_`, ohne Füllzeichen), weil der Arduino-`WebServer` einfach, aber nicht für große Binärkörper gebaut ist; ein Stück ist etwa 1,6 KB. Der Webserver ist einfädig; während eines BLE-Auftrags (`rb61Busy`) lehnen die Schreibrouten mit 409 ab.
+
+**Kurzwahl Typ 4 (0.6.1.2):** `RB42Shortcuts` speichert Typ 4 und die Animations-ID (keine Namenskopie: die Kachel zeigt den aktuellen Namen). `/api/shortcuts/set` prüft mit `rb61AnimExists(id)`, `v042RunShortcut` ruft `rb61QueueAnim(id)` (setzt `rb61PendingAnimId`, Modus 0, Auftrag `ANIM`, Zustand `queued`). Beide Funktionen stehen in `RavestickBoard_Anim.h`, `RavestickBoard_v042.h` kommt davor; deshalb stehen die Vorwärtsdeklarationen im Sketch.
+
+**Ausschnitt-Rahmen (Weboberfläche, 0.6.1.2):** `crop = {cx, cy, w}`, alle Werte als Anteil der Quellbreite bzw. -höhe; die Rahmenhöhe folgt aus `w · 16/64`. `cropRect` bildet das Quellbild so ab, dass der Rahmen genau die 64 × 16 Tafelpixel füllt (`scale = 64 / (w · Quellbreite)`); die Voreinstellungen werden dadurch exakt als Rahmen ausgedrückt (`cropFor`). Zeigerereignisse laufen auf `#animCrop` (`touch-action: none`, damit der Browser nicht scrollt oder zoomt); zwei Zeiger = Zwei-Finger-Geste.
 
 **Senden:** `onAnimSend` -> `rb61PrepareAnimFile(id)` liest und prüft den Kopf und setzt Länge und Zeit; der Auftrag `ANIM` mit `rb60AnimPattern = ANIM_FILE` liest die Chunks über `rb60CopyAnimSlice` (Dateiposition 448 + Versatz). Ablauf, Antwortcodes und Wiederholungen wie im Animationstest; **kein `0x07`, kein `0x06`** (Hardwaretest 0.6.0.2: ohne Wirkung bei Animationen). Dauer bei 79 Bildern etwa 55 s (Adam: 0,2 s je Paket); der Wächter (25 s) wird je Paket über `rbPhase()` gefüttert.
 
